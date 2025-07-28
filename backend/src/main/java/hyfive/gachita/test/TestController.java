@@ -1,7 +1,8 @@
 package hyfive.gachita.test;
 
+import hyfive.gachita.common.response.BaseResponse;
+import hyfive.gachita.common.response.ErrorCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,36 +14,37 @@ public class TestController {
     private final TestService testService;
 
     @PostMapping
-    public Test createTest(@RequestBody Test test) {
-        return testService.createTest(test);
+    public BaseResponse<Test> createTest(@RequestBody Test test) {
+        BaseResponse<Test> result = BaseResponse.success(testService.createTest(test));
+        return result;
     }
 
     @GetMapping
-    public List<Test> getAllTests() {
-        return testService.getAllTests();
+    public BaseResponse<List<Test>> getAllTests() {
+        return BaseResponse.success(testService.getAllTests());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Test> getTestById(@PathVariable Long id) {
+    public BaseResponse<Test> getTestById(@PathVariable Long id) {
         Test test = testService.getTestById(id);
         if (test != null) {
-            return ResponseEntity.ok(test);
+            return BaseResponse.success(test);
         }
-        return ResponseEntity.notFound().build();
+        return BaseResponse.fail(ErrorCode.NO_EXIST_VALUE);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Test> updateTest(@PathVariable Long id, @RequestBody Test testDetails) {
+    public BaseResponse<Test> updateTest(@PathVariable Long id, @RequestBody Test testDetails) {
         Test updatedTest = testService.updateTest(id, testDetails);
         if (updatedTest != null) {
-            return ResponseEntity.ok(updatedTest);
+            return BaseResponse.success(updatedTest);
         }
-        return ResponseEntity.notFound().build();
+        return BaseResponse.fail(ErrorCode.NO_EXIST_VALUE);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTest(@PathVariable Long id) {
+    public BaseResponse<Void> deleteTest(@PathVariable Long id) {
         testService.deleteTest(id);
-        return ResponseEntity.noContent().build();
+        return BaseResponse.success(null);
     }
 }
