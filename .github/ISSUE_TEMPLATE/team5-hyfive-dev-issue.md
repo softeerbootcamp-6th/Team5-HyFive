@@ -1,12 +1,3 @@
----
-name: Team5-HyFive Dev Issue
-about: 'Team5-HyFive 개발 이슈 '
-title: ''
-labels: ''
-assignees: ''
-
----
-
 ## 🎯 작업 목표  
 <!-- 작업 목표에 대해 설명해주세요 -->
 
