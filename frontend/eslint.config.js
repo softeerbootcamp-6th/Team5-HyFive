@@ -1,5 +1,4 @@
 import js from "@eslint/js";
-import globals from "globals";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
@@ -19,7 +18,7 @@ export default tseslint.config([
     languageOptions: {
       parser: tseslint.parser,
       parserOptions: {
-        project: './tsconfig.json',
+        project: "./tsconfig.app.json",
       },
     },
     rules: {
@@ -35,12 +34,7 @@ export default tseslint.config([
       ],
       "@typescript-eslint/consistent-type-imports": "error",
       "@typescript-eslint/no-floating-promises": "warn",
-      "@typescript-eslint/explicit-function-return-type": [
-        "warn",
-        {
-          allowExpressions: true,
-        },
-      ],
+
       "@typescript-eslint/ban-ts-comment": [
         "error",
         {
