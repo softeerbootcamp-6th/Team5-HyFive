@@ -1,3 +1,12 @@
+---
+name: Feature Issue
+about: 신규 기능 생성 feature
+title: "[feature]"
+labels: ''
+assignees: ''
+
+---
+
 ## 🎯 작업 목표  
 <!-- 작업 목표에 대해 설명해주세요 -->
 
