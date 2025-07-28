@@ -7,6 +7,7 @@ import { globalIgnores } from "eslint/config";
 
 export default tseslint.config([
   globalIgnores(["dist"]),
+  ...tseslint.configs.recommended,
   {
     files: ["**/*.{ts,tsx}"],
     extends: [
@@ -16,8 +17,10 @@ export default tseslint.config([
       reactRefresh.configs.vite,
     ],
     languageOptions: {
-      ecmaVersion: 2020,
-      globals: globals.browser,
+      parser: tseslint.parser,
+      parserOptions: {
+        project: './tsconfig.json',
+      },
     },
     rules: {
       eqeqeq: "error",
