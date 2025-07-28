@@ -1,0 +1,68 @@
+# === Common ===
+node_modules/
+.env
+.env.*.local
+.env.local
+.env.development
+.env.production
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+*.log
+*.log.*
+logs/
+*.tgz
+*.zip
+*.bak
+
+# === Git hooks / Dev tools ===
+.husky/
+.eslintcache
+.prettierignore
+*.tsbuildinfo
+
+# === Frontend (Vite + TypeScript) ===
+/frontend/dist/
+frontend/node_modules/
+frontend/.vite/
+frontend/.pnpm-debug.log
+frontend/package-lock.json
+frontend/yarn.lock
+
+# Playwright / Cypress / Vitest
+frontend/coverage/
+frontend/test-results/
+frontend/playwright-report/
+frontend/cypress/screenshots/
+frontend/cypress/videos/
+
+# === Backend (Spring Boot / Gradle) ===
+/backend/build/
+backend/.gradle/
+backend/out/
+backend/logs/
+backend/tmp/
+backend/.classpath
+backend/.project
+backend/.settings
+backend/target/
+backend/*.iml
+backend/application.yml
+
+# === Java / Kotlin specific ===
+*.class
+*.jar
+*.war
+*.ear
+
+# === IntelliJ IDEA ===
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# === OS-generated ===
+Thumbs.db
+Desktop.ini
