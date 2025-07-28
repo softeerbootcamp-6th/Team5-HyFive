@@ -1,18 +1,15 @@
 package hyfive.gachita.common.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 
 import static hyfive.gachita.common.response.ErrorCode.SUCCESS;
 
 @Builder
 @Getter
 @JsonPropertyOrder({"isSuccess", "code", "message", "data"})
-@Slf4j
 public class BaseResponse<T> {
 
     private final Boolean isSuccess;
@@ -36,6 +33,7 @@ public class BaseResponse<T> {
                 .isSuccess(errorCode.isSuccess())
                 .message(errorCode.getMessage())
                 .code(errorCode.getCode())
+                .data(null)
                 .build();
     }
 
@@ -44,6 +42,7 @@ public class BaseResponse<T> {
                 .isSuccess(errorCode.isSuccess())
                 .message(message)
                 .code(errorCode.getCode())
+                .data(null)
                 .build();
     }
 }

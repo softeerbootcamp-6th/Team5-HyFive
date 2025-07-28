@@ -1,7 +1,6 @@
 package hyfive.gachita.test;
 
 import hyfive.gachita.common.response.BaseResponse;
-import hyfive.gachita.common.response.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,8 +14,7 @@ public class TestController {
 
     @PostMapping
     public BaseResponse<Test> createTest(@RequestBody Test test) {
-        BaseResponse<Test> result = BaseResponse.success(testService.createTest(test));
-        return result;
+        return BaseResponse.success(testService.createTest(test));
     }
 
     @GetMapping
@@ -26,20 +24,12 @@ public class TestController {
 
     @GetMapping("/{id}")
     public BaseResponse<Test> getTestById(@PathVariable Long id) {
-        Test test = testService.getTestById(id);
-        if (test != null) {
-            return BaseResponse.success(test);
-        }
-        return BaseResponse.fail(ErrorCode.NO_EXIST_VALUE);
+        return BaseResponse.success(testService.getTestById(id));
     }
 
     @PutMapping("/{id}")
     public BaseResponse<Test> updateTest(@PathVariable Long id, @RequestBody Test testDetails) {
-        Test updatedTest = testService.updateTest(id, testDetails);
-        if (updatedTest != null) {
-            return BaseResponse.success(updatedTest);
-        }
-        return BaseResponse.fail(ErrorCode.NO_EXIST_VALUE);
+        return BaseResponse.success(testService.updateTest(id, testDetails));
     }
 
     @DeleteMapping("/{id}")
