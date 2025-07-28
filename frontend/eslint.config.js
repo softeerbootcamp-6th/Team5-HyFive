@@ -19,6 +19,7 @@ export default tseslint.config([
       parser: tseslint.parser,
       parserOptions: {
         project: "./tsconfig.app.json",
+        tsconfigRootDir: path.resolve(),
       },
     },
     rules: {
