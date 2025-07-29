@@ -1,0 +1,28 @@
+name: Auto-close linked issues on PR merge
+
+on:
+  pull_request:
+    types:
+      - closed # PR이 머지되거나 닫힐 때 실행
+
+jobs:
+  close-linked-issues:
+    if: >
+      github.event.pull_request.merged == true &&
+      (
+        github.event.pull_request.base.ref == 'main' ||
+        github.event.pull_request.base.ref == 'dev' ||
+        github.event.pull_request.base.ref == 'dev-be' ||
+        github.event.pull_request.base.ref == 'dev-fe'
+      )
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: read
+
+    steps:
+      - name: Close linked issues
+        uses: peter-evans/close-issue@v3
+        with:
+          comment: |
+            이 PR이 `{{ base.ref }}` 브랜치로 머지되어 관련 이슈를 자동으로 닫습니다. ✅
