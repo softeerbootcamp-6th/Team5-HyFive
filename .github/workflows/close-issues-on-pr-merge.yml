@@ -25,4 +25,4 @@ jobs:
         uses: peter-evans/close-issue@v3
         with:
           comment: |
-            이 PR이 `{{ base.ref }}` 브랜치로 머지되어 관련 이슈를 자동으로 닫습니다. ✅
+            이 PR이 `${{ github.event.pull_request.base.ref }}` 브랜치로 머지되어 관련 이슈를 자동으로 닫습니다. ✅
