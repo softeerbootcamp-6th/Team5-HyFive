@@ -1,13 +1,6 @@
-import { AdminCalender } from "@/assets/icon";
-
+import "@/styles/global.style.css";
 function App() {
-  return (
-    <>
-      <AdminCalender />
-      <AdminCalender fill="blue" />
-      <AdminCalender width={50} height={50} fill="red" />
-    </>
-  );
+  return <></>;
 }
 
 export default App;
