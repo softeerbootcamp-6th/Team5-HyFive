@@ -34,10 +34,11 @@ export const theme = {
     GrayScale: {
       white: "#FFFFFF",
       gray1: "#FAFAFA",
-      gray2: "#DEDEDE",
-      gray3: "#939393",
-      gray4: "#464646",
-      gray5: "#373737",
+      gray2: "#EFEFEF",
+      gray3: "#DEDEDE",
+      gray4: "#939393",
+      gray5: "#464646",
+      gray6: "#373737",
       black: "#212121",
     },
     Semantic: {
