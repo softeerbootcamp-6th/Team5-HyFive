@@ -12,6 +12,7 @@ import {
   CenterPage,
   VehicleRegisterPage,
   NotFoundPage,
+  TestPage,
 } from "@/pages";
 import { BrowserRouter, Route, Routes } from "react-router";
 
@@ -46,6 +47,9 @@ const Router = () => {
 
         {/* Not found */}
         <Route path="/*" element={<NotFoundPage />} />
+
+        {/* 컴포넌트 렌더링 확인용 페이지 */}
+        <Route path="/test" element={<TestPage />} />
       </Routes>
     </BrowserRouter>
   );
