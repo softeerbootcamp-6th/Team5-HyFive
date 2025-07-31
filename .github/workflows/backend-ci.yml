@@ -3,7 +3,7 @@ name: Backend CI
 on:
   push:
     branches:
-      - chore/#9
+      - dev-be
     paths:
       - 'backend/**'
 

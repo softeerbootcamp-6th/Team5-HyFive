@@ -10,9 +10,4 @@ class GachitaApplicationTests {
 	void contextLoads() {
 	}
 
-	@Test
-	void alwaysFailTest() {
-		fail("항상 실패하는 테스트!");
-	}
-
 }
