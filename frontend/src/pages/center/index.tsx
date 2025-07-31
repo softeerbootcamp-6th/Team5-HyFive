@@ -1,5 +1,5 @@
 const Center = () => {
-  return <></>;
+  return <>Center</>;
 };
 
 export default Center;

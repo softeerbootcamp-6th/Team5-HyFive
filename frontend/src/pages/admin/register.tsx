@@ -1,5 +1,5 @@
 const AdminRegister = () => {
-  return <></>;
+  return <>AdminRegister</>;
 };
 
 export default AdminRegister;

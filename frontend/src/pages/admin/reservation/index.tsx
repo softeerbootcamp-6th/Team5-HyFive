@@ -1,5 +1,5 @@
 const Reservation = () => {
-  return <></>;
+  return <>Reservation</>;
 };
 
 export default Reservation;

@@ -1,5 +1,5 @@
 const CenterDetail = () => {
-  return <>centerDetail</>;
+  return <>CenterDetail</>;
 };
 
 export default CenterDetail;

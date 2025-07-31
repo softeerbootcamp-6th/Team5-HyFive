@@ -1,5 +1,5 @@
 const VehicleRegister = () => {
-  return <></>;
+  return <>VehicleRegister</>;
 };
 
 export default VehicleRegister;
