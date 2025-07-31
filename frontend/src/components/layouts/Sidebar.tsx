@@ -1,10 +1,12 @@
 import { CarIcon, DashboardIcon, PersonIcon, RouteIcon } from "@/assets/icons";
 import { theme } from "@/styles/themes.style";
 import { css } from "@emotion/react";
+import { Link } from "react-router";
 
 interface SidebarContent {
   label: string;
   icon: React.ReactElement<React.SVGProps<SVGSVGElement>>;
+  route: string;
 }
 
 const Sidebar = () => {
@@ -12,29 +14,35 @@ const Sidebar = () => {
     {
       label: "실시간 예약 현황",
       icon: <DashboardIcon fill={theme.color.GrayScale.white} />,
+      route: "/admin/reservation/",
     },
     {
       label: "실시간 운행 현황",
       icon: <CarIcon fill={theme.color.GrayScale.white} />,
+      route: "/admin/reservation/schedule",
     },
     {
       label: "예약자 관리",
       icon: <PersonIcon fill={theme.color.GrayScale.white} />,
+      route: "/admin/reservation/users",
     },
     {
       label: "운행 경로 관리",
       icon: <RouteIcon fill={theme.color.GrayScale.white} />,
+      route: "/admin/reservation/paths",
     },
   ];
   return (
     <div css={SidebarConatiner}>
-      <div css={ContentButton}>신규 예약 접수</div>
+      <Link css={ContentButton} to="/admin/reservation/register">
+        신규 예약 접수
+      </Link>
       <ul>
         {sidebarContent.map((content) => (
-          <li key={content.label} css={ContentLi}>
+          <Link to={content.route} key={content.label} css={ContentLi}>
             {content.icon}
             <p>{content.label}</p>
-          </li>
+          </Link>
         ))}
       </ul>
     </div>
