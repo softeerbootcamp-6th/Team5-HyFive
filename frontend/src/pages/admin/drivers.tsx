@@ -1,5 +1,5 @@
 const Drivers = () => {
-  return <></>;
+  return <>Drivers</>;
 };
 
 export default Drivers;

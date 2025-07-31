@@ -1,5 +1,5 @@
 const Paths = () => {
-  return <></>;
+  return <>Paths</>;
 };
 
 export default Paths;

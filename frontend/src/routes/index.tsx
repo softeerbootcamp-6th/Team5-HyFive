@@ -25,13 +25,13 @@ const Router = () => {
             <Route path="schedule" element={<Schedule />} />
             <Route path="users" element={<Users />} />
             <Route path="paths" element={<Paths />} />
+            <Route path="register" element={<AdminRegister />} />
           </Route>
           <Route path="vehicles">
             <Route index element={<Vehicles />} />
             <Route path=":id" element={<CenterDetail />} />
           </Route>
           <Route path="drivers" element={<Drivers />} />
-          <Route path="register" element={<AdminRegister />} />
         </Route>
 
         {/* Center 영역 */}
