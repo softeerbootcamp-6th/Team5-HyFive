@@ -1,16 +1,19 @@
-import Landing from "@/pages";
-import Admin from "@/pages/admin";
-import Drivers from "@/pages/admin/drivers";
-import AdminRegister from "@/pages/admin/register";
-import Reservation from "@/pages/admin/reservation";
-import Paths from "@/pages/admin/reservation/paths";
-import Schedule from "@/pages/admin/reservation/schedule";
-import Users from "@/pages/admin/reservation/users";
-import Vehicles from "@/pages/admin/vehicles";
-import CenterDetail from "@/pages/admin/vehicles/[centerId]";
-import Center from "@/pages/center";
-import VehicleRegister from "@/pages/center/register";
-import NotFound from "@/pages/notFound";
+import { AdminLayout, CenterLayout, ReservationLayout } from "@/layouts";
+import {
+  LandingPage,
+  AdminPage,
+  DriversPage,
+  AdminRegisterPage,
+  ReservationPage,
+  PathsPage,
+  SchedulePage,
+  UsersPage,
+  VehiclesPage,
+  CenterDetailPage,
+  CenterPage,
+  VehicleRegisterPage,
+  NotFoundPage,
+} from "@/pages";
 import { BrowserRouter, Route, Routes } from "react-router";
 
 const Router = () => {
@@ -18,33 +21,33 @@ const Router = () => {
     <BrowserRouter>
       <Routes>
         {/* Admin 영역 */}
-        <Route path="/admin">
-          <Route index element={<Admin />} />
-          <Route path="reservation">
-            <Route index element={<Reservation />} />
-            <Route path="schedule" element={<Schedule />} />
-            <Route path="users" element={<Users />} />
-            <Route path="paths" element={<Paths />} />
-            <Route path="register" element={<AdminRegister />} />
+        <Route path="/admin/*" element={<AdminLayout />}>
+          <Route index element={<AdminPage />} />
+          <Route path="reservation" element={<ReservationLayout />}>
+            <Route index element={<ReservationPage />} />
+            <Route path="schedule" element={<SchedulePage />} />
+            <Route path="users" element={<UsersPage />} />
+            <Route path="paths" element={<PathsPage />} />
+            <Route path="register" element={<AdminRegisterPage />} />
           </Route>
           <Route path="vehicles">
-            <Route index element={<Vehicles />} />
-            <Route path=":id" element={<CenterDetail />} />
+            <Route index element={<VehiclesPage />} />
+            <Route path=":id" element={<CenterDetailPage />} />
           </Route>
-          <Route path="drivers" element={<Drivers />} />
+          <Route path="drivers" element={<DriversPage />} />
         </Route>
 
         {/* Center 영역 */}
-        <Route path="/center">
-          <Route index element={<Center />} />
-          <Route path="register" element={<VehicleRegister />} />
+        <Route path="/center/*" element={<CenterLayout />}>
+          <Route index element={<CenterPage />} />
+          <Route path="register" element={<VehicleRegisterPage />} />
         </Route>
 
         {/* 초기 진입 시 리디렉션 */}
-        <Route path="/" element={<Landing />} />
+        <Route path="/" element={<LandingPage />} />
 
         {/* Not found */}
-        <Route path="/*" element={<NotFound />} />
+        <Route path="/*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   );
