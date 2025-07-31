@@ -113,11 +113,12 @@ export const theme = {
         950: "#461902",
       },
     },
+  },
 
-    borderRadius: {
-      Small: "8px",
-      Medium: "10px",
-      Large: "12px",
-    },
+  /* border radius */
+  borderRadius: {
+    Small: "8px",
+    Medium: "10px",
+    Large: "12px",
   },
 };
