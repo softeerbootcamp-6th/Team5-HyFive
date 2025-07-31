@@ -43,4 +43,4 @@ out/
 .AppleDouble
 .LSOverride
 
-*.properties
+application.properties

@@ -14,7 +14,7 @@ public class TestService {
 
     public Test createTest(Test test) {
         if (test.getTitle() == null || test.getTitle().isEmpty()) {
-            throw new BusinessException(ErrorCode.INVALID_INPUT, "제목을 입력해주세요.");
+            throw new BusinessException(ErrorCode.INVALID_INPUT, "제목을 입력해주세요!");
         }
         return testRepository.save(test);
     }
