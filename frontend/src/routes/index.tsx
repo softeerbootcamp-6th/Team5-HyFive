@@ -1,16 +1,18 @@
-import LandingPage from "@/pages/landingPage";
-import AdminPage from "@/pages/admin/adminPage";
-import DriversPage from "@/pages/admin/driversPage";
-import AdminRegisterPage from "@/pages/admin/adminRegisterPage";
-import ReservationPage from "@/pages/admin/reservation/reservationPage";
-import PathsPage from "@/pages/admin/reservation/pathsPage";
-import SchedulePage from "@/pages/admin/reservation/schedulePage";
-import UsersPage from "@/pages/admin/reservation/usersPage";
-import VehiclesPage from "@/pages/admin/vehicles/vehiclesPage";
-import CenterDetailPage from "@/pages/admin/vehicles/centerDetailPage";
-import CenterPage from "@/pages/center/centerPage";
-import VehicleRegisterPage from "@/pages/center/centerRegisterPage";
-import NotFoundPage from "@/pages/notFoundPage";
+import {
+  LandingPage,
+  AdminPage,
+  DriversPage,
+  AdminRegisterPage,
+  ReservationPage,
+  PathsPage,
+  SchedulePage,
+  UsersPage,
+  VehiclesPage,
+  CenterDetailPage,
+  CenterPage,
+  VehicleRegisterPage,
+  NotFoundPage,
+} from "@/pages";
 import { BrowserRouter, Route, Routes } from "react-router";
 
 const Router = () => {
