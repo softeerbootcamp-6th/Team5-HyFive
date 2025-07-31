@@ -136,3 +136,6 @@ button {
 textarea {
   padding: 0;
 }
+input {
+  all: unset;
+}
