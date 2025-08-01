@@ -3,11 +3,11 @@ import {
   LandingPage,
   DriversPage,
   AdminRegisterPage,
-  ReservationPage,
+  BookPage,
   PathsPage,
   SchedulePage,
   UsersPage,
-  VehiclesPage,
+  CentersPage,
   CenterDetailPage,
   CenterPage,
   VehicleRegisterPage,
@@ -21,15 +21,15 @@ const Router = () => {
       <Routes>
         {/* Admin 영역 */}
         <Route path="/admin/*" element={<AdminLayout />}>
-          <Route path="reservation" element={<ReservationLayout />}>
-            <Route index element={<ReservationPage />} />
+          <Route path="book" element={<ReservationLayout />}>
+            <Route index element={<BookPage />} />
             <Route path="schedule" element={<SchedulePage />} />
             <Route path="users" element={<UsersPage />} />
             <Route path="paths" element={<PathsPage />} />
             <Route path="register" element={<AdminRegisterPage />} />
           </Route>
-          <Route path="vehicles">
-            <Route index element={<VehiclesPage />} />
+          <Route path="centers">
+            <Route index element={<CentersPage />} />
             <Route path=":id" element={<CenterDetailPage />} />
           </Route>
           <Route path="drivers" element={<DriversPage />} />
