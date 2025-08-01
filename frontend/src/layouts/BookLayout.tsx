@@ -2,9 +2,9 @@ import Sidebar from "@/components/layouts/Sidebar";
 import { css } from "@emotion/react";
 import { Outlet } from "react-router";
 
-const ReservationLayout = () => {
+const BookLayout = () => {
   return (
-    <div css={ReservationContainer}>
+    <div css={BookContainer}>
       <Sidebar />
       <div css={ContentContainer}>
         <Outlet />
@@ -13,9 +13,9 @@ const ReservationLayout = () => {
   );
 };
 
-export default ReservationLayout;
+export default BookLayout;
 
-const ReservationContainer = css`
+const BookContainer = css`
   width: 100%;
   height: calc(100vh - 72px);
   display: flex;
