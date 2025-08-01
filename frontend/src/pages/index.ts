@@ -2,7 +2,6 @@
 export { default as LandingPage } from "@/pages/landingPage";
 
 // Admin
-export { default as AdminPage } from "@/pages/admin/adminPage";
 export { default as DriversPage } from "@/pages/admin/driversPage";
 export { default as AdminRegisterPage } from "@/pages/admin/adminRegisterPage";
 export { default as ReservationPage } from "@/pages/admin/reservation/reservationPage";

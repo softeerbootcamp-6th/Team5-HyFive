@@ -1,7 +1,6 @@
 import { AdminLayout, CenterLayout, ReservationLayout } from "@/layouts";
 import {
   LandingPage,
-  AdminPage,
   DriversPage,
   AdminRegisterPage,
   ReservationPage,
@@ -22,7 +21,6 @@ const Router = () => {
       <Routes>
         {/* Admin 영역 */}
         <Route path="/admin/*" element={<AdminLayout />}>
-          <Route index element={<AdminPage />} />
           <Route path="reservation" element={<ReservationLayout />}>
             <Route index element={<ReservationPage />} />
             <Route path="schedule" element={<SchedulePage />} />
