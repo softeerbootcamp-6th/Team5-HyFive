@@ -1,131 +1,31 @@
 export const theme = {
   typography: {
     Heading: {
-      /* Heading/h1_semi */
-      h1_semi: {
-        fontSize: "36px",
-        fontWeight: 600,
-        lineHeight: "44px",
-        letterSpacing: "0%",
-      },
-      /* Heading/h1_medi */
-      h1_medi: {
-        fontSize: "36px",
-        fontWeight: 500,
-        lineHeight: "44px",
-        letterSpacing: "0%",
-      },
-      /* Heading/h2_semi */
-      h2_semi: {
-        fontSize: "32px",
-        fontWeight: 600,
-        lineHeight: "38px",
-        letterSpacing: "0%",
-      },
-      /* Heading/h3_semi */
-      h3_semi: {
-        fontSize: "24px",
-        fontWeight: 600,
-        lineHeight: "28px",
-        letterSpacing: "0%",
-      },
-      /* Heading/h4_semi */
-      h4_semi: {
-        fontSize: "18px",
-        fontWeight: 600,
-        lineHeight: "24px",
-        letterSpacing: "0%",
-      },
+      h1_semi: "600 36px/44px 'Pretendard', sans-serif",
+      h1_medi: "500 36px/44px 'Pretendard', sans-serif",
+      h2_semi: "600 32px/38px 'Pretendard', sans-serif",
+      h3_semi: "600 24px/28px 'Pretendard', sans-serif",
+      h4_semi: "600 20px/26px 'Pretendard', sans-serif",
+      h5_semi: "600 18px/24px 'Pretendard', sans-serif",
     },
-
     Body: {
-      /* Body/b1_medi */
-      b1_medi: {
-        fontSize: "24px",
-        fontWeight: 500,
-        lineHeight: "34px",
-        letterSpacing: "0%",
-      },
-      /* Body/b2_semi */
-      b2_semi: {
-        fontSize: "20px",
-        fontWeight: 600,
-        lineHeight: "28px",
-        letterSpacing: "0%",
-      },
-      /* Body/b2_medi */
-      b2_medi: {
-        fontSize: "20px",
-        fontWeight: 500,
-        lineHeight: "28px",
-        letterSpacing: "0%",
-      },
-      /* Body/b3_medi */
-      b3_medi: {
-        fontSize: "18px",
-        fontWeight: 500,
-        lineHeight: "24px",
-        letterSpacing: "0%",
-      },
-      /* Body/b3_regu */
-      b3_regu: {
-        fontSize: "18px",
-        fontWeight: 400,
-        lineHeight: "24px",
-        letterSpacing: "0%",
-      },
-      /* Body/b4_medi */
-      b4_medi: {
-        fontSize: "16px",
-        fontWeight: 500,
-        lineHeight: "22px",
-        letterSpacing: "0%",
-      },
-      /* Body/b4_regu */
-      b4_regu: {
-        fontSize: "16px",
-        fontWeight: 400,
-        lineHeight: "22px",
-        letterSpacing: "0%",
-      },
+      b1_medi: "500 24px/34px 'Pretendard', sans-serif",
+      b2_semi: "600 20px/28px 'Pretendard', sans-serif",
+      b2_medi: "500 20px/28px 'Pretendard', sans-serif",
+      b3_medi: "500 18px/24px 'Pretendard', sans-serif",
+      b3_regu: "400 18px/24px 'Pretendard', sans-serif",
+      b4_medi: "500 16px/22px 'Pretendard', sans-serif",
+      b4_regu: "400 16px/22px 'Pretendard', sans-serif",
     },
-
     Label: {
-      /* Label/l1_semi */
-      l1_semi: {
-        fontSize: "24px",
-        fontWeight: 600,
-        lineHeight: "28px",
-        letterSpacing: "0%",
-      },
-      /* Label/l2_semi */
-      l2_semi: {
-        fontSize: "20px",
-        fontWeight: 600,
-        lineHeight: "24px",
-        letterSpacing: "0%",
-      },
-      /* Label/l3_semi */
-      l3_semi: {
-        fontSize: "18px",
-        fontWeight: 600,
-        lineHeight: "22px",
-        letterSpacing: "0%",
-      },
-      /* Label/l4_semi */
-      l4_semi: {
-        fontSize: "16px",
-        fontWeight: 600,
-        lineHeight: "20px",
-        letterSpacing: "0%",
-      },
-      /* Label/l5_semi */
-      l5_semi: {
-        fontSize: "14px",
-        fontWeight: 600,
-        lineHeight: "16px",
-        letterSpacing: "0%",
-      },
+      l1_semi: "600 24px/28px 'Pretendard', sans-serif",
+      l2_semi: "600 20px/24px 'Pretendard', sans-serif",
+      l3_semi: "600 18px/22px 'Pretendard', sans-serif",
+      l4_semi: "600 16px/20px 'Pretendard', sans-serif",
+      l5_semi: "600 14px/16px 'Pretendard', sans-serif",
+    },
+    Caption: {
+      c1_medi: "500 12px/16px 'Pretendard', sans-serif",
     },
   },
 
