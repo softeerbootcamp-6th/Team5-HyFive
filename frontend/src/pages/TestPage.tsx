@@ -1,3 +1,4 @@
+import Button from "@/components/button/Button";
 import Chip from "@/components/chip/Chip";
 import BookCard from "@/components/statusCard/BookCard";
 import DrivingCard from "@/components/statusCard/DrivingCard";
@@ -118,8 +119,20 @@ const TestPage = () => {
       {/* ✅ 버튼 컴포넌트 */}
       <section>
         <h2>🔘 버튼 컴포넌트</h2>
-        <div style={{ border: "1px dashed #aaa", padding: "1rem" }}>
-          버튼 컴포넌트 자리
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "12px",
+
+            border: "1px dashed #aaa",
+            padding: "1rem",
+          }}
+        >
+          <Button bgColor="gray" size="small" />
+          <Button bgColor="orange" size="small" />
+          <Button bgColor="gray" size="big" />
+          <Button bgColor="orange" size="big" />
         </div>
       </section>
 
