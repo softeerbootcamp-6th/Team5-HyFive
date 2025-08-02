@@ -1,3 +1,4 @@
+import Chip from "@/components/chip/Chip";
 import BookCard from "@/components/statusCard/BookCard";
 import DrivingCard from "@/components/statusCard/DrivingCard";
 import Table from "@/components/table/Table";
@@ -95,19 +96,22 @@ const TestPage = () => {
         </div>
       </section>
 
-      {/* ✅ 애니메이션 포함 컴포넌트 */}
-      <section>
-        <h2>🎞️ 애니메이션 컴포넌트</h2>
-        <div style={{ border: "1px dashed #aaa", padding: "1rem" }}>
-          애니메이션 컴포넌트 자리
-        </div>
-      </section>
-
       {/* ✅ 칩 컴포넌트 */}
       <section>
         <h2>🏷️ 칩 컴포넌트</h2>
-        <div style={{ border: "1px dashed #aaa", padding: "1rem" }}>
-          칩 컴포넌트 자리
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            gap: "12px",
+            border: "1px dashed #aaa",
+            padding: "1rem",
+          }}
+        >
+          <Chip chipType="stroke" isActive={false} content="chip" />
+          <Chip chipType="stroke" isActive={true} content="chip" />
+          <Chip chipType="fill" isActive={false} content="chip" />
+          <Chip chipType="fill" isActive={true} content="chip" />
         </div>
       </section>
 
