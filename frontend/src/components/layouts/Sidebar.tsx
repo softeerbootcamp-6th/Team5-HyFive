@@ -10,7 +10,7 @@ interface SidebarContent {
 }
 
 const Sidebar = () => {
-  const sidebarContent: SidebarContent[] = [
+  const SIDEBAR_CONTENT: SidebarContent[] = [
     {
       label: "실시간 예약 현황",
       icon: <DashboardIcon fill={theme.color.GrayScale.white} />,
@@ -31,14 +31,14 @@ const Sidebar = () => {
       icon: <RouteIcon fill={theme.color.GrayScale.white} />,
       route: "/admin/reservation/paths",
     },
-  ];
+  ] as const;
   return (
     <div css={SidebarConatiner}>
       <Link css={ContentButton} to="/admin/reservation/register">
         신규 예약 접수
       </Link>
       <ul>
-        {sidebarContent.map((content) => (
+        {SIDEBAR_CONTENT.map((content) => (
           <Link to={content.route} key={content.label} css={ContentLi}>
             {content.icon}
             <p>{content.label}</p>
