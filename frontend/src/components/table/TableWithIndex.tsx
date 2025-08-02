@@ -25,7 +25,7 @@ const TableWithIndex = ({ rows }: TableProps) => {
       </thead>
       <tbody>
         {rows.map((row, idx) => (
-          <tr>
+          <tr css={TableContentRow}>
             <td css={TableContentElement}>{idx + 1}</td>
             {keys.map((key) => {
               switch (key) {
@@ -66,6 +66,12 @@ const TableContainer = css`
 const TableHeader = css`
   color: ${theme.color.GrayScale.gray5};
   background-color: ${theme.color.GrayScale.gray1};
+`;
+
+const TableContentRow = css`
+  &:hover {
+    background-color: ${color.GrayScale.gray1};
+  }
 `;
 
 const TableHeaderElement = css`

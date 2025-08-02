@@ -2,6 +2,7 @@ import { theme } from "@/styles/themes.style";
 import type { TableObject } from "@/utils/TableMatcher";
 import TableMatcher from "@/utils/TableMatcher";
 import { css } from "@emotion/react";
+const { color, typography } = theme;
 
 interface TableProps {
   rows: TableObject[];
@@ -20,7 +21,7 @@ const Table = ({ rows }: TableProps) => {
       </thead>
       <tbody>
         {rows.map((row) => (
-          <tr>
+          <tr css={TableContentRow}>
             {keys.map((key) => (
               <td css={TableContentElement}>{row[key]}</td>
             ))}
@@ -35,12 +36,18 @@ export default Table;
 
 const TableContainer = css`
   width: 100%;
-  font: ${theme.typography.Body.b4_medi};
+  font: ${typography.Body.b4_medi};
 `;
 
 const TableHeader = css`
   color: ${theme.color.GrayScale.gray5};
-  background-color: ${theme.color.GrayScale.gray1};
+  background-color: ${color.GrayScale.gray1};
+`;
+
+const TableContentRow = css`
+  &:hover {
+    background-color: ${color.GrayScale.gray1};
+  }
 `;
 
 const TableHeaderElement = css`
@@ -50,8 +57,7 @@ const TableHeaderElement = css`
 const TableContentElement = css`
   text-align: center;
   padding: 16px 12px;
-  /* border-right: 1px solid ${theme.color.GrayScale.gray3}; */
-  border-bottom: 1px solid ${theme.color.GrayScale.gray3};
+  border-bottom: 1px solid ${color.GrayScale.gray3};
 
   &:last-child {
     border-right: none;

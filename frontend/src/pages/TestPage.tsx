@@ -11,16 +11,8 @@ import TableMatcher from "@/utils/TableMatcher";
 
 const TestPage = () => {
   //Table
-  const { dataType: orderType, originRows: orderRows } =
-    TableMatcher.matchTableType(rowsOrder);
-  const { dataType: centerType, originRows: centerRows } =
-    TableMatcher.matchTableType(rowsCenter);
-  const {
-    dataType: userType,
-    userRows,
-    bookingRows,
-    routeRows,
-  } = TableMatcher.matchTableType(rowsUser);
+  const { userRows, bookingRows, routeRows } =
+    TableMatcher.matchBookTableType(rowsUser);
   return (
     <div
       style={{
@@ -44,15 +36,11 @@ const TestPage = () => {
             padding: "1rem",
           }}
         >
-          {orderType === "orders" && <Table rows={orderRows} />}
-          {centerType === "centers" && <Table rows={centerRows} />}
-          {userType === "book" && (
-            <>
-              <Table rows={userRows} />
-              <Table rows={bookingRows} />
-              <Table rows={routeRows} />
-            </>
-          )}
+          <Table rows={rowsOrder} />
+          <Table rows={rowsCenter} />
+          <Table rows={userRows} />
+          <Table rows={bookingRows} />
+          <Table rows={routeRows} />
         </div>
       </section>
 

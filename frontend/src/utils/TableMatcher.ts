@@ -36,64 +36,49 @@ const MAPPING_TABLE = {
 } as const;
 
 //타입
-type TableType = "book" | "orders" | "centers" | "indexs";
 type BookType = "user" | "booking" | "route";
 type TableKey = keyof typeof MAPPING_TABLE;
 export type TableObject = Partial<Record<TableKey, string | number | boolean>>;
 
 const TableMatcher = {
-  //전체 데이터를 각 테이블 타입에 맞게 분할
-  matchTableType: (rows: TableObject[]) => {
-    const getDataType = (data: TableObject): TableType => {
-      if ("order" in data) return "orders";
-      if ("centerName" in data) return "centers";
-      if ("status" in data) return "indexs";
-      return "book";
-    };
-
-    //데이터 타입이 book인 경우 예약자정보, 예약정보, 경로정보로 분할
-    const splitBookData = (rows: TableObject[]) => {
-      const groupData: Record<BookType, TableObject[]> = {
-        user: [],
-        booking: [],
-        route: [],
-      };
-      rows.forEach((row) => {
-        const user: TableObject = {};
-        const booking: TableObject = {};
-        const route: TableObject = {};
-
-        Object.entries(row).forEach(([key, value]) => {
-          const typedKey = key as TableKey;
-          const type = MAPPING_TABLE[typedKey].type;
-          if (type === "user") user[typedKey] = value;
-          else if (type === "booking") booking[typedKey] = value;
-          else if (type === "route") route[typedKey] = value;
-        });
-
-        groupData.user.push(user);
-        groupData.booking.push(booking);
-        groupData.route.push(route);
-      });
-      return groupData;
-    };
-
-    const dataType = getDataType(rows[0]);
-    if (dataType !== "book") return { dataType, originRows: rows };
-    const splitRows = splitBookData(rows);
-    return {
-      dataType,
-      userRows: splitRows.user,
-      bookingRows: splitRows.booking,
-      routeRows: splitRows.route,
-    };
-  },
-
   //전체 행의 key값을 MAPPING_TABEL과 매칭
   matchTableHeader: (rows: TableObject[]) => {
     const keys = Object.keys(rows[0] ?? {}) as TableKey[];
     const labels = keys.map((key) => MAPPING_TABLE[key]["label"]);
     return { keys, labels };
+  },
+
+  //데이터 타입이 book인 경우 예약자정보, 예약정보, 경로정보로 분할
+  matchBookTableType: (rows: TableObject[]) => {
+    const groupData: Record<BookType, TableObject[]> = {
+      user: [],
+      booking: [],
+      route: [],
+    };
+
+    rows.forEach((row) => {
+      const grouped: Record<BookType, TableObject> = {
+        user: {},
+        booking: {},
+        route: {},
+      };
+
+      Object.entries(row).forEach(([key, value]) => {
+        const typedKey = key as TableKey;
+        const type = MAPPING_TABLE[typedKey].type as BookType;
+        grouped[type][typedKey] = value;
+      });
+
+      (Object.keys(grouped) as BookType[]).forEach((type) => {
+        groupData[type].push(grouped[type]);
+      });
+    });
+
+    return {
+      userRows: groupData.user,
+      bookingRows: groupData.booking,
+      routeRows: groupData.route,
+    };
   },
 };
 
