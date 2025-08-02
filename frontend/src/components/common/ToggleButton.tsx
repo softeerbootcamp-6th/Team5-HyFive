@@ -1,38 +1,42 @@
 import { CheckCircleIcon, ActiveCheckCircleIcon } from "@/assets/icons";
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
-
 const { color, typography, borderRadius } = theme;
 
-interface CheckToggleButtonProps {
+type toggleButtonType = "check" | "radio";
+
+interface ToggleButtonProps {
+  type: toggleButtonType;
   label: string;
   isChecked: boolean;
   onToggle: () => void;
 }
 
-const CheckToggleButton = ({
+const ToggleButton = ({
+  type,
   label,
   isChecked,
   onToggle,
-}: CheckToggleButtonProps) => {
+}: ToggleButtonProps) => {
   return (
-    <button css={ButtonContainer(isChecked)} onClick={onToggle}>
+    <button css={ButtonContainer(type, isChecked)} onClick={onToggle}>
       <p css={StyledLabel(isChecked)}>{label}</p>
-      {isChecked ? (
-        <ActiveCheckCircleIcon />
-      ) : (
-        <CheckCircleIcon
-          fill={color.GrayScale.white}
-          stroke={color.GrayScale.gray4}
-        />
-      )}
+      {type === "check" &&
+        (isChecked ? (
+          <ActiveCheckCircleIcon />
+        ) : (
+          <CheckCircleIcon
+            fill={color.GrayScale.white}
+            stroke={color.GrayScale.gray4}
+          />
+        ))}
     </button>
   );
 };
 
-export default CheckToggleButton;
+export default ToggleButton;
 
-const ButtonContainer = (isChecked: boolean) => css`
+const ButtonContainer = (type: toggleButtonType, isChecked: boolean) => css`
   border: 1px solid
     ${isChecked ? color.Maincolor.primary : color.GrayScale.gray3};
   border-radius: ${borderRadius.Medium};
@@ -40,7 +44,7 @@ const ButtonContainer = (isChecked: boolean) => css`
     ? color.SemanticScale.orange[50]
     : color.GrayScale.white};
   display: flex;
-  justify-content: space-between;
+  justify-content: ${type === "check" ? "space-between" : "center"};
   flex: auto;
   padding: 16px 24px;
   cursor: pointer;
