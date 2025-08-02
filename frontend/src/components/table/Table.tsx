@@ -1,6 +1,6 @@
 import { theme } from "@/styles/themes.style";
-import type { TableObject } from "@/utils/tableMatcher";
-import TableMatcher from "@/utils/tableMatcher";
+import type { TableObject } from "@/utils/TableMatcher";
+import TableMatcher from "@/utils/TableMatcher";
 import { css } from "@emotion/react";
 
 interface TableProps {
