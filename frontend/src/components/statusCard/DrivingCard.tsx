@@ -6,7 +6,7 @@ const { color, typography } = theme;
 const grayColor = color.GrayScale.gray4;
 const blueColor = color.SemanticScale.blue[400];
 
-type DrivingType = "pending" | "progress" | "end";
+export type DrivingType = "waiting" | "progress" | "end";
 interface DrivingCardProps {
   drivingType: DrivingType;
   data: DrivingDataType;

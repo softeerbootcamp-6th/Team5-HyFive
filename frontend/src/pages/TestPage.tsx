@@ -1,9 +1,12 @@
 import BookCard from "@/components/statusCard/BookCard";
 import DrivingCard from "@/components/statusCard/DrivingCard";
 import Table from "@/components/table/Table";
+import TableWithIndex from "@/components/table/TableWithIndex";
 import { bookDataList } from "@/mocks/bookMocks";
 import { drivingDataList } from "@/mocks/drivingMocks";
+import { routeDataList } from "@/mocks/routeMocks";
 import { rowsCenter, rowsOrder, rowsUser } from "@/mocks/tableMocks";
+import { userDataList } from "@/mocks/usersMocks";
 import TableMatcher from "@/utils/TableMatcher";
 
 const TestPage = () => {
@@ -53,6 +56,23 @@ const TestPage = () => {
         </div>
       </section>
 
+      {/* ✅ 인덱스 테이블 컴포넌트 */}
+      <section>
+        <h2>📋 TableWithIndex 컴포넌트</h2>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "2rem",
+            border: "1px dashed #aaa",
+            padding: "1rem",
+          }}
+        >
+          <TableWithIndex rows={userDataList} />
+          <TableWithIndex rows={routeDataList} />
+        </div>
+      </section>
+
       {/* ✅ 예약 정보 카드 */}
       <section>
         <h2>🚐 예약 정보 카드</h2>
@@ -64,9 +84,9 @@ const TestPage = () => {
             padding: "1rem",
           }}
         >
-          <BookCard cardType="pending" data={bookDataList[0]} />
-          <BookCard cardType="success" data={bookDataList[1]} />
-          <BookCard cardType="fail" data={bookDataList[2]} />
+          <BookCard bookType="pending" data={bookDataList[0]} />
+          <BookCard bookType="success" data={bookDataList[1]} />
+          <BookCard bookType="fail" data={bookDataList[2]} />
         </div>
       </section>
 
@@ -81,7 +101,7 @@ const TestPage = () => {
             padding: "1rem",
           }}
         >
-          <DrivingCard drivingType="pending" data={drivingDataList[0]} />
+          <DrivingCard drivingType="waiting" data={drivingDataList[0]} />
           <DrivingCard drivingType="progress" data={drivingDataList[1]} />
           <DrivingCard drivingType="end" data={drivingDataList[2]} />
         </div>

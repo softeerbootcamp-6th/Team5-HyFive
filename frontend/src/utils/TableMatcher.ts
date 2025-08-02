@@ -27,15 +27,19 @@ const MAPPING_TABLE = {
   //센터 정보
   centerName: { label: "센터명", type: "centers" },
   centerLocation: { label: "위치", type: "centers" },
-  centerCars: { label: "등록 차량", type: "centers" },
-  centerLowCars: { label: "저상형 대수", type: "centers" },
+  centerCarCount: { label: "등록 차량", type: "centers" },
+  centerLowCarCount: { label: "저상형 대수", type: "centers" },
+
+  //인덱스 테이블 정보
+  status: { label: "상태", type: "index" },
+  totalUserCount: { label: "탑승자", type: "index" },
 } as const;
 
 //타입
-type TableType = "book" | "orders" | "centers";
+type TableType = "book" | "orders" | "centers" | "indexs";
 type BookType = "user" | "booking" | "route";
 type TableKey = keyof typeof MAPPING_TABLE;
-export type TableObject = Partial<Record<TableKey, string | number>>;
+export type TableObject = Partial<Record<TableKey, string | number | boolean>>;
 
 const TableMatcher = {
   //전체 데이터를 각 테이블 타입에 맞게 분할
@@ -43,6 +47,7 @@ const TableMatcher = {
     const getDataType = (data: TableObject): TableType => {
       if ("order" in data) return "orders";
       if ("centerName" in data) return "centers";
+      if ("status" in data) return "indexs";
       return "book";
     };
 

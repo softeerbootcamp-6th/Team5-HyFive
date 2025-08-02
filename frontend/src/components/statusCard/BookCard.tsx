@@ -4,13 +4,13 @@ import type { BookDataType } from "@/components/types/bookType";
 import { css } from "@emotion/react";
 const { color, typography } = theme;
 
-type CardType = "pending" | "success" | "fail";
+export type BookType = "pending" | "success" | "fail";
 interface BookCardProps {
-  cardType: CardType;
+  bookType: BookType;
   data: BookDataType;
 }
 
-const BookCard = ({ cardType, data }: BookCardProps) => {
+const BookCard = ({ bookType, data }: BookCardProps) => {
   return (
     <div css={BookCardContainer}>
       <div>
@@ -18,7 +18,7 @@ const BookCard = ({ cardType, data }: BookCardProps) => {
           <p css={TimeText}>{data.bookTime}</p>
           <p css={CardTypeText}>접수</p>
         </div>
-        <div css={DateWrapper(cardType)}>
+        <div css={DateWrapper(bookType)}>
           <p>이용 희망 날짜</p>
           <p>{data.bookDate}</p>
         </div>
@@ -61,7 +61,7 @@ const TimeWrapper = css`
   align-items: end;
 `;
 
-const DateWrapper = (cardType: CardType) => css`
+const DateWrapper = (cardType: BookType) => css`
   width: fit-content;
   display: flex;
   flex-direction: row;
