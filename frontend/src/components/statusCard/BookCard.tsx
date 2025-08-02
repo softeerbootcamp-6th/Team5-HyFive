@@ -16,7 +16,7 @@ const BookCard = ({ cardType, data }: BookCardProps) => {
       <div>
         <div css={TimeWrapper}>
           <p css={TimeText}>{data.bookTime}</p>
-          <p css={GrayText}>접수</p>
+          <p css={CardTypeText}>접수</p>
         </div>
         <div css={DateWrapper(cardType)}>
           <p>이용 희망 날짜</p>
@@ -68,7 +68,7 @@ const DateWrapper = (cardType: CardType) => css`
   gap: 8px;
   padding: 4px;
   margin-bottom: 6px;
-  border-radius: 5px;
+  border-radius: 10px;
   text-align: center;
   font: ${typography.Body.b2_medi};
   background-color: ${cardType === "pending"
@@ -101,6 +101,12 @@ const UserWrapper = css`
 const TimeText = css`
   font: ${typography.Heading.h1_semi};
   gap: 8px;
+`;
+
+const CardTypeText = css`
+  color: ${color.GrayScale.gray4};
+  font: ${typography.Body.b3_medi};
+  padding: 4px 0;
 `;
 
 const GrayText = css`

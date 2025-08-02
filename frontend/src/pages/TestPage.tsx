@@ -1,6 +1,8 @@
 import BookCard from "@/components/statusCard/BookCard";
+import DrivingCard from "@/components/statusCard/DrivingCard";
 import Table from "@/components/table/Table";
 import { bookDataList } from "@/mocks/bookMocks";
+import { drivingDataList } from "@/mocks/drivingMocks";
 import { rowsCenter, rowsOrder, rowsUser } from "@/mocks/tableMocks";
 import TableMatcher from "@/utils/TableMatcher";
 
@@ -51,9 +53,9 @@ const TestPage = () => {
         </div>
       </section>
 
-      {/* ✅ 운행 정보 카드 */}
+      {/* ✅ 예약 정보 카드 */}
       <section>
-        <h2>🚐 운행 정보 카드</h2>
+        <h2>🚐 예약 정보 카드</h2>
         <div
           style={{
             display: "flex",
@@ -65,6 +67,23 @@ const TestPage = () => {
           <BookCard cardType="pending" data={bookDataList[0]} />
           <BookCard cardType="success" data={bookDataList[1]} />
           <BookCard cardType="fail" data={bookDataList[2]} />
+        </div>
+      </section>
+
+      {/* ✅ 운행 정보 카드 */}
+      <section>
+        <h2>🚐 운행 정보 카드</h2>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            border: "1px dashed #aaa",
+            padding: "1rem",
+          }}
+        >
+          <DrivingCard drivingType="pending" data={drivingDataList[0]} />
+          <DrivingCard drivingType="progress" data={drivingDataList[1]} />
+          <DrivingCard drivingType="end" data={drivingDataList[2]} />
         </div>
       </section>
 
