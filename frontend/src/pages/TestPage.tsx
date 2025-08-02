@@ -1,8 +1,11 @@
+import BookCard from "@/components/statusCard/BookCard";
 import Table from "@/components/table/Table";
+import { bookDataList } from "@/mocks/bookMocks";
 import { rowsCenter, rowsOrder, rowsUser } from "@/mocks/tableMocks";
 import TableMatcher from "@/utils/TableMatcher";
 
 const TestPage = () => {
+  //Table
   const { dataType: orderType, originRows: orderRows } =
     TableMatcher.matchTableType(rowsOrder);
   const { dataType: centerType, originRows: centerRows } =
@@ -51,8 +54,17 @@ const TestPage = () => {
       {/* ✅ 운행 정보 카드 */}
       <section>
         <h2>🚐 운행 정보 카드</h2>
-        <div style={{ border: "1px dashed #aaa", padding: "1rem" }}>
-          운행 정보 카드 자리
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            border: "1px dashed #aaa",
+            padding: "1rem",
+          }}
+        >
+          <BookCard cardType="pending" data={bookDataList[0]} />
+          <BookCard cardType="success" data={bookDataList[1]} />
+          <BookCard cardType="fail" data={bookDataList[2]} />
         </div>
       </section>
 
