@@ -1,5 +1,3 @@
-import type { BookType } from "@/components/statusCard/BookCard";
-import type { DrivingType } from "@/components/statusCard/DrivingCard";
 import { theme } from "@/styles/themes.style";
 import type { TableObject } from "@/utils/TableMatcher";
 import TableMatcher from "@/utils/TableMatcher";
@@ -9,7 +7,6 @@ const { color } = theme;
 interface TableProps {
   rows: TableObject[];
 }
-type StatusType = BookType | DrivingType;
 
 const TableWithIndex = ({ rows }: TableProps) => {
   const { keys, labels } = TableMatcher.matchTableHeader(rows);
@@ -86,27 +83,4 @@ const TableContentElement = css`
   &:last-child {
     border-right: none;
   }
-`;
-
-const backgroundColorMap: Record<StatusType, string> = {
-  waiting: color.GrayScale.gray2,
-  progress: color.SemanticScale.blue[50],
-  end: color.SemanticScale.green[50],
-  pending: color.SemanticScale.orange[50],
-  success: color.SemanticScale.blue[50],
-  fail: color.SemanticScale.red[50],
-};
-
-const textColorMap: Record<StatusType, string> = {
-  waiting: color.GrayScale.gray5,
-  progress: color.Semantic.success,
-  end: color.Semantic.information,
-  pending: color.Maincolor.primary,
-  success: color.Semantic.success,
-  fail: color.Semantic.error,
-};
-
-const StatusWrapper = (value: StatusType) => css`
-  background-color: ${backgroundColorMap[value]};
-  color: ${textColorMap[value]};
 `;

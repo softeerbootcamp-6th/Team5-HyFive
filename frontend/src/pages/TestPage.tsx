@@ -1,6 +1,6 @@
 import Button from "@/components/button/Button";
 import Chip from "@/components/chip/Chip";
-import SearchInput from "@/components/Search/SearchButton";
+import SearchInput from "@/components/Search/SearchInput";
 import BookCard from "@/components/statusCard/BookCard";
 import DrivingCard from "@/components/statusCard/DrivingCard";
 import Table from "@/components/table/Table";
@@ -13,7 +13,6 @@ import { userDataList } from "@/mocks/usersMocks";
 import TableMatcher from "@/utils/TableMatcher";
 
 const TestPage = () => {
-  //Table
   const { userRows, bookingRows, routeRows } =
     TableMatcher.matchBookTableType(rowsUser);
   return (
