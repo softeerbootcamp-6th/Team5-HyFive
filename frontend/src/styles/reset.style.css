@@ -136,6 +136,10 @@ button {
 textarea {
   padding: 0;
 }
+input {
+  border: none;
+  outline: none;
+}
 a,
 a:link,
 a:visited,

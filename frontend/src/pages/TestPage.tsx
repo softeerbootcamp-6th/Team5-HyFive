@@ -1,5 +1,6 @@
 import Button from "@/components/button/Button";
 import Chip from "@/components/chip/Chip";
+import SearchInput from "@/components/Search/SearchButton";
 import BookCard from "@/components/statusCard/BookCard";
 import DrivingCard from "@/components/statusCard/DrivingCard";
 import Table from "@/components/table/Table";
@@ -139,8 +140,17 @@ const TestPage = () => {
       {/* ✅ 검색 컴포넌트 */}
       <section>
         <h2>🔍 검색 컴포넌트</h2>
-        <div style={{ border: "1px dashed #aaa", padding: "1rem" }}>
-          검색 컴포넌트 자리
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            gap: "12px",
+            border: "1px dashed #aaa",
+            padding: "1rem",
+          }}
+        >
+          <SearchInput searchType="user" />
+          <SearchInput searchType="route" />
         </div>
       </section>
     </div>
