@@ -63,12 +63,6 @@ const getTabFontColor = (type: TabsType, isActive: boolean) => {
   return isActive ? color.GrayScale.white : color.GrayScale.gray4;
 };
 
-const getUnderlineColor = (type: TabsType, isActive: boolean) => {
-  return type === "bar_true" && isActive
-    ? `${color.GrayScale.black}`
-    : `transparent`;
-};
-
 const getTabHoverColor = (type: TabsType) => {
   if (type === "bar_true") {
     return color.GrayScale.gray5;

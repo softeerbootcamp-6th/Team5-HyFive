@@ -6,10 +6,12 @@ const { color, typography } = theme;
 const TAG_TYPES = ["orange", "red", "blue", "green", "gray"] as const;
 
 type TagType = (typeof TAG_TYPES)[number];
+
 interface TagProps {
   type: TagType;
   label: string;
 }
+
 const Tag = ({ type, label }: TagProps) => {
   return <div css={TagStyleCSS(type)}>{label}</div>;
 };
