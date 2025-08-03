@@ -11,6 +11,10 @@ jobs:
       matrix:
         node-version: [20]
 
+    defaults:
+      run:
+        working-directory: frontend
+
     steps:
       - uses: actions/checkout@v4
 
@@ -23,11 +27,11 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "pnpm"
+          cache-dependency-path: frontend/pnpm-lock.yaml
 
       - name: Install dependencies
         run: pnpm install
 
-      # 5. ESlint 검사
       - name: Run ESLint
         run: pnpm lint
 
@@ -35,7 +39,7 @@ jobs:
         run: pnpm format --check
 
       - name: Run TypeScript for type check
-        run: tsc --noEmit
+        run: pnpm tsc --noEmit
 
       - name: Build Project
         run: pnpm build
@@ -45,4 +49,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: dist
-          path: dist
+          path: frontend/dist
