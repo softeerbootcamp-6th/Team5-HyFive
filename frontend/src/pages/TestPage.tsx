@@ -1,6 +1,6 @@
 import Button from "@/components/button/Button";
 import Chip from "@/components/chip/Chip";
-import SearchInput from "@/components/Search/SearchInput";
+import SearchInput from "@/components/search/SearchInput";
 import BookCard from "@/components/statusCard/BookCard";
 import DrivingCard from "@/components/statusCard/DrivingCard";
 import Table from "@/components/table/Table";
