@@ -9,6 +9,7 @@ interface InputProps {
   placeholder?: string;
   error?: string;
   readOnly?: boolean;
+  value?: string;
   onClick?: () => void;
 }
 
@@ -17,6 +18,7 @@ const Input = ({
   required = false,
   icon,
   placeholder,
+  value,
   error,
   readOnly = false,
   onClick,
@@ -37,6 +39,7 @@ const Input = ({
           onBlur={() => setIsFocused(false)}
           readOnly={readOnly}
           onClick={onClick}
+          value={value}
         />
         {icon && <span css={IconWrapper}>{icon}</span>}
       </div>
