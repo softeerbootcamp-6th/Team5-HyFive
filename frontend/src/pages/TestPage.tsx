@@ -61,6 +61,15 @@ const TestPage = () => {
       ),
     },
     {
+      label: "🔍 검색 컴포넌트",
+      component: (
+        <div css={searchStyle}>
+          <SearchInput searchType="user" />
+          <SearchInput searchType="route" />
+        </div>
+      ),
+    },
+    {
       label: "🏷️ 칩 컴포넌트",
       component: (
         <div css={chipStyle}>
@@ -79,15 +88,6 @@ const TestPage = () => {
           <Button bgColor="orange" size="small" />
           <Button bgColor="gray" size="big" />
           <Button bgColor="orange" size="big" />
-        </div>
-      ),
-    },
-    {
-      label: "🔍 검색 컴포넌트",
-      component: (
-        <div css={searchStyle}>
-          <SearchInput searchType="user" />
-          <SearchInput searchType="route" />
         </div>
       ),
     },
