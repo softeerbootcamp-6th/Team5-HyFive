@@ -1,10 +1,10 @@
-import CenterHeader from "@/components/layouts/CenterHeader";
+import Header from "@/components/layouts/Header";
 import { Outlet } from "react-router";
 
 const CenterLayout = () => {
   return (
     <div>
-      <CenterHeader />
+      <Header />
       <Outlet />
     </div>
   );
