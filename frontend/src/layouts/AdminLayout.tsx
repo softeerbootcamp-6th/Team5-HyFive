@@ -4,7 +4,7 @@ import { Outlet } from "react-router";
 const AdminLayout = () => {
   return (
     <div>
-      <Header />
+      <Header type="ADMIN" hasTab={true} />
       <Outlet />
     </div>
   );

@@ -4,7 +4,7 @@ import { Outlet } from "react-router";
 const CenterLayout = () => {
   return (
     <div>
-      <Header />
+      <Header type="CENTER" hasTab={false} />
       <Outlet />
     </div>
   );
