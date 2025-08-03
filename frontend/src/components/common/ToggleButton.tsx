@@ -1,9 +1,9 @@
-import { CheckCircleIcon, ActiveCheckCircleIcon } from "@/assets/icons";
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
+import { ActiveCheckCircleIcon, CheckCircleIcon } from "@/assets/icons";
 const { color, typography, borderRadius } = theme;
 
-type toggleButtonType = "check" | "radio";
+type toggleButtonType = "CHECK" | "RADIO";
 
 interface ToggleButtonProps {
   type: toggleButtonType;
@@ -21,7 +21,7 @@ const ToggleButton = ({
   return (
     <button css={ButtonContainer(type, isChecked)} onClick={onToggle}>
       <p css={StyledLabel(isChecked)}>{label}</p>
-      {type === "check" &&
+      {type === "CHECK" &&
         (isChecked ? (
           <ActiveCheckCircleIcon />
         ) : (
@@ -44,7 +44,7 @@ const ButtonContainer = (type: toggleButtonType, isChecked: boolean) => css`
     ? color.SemanticScale.orange[50]
     : color.GrayScale.white};
   display: flex;
-  justify-content: ${type === "check" ? "space-between" : "center"};
+  justify-content: ${type === "CHECK" ? "space-between" : "center"};
   flex: auto;
   padding: 16px 24px;
   cursor: pointer;

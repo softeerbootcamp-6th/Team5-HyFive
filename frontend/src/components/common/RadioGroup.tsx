@@ -3,14 +3,14 @@ import { theme } from "@/styles/themes.style";
 import ToggleButton from "@/components/common/ToggleButton";
 // radio group 배열을 받아와 ToggleButton들을 하나의 상태로 관리
 
-const { color, typography } = theme;
-
 interface RadioGroupProps {
   label: string;
   group: string[];
   selected: string;
   setSelected: (value: string) => void;
 }
+
+const { color, typography } = theme;
 
 const RadioGroup = ({
   label,
@@ -25,7 +25,7 @@ const RadioGroup = ({
         {group.map((item) => (
           <ToggleButton
             key={item}
-            type="radio"
+            type="RADIO"
             label={item}
             isChecked={selected === item}
             onToggle={() => setSelected(item)}
