@@ -1,17 +1,17 @@
 import { useCallback, useRef } from "react";
 
-interface UseLongPressProps {
-  handleLongPress: () => void;
-  handleShortPress: () => void;
+interface UsePressDetectionProps {
+  handleLongPress?: () => void;
+  handleShortPress?: () => void;
   delay?: number;
   setIsPressing?: (isPressing: boolean) => void;
 }
-const useLongPress = ({
-  handleLongPress,
-  handleShortPress,
+const usePressDetection = ({
+  handleLongPress = () => {},
+  handleShortPress = () => {},
   delay = 500,
   setIsPressing = () => {},
-}: UseLongPressProps) => {
+}: UsePressDetectionProps) => {
   const rafIdRef = useRef(0);
   const timerRef = useRef(0);
   const isLongPressRef = useRef(false);
@@ -52,4 +52,4 @@ const useLongPress = ({
   };
 };
 
-export default useLongPress;
+export default usePressDetection;

@@ -1,4 +1,4 @@
-import useLongPress from "@/hooks/useLongPress";
+import usePressDetection from "@/hooks/usePressDetection";
 import { theme } from "@/styles/themes.style";
 import { css } from "@emotion/react";
 import { useState } from "react";
@@ -12,9 +12,7 @@ interface ChipProps {
 }
 const Chip = ({ chipType, isActive, content }: ChipProps) => {
   const [isPressing, setIsPressing] = useState(false);
-  const handlers = useLongPress({
-    handleLongPress: () => {},
-    handleShortPress: () => {},
+  const handlers = usePressDetection({
     setIsPressing,
   });
   return (
