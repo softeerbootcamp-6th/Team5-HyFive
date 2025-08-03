@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
     /* personal setting */
-    "baseUrl": "./src",
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["*"]
+      "@/*": ["src/*"]
     },
     "types": ["vite/client"],
 
