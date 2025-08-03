@@ -19,4 +19,4 @@ export { default as VehicleRegisterPage } from "@/pages/center/CenterRegisterPag
 export { default as NotFoundPage } from "@/pages/NotFoundPage";
 
 // Test
-export { default as TestPage } from "@/pages/testPage";
+export { default as TestPage } from "@/pages/TestPage";

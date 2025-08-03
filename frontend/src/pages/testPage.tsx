@@ -1,28 +1,159 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import Input from "@/components/common/Input";
-import { CalenderIcon } from "@/assets/icons";
 import { theme } from "@/styles/themes.style";
+import { useState } from "react";
+import { CalenderIcon, TimeIcon } from "@/assets/icons";
+
+import RadioGroup from "@/components/common/RadioGroup";
+import Tabs from "@/components/common/Tabs";
+import Tag from "@/components/common/Tag";
+import Input from "@/components/common/Input";
+import ToggleButton from "@/components/common/ToggleButton";
+import DropdownInput from "@/components/common/DropdownInput";
 
 const TestPage = () => {
+  // 체크버튼 상태
+  const [toggleState, setToggleState] = useState(false);
+
+  // 라디오 버튼 상태
+  const radioGroupItem = ["소유", "미소유"];
+  const [selectedState, setSelectedState] = useState("소유");
+
+  // 탭 상태
+  const tapGroupItem = ["신규 예약 5", "예약 성공 16", "예약 실패 7"];
+  const [tabState, setTabState] = useState("신규 예약 5");
+
+  // 드롭다운 상태
+  const [maxPassenger, setMaxPassenger] = useState<string>("");
+  const dropdownOptions = ["1", "2", "3", "4", "5", "6", "7"];
+
   const components = [
     {
       label: "폼 컴포넌트",
       component: (
-        <Input
-          type="text"
-          label={"예약날짜"}
-          required={true}
-          icon={<CalenderIcon fill={theme.color.GrayScale.gray4} />}
-          placeholder="날짜를 선택해주세요"
+        <div
+          css={css`
+            display: flex;
+            width: 100%;
+            flex-direction: column;
+            gap: 16px;
+          `}
+        >
+          <Input
+            label={"이름"}
+            required={true}
+            placeholder="홍길동"
+            readOnly={false}
+          />
+          <Input
+            label={"예약날짜"}
+            required={true}
+            icon={<CalenderIcon fill={theme.color.GrayScale.gray4} />}
+            placeholder="날짜를 선택해주세요"
+            readOnly={true}
+          />
+          <Input
+            label={"병원 도착 시간"}
+            required={false}
+            icon={<TimeIcon fill={theme.color.GrayScale.gray4} />}
+            placeholder="병원 도착 시간을 입력해주세요"
+            readOnly={true}
+          />
+        </div>
+      ),
+    },
+    {
+      label: "체크버튼 컴포넌트",
+      component: (
+        <ToggleButton
+          type="CHECK"
+          label="저상형"
+          isChecked={toggleState}
+          onToggle={() => setToggleState(!toggleState)}
         />
       ),
     },
-    { label: "토글 컴포넌트", component: <div>토글 자리</div> },
-    { label: "헤더 컴포넌트", component: <div>헤더 자리</div> },
-    { label: "탭 컴포넌트", component: <div>탭 자리</div> },
-    { label: "태그 컴포넌트", component: <div>태그 자리</div> },
-    { label: "드롭다운(기본형)", component: <div>드롭다운 자리</div> },
+    {
+      label: "라디오 버튼 컴포넌트",
+      component: (
+        <RadioGroup
+          label="보행 특이사항 (보행기구 유무)"
+          group={radioGroupItem}
+          selected={selectedState}
+          setSelected={setSelectedState}
+        />
+      ),
+    },
+    {
+      label: "탭 컴포넌트",
+      component: (
+        <div
+          style={{
+            width: "550px",
+            flexDirection: "column",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Tabs
+            type="bar_true"
+            group={tapGroupItem}
+            selected={tabState}
+            setSelected={setTabState}
+          />
+          <div
+            style={{
+              width: "100%",
+              marginTop: "14px",
+              display: "flex",
+              justifyContent: "center",
+              backgroundColor: "#212121",
+            }}
+          >
+            <Tabs
+              type="bar_false"
+              group={tapGroupItem}
+              selected={tabState}
+              setSelected={setTabState}
+            />
+          </div>
+        </div>
+      ),
+    },
+    {
+      label: "태그 컴포넌트",
+      component: (
+        <div
+          style={{
+            flexDirection: "column",
+            display: "flex",
+            gap: "16px",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Tag type="orange" label="new" />
+          <Tag type="red" label="fail" />
+          <Tag type="blue" label="success" />
+          <Tag type="green" label="confirm" />
+          <Tag type="gray" label="waiting" />
+        </div>
+      ),
+    },
+    {
+      label: "드롭다운(기본형)",
+      component: (
+        <DropdownInput
+          label="최대탑승 인원"
+          required={true}
+          placeholder="인원"
+          options={dropdownOptions}
+          value={maxPassenger}
+          onSelect={setMaxPassenger}
+        />
+      ),
+    },
   ];
 
   return (
