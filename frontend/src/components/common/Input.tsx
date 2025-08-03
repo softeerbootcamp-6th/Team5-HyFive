@@ -95,7 +95,7 @@ const StyledInput = (isFocused: boolean, readOnly: boolean) => css`
   border: 1px solid
     ${isFocused ? theme.color.Maincolor.primary : theme.color.GrayScale.gray3};
   border-radius: ${theme.borderRadius.Medium};
-  cursor: ${readOnly ? "pointer" : "none"};
+  cursor: ${readOnly ? "pointer" : "text"};
   &::placeholder {
     color: ${theme.color.GrayScale.gray4};
   }
