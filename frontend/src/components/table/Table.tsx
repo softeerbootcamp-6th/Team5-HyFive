@@ -15,15 +15,19 @@ const Table = ({ rows }: TableProps) => {
       <thead css={TableHeader}>
         <tr>
           {labels.map((label) => (
-            <th css={TableHeaderElement}>{label}</th>
+            <th key={label} css={TableHeaderElement}>
+              {label}
+            </th>
           ))}
         </tr>
       </thead>
       <tbody>
-        {rows.map((row) => (
-          <tr css={TableContentRow}>
+        {rows.map((row, idx) => (
+          <tr key={idx} css={TableContentRow}>
             {keys.map((key) => (
-              <td css={TableContentElement}>{row[key]}</td>
+              <td key={key} css={TableContentElement}>
+                {row[key]}
+              </td>
             ))}
           </tr>
         ))}

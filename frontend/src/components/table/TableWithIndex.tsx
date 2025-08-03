@@ -10,42 +10,45 @@ interface TableProps {
 
 const TableWithIndex = ({ rows }: TableProps) => {
   const { keys, labels } = TableMatcher.matchTableHeader(rows);
+  const formatElement = ({
+    key,
+    value,
+  }: {
+    key: string;
+    value: string | number | boolean | undefined;
+  }) => {
+    switch (key) {
+      case "isExistWalkingDevice":
+        return value === true ? "o" : "-";
+      case "routeId":
+        return value ? "#" + value : "-";
+      case "totalUserCount":
+        return value + "명";
+      default:
+        return value;
+    }
+  };
   return (
     <table css={TableContainer}>
       <thead css={TableHeader}>
         <tr>
           <th css={TableHeaderElement}> </th>
           {labels.map((label) => (
-            <th css={TableHeaderElement}>{label}</th>
+            <th key={label} css={TableHeaderElement}>
+              {label}
+            </th>
           ))}
         </tr>
       </thead>
       <tbody>
         {rows.map((row, idx) => (
-          <tr css={TableContentRow}>
+          <tr key={idx} css={TableContentRow}>
             <td css={TableContentElement}>{idx + 1}</td>
-            {keys.map((key) => {
-              switch (key) {
-                case "isExistWalkingDevice":
-                  return (
-                    <td css={TableContentElement}>
-                      {row[key] === true ? "o" : "-"}
-                    </td>
-                  );
-                case "routeId":
-                  return (
-                    <td css={TableContentElement}>
-                      {row[key] ? "#" + row[key] : "-"}
-                    </td>
-                  );
-                case "totalUserCount":
-                  return <td css={TableContentElement}>{row[key]}명</td>;
-                case "status":
-                  return <td css={TableContentElement}>{row[key]}</td>;
-                default:
-                  return <td css={TableContentElement}>{row[key]}</td>;
-              }
-            })}
+            {keys.map((key) => (
+              <td key={key} css={TableContentElement}>
+                {formatElement({ key, value: row[key] })}
+              </td>
+            ))}
           </tr>
         ))}
       </tbody>
