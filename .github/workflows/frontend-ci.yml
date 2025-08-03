@@ -1,0 +1,48 @@
+name: frontend-ci
+
+on:
+  pull_request:
+    branches: [dev-fe]
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        node-version: [20]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 20
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install
+
+      # 5. ESlint 검사
+      - name: Run ESLint
+        run: pnpm lint
+
+      - name: Run Prettier
+        run: pnpm format --check
+
+      - name: Run TypeScript for type check
+        run: tsc --noEmit
+
+      - name: Build Project
+        run: pnpm build
+
+      - name: Upload production artifacts
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
