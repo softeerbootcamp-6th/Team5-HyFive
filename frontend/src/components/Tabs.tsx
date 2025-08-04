@@ -4,16 +4,21 @@ import { useState, useRef, useEffect } from "react";
 
 type TabsType = "bar_true" | "bar_false";
 
-interface TabsProps {
+interface TabsProps<T extends string> {
   type: TabsType;
-  group: string[];
-  selected: string;
-  setSelected: (value: string) => void;
+  group: T[];
+  selected: T;
+  setSelected: (value: T) => void;
 }
 
 const { color, typography } = theme;
 
-const Tabs = ({ type, group, selected, setSelected }: TabsProps) => {
+const Tabs = <T extends string>({
+  type,
+  group,
+  selected,
+  setSelected,
+}: TabsProps<T>) => {
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
 
   const tabRefs = useRef<(HTMLDivElement | null)[]>([]);
