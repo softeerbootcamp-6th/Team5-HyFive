@@ -1,6 +1,7 @@
 package hyfive.gachita.path;
 
 import hyfive.gachita.car.Car;
+import hyfive.gachita.node.Node;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -8,6 +9,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -60,4 +62,7 @@ public class Path {
     @Enumerated(EnumType.STRING)
     @Column(name = "drive_status", nullable = false, columnDefinition = "VARCHAR(50)")
     private DriveStatus driveStatus = DriveStatus.WAITING;
+
+    @OneToMany(mappedBy = "path", fetch = FetchType.LAZY)
+    private List<Node> nodeList;
 }
