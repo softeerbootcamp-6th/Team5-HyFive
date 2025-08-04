@@ -3,7 +3,7 @@ import { theme } from "@/styles/themes.style";
 import { ActiveCheckCircleIcon, CheckCircleIcon } from "@/assets/icons";
 const { color, typography, borderRadius } = theme;
 
-type toggleButtonType = "CHECK" | "RADIO";
+type toggleButtonType = "check" | "radio";
 
 interface ToggleButtonProps {
   type: toggleButtonType;
@@ -21,7 +21,7 @@ const ToggleButton = ({
   return (
     <button css={ButtonContainer(type, isChecked)} onClick={onToggle}>
       <p css={StyledLabel(isChecked)}>{label}</p>
-      {type === "CHECK" &&
+      {type === "check" &&
         (isChecked ? (
           <ActiveCheckCircleIcon />
         ) : (
@@ -44,7 +44,7 @@ const ButtonContainer = (type: toggleButtonType, isChecked: boolean) => css`
     ? color.SemanticScale.orange[50]
     : color.GrayScale.white};
   display: flex;
-  justify-content: ${type === "CHECK" ? "space-between" : "center"};
+  justify-content: ${type === "check" ? "space-between" : "center"};
   flex: auto;
   padding: 16px 24px;
   cursor: pointer;

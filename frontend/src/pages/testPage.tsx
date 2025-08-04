@@ -66,7 +66,7 @@ const TestPage = () => {
       label: "체크버튼 컴포넌트",
       component: (
         <ToggleButton
-          type="CHECK"
+          type="check"
           label="저상형"
           isChecked={toggleState}
           onToggle={() => setToggleState(!toggleState)}

@@ -25,7 +25,7 @@ const RadioGroup = ({
         {group.map((item) => (
           <ToggleButton
             key={item}
-            type="RADIO"
+            type="radio"
             label={item}
             isChecked={selected === item}
             onToggle={() => setSelected(item)}
