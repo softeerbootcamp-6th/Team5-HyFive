@@ -24,6 +24,7 @@ import TimeIcon from "./time_default.svg?react";
 import LogoIcon from "./logo_default.svg?react";
 import DotIcon from "./dot.svg?react";
 import ArrowRightIcon from "./arrow-right.svg?react";
+import NoRouteIcon from "./no-route.svg?react";
 
 export {
   AddIcon,
@@ -52,4 +53,5 @@ export {
   LogoIcon,
   DotIcon,
   ArrowRightIcon,
+  NoRouteIcon,
 };
