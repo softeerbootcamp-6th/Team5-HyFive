@@ -40,6 +40,21 @@ const BookCard = ({ bookType, data }: BookCardProps) => {
 
 export default BookCard;
 
+const COLOR_MAP = {
+  pending: {
+    bgColor: color.SemanticScale.orange[50],
+    fontColor: color.Maincolor.primary,
+  },
+  success: {
+    bgColor: color.SemanticScale.blue[50],
+    fontColor: color.Semantic.success,
+  },
+  fail: {
+    bgColor: color.SemanticScale.red[50],
+    fontColor: color.Semantic.error,
+  },
+};
+
 const BookCardContainer = css`
   width: 100%;
   padding: 20px;
@@ -71,16 +86,8 @@ const DateWrapper = (cardType: BookType) => css`
   border-radius: 10px;
   text-align: center;
   font: ${typography.Body.b2_medi};
-  background-color: ${cardType === "pending"
-    ? color.SemanticScale.orange[50]
-    : cardType === "success"
-      ? color.SemanticScale.blue[50]
-      : color.SemanticScale.red[50]};
-  color: ${cardType === "pending"
-    ? color.Maincolor.primary
-    : cardType === "success"
-      ? color.Semantic.success
-      : color.Semantic.error};
+  background-color: ${COLOR_MAP[cardType].bgColor};
+  color: ${COLOR_MAP[cardType].fontColor};
 `;
 
 const LocationWrapper = css`
