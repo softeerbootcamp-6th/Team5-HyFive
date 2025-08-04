@@ -1,4 +1,4 @@
-import type { DrivingDataType } from "@/components/types/drivingType";
+import type { DrivingDataType } from "@/types/drivingType";
 
 export const drivingDataList: DrivingDataType[] = [
   {

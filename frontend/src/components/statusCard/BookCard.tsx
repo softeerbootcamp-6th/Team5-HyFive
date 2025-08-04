@@ -1,6 +1,6 @@
 import { ArrowRightIcon, DotIcon, PersonIcon } from "@/assets/icons";
 import { theme } from "@/styles/themes.style";
-import type { BookDataType } from "@/components/types/bookType";
+import type { BookDataType } from "@/types/bookType";
 import { css } from "@emotion/react";
 const { color, typography } = theme;
 

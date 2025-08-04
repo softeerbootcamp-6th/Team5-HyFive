@@ -1,4 +1,4 @@
-import type { UserType } from "@/components/types/usersType";
+import type { UserType } from "@/types/usersType";
 
 export const userDataList: UserType[] = [
   {

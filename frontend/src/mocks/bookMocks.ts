@@ -1,4 +1,4 @@
-import type { BookDataType } from "@/components/types/bookType";
+import type { BookDataType } from "@/types/bookType";
 
 export const bookDataList: BookDataType[] = [
   {

@@ -1,5 +1,5 @@
 import { CarIcon, DotIcon, LocationIcon, PersonIcon } from "@/assets/icons";
-import type { DrivingDataType } from "@/components/types/drivingType";
+import type { DrivingDataType } from "@/types/drivingType";
 import { theme } from "@/styles/themes.style";
 import { css } from "@emotion/react";
 const { color, typography } = theme;

@@ -1,4 +1,4 @@
-import type { RouteType } from "@/components/types/routeType";
+import type { RouteType } from "@/types/routeType";
 
 export const routeDataList: RouteType[] = [
   {
@@ -10,7 +10,7 @@ export const routeDataList: RouteType[] = [
     routeStartLocation: "강남구청",
     routeEndLocation: "서울의료원",
     totalUserCount: 4,
-    status: "end",
+    status: "waiting",
   },
   {
     routeId: 1002,
@@ -21,7 +21,7 @@ export const routeDataList: RouteType[] = [
     routeStartLocation: "분당구청",
     routeEndLocation: "분당서울대병원",
     totalUserCount: 5,
-    status: "progress",
+    status: "inProgress",
   },
   {
     routeId: 1003,
@@ -32,6 +32,6 @@ export const routeDataList: RouteType[] = [
     routeStartLocation: "서초복지관",
     routeEndLocation: "강남성심병원",
     totalUserCount: 3,
-    status: "waiting",
+    status: "completed",
   },
 ];

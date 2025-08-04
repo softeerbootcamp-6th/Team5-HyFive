@@ -7,5 +7,5 @@ export interface RouteType {
   routeStartLocation: string;
   routeEndLocation: string;
   totalUserCount: number;
-  status: "end" | "progress" | "waiting";
+  status: "waiting" | "inProgress" | "completed";
 }
