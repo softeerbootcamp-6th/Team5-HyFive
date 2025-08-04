@@ -115,7 +115,6 @@ export const theme = {
       },
     },
   },
-
   /* border radius */
   borderRadius: {
     Small: "8px",

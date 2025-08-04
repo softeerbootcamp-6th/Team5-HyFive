@@ -21,8 +21,10 @@ import RemoveIcon from "./remove_default.svg?react";
 import RouteIcon from "./route_default.svg?react";
 import SearchIcon from "./search_default.svg?react";
 import TimeIcon from "./time_default.svg?react";
+import LogoIcon from "./logo_default.svg?react";
 import DotIcon from "./dot.svg?react";
 import ArrowRightIcon from "./arrow-right.svg?react";
+
 
 export {
   AddIcon,
@@ -48,6 +50,7 @@ export {
   SearchIcon,
   TimeIcon,
   ActiveCheckCircleIcon,
+  LogoIcon,
   DotIcon,
   ArrowRightIcon,
 };
