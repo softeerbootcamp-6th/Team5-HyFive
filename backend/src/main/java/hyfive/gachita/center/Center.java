@@ -40,7 +40,6 @@ public class Center {
     private double lng;
 
     @NotNull
-    @CreationTimestamp
     @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdAt;
 
