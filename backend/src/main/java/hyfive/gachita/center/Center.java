@@ -30,11 +30,11 @@ public class Center {
     private String centerAddr;
 
     @NotNull
-    @Column(name = "lat", nullable = false, columnDefinition = "DECIMAL(9,6)")
+    @Column(name = "lat", nullable = false, columnDefinition = "DECIMAL(18,15)")
     private double lat;
 
     @NotNull
-    @Column(name = "lng", nullable = false, columnDefinition = "DECIMAL(9,6)")
+    @Column(name = "lng", nullable = false, columnDefinition = "DECIMAL(18,15)")
     private double lng;
 
     @NotNull

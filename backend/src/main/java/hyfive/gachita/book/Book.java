@@ -58,19 +58,19 @@ public class Book {
     private LocalTime deadline;
 
     @NotNull
-    @Column(name = "start_lat", nullable = false, columnDefinition = "DECIMAL(9,6)")
+    @Column(name = "start_lat", nullable = false, columnDefinition = "DECIMAL(18,15)")
     private double startLat;
 
     @NotNull
-    @Column(name = "start_lng", nullable = false, columnDefinition = "DECIMAL(9,6)")
+    @Column(name = "start_lng", nullable = false, columnDefinition = "DECIMAL(18,15)")
     private double startLng;
 
     @NotNull
-    @Column(name = "end_lat", nullable = false, columnDefinition = "DECIMAL(9,6)")
+    @Column(name = "end_lat", nullable = false, columnDefinition = "DECIMAL(18,15)")
     private double endLat;
 
     @NotNull
-    @Column(name = "end_lng", nullable = false, columnDefinition = "DECIMAL(9,6)")
+    @Column(name = "end_lng", nullable = false, columnDefinition = "DECIMAL(18,15)")
     private double endLng;
 
     @NotNull
