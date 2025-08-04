@@ -1,5 +1,11 @@
+import BookListSection from "@/features/book/BookListSection";
+
 const BookPage = () => {
-  return <div>BookPage</div>;
+  return (
+    <div>
+      <BookListSection />
+    </div>
+  );
 };
 
 export default BookPage;
