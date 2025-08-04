@@ -10,10 +10,10 @@ type UserType = "ADMIN" | "CENTER";
 
 interface HeaderProps {
   type: UserType;
-  hasTab: boolean;
+  hasTab?: boolean;
 }
 
-const Header = ({ type, hasTab }: HeaderProps) => {
+const Header = ({ type, hasTab = false }: HeaderProps) => {
   const navigate = useNavigate();
   const location = useLocation();
 
