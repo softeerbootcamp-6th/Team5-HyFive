@@ -34,7 +34,7 @@ public class Car {
 
     @NotNull
     @Column(name = "capacity", nullable = false, columnDefinition = "INT")
-    private Integer capacity;
+    private int capacity;
 
     @NotNull
     @Column(name = "low_floor", nullable = false, columnDefinition = "BOOLEAN")

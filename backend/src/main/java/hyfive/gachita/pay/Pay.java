@@ -32,7 +32,7 @@ public class Pay {
 
     @NotNull
     @Column(name = "amount", nullable = false, columnDefinition = "INT")
-    private Integer amount = 0;
+    private int amount = 0;
 
     @NotNull
     @Column(name = "pay_date", nullable = false, columnDefinition = "DATE")

@@ -54,7 +54,7 @@ public class Path {
 
     @NotNull
     @Column(name = "user_count", nullable = false, columnDefinition = "INT")
-    private Integer userCount;
+    private int userCount;
 
     @NotNull
     @Enumerated(EnumType.STRING)
