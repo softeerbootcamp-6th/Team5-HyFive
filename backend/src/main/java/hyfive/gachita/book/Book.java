@@ -62,16 +62,16 @@ public class Book {
     private double startLat;
 
     @NotNull
-    @Column(name = "start_lon", nullable = false, columnDefinition = "DECIMAL(9,6)")
-    private double startLon;
+    @Column(name = "start_lng", nullable = false, columnDefinition = "DECIMAL(9,6)")
+    private double startLng;
 
     @NotNull
     @Column(name = "end_lat", nullable = false, columnDefinition = "DECIMAL(9,6)")
     private double endLat;
 
     @NotNull
-    @Column(name = "end_lon", nullable = false, columnDefinition = "DECIMAL(9,6)")
-    private double endLon;
+    @Column(name = "end_lng", nullable = false, columnDefinition = "DECIMAL(9,6)")
+    private double endLng;
 
     @NotNull
     @Enumerated(EnumType.STRING)

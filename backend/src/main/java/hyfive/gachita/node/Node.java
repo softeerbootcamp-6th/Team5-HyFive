@@ -34,8 +34,8 @@ public class Node {
     private double lat;
 
     @NotNull
-    @Column(name = "lon", nullable = false, columnDefinition = "DECIMAL(9,6)")
-    private double lon;
+    @Column(name = "lng", nullable = false, columnDefinition = "DECIMAL(9,6)")
+    private double lng;
 
     @NotNull
     @Column(name = "time", nullable = false, columnDefinition = "TIME")
