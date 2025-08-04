@@ -136,3 +136,16 @@ button {
 textarea {
   padding: 0;
 }
+input {
+  border: none;
+  outline: none;
+}
+a,
+a:link,
+a:visited,
+a:hover,
+a:active {
+  text-decoration: none;
+  outline: none;
+  color: inherit;
+}

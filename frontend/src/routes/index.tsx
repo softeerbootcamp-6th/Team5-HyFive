@@ -1,4 +1,4 @@
-import { AdminLayout, CenterLayout, ReservationLayout } from "@/layouts";
+import { AdminLayout, BookLayout, CenterLayout } from "@/layouts";
 import {
   LandingPage,
   DriversPage,
@@ -12,6 +12,7 @@ import {
   CenterPage,
   VehicleRegisterPage,
   NotFoundPage,
+  TestPage,
 } from "@/pages";
 import { BrowserRouter, Route, Routes } from "react-router";
 
@@ -21,7 +22,7 @@ const Router = () => {
       <Routes>
         {/* Admin 영역 */}
         <Route path="/admin/*" element={<AdminLayout />}>
-          <Route path="book" element={<ReservationLayout />}>
+          <Route path="book" element={<BookLayout />}>
             <Route index element={<BookPage />} />
             <Route path="schedule" element={<SchedulePage />} />
             <Route path="users" element={<UsersPage />} />
@@ -46,6 +47,9 @@ const Router = () => {
 
         {/* Not found */}
         <Route path="/*" element={<NotFoundPage />} />
+
+        {/* Test */}
+        <Route path="/test" element={<TestPage />} />
       </Routes>
     </BrowserRouter>
   );
