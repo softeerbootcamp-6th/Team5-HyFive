@@ -25,7 +25,6 @@ import LogoIcon from "./logo_default.svg?react";
 import DotIcon from "./dot.svg?react";
 import ArrowRightIcon from "./arrow-right.svg?react";
 
-
 export {
   AddIcon,
   CalenderIcon,
