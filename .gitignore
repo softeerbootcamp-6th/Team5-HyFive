@@ -20,7 +20,6 @@ logs/
 # === Git hooks / Dev tools ===
 .husky/
 .eslintcache
-.prettierignore
 *.tsbuildinfo
 
 # === Frontend (Vite + TypeScript) ===

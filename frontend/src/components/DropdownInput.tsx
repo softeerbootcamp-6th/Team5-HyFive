@@ -1,5 +1,5 @@
 import { ChevronDownIcon, ChevronUpIcon } from "@/assets/icons";
-import Input from "@/components/common/Input";
+import Input from "@/components/Input";
 import { useState, useEffect, useRef } from "react";
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";

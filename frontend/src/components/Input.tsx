@@ -9,7 +9,6 @@ interface InputProps {
   required?: boolean;
   icon?: React.ReactNode;
   placeholder?: string;
-  error?: string;
   readOnly?: boolean;
   value?: string;
   onClick?: () => void;
@@ -21,7 +20,6 @@ const Input = ({
   icon,
   placeholder,
   value,
-  error,
   readOnly = false,
   onClick,
 }: InputProps) => {

@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
-import ToggleButton from "@/components/common/ToggleButton";
+import ToggleButton from "@/components/ToggleButton";
 // radio group 배열을 받아와 ToggleButton들을 하나의 상태로 관리
 
 interface RadioGroupProps {
