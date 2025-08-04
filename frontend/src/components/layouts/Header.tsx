@@ -2,7 +2,7 @@ import { LogoIcon } from "@/assets/icons";
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
 import { Link, useLocation, useNavigate } from "react-router";
-import Tabs from "@/components/common/Tabs";
+import Tabs from "@/components/Tabs";
 
 const { color, typography } = theme;
 
@@ -33,7 +33,7 @@ const Header = ({ type, hasTab = false }: HeaderProps) => {
 
   const handleTabChange = (label: string) => {
     const target = tabItems.find((item) => item.label === label);
-    if (target) navigate(target.path);
+    if (target) void navigate(target.path);
   };
   return (
     <div css={HeaderContainer}>
