@@ -1,11 +1,13 @@
 package hyfive.gachita.center;
 
+import hyfive.gachita.car.Car;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -41,5 +43,8 @@ public class Center {
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "center", fetch = FetchType.LAZY)
+    private List<Car> carList;
 }
 
