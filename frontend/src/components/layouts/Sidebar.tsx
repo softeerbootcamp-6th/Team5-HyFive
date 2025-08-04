@@ -14,27 +14,27 @@ const Sidebar = () => {
     {
       label: "실시간 예약 현황",
       icon: <DashboardIcon fill={theme.color.GrayScale.white} />,
-      route: "/admin/reservation/",
+      route: "/admin/book",
     },
     {
       label: "실시간 운행 현황",
       icon: <CarIcon fill={theme.color.GrayScale.white} />,
-      route: "/admin/reservation/schedule",
+      route: "/admin/book/schedule",
     },
     {
       label: "예약자 관리",
       icon: <PersonIcon fill={theme.color.GrayScale.white} />,
-      route: "/admin/reservation/users",
+      route: "/admin/book/users",
     },
     {
       label: "운행 경로 관리",
       icon: <RouteIcon fill={theme.color.GrayScale.white} />,
-      route: "/admin/reservation/paths",
+      route: "/admin/book/paths",
     },
   ] as const;
   return (
     <div css={SidebarConatiner}>
-      <Link css={ContentButton} to="/admin/reservation/register">
+      <Link css={ContentButton} to="/admin/book/register">
         신규 예약 접수
       </Link>
       <ul>
