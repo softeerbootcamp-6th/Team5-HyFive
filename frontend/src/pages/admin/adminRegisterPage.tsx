@@ -1,5 +1,5 @@
 const AdminRegisterPage = () => {
-  return <>AdminRegister</>;
+  return <div>AdminRegisterPage</div>;
 };
 
 export default AdminRegisterPage;

@@ -1,4 +1,4 @@
-import { AdminLayout, CenterLayout, ReservationLayout } from "@/layouts";
+import { AdminLayout, BookLayout, CenterLayout } from "@/layouts";
 import {
   LandingPage,
   DriversPage,
@@ -22,7 +22,7 @@ const Router = () => {
       <Routes>
         {/* Admin 영역 */}
         <Route path="/admin/*" element={<AdminLayout />}>
-          <Route path="book" element={<ReservationLayout />}>
+          <Route path="book" element={<BookLayout />}>
             <Route index element={<BookPage />} />
             <Route path="schedule" element={<SchedulePage />} />
             <Route path="users" element={<UsersPage />} />
@@ -47,6 +47,7 @@ const Router = () => {
 
         {/* Not found */}
         <Route path="/*" element={<NotFoundPage />} />
+
 
         {/* 컴포넌트 렌더링 확인용 페이지 */}
         <Route path="/test" element={<TestPage />} />

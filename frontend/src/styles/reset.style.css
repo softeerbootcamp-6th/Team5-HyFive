@@ -139,3 +139,12 @@ textarea {
 input {
   all: unset;
 }
+a,
+a:link,
+a:visited,
+a:hover,
+a:active {
+  text-decoration: none;
+  outline: none;
+  color: inherit;
+}
