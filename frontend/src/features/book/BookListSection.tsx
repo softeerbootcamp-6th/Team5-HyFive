@@ -5,13 +5,20 @@ import BookCard from "@/features/book/BookCard";
 import { bookDataList } from "@/mocks/bookMocks";
 import { theme } from "@/styles/themes.style";
 import { css } from "@emotion/react";
-import { useState } from "react";
+import type { Dispatch, SetStateAction } from "react";
 const { color, typography } = theme;
 
-const BookListSection = () => {
+interface BookListSectionProps {
+  TAB_LIST: BookType[];
+  activeTab: BookType;
+  setActiveTab: Dispatch<SetStateAction<BookType>>;
+}
+const BookListSection = ({
+  TAB_LIST,
+  activeTab,
+  setActiveTab,
+}: BookListSectionProps) => {
   const LOCATION_SECTION = "운정 1구역";
-  const TAB_LIST: BookType[] = ["pending", "success", "fail"];
-  const [activeTab, setActiveTab] = useState<BookType>(TAB_LIST[0]);
   return (
     <div css={BookListSectionContainer}>
       <div css={HeaderContainer}>
@@ -26,12 +33,8 @@ const BookListSection = () => {
       />
       <div>
         {bookDataList.map((bookData, idx) => (
-          <div>
-            <BookCard
-              key={bookData.name + bookData.routeId}
-              bookType={activeTab}
-              data={bookData}
-            />
+          <div key={bookData.name}>
+            <BookCard bookType={activeTab} data={bookData} />
             {idx !== bookDataList.length - 1 && <div css={LineWrapper} />}
           </div>
         ))}
