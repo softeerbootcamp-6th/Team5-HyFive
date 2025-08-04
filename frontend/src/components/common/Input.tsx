@@ -2,6 +2,8 @@ import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
 import { useState } from "react";
 
+const { color, typography, borderRadius } = theme;
+
 interface InputProps {
   label: string;
   required?: boolean;
@@ -63,13 +65,13 @@ const LabelContainer = css`
 `;
 
 const InputLabel = css`
-  font: ${theme.typography.Heading.h5_semi};
-  color: ${theme.color.GrayScale.gray4};
+  font: ${typography.Heading.h5_semi};
+  color: ${color.GrayScale.gray4};
 `;
 
 const RequiredStar = css`
-  font: ${theme.typography.Heading.h5_semi};
-  color: ${theme.color.Maincolor.primary};
+  font: ${typography.Heading.h5_semi};
+  color: ${color.Maincolor.primary};
 `;
 
 const InputWrapper = css`
@@ -93,13 +95,13 @@ const StyledInput = (isFocused: boolean, readOnly: boolean) => css`
   width: 100%;
   height: 60px;
   padding: 16px 48px 16px 24px;
-  font: ${theme.typography.Body.b3_regu};
-  color: ${theme.color.GrayScale.black};
+  font: ${typography.Body.b3_regu};
+  color: ${color.GrayScale.black};
   border: 1px solid
-    ${isFocused ? theme.color.Maincolor.primary : theme.color.GrayScale.gray3};
-  border-radius: ${theme.borderRadius.Medium};
+    ${isFocused ? color.Maincolor.primary : color.GrayScale.gray3};
+  border-radius: ${borderRadius.Medium};
   cursor: ${readOnly ? "pointer" : "text"};
   &::placeholder {
-    color: ${theme.color.GrayScale.gray4};
+    color: ${color.GrayScale.gray4};
   }
 `;
