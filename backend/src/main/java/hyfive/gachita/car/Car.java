@@ -51,6 +51,6 @@ public class Car {
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "del_yn", nullable = false, columnDefinition = "VARCHAR(50)")
-    private DelYn delYn = DelYn.N;;
+    private DelYn delYn = DelYn.N;
 }
 
