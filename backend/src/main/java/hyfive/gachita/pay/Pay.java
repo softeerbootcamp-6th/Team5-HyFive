@@ -31,7 +31,7 @@ public class Pay {
     private Center center;
 
     @NotNull
-    @Column(name = "amount", nullable = false, columnDefinition = "INT DEFAULT 0")
+    @Column(name = "amount", nullable = false, columnDefinition = "INT")
     private Integer amount = 0;
 
     @NotNull
