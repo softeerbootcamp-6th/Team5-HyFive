@@ -1,12 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import { useState } from "react";
 import { css } from "@emotion/react";
-import Button from "@/components/button/Button";
+import Button from "@/components/Button";
 import { theme } from "@/styles/themes.style";
-import Chip from "@/components/chip/Chip";
-import SearchInput from "@/components/Search/SearchInput";
-import BookCard from "@/components/statusCard/BookCard";
-import DrivingCard from "@/components/statusCard/DrivingCard";
+import Chip from "@/components/Chip";
+import SearchInput from "@/components/SearchInput";
+import BookCard from "@/features/book/BookCard";
+import DrivingCard from "@/features/schedule/DrivingCard";
 import Table from "@/components/table/Table";
 import TableWithIndex from "@/components/table/TableWithIndex";
 import { bookDataList } from "@/mocks/bookMocks";
@@ -17,12 +17,12 @@ import { userDataList } from "@/mocks/usersMocks";
 import TableMatcher from "@/utils/TableMatcher";
 import { CalenderIcon, TimeIcon } from "@/assets/icons";
 
-import RadioGroup from "@/components/common/RadioGroup";
-import Tabs from "@/components/common/Tabs";
-import Tag from "@/components/common/Tag";
-import Input from "@/components/common/Input";
-import ToggleButton from "@/components/common/ToggleButton";
-import DropdownInput from "@/components/common/DropdownInput";
+import RadioGroup from "@/components/RadioGroup";
+import Tabs from "@/components/Tabs";
+import Tag from "@/components/Tag";
+import Input from "@/components/Input";
+import ToggleButton from "@/components/ToggleButton";
+import DropdownInput from "@/components/DropdownInput";
 
 const TestPage = () => {
   const { userRows, bookingRows, routeRows } =
