@@ -43,10 +43,8 @@ const Tabs = ({ type, group, selected, setSelected }: TabsProps) => {
             {item}
           </div>
         ))}
-        {type === "bar_true" ? (
+        {type === "bar_true" && (
           <div css={Underline(indicatorStyle.left, indicatorStyle.width)} />
-        ) : (
-          <></>
         )}
       </div>
     </div>
