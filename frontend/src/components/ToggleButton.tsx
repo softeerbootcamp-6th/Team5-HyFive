@@ -45,7 +45,7 @@ const ButtonContainer = (type: toggleButtonType, isChecked: boolean) => css`
     : color.GrayScale.white};
   display: flex;
   justify-content: ${type === "check" ? "space-between" : "center"};
-  flex: auto;
+  width: 100%;
   padding: 16px 24px;
   cursor: pointer;
 
