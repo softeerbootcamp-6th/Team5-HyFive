@@ -4,7 +4,7 @@ import { css } from "@emotion/react";
 import { useState } from "react";
 
 const SchedulePage = () => {
-  const TAB_LIST: ScheduleType[] = ["waiting", "inProgress", "completed"];
+  const TAB_LIST: ScheduleType[] = ["inProgress", "waiting", "completed"];
   const [activeTab, setActiveTab] = useState<ScheduleType>(TAB_LIST[0]);
   return (
     <div css={BookPageContainer}>
