@@ -1,5 +1,6 @@
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
+import type { HighlightType } from "@/features/calander/Calander";
 
 const { color, typography, borderRadius } = theme;
 
@@ -69,13 +70,6 @@ const DayLabel = css`
   color: ${color.GrayScale.gray3};
 `;
 
-const WeekSection = css`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-`;
-
 const DaySection = css`
   display: flex;
   width: 32px;
@@ -94,12 +88,25 @@ const DaySection = css`
   }
 `;
 
+const getWeekSectionStyle = (highlighted: boolean) => css`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  ${highlighted &&
+  css`
+    background-color: ${color.GrayScale.gray2};
+    border-radius: ${borderRadius.Medium};
+  `}
+`;
+
 const getDaySectionStyle = (
   isCurrentMonth: boolean,
   isSelected: boolean,
   isToday: boolean,
+  highlightType: HighlightType,
 ) => {
-  if (isSelected) {
+  if (isSelected && highlightType === "day") {
     return css`
       background-color: ${color.GrayScale.black};
       color: ${color.GrayScale.white};
@@ -130,7 +137,7 @@ export {
   ContentContainer,
   DayLabelSection,
   DayLabel,
-  WeekSection,
   DaySection,
   getDaySectionStyle,
+  getWeekSectionStyle,
 };

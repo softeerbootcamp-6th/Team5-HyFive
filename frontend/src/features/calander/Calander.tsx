@@ -3,7 +3,12 @@ import CalanderContent from "@/features/calander/CalanderContent";
 import { useState } from "react";
 import { CalanderContainer } from "@/features/calander/Calander.style";
 
-const Calander = () => {
+export type HighlightType = "day" | "week";
+
+interface CalanderProps {
+  highlightType?: HighlightType;
+}
+const Calander = ({ highlightType = "day" }: CalanderProps) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null); // TODO: Reducer로 들어갈 상태
 
@@ -32,6 +37,7 @@ const Calander = () => {
       />
       <CalanderContent
         date={currentDate}
+        highlightType={highlightType}
         selectedDate={selectedDate}
         handleClickDate={handleClickDate}
       />

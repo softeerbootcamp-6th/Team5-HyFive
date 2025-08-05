@@ -84,3 +84,11 @@ export const isCurrentMonth = (target: Date, base: Date) => {
 export const isSelectedDate = (target: Date, selected: Date) => {
   return isSameDay(target, selected);
 };
+
+export const isSelectedWeek = (
+  week: Date[],
+  selectedDate: Date | null,
+): boolean => {
+  if (!selectedDate) return false;
+  return week.some((day) => isSelectedDate(day, selectedDate));
+};
