@@ -2,24 +2,24 @@ import { CarIcon, DotIcon, LocationIcon, PersonIcon } from "@/assets/icons";
 import type { DrivingDataType } from "@/types/drivingType";
 import { theme } from "@/styles/themes.style";
 import { css } from "@emotion/react";
+import type { ScheduleType } from "@/features/schedule/Schedule.types";
 const { color, typography } = theme;
 const grayColor = color.GrayScale.gray4;
 const blueColor = color.SemanticScale.blue[400];
 
-export type DrivingType = "waiting" | "progress" | "end";
 interface DrivingCardProps {
-  drivingType: DrivingType;
+  drivingType: ScheduleType;
   data: DrivingDataType;
 }
-const DrivingCard = ({ drivingType, data }: DrivingCardProps) => {
+const ScheduleCard = ({ drivingType, data }: DrivingCardProps) => {
   return (
-    <div css={DrivingCardContainer}>
+    <div css={ScheduleCardContainer}>
       <div css={HeaderWrapper}>
         <div css={RouteWrapper}>
           <p css={RouteText}>경로 #{data.routeId}</p>
           <div css={UserWrapper(drivingType)}>
             <PersonIcon
-              fill={drivingType === "progress" ? blueColor : grayColor}
+              fill={drivingType === "inProgress" ? blueColor : grayColor}
             />
             <p>{data.totalUserCount}</p>
           </div>
@@ -47,9 +47,9 @@ const DrivingCard = ({ drivingType, data }: DrivingCardProps) => {
   );
 };
 
-export default DrivingCard;
+export default ScheduleCard;
 
-const DrivingCardContainer = css`
+const ScheduleCardContainer = css`
   width: 100%;
   padding: 20px;
   display: flex;
@@ -89,17 +89,17 @@ const TimeWrapper = css`
   align-items: end;
 `;
 
-const UserWrapper = (drivingType: DrivingType) => css`
+const UserWrapper = (drivingType: ScheduleType) => css`
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 2px;
   padding: 4px 6px;
   border-radius: 10px;
-  background-color: ${drivingType === "progress"
+  background-color: ${drivingType === "inProgress"
     ? color.SemanticScale.blue[50]
     : color.GrayScale.gray1};
-  color: ${drivingType === "progress" ? blueColor : grayColor};
+  color: ${drivingType === "inProgress" ? blueColor : grayColor};
 `;
 
 const Content = css`
