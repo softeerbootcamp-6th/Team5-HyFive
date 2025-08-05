@@ -17,12 +17,12 @@ public enum ErrorCode {
     UNKNOWN_ERROR(false, 2006, "알수 없는 에러가 발생했습니다."),
 
 
-    /*서버, DB, s3 4000*/
-    DATABASE_ERROR(false, 4000, "DB에 문제가 발생했습니다."),
-    NO_EXIST_VALUE(false, 4001, "DB에 데이터가 존재하지 않습니다."),
-    EMPTY_FILE(false, 4002, "S3 업로드 실패 - 빈 파일을 주셨습니다."),
-    FILE_TYPE_NOT_ALLOWED(false, 4003, "허용되지 않은 확장자 입니다."),
-    FILE_DELETE_FAIL(false, 4004, "S3 이미지 삭제에 실패했습니다.");
+    /*서버, DB, s3 3000*/
+    DATABASE_ERROR(false, 3000, "DB에 문제가 발생했습니다."),
+    NO_EXIST_VALUE(false, 3001, "DB에 데이터가 존재하지 않습니다."),
+    EMPTY_FILE(false, 3002, "S3 업로드 실패 - 빈 파일을 주셨습니다."),
+    FILE_TYPE_NOT_ALLOWED(false, 3003, "허용되지 않은 확장자 입니다."),
+    FILE_DELETE_FAIL(false, 3004, "S3 이미지 삭제에 실패했습니다.");
 
     private final boolean isSuccess;
     private final int code;
