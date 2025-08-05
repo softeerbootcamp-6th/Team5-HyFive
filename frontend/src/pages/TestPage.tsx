@@ -6,7 +6,7 @@ import { theme } from "@/styles/themes.style";
 import Chip from "@/components/Chip";
 import SearchInput from "@/components/SearchInput";
 import BookCard from "@/features/book/BookCard";
-import DrivingCard from "@/features/schedule/DrivingCard";
+import ScheduleCard from "@/features/schedule/ScheduleCard";
 import Table from "@/components/table/Table";
 import TableWithIndex from "@/components/table/TableWithIndex";
 import { bookDataList } from "@/mocks/bookMocks";
@@ -36,8 +36,8 @@ const TestPage = () => {
   const [selectedState, setSelectedState] = useState("소유");
 
   // 탭 상태
-  const tapGroupItem = ["신규 예약 5", "예약 성공 16", "예약 실패 7"];
-  const [tabState, setTabState] = useState("신규 예약 5");
+  const tapGroupItem: string[] = ["신규 예약 5", "예약 성공 16", "예약 실패 7"];
+  const [tabState, setTabState] = useState<string>("신규 예약 5");
 
   // 드롭다운 상태
   const [maxPassenger, setMaxPassenger] = useState<string>("");
@@ -78,9 +78,9 @@ const TestPage = () => {
       label: "🚐 운행 정보 카드",
       component: (
         <div css={horizontalCardStyle}>
-          <DrivingCard drivingType="waiting" data={drivingDataList[0]} />
-          <DrivingCard drivingType="progress" data={drivingDataList[1]} />
-          <DrivingCard drivingType="end" data={drivingDataList[2]} />
+          <ScheduleCard drivingType="waiting" data={drivingDataList[0]} />
+          <ScheduleCard drivingType="inProgress" data={drivingDataList[1]} />
+          <ScheduleCard drivingType="completed" data={drivingDataList[2]} />
         </div>
       ),
     },
