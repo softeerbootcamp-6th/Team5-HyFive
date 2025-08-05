@@ -3,16 +3,18 @@ package hyfive.gachita.book;
 import hyfive.gachita.path.Path;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+
 @Getter
-@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "book")
 public class Book {
@@ -34,8 +36,8 @@ public class Book {
     private String bookTel;
 
     @NotNull
-    @Column(name = "book_date", nullable = false, columnDefinition = "DATE")
-    private LocalDate bookDate;
+    @Column(name = "hospital_date", nullable = false, columnDefinition = "DATE")
+    private LocalDate hospitalDate;
 
     @NotNull
     @Column(name = "start_addr", nullable = false, columnDefinition = "VARCHAR(255)")
@@ -50,8 +52,8 @@ public class Book {
     private Boolean walker;
 
     @NotNull
-    @Column(name = "hospital_book_time", nullable = false, columnDefinition = "TIME")
-    private LocalTime hospitalBookTime;
+    @Column(name = "hospital_time", nullable = false, columnDefinition = "TIME")
+    private LocalTime hospitalTime;
 
     @NotNull
     @Column(name = "deadline", nullable = false, columnDefinition = "TIME")
@@ -78,7 +80,6 @@ public class Book {
     @Column(name = "book_status", nullable = false, columnDefinition = "VARCHAR(50)")
     private BookStatus bookStatus;
 
-    @NotNull
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime createdAt;
