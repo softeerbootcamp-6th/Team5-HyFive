@@ -31,7 +31,7 @@ const BookListSection = ({
         selected={activeTab}
         setSelected={setActiveTab}
       />
-      <div>
+      <div css={ContentContainer}>
         {bookDataList.map((bookData, idx) => (
           <div key={bookData.name}>
             <BookCard bookType={activeTab} data={bookData} />
@@ -46,10 +46,11 @@ const BookListSection = ({
 export default BookListSection;
 
 const BookListSectionContainer = css`
+  width: 485px;
+  height: calc(100vh - 72px);
   display: flex;
   flex-direction: column;
   gap: 24px;
-  width: 485px;
   padding: 20px;
   border-right: 1px solid ${color.GrayScale.gray3};
 `;
@@ -59,6 +60,12 @@ const HeaderContainer = css`
   flex-direction: row;
   justify-content: space-between;
   padding: 24px 0;
+  flex-shrink: 0;
+`;
+
+const ContentContainer = css`
+  flex: 1;
+  overflow-y: scroll;
 `;
 
 const LineWrapper = css`

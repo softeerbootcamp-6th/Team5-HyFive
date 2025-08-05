@@ -27,6 +27,7 @@ const RouteCard = ({ routeType }: { routeType: RouteType }) => {
 export default RouteCard;
 
 const RouteCardContainer = css`
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -39,8 +40,12 @@ const RouteResultText = css`
   padding: 10px;
   color: ${color.GrayScale.gray4};
   font: ${typography.Heading.h5_semi};
+  z-index: 1;
 `;
 
 const RouteResultImg = css`
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
 `;
