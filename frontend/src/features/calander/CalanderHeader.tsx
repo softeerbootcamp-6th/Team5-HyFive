@@ -1,23 +1,31 @@
-import { css } from "@emotion/react";
-import { theme } from "@/styles/themes.style";
 import { ChevronLeftIcon, ChevronRightIcon } from "@/assets/icons";
 import { getYearMonth } from "@/features/calander/Calander.util";
-const { color, typography } = theme;
+import {
+  HeaderContainer,
+  StyledButton,
+  HeaderTitle,
+} from "@/features/calander/Calander.style";
 
 interface CalanderHeaderProps {
   date: Date;
+  onClickPrev: () => void;
+  onClickNext: () => void;
 }
 
-const CalanderHeader = ({ date }: CalanderHeaderProps) => {
+const CalanderHeader = ({
+  date,
+  onClickPrev,
+  onClickNext,
+}: CalanderHeaderProps) => {
   const formattedYearMonth = getYearMonth(date);
 
   return (
     <div css={HeaderContainer}>
-      <button css={StyledButton}>
+      <button css={StyledButton} aria-label="이전 달" onClick={onClickPrev}>
         <ChevronLeftIcon className="chevron-icon" />
       </button>
       <p css={HeaderTitle}>{formattedYearMonth}</p>
-      <button css={StyledButton}>
+      <button css={StyledButton} aria-label="다음 달" onClick={onClickNext}>
         <ChevronRightIcon className="chevron-icon" />
       </button>
     </div>
@@ -25,26 +33,3 @@ const CalanderHeader = ({ date }: CalanderHeaderProps) => {
 };
 
 export default CalanderHeader;
-
-const HeaderContainer = css`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const HeaderTitle = css`
-  font: ${typography.Body.b2_semi};
-  color: ${color.GrayScale.black};
-`;
-
-const StyledButton = css`
-  cursor: pointer;
-  .chevron-icon {
-    stroke: ${color.GrayScale.gray3};
-    transition: stroke 0.2s ease;
-  }
-
-  &:hover .chevron-icon {
-    stroke: ${color.GrayScale.gray5};
-  }
-`;
