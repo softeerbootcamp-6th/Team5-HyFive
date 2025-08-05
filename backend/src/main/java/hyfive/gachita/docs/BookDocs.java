@@ -28,7 +28,12 @@ public interface BookDocs {
             ),
             @ApiResponse(
                     responseCode = "2000",
-                    description = "잘못된 요청 메시지 - 각 필드가 비어있는 경우, 동일한 일자에 대한 중복 요청이 발생하는 경우",
+                    description = "필드가 비어있거나 잘못된 body 형식이 요청이 발생하는 경우",
+                    content = @Content()
+            ),
+            @ApiResponse(
+                    responseCode = "5000",
+                    description = "사용자는 하루에 하나의 예약만 가능하기 때문에, 동일한 일자의 중복 예약의 경우",
                     content = @Content()
             )
     })

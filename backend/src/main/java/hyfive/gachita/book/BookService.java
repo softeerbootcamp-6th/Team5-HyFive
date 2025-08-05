@@ -13,7 +13,7 @@ public class BookService {
 
     public Book createBook(CreateBookReq createBookReq) {
         if (bookRepository.existsBookByBookTelAndHospitalDate(createBookReq.getBookTel(), createBookReq.getHospitalDate())) {
-            throw new BusinessException(ErrorCode.INVALID_INPUT, "예약 불가: 동일한 사용자에 의해 이미 예약된 날짜입니다.");
+            throw new BusinessException(ErrorCode.DUPLICATE_BOOK_DATE);
         }
 
         //TODO 출발지, 도착지의 위도, 경도 설정
