@@ -25,6 +25,9 @@ import LogoIcon from "./logo_default.svg?react";
 import DotIcon from "./dot.svg?react";
 import ArrowRightIcon from "./arrow-right.svg?react";
 import NoRouteIcon from "./no-route.svg?react";
+import WaitingIcon from "./waiting.svg?react";
+import InProgressIcon from "./inProgress.svg?react";
+import CompletedIcon from "./completed.svg?react";
 
 export {
   AddIcon,
@@ -54,4 +57,7 @@ export {
   DotIcon,
   ArrowRightIcon,
   NoRouteIcon,
+  WaitingIcon,
+  InProgressIcon,
+  CompletedIcon,
 };
