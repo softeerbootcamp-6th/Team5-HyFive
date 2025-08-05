@@ -4,6 +4,7 @@ import hyfive.gachita.book.dto.BookRes;
 import hyfive.gachita.book.dto.CreateBookReq;
 import hyfive.gachita.common.response.BaseResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +17,7 @@ public class BookController {
     private final BookService bookService;
 
     @PostMapping
-    public BaseResponse<BookRes> createBook(@RequestBody CreateBookReq createBookReq) {
+    public BaseResponse<BookRes> createBook(@RequestBody @Validated CreateBookReq createBookReq) {
         Book createdBook = bookService.createBook(createBookReq);
         return BaseResponse.success(BookRes.from(createdBook));
     }
