@@ -1,16 +1,24 @@
 import { RefreashIcon } from "@/assets/icons";
 import { theme } from "@/styles/themes.style";
+import DateFormatter from "@/utils/DateFormatter";
 import { css } from "@emotion/react";
+import { useState } from "react";
 const { color, typography } = theme;
 
 interface RefetchButtonProps {
-  date: string;
   handleClick: () => void;
 }
-const RefetchButton = ({ date, handleClick }: RefetchButtonProps) => {
+const RefetchButton = ({ handleClick }: RefetchButtonProps) => {
+  const [refetchTime, setRefetchTime] = useState(
+    DateFormatter.formatDateTime(new Date()),
+  );
+  const handleRefetch = () => {
+    handleClick();
+    setRefetchTime(DateFormatter.formatDateTime(new Date()));
+  };
   return (
-    <div css={RefetchButtonContainer} onClick={handleClick}>
-      <p css={DateText}>{date}</p>
+    <div css={RefetchButtonContainer} onClick={handleRefetch}>
+      <p css={DateText}>{refetchTime}</p>
       <RefreashIcon fill={color.GrayScale.gray4} />
     </div>
   );

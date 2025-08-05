@@ -23,7 +23,7 @@ const BookListSection = ({
     <div css={BookListSectionContainer}>
       <div css={HeaderContainer}>
         <p css={LocationSectionText}>{LOCATION_SECTION}</p>
-        <RefetchButton date="2025.05.07 17:00" handleClick={() => {}} />
+        <RefetchButton handleClick={() => {}} />
       </div>
       <Tabs
         type="bar_true"
