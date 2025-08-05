@@ -1,5 +1,6 @@
 package hyfive.gachita.book;
 
+import hyfive.gachita.docs.BookDocs;
 import hyfive.gachita.book.dto.BookRes;
 import hyfive.gachita.book.dto.CreateBookReq;
 import hyfive.gachita.common.response.BaseResponse;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/book")
 @RequiredArgsConstructor
-public class BookController {
+public class BookController implements BookDocs {
     private final BookService bookService;
 
     @PostMapping
