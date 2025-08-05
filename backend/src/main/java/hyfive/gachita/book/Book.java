@@ -80,7 +80,6 @@ public class Book {
     @Column(name = "book_status", nullable = false, columnDefinition = "VARCHAR(50)")
     private BookStatus bookStatus;
 
-    @NotNull
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime createdAt;
