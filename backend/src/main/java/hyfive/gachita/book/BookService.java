@@ -12,21 +12,21 @@ public class BookService {
     private final BookRepository bookRepository;
 
     public Book createBook(CreateBookReq createBookReq) {
-        if (bookRepository.existsBookByBookTelAndHospitalDate(createBookReq.getBookTel(), createBookReq.getHospitalDate())) {
+        if (bookRepository.existsBookByBookTelAndHospitalDate(createBookReq.bookTel(), createBookReq.hospitalDate())) {
             throw new BusinessException(ErrorCode.DUPLICATE_BOOK_DATE);
         }
 
         //TODO 출발지, 도착지의 위도, 경도 설정
         Book book = Book.builder()
-                .bookName(createBookReq.getBookName())
-                .bookTel(createBookReq.getBookTel())
-                .hospitalDate(createBookReq.getHospitalDate())
-                .hospitalTime(createBookReq.getHospitalTime())
-                .startAddr(createBookReq.getStartAddr())
-                .endAddr(createBookReq.getEndAddr())
-                .walker(createBookReq.getWalker())
+                .bookName(createBookReq.bookName())
+                .bookTel(createBookReq.bookTel())
+                .hospitalDate(createBookReq.hospitalDate())
+                .hospitalTime(createBookReq.hospitalTime())
+                .startAddr(createBookReq.startAddr())
+                .endAddr(createBookReq.endAddr())
+                .walker(createBookReq.walker())
                 .bookStatus(BookStatus.NEW)
-                .deadline(createBookReq.getHospitalTime().minusMinutes(30))
+                .deadline(createBookReq.hospitalTime().minusMinutes(30))
                 .build();
 
         bookRepository.save(book);

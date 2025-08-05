@@ -29,7 +29,6 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-
                 .body(BaseResponse.fail(ErrorCode.INVALID_INPUT, errorMessages));
     }
 
