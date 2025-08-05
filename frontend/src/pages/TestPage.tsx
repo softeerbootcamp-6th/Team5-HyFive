@@ -23,6 +23,7 @@ import Tag from "@/components/Tag";
 import Input from "@/components/Input";
 import ToggleButton from "@/components/ToggleButton";
 import DropdownInput from "@/components/DropdownInput";
+import Calander from "@/features/calander/Calander";
 
 const TestPage = () => {
   const { userRows, bookingRows, routeRows } =
@@ -239,6 +240,15 @@ const TestPage = () => {
           value={maxPassenger}
           onSelect={setMaxPassenger}
         />
+      ),
+    },
+    {
+      label: "달력 컴포넌트",
+      component: (
+        <div css={{ display: "flex", gap: "30px", justifyContent: "center" }}>
+          <Calander highlightType="day"></Calander>
+          <Calander highlightType="week"></Calander>,
+        </div>
       ),
     },
   ];
