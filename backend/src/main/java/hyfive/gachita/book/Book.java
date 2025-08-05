@@ -34,8 +34,8 @@ public class Book {
     private String bookTel;
 
     @NotNull
-    @Column(name = "book_date", nullable = false, columnDefinition = "DATE")
-    private LocalDate bookDate;
+    @Column(name = "hospital_date", nullable = false, columnDefinition = "DATE")
+    private LocalDate hospitalDate;
 
     @NotNull
     @Column(name = "start_addr", nullable = false, columnDefinition = "VARCHAR(255)")
@@ -50,8 +50,8 @@ public class Book {
     private Boolean walker;
 
     @NotNull
-    @Column(name = "hospital_book_time", nullable = false, columnDefinition = "TIME")
-    private LocalTime hospitalBookTime;
+    @Column(name = "hospital_time", nullable = false, columnDefinition = "TIME")
+    private LocalTime hospitalTime;
 
     @NotNull
     @Column(name = "deadline", nullable = false, columnDefinition = "TIME")
