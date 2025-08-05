@@ -1,10 +1,12 @@
 package hyfive.gachita.book.dto;
 
-import hyfive.gachita.book.BookStatus;
+import lombok.Getter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+// TODO: 유효성 검사 추가하기
+@Getter
 public class CreateBookDto {
     private String bookName;
     private String bookTel;
@@ -13,5 +15,4 @@ public class CreateBookDto {
     private String startAddr;
     private String endAddr;
     private Boolean walker;
-    private BookStatus bookStatus;
 }
