@@ -1,7 +1,7 @@
 package hyfive.gachita.book;
 
-import hyfive.gachita.book.dto.BookResponse;
-import hyfive.gachita.book.dto.CreateBookDto;
+import hyfive.gachita.book.dto.BookRes;
+import hyfive.gachita.book.dto.CreateBookReq;
 import hyfive.gachita.common.response.BaseResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,8 +16,8 @@ public class BookController {
     private final BookService bookService;
 
     @PostMapping
-    public BaseResponse<BookResponse> createBook(@RequestBody CreateBookDto createBookDto) {
-        Book createdBook = bookService.createBook(createBookDto);
-        return BaseResponse.success(BookResponse.from(createdBook));
+    public BaseResponse<BookRes> createBook(@RequestBody CreateBookReq createBookReq) {
+        Book createdBook = bookService.createBook(createBookReq);
+        return BaseResponse.success(BookRes.from(createdBook));
     }
 }

@@ -1,8 +1,7 @@
 package hyfive.gachita.book;
 
-import hyfive.gachita.book.dto.CreateBookDto;
+import hyfive.gachita.book.dto.CreateBookReq;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -10,18 +9,18 @@ import org.springframework.stereotype.Service;
 public class BookService {
     private final BookRepository bookRepository;
 
-    public Book createBook(CreateBookDto createBookDto) {
+    public Book createBook(CreateBookReq createBookReq) {
         //TODO 출발지, 도착지의 위도, 경도 설정
         Book book = Book.builder()
-                .bookName(createBookDto.getBookName())
-                .bookTel(createBookDto.getBookTel())
-                .hospitalDate(createBookDto.getHospitalDate())
-                .hospitalTime(createBookDto.getHospitalTime())
-                .startAddr(createBookDto.getStartAddr())
-                .endAddr(createBookDto.getEndAddr())
-                .walker(createBookDto.getWalker())
+                .bookName(createBookReq.getBookName())
+                .bookTel(createBookReq.getBookTel())
+                .hospitalDate(createBookReq.getHospitalDate())
+                .hospitalTime(createBookReq.getHospitalTime())
+                .startAddr(createBookReq.getStartAddr())
+                .endAddr(createBookReq.getEndAddr())
+                .walker(createBookReq.getWalker())
                 .bookStatus(BookStatus.NEW)
-                .deadline(createBookDto.getHospitalTime().minusMinutes(30))
+                .deadline(createBookReq.getHospitalTime().minusMinutes(30))
                 .build();
 
         bookRepository.save(book);

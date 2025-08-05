@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Getter
-public class BookResponse {
+public class BookRes {
     private Long id;
     private String bookName;
     private String bookTel;
@@ -28,8 +28,8 @@ public class BookResponse {
     private Boolean walker;
     private BookStatus bookStatus;
 
-    public static BookResponse from(Book book) {
-        BookResponse dto = new BookResponse();
+    public static BookRes from(Book book) {
+        BookRes dto = new BookRes();
         dto.id = book.getId();
         dto.bookName = book.getBookName();
         dto.bookTel = book.getBookTel();
