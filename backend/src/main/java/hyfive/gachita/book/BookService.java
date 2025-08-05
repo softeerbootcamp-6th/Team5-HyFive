@@ -29,8 +29,7 @@ public class BookService {
                 .deadline(createBookReq.hospitalTime().minusMinutes(30))
                 .build();
 
-        bookRepository.save(book);
-        return book;
+        return bookRepository.save(book);
     }
 }
 
