@@ -9,7 +9,17 @@ const RouteCard = ({ routeType }: { routeType: RouteType }) => {
   const ROUTE_LIST = {
     pending: {
       label: "보행 기구 유무에 맞는 차량을 찾고 있어요",
-      img: <img src={MovingCarGif} alt="moving car gif" />,
+      img: (
+        <img
+          src={MovingCarGif}
+          css={css`
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          `}
+          alt="moving car gif"
+        />
+      ),
     },
     fail: {
       label: "이용 가능한 경로가 없어요",
