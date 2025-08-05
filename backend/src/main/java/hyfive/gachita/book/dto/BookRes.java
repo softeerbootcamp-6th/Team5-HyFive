@@ -12,12 +12,15 @@ public record BookRes(
         Long id,
         String bookName,
         String bookTel,
+
+        @JsonFormat(pattern = "yyyy.MM.dd")
         LocalDate bookDate,
 
         @JsonFormat(pattern = "HH:mm")
         @JsonProperty("bookTime")
         LocalTime bookTime,
 
+        @JsonFormat(pattern = "yyyy.MM.dd")
         LocalDate hospitalDate,
 
         @JsonFormat(pattern = "HH:mm")
