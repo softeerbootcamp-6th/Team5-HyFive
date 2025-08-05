@@ -10,11 +10,11 @@ interface RefetchButtonProps {
 }
 const RefetchButton = ({ handleClick }: RefetchButtonProps) => {
   const [refetchTime, setRefetchTime] = useState(
-    DateFormatter.formatDateTime(new Date()),
+    DateFormatter.formatDateToSplitTime(new Date()),
   );
   const handleRefetch = () => {
     handleClick();
-    setRefetchTime(DateFormatter.formatDateTime(new Date()));
+    setRefetchTime(DateFormatter.formatDateToSplitTime(new Date()));
   };
   return (
     <div css={RefetchButtonContainer} onClick={handleRefetch}>
