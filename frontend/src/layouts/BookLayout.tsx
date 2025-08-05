@@ -5,7 +5,9 @@ import { Outlet } from "react-router";
 const BookLayout = () => {
   return (
     <div css={BookContainer}>
-      <Sidebar />
+      <div css={SidebarContainer}>
+        <Sidebar />
+      </div>
       <div css={ContentContainer}>
         <Outlet />
       </div>
@@ -15,14 +17,20 @@ const BookLayout = () => {
 
 export default BookLayout;
 
-const BookContainer = css`
-  width: 100%;
-  height: calc(100vh - 72px);
-  display: flex;
-  flex-direction: row;
+const BookContainer = css``;
+
+const SidebarContainer = css`
+  position: fixed;
+  top: 72px;
+  left: 0;
+  width: 330px;
+  height: calc(100dvh - 72px);
 `;
 
 const ContentContainer = css`
-  display: flex;
-  flex: 1;
+  position: relative;
+  width: calc(100dvw - 330px);
+  height: calc(100dvh - 72px);
+  left: 330px;
+  top: 72px;
 `;
