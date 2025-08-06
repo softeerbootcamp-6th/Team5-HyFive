@@ -11,11 +11,10 @@ const MAPPING_TABLE: Record<BookType | ScheduleType, string> = {
 };
 
 const TabMatcher = {
-  matchInnerTypeToExternalType: (activeTab: string): string => {
-    if (activeTab in MAPPING_TABLE) {
-      return MAPPING_TABLE[activeTab as BookType | ScheduleType];
-    }
-    return activeTab;
+  matchInnerTypeToExternalType: (
+    activeTab: BookType | ScheduleType,
+  ): string => {
+    return MAPPING_TABLE[activeTab];
   },
 };
 

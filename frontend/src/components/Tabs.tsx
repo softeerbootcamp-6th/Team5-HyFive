@@ -2,10 +2,12 @@ import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
 import { useState, useRef, useEffect } from "react";
 import TabMatcher from "@/utils/TabMatcher";
+import type { BookType } from "@/features/book/Book.types";
+import type { ScheduleType } from "@/features/schedule/Schedule.types";
 
 type TabsType = "bar_true" | "bar_false";
 
-interface TabsProps<T extends string> {
+interface TabsProps<T extends BookType | ScheduleType> {
   type: TabsType;
   group: T[];
   selected: T;
@@ -14,7 +16,7 @@ interface TabsProps<T extends string> {
 
 const { color, typography } = theme;
 
-const Tabs = <T extends string>({
+const Tabs = <T extends BookType | ScheduleType>({
   type,
   group,
   selected,
