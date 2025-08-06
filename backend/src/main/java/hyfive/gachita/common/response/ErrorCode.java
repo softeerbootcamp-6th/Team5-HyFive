@@ -22,6 +22,7 @@ public enum ErrorCode {
     EMPTY_FILE(false, 3002, "S3 업로드 실패 - 빈 파일을 주셨습니다."),
     FILE_TYPE_NOT_ALLOWED(false, 3003, "허용되지 않은 확장자 입니다."),
     FILE_DELETE_FAIL(false, 3004, "S3 이미지 삭제에 실패했습니다."),
+    MAX_UPLOAD_SIZE_EXCEEDED(false, 3005, "파일 사이즈는 최대 10MB 까지 업로드 할 수 있습니다."),
 
     /*예약 5000*/
     DUPLICATE_BOOK_DATE(false, 5000, "동일한 사용자에 의해 이미 예약된 날짜입니다.");

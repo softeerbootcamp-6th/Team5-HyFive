@@ -12,7 +12,7 @@ public record CreateCarReq(
         Long centerId,
 
         @NotBlank
-        @Schema(description = "차량 모델명", example = "Hyundai Solati")
+        @Schema(description = "차량 모델명", example = "기아 레이")
         String modelName,
 
         @NotBlank
@@ -30,7 +30,7 @@ public record CreateCarReq(
         Boolean lowFloor,
 
         @NotNull
-        @Schema(description = "차량 이미지 URL", example = "https://cdn.example.com/images/car.png")
+        @Schema(description = "차량 이미지 URL", example = "이미지는 최대 10MB까지 첨부 가능합니다")
         MultipartFile imgFile
 ) {}
 
