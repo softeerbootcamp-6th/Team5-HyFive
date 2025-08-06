@@ -1,4 +1,4 @@
-package hyfive.gachita.book;
+package hyfive.gachita.common.enums;
 
 import org.springframework.data.util.Pair;
 

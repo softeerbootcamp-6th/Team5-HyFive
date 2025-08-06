@@ -1,4 +1,4 @@
-package hyfive.gachita.common.config;
+package hyfive.gachita.config;
 
 import hyfive.gachita.common.response.BusinessException;
 import hyfive.gachita.common.response.ErrorCode;

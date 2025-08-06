@@ -1,4 +1,4 @@
-package hyfive.gachita.common.config;
+package hyfive.gachita.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;

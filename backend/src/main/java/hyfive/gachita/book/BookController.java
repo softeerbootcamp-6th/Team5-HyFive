@@ -2,7 +2,8 @@ package hyfive.gachita.book;
 
 import hyfive.gachita.book.dto.BookRes;
 import hyfive.gachita.book.dto.CreateBookReq;
-import hyfive.gachita.book.dto.ListRes;
+import hyfive.gachita.common.dto.ListRes;
+import hyfive.gachita.common.enums.SearchPeriod;
 import hyfive.gachita.common.response.BaseResponse;
 import hyfive.gachita.docs.BookDocs;
 import lombok.RequiredArgsConstructor;

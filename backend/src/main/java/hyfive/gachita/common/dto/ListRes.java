@@ -1,4 +1,4 @@
-package hyfive.gachita.book.dto;
+package hyfive.gachita.common.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;

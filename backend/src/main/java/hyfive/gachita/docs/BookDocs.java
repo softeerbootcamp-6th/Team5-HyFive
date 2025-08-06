@@ -1,10 +1,10 @@
 package hyfive.gachita.docs;
 
 import hyfive.gachita.book.BookStatus;
-import hyfive.gachita.book.SearchPeriod;
+import hyfive.gachita.common.enums.SearchPeriod;
 import hyfive.gachita.book.dto.BookRes;
 import hyfive.gachita.book.dto.CreateBookReq;
-import hyfive.gachita.book.dto.ListRes;
+import hyfive.gachita.common.dto.ListRes;
 import hyfive.gachita.common.response.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
