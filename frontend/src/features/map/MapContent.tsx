@@ -45,8 +45,11 @@ const MapContent = () => {
     }
 
     const options = {
-      center: new window.kakao.maps.LatLng(path[0].lng, path[0].lat),
-      level: 3,
+      center: new window.kakao.maps.LatLng(
+        path[(path.length - 1) / 2].lng,
+        path[(path.length - 1) / 2].lat,
+      ),
+      level: 4,
     };
 
     const initializedMap = new window.kakao.maps.Map(container, options);
