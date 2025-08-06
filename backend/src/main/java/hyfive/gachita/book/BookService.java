@@ -3,6 +3,7 @@ package hyfive.gachita.book;
 import hyfive.gachita.book.dto.BookRes;
 import hyfive.gachita.book.dto.CreateBookReq;
 import hyfive.gachita.book.dto.ListRes;
+import hyfive.gachita.book.repository.BookRepository;
 import hyfive.gachita.common.response.BusinessException;
 import hyfive.gachita.common.response.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -11,8 +12,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -42,7 +45,6 @@ public class BookService {
         return bookRepository.save(book);
     }
 
-    // TODO: 예약 시간 기준 필터링 조건 추가하기
     public ListRes<BookRes> getBookList(SearchPeriod period, BookStatus bookStatus, int page, int limit) {
         Pageable pageable = PageRequest.of(
                 page - 1,
@@ -50,12 +52,9 @@ public class BookService {
                 Sort.by("createdAt").descending()
         );
 
-        Page<Book> pageResult;
-        if (bookStatus == null){
-            pageResult = bookRepository.findAll(pageable);
-        } else {
-            pageResult = bookRepository.findAllByBookStatus(bookStatus, pageable);
-        }
+        Pair<LocalDateTime, LocalDateTime> dateRange = SearchPeriod.getDateRange(period);
+        Page<Book> pageResult = bookRepository.searchBookPageByCondition(dateRange, bookStatus, pageable);
+
         List<BookRes> bookResList = pageResult.getContent().stream().map(BookRes::from).toList();
         return ListRes.<BookRes>builder()
                 .items(bookResList)
