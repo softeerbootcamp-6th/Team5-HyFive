@@ -25,8 +25,6 @@ export default MapSection;
 const MapSectionContainer = css`
   display: flex;
   flex-direction: column;
-  gap: 40px;
-  padding: 20px 40px 60px 42px;
   width: 100%;
   height: 100%;
 `;
