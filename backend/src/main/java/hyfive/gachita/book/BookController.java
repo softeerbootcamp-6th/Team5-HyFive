@@ -1,15 +1,14 @@
 package hyfive.gachita.book;
 
-import hyfive.gachita.docs.BookDocs;
 import hyfive.gachita.book.dto.BookRes;
 import hyfive.gachita.book.dto.CreateBookReq;
+import hyfive.gachita.book.dto.ListRes;
 import hyfive.gachita.common.response.BaseResponse;
+import hyfive.gachita.docs.BookDocs;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/book")
@@ -28,17 +27,13 @@ public class BookController implements BookDocs {
 
     // TODO : enum 소문자 인식
     @GetMapping("/list")
-    public BaseResponse<List<BookRes>> getBookList(
+    public BaseResponse<ListRes<BookRes>> getBookList(
             @RequestParam(name = "period", defaultValue = "TODAY") SearchPeriod period,
             @RequestParam(name = "status", required = false) BookStatus bookStatus,
-            @RequestParam(name = "page", defaultValue = "1") Integer page,
-            @RequestParam(name = "limit", defaultValue = "12") Integer limit
+            @RequestParam(name = "page", defaultValue = "1") int page,
+            @RequestParam(name = "limit", defaultValue = "12") int limit
     ) {
-        log.info("getBookList called with period={}, status={}, page={}, limit={}", period, bookStatus, page, limit);
-        List<Book> bookList = bookService.getBookList(period, bookStatus, page, limit);
-        return BaseResponse.success(
-                bookList.stream()
-                .map(BookRes::from)
-                .toList());
+//        List<Book> bookList = bookService.getBookList(period, bookStatus, page, limit);
+        return BaseResponse.success(bookService.getBookList(period, bookStatus, page, limit));
     }
 }
