@@ -21,7 +21,7 @@ public record CreateCarReq(
         String carNumber,
 
         @Min(1)
-        @Max(50)
+        @Max(25)
         @Schema(description = "탑승 가능 인원 수", example = "3")
         int capacity,
 
