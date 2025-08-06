@@ -26,8 +26,8 @@ public class CarController implements CarDocs {
 
     @PatchMapping("/{id}")
     public BaseResponse<CarRes> updateCar(
-            @Validated @PathVariable("id") @NotNull Long id,
-            @ModelAttribute @Validated UpdateCarReq updateCarReq) {
+            @PathVariable("id") @NotNull Long id,
+            @ModelAttribute UpdateCarReq updateCarReq) {
         Car updateCar = carService.updateCar(id, updateCarReq);
         return BaseResponse.success(CarRes.from(updateCar));
     }
