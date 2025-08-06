@@ -3,14 +3,15 @@ package hyfive.gachita.car;
 import hyfive.gachita.center.Center;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
 @Getter
-@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "car")
 public class Car {
@@ -43,11 +44,11 @@ public class Car {
     @Column(name = "car_image", columnDefinition = "VARCHAR(255)")
     private String carImage;
 
-    @NotNull
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime createdAt;
 
+    @Builder.Default
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "del_yn", nullable = false, columnDefinition = "VARCHAR(50)")
