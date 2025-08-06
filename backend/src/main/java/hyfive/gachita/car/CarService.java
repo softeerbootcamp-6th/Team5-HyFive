@@ -27,10 +27,7 @@ public class CarService {
             throw new BusinessException(ErrorCode.MAX_CAR_COUNT_EXCEEDED);
         }
 
-        String normalizedCarNumber = normalize(createCarReq.carNumber());
-        if (carRepository.existsByCarNumberAndDelYn(normalizedCarNumber, DelYn.N)) {
-            throw new BusinessException(ErrorCode.DUPLICATE_CAR_NUMBER);
-        }
+        String normalizedCarNumber = getValidatedCarNumber(createCarReq.carNumber());
 
         // TODO : 이미지 저장 service 개발 필요
         String imgUrl = "test";
@@ -53,19 +50,28 @@ public class CarService {
         Car car = carRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NO_EXIST_VALUE, "DB에 차량 데이터가 존재하지 않습니다."));
 
+        String normalizedCarNumber = getValidatedCarNumber(updateCarReq.carNumber());
+
         // TODO : 이미지 저장 service 개발 필요 - 기존 사진 덮어 쓰기
         String imageUrl = "test_change";
 
-
-        // 3. 엔티티 필드 수정 (Dirty Checking)
         car.update(
                 updateCarReq.modelName(),
-                updateCarReq.carNumber(),
+                normalizedCarNumber,
                 updateCarReq.capacity(),
                 updateCarReq.lowFloor(),
                 imageUrl
         );
 
         return car;
+    }
+
+    private String getValidatedCarNumber(String carNumber) {
+        String normalizedCarNumber = normalize(carNumber);
+        if (carRepository.existsByCarNumberAndDelYn(normalizedCarNumber, DelYn.N)) {
+            throw new BusinessException(ErrorCode.DUPLICATE_CAR_NUMBER);
+        } else {
+            return normalizedCarNumber;
+        }
     }
 }
