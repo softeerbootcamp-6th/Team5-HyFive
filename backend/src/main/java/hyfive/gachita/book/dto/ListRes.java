@@ -6,6 +6,7 @@ import lombok.Builder;
 import java.util.List;
 
 @Builder
+@Schema(description = "리스트 응답 DTO")
 public record ListRes<T>(
         @Schema(description = "현재 페이지의 아이템 목록")
         List<T> items,
