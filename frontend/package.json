@@ -9,7 +9,8 @@
     "format": "prettier --check .",
     "typecheck": "tsc --noEmit",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:ui": "vitest --ui"
   },
   "dependencies": {
     "date-fns": "^4.1.0",
