@@ -1,5 +1,5 @@
-import MapContent from "@/features/schedule/MapContent";
-import MapHeader from "@/features/schedule/MapHeader";
+import MapContent from "@/features/map/MapContent";
+import MapHeader from "@/features/map/MapHeader";
 import type { ScheduleType } from "@/features/schedule/Schedule.types";
 import { css } from "@emotion/react";
 

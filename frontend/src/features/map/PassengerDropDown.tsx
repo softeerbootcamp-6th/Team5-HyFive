@@ -32,7 +32,7 @@ const PassengerDropDown = () => {
           <div css={DropDownContent}>
             <Table rows={sampleData} />
           </div>,
-          document.getElementById("map-content")!,
+          document.getElementById("map")!,
         )}
     </>
   );

@@ -4,7 +4,7 @@ import {
   InProgressIcon,
   WaitingIcon,
 } from "@/assets/icons";
-import PassengerDropDown from "@/features/schedule/PassengerDropDown";
+import PassengerDropDown from "@/features/map/PassengerDropDown";
 import type { ScheduleType } from "@/features/schedule/Schedule.types";
 import { theme } from "@/styles/themes.style";
 import TabMatcher from "@/utils/TabMatcher";
