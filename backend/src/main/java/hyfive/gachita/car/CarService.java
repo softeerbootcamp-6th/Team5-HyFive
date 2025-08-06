@@ -1,10 +1,12 @@
 package hyfive.gachita.car;
 
 import hyfive.gachita.car.dto.CreateCarReq;
+import hyfive.gachita.car.dto.UpdateCarReq;
 import hyfive.gachita.center.Center;
 import hyfive.gachita.center.CenterRepository;
 import hyfive.gachita.common.response.BusinessException;
 import hyfive.gachita.common.response.ErrorCode;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -32,5 +34,26 @@ public class CarService {
                 .build();
 
         return carRepository.save(car);
+    }
+
+    @Transactional
+    public Car updateCar(Long id, UpdateCarReq updateCarReq) {
+        Car car = carRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NO_EXIST_VALUE, "DB에 차량 데이터가 존재하지 않습니다."));
+
+        // TODO : 이미지 저장 service 개발 필요 - 기존 사진 덮어 쓰기
+        String imageUrl = "test_change";
+
+
+        // 3. 엔티티 필드 수정 (Dirty Checking)
+        car.update(
+                updateCarReq.modelName(),
+                updateCarReq.carNumber(),
+                updateCarReq.capacity(),
+                updateCarReq.lowFloor(),
+                imageUrl
+        );
+
+        return car;
     }
 }

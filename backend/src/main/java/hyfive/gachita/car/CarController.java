@@ -2,8 +2,10 @@ package hyfive.gachita.car;
 
 import hyfive.gachita.car.dto.CarRes;
 import hyfive.gachita.car.dto.CreateCarReq;
+import hyfive.gachita.car.dto.UpdateCarReq;
 import hyfive.gachita.common.response.BaseResponse;
 import hyfive.gachita.docs.CarDocs;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
@@ -19,5 +21,13 @@ public class CarController implements CarDocs {
     public BaseResponse<CarRes> createCar(@ModelAttribute @Validated CreateCarReq createCarReq) {
         Car createCar = carService.createCar(createCarReq);
         return BaseResponse.success(CarRes.from(createCar));
+    }
+
+    @PatchMapping("/{id}")
+    public BaseResponse<CarRes> updateCar(
+            @Validated @PathVariable("id") @NotNull Long id,
+            @ModelAttribute @Validated UpdateCarReq updateCarReq) {
+        Car updateCar = carService.updateCar(id, updateCarReq);
+        return BaseResponse.success(CarRes.from(updateCar));
     }
 }

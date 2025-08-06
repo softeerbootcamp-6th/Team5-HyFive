@@ -53,5 +53,13 @@ public class Car {
     @Enumerated(EnumType.STRING)
     @Column(name = "del_yn", nullable = false, columnDefinition = "VARCHAR(50)")
     private DelYn delYn = DelYn.N;
+
+    public void update(String modelName, String carNumber, int capacity, Boolean lowFloor, String carImage) {
+        this.modelName = modelName;
+        this.carNumber = carNumber;
+        this.capacity = capacity;
+        this.lowFloor = lowFloor;
+        this.carImage = carImage;
+    }
 }
 
