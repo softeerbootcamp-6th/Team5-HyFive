@@ -9,4 +9,6 @@ public interface CarRepository extends JpaRepository<Car, Long> {
 
     boolean existsByCarNumberAndDelYn(String carNumber, DelYn delYn);
 
+    boolean existsByIdNotAndCarNumberAndDelYn(Long id, String carNumber, DelYn delYn);
+
 }
