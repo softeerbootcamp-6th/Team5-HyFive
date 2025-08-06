@@ -1,6 +1,7 @@
 package hyfive.gachita.common.response;
 
 import io.swagger.v3.oas.annotations.Hidden;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Hidden
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
@@ -27,6 +29,7 @@ public class GlobalExceptionHandler {
                 .reduce((msg1, msg2) -> msg1 + ", " + msg2)
                 .orElse("입력값이 올바르지 않습니다.");
 
+        log.debug(errorMessages);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(BaseResponse.fail(ErrorCode.INVALID_INPUT, errorMessages));
