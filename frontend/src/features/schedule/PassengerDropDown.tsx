@@ -1,4 +1,4 @@
-import { ChevronDownIcon, ChevronUpIcon } from "@/assets/icons";
+import { ChevronDownIcon } from "@/assets/icons";
 import Table from "@/components/table/Table";
 import { theme } from "@/styles/themes.style";
 import { css } from "@emotion/react";
