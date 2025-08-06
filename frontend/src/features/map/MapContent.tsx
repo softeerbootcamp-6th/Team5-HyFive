@@ -1,4 +1,3 @@
-import { MarkerEnterIcon } from "@/assets/icons";
 import { css } from "@emotion/react";
 import { useEffect, useRef } from "react";
 
@@ -52,11 +51,9 @@ const MapContent = () => {
 
     const initializedMap = new window.kakao.maps.Map(container, options);
 
-    const linePath = [
-      new window.kakao.maps.LatLng(path[0].lng, path[0].lat),
-      new window.kakao.maps.LatLng(path[1].lng, path[1].lat),
-      new window.kakao.maps.LatLng(path[2].lng, path[2].lat),
-    ];
+    const linePath = path.map(
+      (point) => new window.kakao.maps.LatLng(point.lng, point.lat),
+    );
 
     const polyline = new window.kakao.maps.Polyline({
       path: linePath,
@@ -67,6 +64,37 @@ const MapContent = () => {
     });
 
     polyline.setMap(initializedMap);
+
+    const getMarkerType = (
+      index: number,
+      length: number,
+    ): keyof typeof imageSrc => {
+      if (index === 0) return "start";
+      if (index === length - 1) return "end";
+      return "middle";
+    };
+
+    const imageSrc = {
+      start: "/src/assets/icons/marker-start.svg",
+      middle: "/src/assets/icons/marker-default.svg",
+      end: "/src/assets/icons/marker-end.svg",
+    };
+
+    for (let i = 0; i < path.length; i++) {
+      const markerType = getMarkerType(i, path.length);
+      const imageSize = new window.kakao.maps.Size(32, 32);
+      const markerImage = new window.kakao.maps.MarkerImage(
+        imageSrc[markerType],
+        imageSize,
+      );
+
+      new window.kakao.maps.Marker({
+        map: initializedMap,
+        position: new window.kakao.maps.LatLng(path[i].lng, path[i].lat),
+        title: "User Marker",
+        image: markerImage,
+      });
+    }
   }, []);
   return <div id="map" ref={mapRef} css={MapContentContainer} />;
 };
