@@ -30,7 +30,7 @@ public class CarService {
         String normalizedCarNumber = getValidatedCarNumber(createCarReq.carNumber());
 
         // TODO : 이미지 저장 service 개발 필요
-        String imgUrl = "test";
+        String imageUrl = "test";
 
         // 엔티티 생성
         Car car = Car.builder()
@@ -39,7 +39,7 @@ public class CarService {
                 .carNumber(normalizedCarNumber)
                 .capacity(createCarReq.capacity())
                 .lowFloor(createCarReq.lowFloor())
-                .carImage(imgUrl)
+                .carImage(imageUrl)
                 .build();
 
         return carRepository.save(car);
