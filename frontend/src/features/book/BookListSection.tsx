@@ -1,17 +1,17 @@
 import RefetchButton from "@/components/RefetchButton";
 import Tabs from "@/components/Tabs";
-import type { BookType } from "@/features/book/Book.types";
 import BookCard from "@/features/book/BookCard";
 import { bookDataList } from "@/mocks/bookMocks";
 import { theme } from "@/styles/themes.style";
+import TabMatcher from "@/utils/TabMatcher";
 import { css } from "@emotion/react";
 import type { Dispatch, SetStateAction } from "react";
 const { color, typography } = theme;
 
 interface BookListSectionProps {
-  TAB_LIST: BookType[];
-  activeTab: BookType;
-  setActiveTab: Dispatch<SetStateAction<BookType>>;
+  TAB_LIST: string[];
+  activeTab: string;
+  setActiveTab: Dispatch<SetStateAction<string>>;
 }
 const BookListSection = ({
   TAB_LIST,
@@ -34,7 +34,10 @@ const BookListSection = ({
       <div css={ContentContainer}>
         {bookDataList.map((bookData, idx) => (
           <div key={bookData.name}>
-            <BookCard bookType={activeTab} data={bookData} />
+            <BookCard
+              bookType={TabMatcher.matchBookTypKRToENG(activeTab)}
+              data={bookData}
+            />
             {idx !== bookDataList.length - 1 && <div css={LineWrapper} />}
           </div>
         ))}

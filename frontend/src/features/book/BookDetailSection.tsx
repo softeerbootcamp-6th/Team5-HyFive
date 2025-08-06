@@ -1,13 +1,13 @@
 import Table from "@/components/table/Table";
-import type { BookType } from "@/features/book/Book.types";
 import RouteCard from "@/features/book/RouteCard";
 import { theme } from "@/styles/themes.style";
 import type { TableObject } from "@/utils/TableMatcher";
+import TabMatcher from "@/utils/TabMatcher";
 import { css } from "@emotion/react";
 const { typography } = theme;
 
 interface BookDetailSectionProps {
-  activeTab: BookType;
+  activeTab: string;
   userRows: TableObject[];
   bookingRows: TableObject[];
   routeRows: TableObject[];
@@ -24,14 +24,15 @@ const BookDetailSection = ({
     { title: "예약 정보", data: bookingRows },
     { title: "이용 경로 정보", data: routeRows },
   ];
+  const parsedActiveTab = TabMatcher.matchBookTypKRToENG(activeTab);
 
   return (
     <div css={BookDetailSectionContainer}>
       {TABLE_SECTIONS.map(({ title, data }) => (
         <div css={TableWrapper} key={title}>
           <p css={TitleText}>{title}</p>
-          {title === "이용 경로 정보" && activeTab !== "success" ? (
-            <RouteCard routeType={activeTab} />
+          {title === "이용 경로 정보" && parsedActiveTab !== "success" ? (
+            <RouteCard routeType={parsedActiveTab as "pending" | "fail"} />
           ) : (
             <Table rows={data} />
           )}
