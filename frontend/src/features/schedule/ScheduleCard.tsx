@@ -9,12 +9,11 @@ import {
   RouteWrapper,
   ScheduleCardContainer,
   UserWrapper,
-} from "@/features/schedule/ScheduleCard.style";
-import {
   CardTypeText,
   TimeText,
   TimeWrapper,
-} from "@/features/book/BookCard.style";
+} from "@/features/schedule/ScheduleCard.style";
+
 import { theme } from "@/styles/themes.style";
 const { color } = theme;
 const grayColor = color.GrayScale.gray4;

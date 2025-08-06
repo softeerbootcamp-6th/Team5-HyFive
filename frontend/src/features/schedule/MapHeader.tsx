@@ -55,7 +55,8 @@ const MapHeaderContainer = css`
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 20px 24px;
+  padding-top: 24px;
+  padding-bottom: 12px;
 `;
 
 const SectionWrapper = css`
