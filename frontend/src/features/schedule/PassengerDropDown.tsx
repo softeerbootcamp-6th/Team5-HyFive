@@ -1,4 +1,4 @@
-import { ChevronDownIcon } from "@/assets/icons";
+import { ChevronDownIcon, ChevronUpIcon } from "@/assets/icons";
 import Table from "@/components/table/Table";
 import { theme } from "@/styles/themes.style";
 import { css } from "@emotion/react";
@@ -23,7 +23,9 @@ const PassengerDropDown = () => {
         onClick={() => setIsDropDownOpen((prev) => !prev)}
       >
         <p>탑승자 정보</p>
-        <ChevronDownIcon />
+        <div css={ChevronWrapper(isDropDownOpen)}>
+          <ChevronDownIcon />
+        </div>
       </div>
       {isDropDownOpen &&
         createPortal(
@@ -48,6 +50,15 @@ const DropDownTrigger = css`
   border: 1px solid ${color.GrayScale.gray3};
   font: ${typography.Body.b2_medi};
   cursor: pointer;
+  transition: transform 0.2s ease;
+`;
+
+const ChevronWrapper = (isDropDownOpen: boolean) => css`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotateX(${isDropDownOpen ? "180deg" : "0deg"});
+  transition: transform 0.5s ease;
 `;
 
 const DropDownContent = css`
