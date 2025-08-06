@@ -25,7 +25,6 @@ public class BookController implements BookDocs {
         return BaseResponse.success(BookRes.from(createdBook));
     }
 
-    // TODO : enum 소문자 인식
     @GetMapping("/list")
     public BaseResponse<ListRes<BookRes>> getBookList(
             @RequestParam(name = "period", defaultValue = "TODAY") SearchPeriod period,
@@ -33,7 +32,6 @@ public class BookController implements BookDocs {
             @RequestParam(name = "page", defaultValue = "1") int page,
             @RequestParam(name = "limit", defaultValue = "12") int limit
     ) {
-//        List<Book> bookList = bookService.getBookList(period, bookStatus, page, limit);
         return BaseResponse.success(bookService.getBookList(period, bookStatus, page, limit));
     }
 }
