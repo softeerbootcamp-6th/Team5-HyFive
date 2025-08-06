@@ -24,7 +24,7 @@ public class CarController implements CarDocs {
         return BaseResponse.success(CarRes.from(createCar));
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping(path = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public BaseResponse<CarRes> updateCar(
             @PathVariable("id") @NotNull Long id,
             @ModelAttribute UpdateCarReq updateCarReq) {
