@@ -12,7 +12,7 @@ const PassengerDropDown = () => {
     order: i + 1,
     name: `김민정 ${i + 1}`,
     phone: `010-0000-000${i}`,
-    isExistWalkingDevice: i % 2 === 0,
+    isExistWalkingDevice: i % 2 === 0 ? "o" : "-",
     boardingTime: "12:00",
     getOffTime: "13:00",
   }));
