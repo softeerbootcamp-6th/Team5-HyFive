@@ -5,21 +5,40 @@ import hyfive.gachita.book.dto.BookRes;
 import hyfive.gachita.book.dto.CreateBookReq;
 import hyfive.gachita.common.response.BaseResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/book")
 @RequiredArgsConstructor
+@Slf4j
+@Validated
 public class BookController implements BookDocs {
     private final BookService bookService;
 
     @PostMapping
-    public BaseResponse<BookRes> createBook(@RequestBody @Validated CreateBookReq createBookReq) {
+    public BaseResponse<BookRes> createBook(@RequestBody
+                                                CreateBookReq createBookReq) {
         Book createdBook = bookService.createBook(createBookReq);
         return BaseResponse.success(BookRes.from(createdBook));
+    }
+
+    // TODO : enum 소문자 인식
+    @GetMapping("/list")
+    public BaseResponse<List<BookRes>> getBookList(
+            @RequestParam(name = "period", defaultValue = "TODAY") SearchPeriod period,
+            @RequestParam(name = "status", required = false) BookStatus bookStatus,
+            @RequestParam(name = "page", defaultValue = "1") Integer page,
+            @RequestParam(name = "limit", defaultValue = "12") Integer limit
+    ) {
+        log.info("getBookList called with period={}, status={}, page={}, limit={}", period, bookStatus, page, limit);
+        List<Book> bookList = bookService.getBookList(period, bookStatus, page, limit);
+        return BaseResponse.success(
+                bookList.stream()
+                .map(BookRes::from)
+                .toList());
     }
 }
