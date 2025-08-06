@@ -14,11 +14,18 @@ const SCHEDULE_MAPPING_TABLE: Record<string, ScheduleType> = {
 };
 
 const TabMatcher = {
-  matchBookTypKRToENG: (activeTab: string): BookType => {
+  matchBookTypeKRToENG: (activeTab: string): BookType => {
     return BOOK_MAPPING_TABLE[activeTab];
   },
-  matchSheduleTypKRToENG: (activeTab: string): ScheduleType => {
+  matchScheduleTypeKRToENG: (activeTab: string): ScheduleType => {
     return SCHEDULE_MAPPING_TABLE[activeTab];
+  },
+  matchScheduleTypeENGToKR: (activeTab: ScheduleType): string => {
+    const scheduleType = Object.keys(SCHEDULE_MAPPING_TABLE).find(
+      (key) => SCHEDULE_MAPPING_TABLE[key] === activeTab,
+    );
+    if (scheduleType) return scheduleType;
+    return "운행 대기";
   },
 };
 

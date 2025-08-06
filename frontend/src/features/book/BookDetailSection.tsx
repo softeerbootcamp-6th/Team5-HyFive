@@ -24,7 +24,7 @@ const BookDetailSection = ({
     { title: "예약 정보", data: bookingRows },
     { title: "이용 경로 정보", data: routeRows },
   ];
-  const parsedActiveTab = TabMatcher.matchBookTypKRToENG(activeTab);
+  const parsedActiveTab = TabMatcher.matchBookTypeKRToENG(activeTab);
 
   return (
     <div css={BookDetailSectionContainer}>

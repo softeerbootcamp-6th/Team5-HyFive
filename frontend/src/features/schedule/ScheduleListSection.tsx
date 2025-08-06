@@ -9,14 +9,16 @@ import type { Dispatch, SetStateAction } from "react";
 const { color, typography } = theme;
 
 interface ScheduleListSectionProps {
-  TAB_LIST: ScheduleType[];
-  activeTab: ScheduleType;
-  setActiveTab: Dispatch<SetStateAction<ScheduleType>>;
+  TAB_LIST: string[];
+  activeTab: string;
+  setActiveTab: Dispatch<SetStateAction<string>>;
+  parsedActiveTab: ScheduleType;
 }
 const ScheduleListSection = ({
   TAB_LIST,
   activeTab,
   setActiveTab,
+  parsedActiveTab,
 }: ScheduleListSectionProps) => {
   const LOCATION_SECTION = "운정 1구역";
   return (
@@ -34,7 +36,7 @@ const ScheduleListSection = ({
       <div css={ContentContainer}>
         {drivingDataList.map((scheduleData, idx) => (
           <div key={scheduleData.routeId}>
-            <ScheduleCard drivingType={activeTab} data={scheduleData} />
+            <ScheduleCard drivingType={parsedActiveTab} data={scheduleData} />
             {idx !== drivingDataList.length - 1 && <div css={LineWrapper} />}
           </div>
         ))}

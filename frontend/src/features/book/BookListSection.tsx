@@ -35,7 +35,7 @@ const BookListSection = ({
         {bookDataList.map((bookData, idx) => (
           <div key={bookData.name}>
             <BookCard
-              bookType={TabMatcher.matchBookTypKRToENG(activeTab)}
+              bookType={TabMatcher.matchBookTypeKRToENG(activeTab)}
               data={bookData}
             />
             {idx !== bookDataList.length - 1 && <div css={LineWrapper} />}

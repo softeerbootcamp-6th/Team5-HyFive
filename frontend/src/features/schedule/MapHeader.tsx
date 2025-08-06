@@ -25,6 +25,7 @@ const MapHeader = ({ scheduleType, data }: MapHeaderProps) => {
     inProgress: <InProgressIcon />,
     completed: <CompletedIcon />,
   };
+  const parsedScheduleType = TabMatcher.matchScheduleTypeENGToKR(scheduleType);
   return (
     <div css={MapHeaderContainer}>
       <p css={RouteIdText}>경로 #{data.id}</p>
@@ -32,9 +33,7 @@ const MapHeader = ({ scheduleType, data }: MapHeaderProps) => {
         <div css={LeftSectionWrapper}>
           <div>{ICON_MAPPER[scheduleType]}</div>
           <div>
-            <p css={RouteStatusText}>
-              {TabMatcher.matchInnerTypeToExternalType(scheduleType)}
-            </p>
+            <p css={RouteStatusText}>{parsedScheduleType}</p>
             <div css={RouteLocationWrapper}>
               <p>{data.routeStartLocation}</p>
               <ArrowRightIcon />
