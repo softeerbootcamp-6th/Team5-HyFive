@@ -12,15 +12,11 @@ const Calander = ({ highlightType = "day" }: CalanderProps) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null); // TODO: Reducer로 들어갈 상태
 
-  const handlePrevBtn = () => {
-    const prevMonth = new Date(currentDate);
-    prevMonth.setMonth(prevMonth.getMonth() - 1);
-    setCurrentDate(prevMonth);
-  };
-  const handleNextBtn = () => {
-    const nextMonth = new Date(currentDate);
-    nextMonth.setMonth(nextMonth.getMonth() + 1);
-    setCurrentDate(nextMonth);
+  const changeMonth = (direction: "next" | "prev") => {
+    const offset = direction === "next" ? 1 : -1;
+    const newDate = new Date(currentDate);
+    newDate.setMonth(currentDate.getMonth() + offset);
+    setCurrentDate(newDate);
   };
 
   const handleClickDate = (date: Date) => {
@@ -32,8 +28,8 @@ const Calander = ({ highlightType = "day" }: CalanderProps) => {
     <div css={CalanderContainer}>
       <CalanderHeader
         date={currentDate}
-        onClickNext={handleNextBtn}
-        onClickPrev={handlePrevBtn}
+        onClickPrev={() => changeMonth("prev")}
+        onClickNext={() => changeMonth("next")}
       />
       <CalanderContent
         date={currentDate}
