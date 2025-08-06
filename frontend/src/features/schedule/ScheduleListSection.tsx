@@ -1,26 +1,28 @@
 import RefetchButton from "@/components/RefetchButton";
 import Tabs from "@/components/Tabs";
-import BookCard from "@/features/book/BookCard";
-import { bookDataList } from "@/mocks/bookMocks";
+import type { ScheduleType } from "@/features/schedule/Schedule.types";
+import ScheduleCard from "@/features/schedule/ScheduleCard";
+import { drivingDataList } from "@/mocks/drivingMocks";
 import { theme } from "@/styles/themes.style";
-import TabMatcher from "@/utils/TabMatcher";
 import { css } from "@emotion/react";
 import type { Dispatch, SetStateAction } from "react";
 const { color, typography } = theme;
 
-interface BookListSectionProps {
+interface ScheduleListSectionProps {
   TAB_LIST: string[];
   activeTab: string;
   setActiveTab: Dispatch<SetStateAction<string>>;
+  parsedActiveTab: ScheduleType;
 }
-const BookListSection = ({
+const ScheduleListSection = ({
   TAB_LIST,
   activeTab,
   setActiveTab,
-}: BookListSectionProps) => {
+  parsedActiveTab,
+}: ScheduleListSectionProps) => {
   const LOCATION_SECTION = "운정 1구역";
   return (
-    <div css={BookListSectionContainer}>
+    <div css={ScheduleListSectionContainer}>
       <div css={HeaderContainer}>
         <p css={LocationSectionText}>{LOCATION_SECTION}</p>
         <RefetchButton handleClick={() => {}} />
@@ -32,13 +34,10 @@ const BookListSection = ({
         setSelected={setActiveTab}
       />
       <div css={ContentContainer}>
-        {bookDataList.map((bookData, idx) => (
-          <div key={bookData.name}>
-            <BookCard
-              bookType={TabMatcher.matchBookTypeKRToENG(activeTab)}
-              data={bookData}
-            />
-            {idx !== bookDataList.length - 1 && <div css={LineWrapper} />}
+        {drivingDataList.map((scheduleData, idx) => (
+          <div key={scheduleData.routeId}>
+            <ScheduleCard drivingType={parsedActiveTab} data={scheduleData} />
+            {idx !== drivingDataList.length - 1 && <div css={LineWrapper} />}
           </div>
         ))}
       </div>
@@ -46,9 +45,9 @@ const BookListSection = ({
   );
 };
 
-export default BookListSection;
+export default ScheduleListSection;
 
-const BookListSectionContainer = css`
+const ScheduleListSectionContainer = css`
   width: 485px;
   height: calc(100vh - 72px);
   display: flex;

@@ -1,4 +1,3 @@
-import type { BookType } from "@/features/book/Book.types";
 import BookDetailSection from "@/features/book/BookDetailSection";
 import BookListSection from "@/features/book/BookListSection";
 import { rowsUser } from "@/mocks/tableMocks";
@@ -10,8 +9,8 @@ const BookPage = () => {
   const { userRows, bookingRows, routeRows } =
     TableMatcher.matchBookTableType(rowsUser);
 
-  const TAB_LIST: BookType[] = ["pending", "success", "fail"];
-  const [activeTab, setActiveTab] = useState<BookType>(TAB_LIST[0]);
+  const TAB_LIST = ["신규 예약", "예약 성공", "예약 실패"];
+  const [activeTab, setActiveTab] = useState<string>(TAB_LIST[0]);
   return (
     <div css={BookPageContainer}>
       <BookListSection

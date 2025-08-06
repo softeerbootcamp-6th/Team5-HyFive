@@ -1,8 +1,6 @@
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
 import { useState, useRef, useEffect } from "react";
-import TabMatcher from "@/utils/TabMatcher";
-import type { BookType } from "@/features/book/Book.types";
 
 type TabsType = "bar_true" | "bar_false";
 
@@ -15,7 +13,7 @@ interface TabsProps<T extends string> {
 
 const { color, typography } = theme;
 
-const Tabs = <T extends BookType>({
+const Tabs = <T extends string>({
   type,
   group,
   selected,
@@ -47,7 +45,7 @@ const Tabs = <T extends BookType>({
               tabRefs.current[i] = el;
             }}
           >
-            {TabMatcher.matchInnerTypeToExternalType(item)}
+            {item}
           </div>
         ))}
         {type === "bar_true" && (
