@@ -8,6 +8,8 @@ import hyfive.gachita.common.response.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import static hyfive.gachita.common.util.CarNumberFormatter.normalize;
+
 @Service
 @RequiredArgsConstructor
 public class CarService {
@@ -23,7 +25,7 @@ public class CarService {
             throw new BusinessException(ErrorCode.MAX_CAR_COUNT_EXCEEDED);
         }
 
-        String normalizedCarNumber = normalizeCarNumber(createCarReq.carNumber());
+        String normalizedCarNumber = normalize(createCarReq.carNumber());
         if (carRepository.existsByCarNumberAndDelYn(normalizedCarNumber, DelYn.N)) {
             throw new BusinessException(ErrorCode.DUPLICATE_CAR_NUMBER);
         }
@@ -42,15 +44,5 @@ public class CarService {
                 .build();
 
         return carRepository.save(car);
-    }
-
-    private String normalizeCarNumber(String carNumber) {
-        // 예: " 12 가 1 234" -> "12가1234"
-        return carNumber.replaceAll("[\\s-]", "");
-    }
-
-    private String formatCarNumber(String carNumber) {
-        // 예: "12가1234" → "12가 1234"
-        return carNumber.replaceFirst("^(\\d{2,3}[가-힣])(\\d{4})$", "$1 $2");
     }
 }

@@ -3,6 +3,8 @@ package hyfive.gachita.car.dto;
 import hyfive.gachita.car.Car;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import static hyfive.gachita.common.util.CarNumberFormatter.format;
+
 public record CarRes(
         @Schema(description = "차량 ID", example = "1")
         Long id,
@@ -35,7 +37,7 @@ public record CarRes(
                 car.getCenter().getId(),
                 car.getCenter().getCenterName(),
                 car.getModelName(),
-                car.getCarNumber(),
+                format(car.getCarNumber()),
                 car.getCapacity(),
                 car.getLowFloor(),
                 car.getCarImage()
