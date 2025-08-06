@@ -10,6 +10,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import static hyfive.gachita.common.util.CarNumberFormatter.normalize;
+
 @Service
 @RequiredArgsConstructor
 public class CarService {
@@ -20,6 +22,16 @@ public class CarService {
         Center center = centerRepository.findById(createCarReq.centerId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.NO_EXIST_VALUE, "DB에 센터 데이터가 존재하지 않습니다."));
 
+        long carCount = carRepository.countByCenterAndDelYn(center, DelYn.N);
+        if (carCount >= 6) {
+            throw new BusinessException(ErrorCode.MAX_CAR_COUNT_EXCEEDED);
+        }
+
+        String normalizedCarNumber = normalize(createCarReq.carNumber());
+        if (carRepository.existsByCarNumberAndDelYn(normalizedCarNumber, DelYn.N)) {
+            throw new BusinessException(ErrorCode.DUPLICATE_CAR_NUMBER);
+        }
+
         // TODO : 이미지 저장 service 개발 필요
         String imgUrl = "test";
 
@@ -27,7 +39,7 @@ public class CarService {
         Car car = Car.builder()
                 .center(center)
                 .modelName(createCarReq.modelName())
-                .carNumber(createCarReq.carNumber())
+                .carNumber(normalizedCarNumber)
                 .capacity(createCarReq.capacity())
                 .lowFloor(createCarReq.lowFloor())
                 .carImage(imgUrl)

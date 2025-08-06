@@ -14,11 +14,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/car")
 @RequiredArgsConstructor
+@Validated
 public class CarController implements CarDocs {
     private final CarService carService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public BaseResponse<CarRes> createCar(@ModelAttribute @Validated CreateCarReq createCarReq) {
+    public BaseResponse<CarRes> createCar(@ModelAttribute CreateCarReq createCarReq) {
         Car createCar = carService.createCar(createCarReq);
         return BaseResponse.success(CarRes.from(createCar));
     }
