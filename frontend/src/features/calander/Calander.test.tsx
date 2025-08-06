@@ -67,10 +67,13 @@ describe("Calander 컴포넌트", () => {
 
     expect(screen.getByText("2025년 8월")).toBeInTheDocument();
 
-    // 예: 7월 31일이 포함되어 있다고 가정하고 해당 날짜를 클릭
+    // 1. 이전 달 날짜 클릭 (예: 7월 31일)
     await user.click(screen.getByTestId("day-2025-7-31"));
-
     expect(screen.getByText("2025년 7월")).toBeInTheDocument();
+
+    // 2. 다음 달 날짜 클릭 (예: 8월 1일)
+    await user.click(screen.getByTestId("day-2025-8-1"));
+    expect(screen.getByText("2025년 8월")).toBeInTheDocument();
   });
 
   it("hilightType === day 라면 오늘 날짜는 강조 스타일이 적용된다.", () => {
