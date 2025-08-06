@@ -58,7 +58,7 @@ const ChevronWrapper = (isDropDownOpen: boolean) => css`
   align-items: center;
   justify-content: center;
   transform: rotateX(${isDropDownOpen ? "180deg" : "0deg"});
-  transition: transform 0.5s ease;
+  transition: transform 0.4s ease;
 `;
 
 const DropDownContent = css`
