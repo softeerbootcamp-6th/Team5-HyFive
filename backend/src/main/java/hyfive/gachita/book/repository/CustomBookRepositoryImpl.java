@@ -14,6 +14,7 @@ import org.springframework.data.util.Pair;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import static hyfive.gachita.book.QBook.book;
 
 @RequiredArgsConstructor
 public class CustomBookRepositoryImpl implements CustomBookRepository {
@@ -24,7 +25,6 @@ public class CustomBookRepositoryImpl implements CustomBookRepository {
     public Page<Book> searchBookPageByCondition(Pair<LocalDateTime, LocalDateTime> dateRange,
                                                 BookStatus status,
                                                 Pageable pageable) {
-        QBook book = QBook.book;
 
         List<Book> books = queryFactory
                 .selectFrom(book)
