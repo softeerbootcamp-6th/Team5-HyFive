@@ -39,10 +39,10 @@ public record BookRes(
         @JsonProperty("hospitalTime")
         LocalTime hospitalTime,
 
-        @Schema(description = "출발지 주소", example = "서울특별시 강남구 테헤란로 123")
+        @Schema(description = "출발지 주소", example = "서울특별시 노원구 동일로 123")
         String startAddr,
 
-        @Schema(description = "도착지 주소", example = "서울특별시 종로구 종로1길 45")
+        @Schema(description = "도착지 주소", example = "서울특별시 노원구 노해로 45")
         String endAddr,
 
         @Schema(description = "보행기 사용 여부", example = "true")

@@ -28,11 +28,11 @@ public record CreateBookReq(
         @NotNull(message = "병원 시간은 필수입니다.")
         LocalTime hospitalTime,
 
-        @Schema(description = "출발지 주소", example = "서울특별시 강남구 테헤란로 123")
+        @Schema(description = "출발지 주소", example = "서울특별시 노원구 동일로 123")
         @NotBlank(message = "출발 주소는 필수입니다.")
         String startAddr,
 
-        @Schema(description = "도착지 주소", example = "서울특별시 종로구 종로1길 45")
+        @Schema(description = "도착지 주소", example = "서울특별시 노원구 노해로 45")
         @NotBlank(message = "도착 주소는 필수입니다.")
         String endAddr,
 

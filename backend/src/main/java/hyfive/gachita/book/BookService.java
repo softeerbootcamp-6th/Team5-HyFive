@@ -7,7 +7,6 @@ import hyfive.gachita.book.repository.BookRepository;
 import hyfive.gachita.common.response.BusinessException;
 import hyfive.gachita.common.response.ErrorCode;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +19,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class BookService {
     private final BookRepository bookRepository;
 

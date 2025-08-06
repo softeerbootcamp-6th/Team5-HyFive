@@ -6,14 +6,12 @@ import hyfive.gachita.book.dto.ListRes;
 import hyfive.gachita.common.response.BaseResponse;
 import hyfive.gachita.docs.BookDocs;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/book")
 @RequiredArgsConstructor
-@Slf4j
 @Validated
 public class BookController implements BookDocs {
     private final BookService bookService;
