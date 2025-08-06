@@ -18,6 +18,16 @@ public class CarService {
         Center center = centerRepository.findById(createCarReq.centerId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.NO_EXIST_VALUE, "DB에 센터 데이터가 존재하지 않습니다."));
 
+        long carCount = carRepository.countByCenterAndDelYn(center, DelYn.N);
+        if (carCount >= 6) {
+            throw new BusinessException(ErrorCode.MAX_CAR_COUNT_EXCEEDED);
+        }
+
+        String normalizedCarNumber = normalizeCarNumber(createCarReq.carNumber());
+        if (carRepository.existsByCarNumberAndDelYn(normalizedCarNumber, DelYn.N)) {
+            throw new BusinessException(ErrorCode.DUPLICATE_CAR_NUMBER);
+        }
+
         // TODO : 이미지 저장 service 개발 필요
         String imgUrl = "test";
 
@@ -25,12 +35,22 @@ public class CarService {
         Car car = Car.builder()
                 .center(center)
                 .modelName(createCarReq.modelName())
-                .carNumber(createCarReq.carNumber())
+                .carNumber(normalizedCarNumber)
                 .capacity(createCarReq.capacity())
                 .lowFloor(createCarReq.lowFloor())
                 .carImage(imgUrl)
                 .build();
 
         return carRepository.save(car);
+    }
+
+    private String normalizeCarNumber(String carNumber) {
+        // 예: " 12 가 1 234" -> "12가1234"
+        return carNumber.replaceAll("[\\s-]", "");
+    }
+
+    private String formatCarNumber(String carNumber) {
+        // 예: "12가1234" → "12가 1234"
+        return carNumber.replaceFirst("^(\\d{2,3}[가-힣])(\\d{4})$", "$1 $2");
     }
 }
