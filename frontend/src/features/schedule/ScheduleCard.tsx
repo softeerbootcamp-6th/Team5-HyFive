@@ -37,9 +37,9 @@ const ScheduleCard = ({ drivingType, data }: DrivingCardProps) => {
           </div>
         </div>
         <div css={TimeWrapper}>
-          <p css={TimeText}>{data.routeStartTime}</p>
-          <p css={TimeText}>~</p>
-          <p css={TimeText}>{data.routeEndTime}</p>
+          <p css={TimeText}>
+            {data.routeStartTime}~{data.routeEndTime}
+          </p>
           <p css={CardTypeText}>운행</p>
         </div>
       </div>
