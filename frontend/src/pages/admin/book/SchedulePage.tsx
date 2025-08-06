@@ -29,4 +29,5 @@ export default SchedulePage;
 const BookPageContainer = css`
   display: flex;
   flex-direction: row;
+  height: 100%;
 `;
