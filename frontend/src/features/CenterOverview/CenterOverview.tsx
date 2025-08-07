@@ -39,9 +39,9 @@ const CenterOverview = ({
     <div css={OverviewContainer}>
       <header css={OverviewHeader}>{centerName}</header>
       <div css={OverviewBody}>
-        {infoCardData.map((card, idx) => (
+        {infoCardData.map((card) => (
           <CenterInfoCard
-            key={idx}
+            key={`${card.label}-${card.content}`}
             icon={card.icon}
             label={card.label}
             content={card.content}
