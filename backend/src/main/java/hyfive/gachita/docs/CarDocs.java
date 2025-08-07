@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -88,7 +89,7 @@ public interface CarDocs {
             )
     })
     BaseResponse<CarRes> updateCar(
-            @PathVariable("id") Long id,
+            @PathVariable("id") @NotNull Long id,
             @ModelAttribute UpdateCarReq updateCarReq
     );
 }
