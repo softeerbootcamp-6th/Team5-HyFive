@@ -34,7 +34,7 @@ jobs:
       - name: Zip build output
         run: |
           mkdir -p deploy/scripts
-          cp backend/build/libs/*.jar deploy/app.jar
+          cp backend/build/libs/*SNAPSHOT.jar deploy/app.jar
           cp backend/appspec.yml deploy/
           cp backend/scripts/deploy.sh deploy/scripts/
           cd deploy && zip -r ../deploy.zip .
