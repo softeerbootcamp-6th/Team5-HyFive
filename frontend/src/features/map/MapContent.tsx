@@ -93,7 +93,7 @@ const MapContent = () => {
         image: markerImage,
       });
     }
-  }, []);
+  }, [initializedMap]);
   return <div id="map" ref={mapRef} css={MapContentContainer} />;
 };
 
