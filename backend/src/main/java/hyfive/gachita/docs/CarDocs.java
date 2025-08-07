@@ -92,4 +92,29 @@ public interface CarDocs {
             @PathVariable("id") @NotNull Long id,
             @ModelAttribute UpdateCarReq updateCarReq
     );
+
+    @Operation(
+            summary = "차량 상세 정보 API",
+            description = "차량 ID를 받아 차량 상세 정보를 가져옵니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "1000",
+                    description = "차량 상세 정보 조회 성공 시, 차량 정보를 응답합니다.",
+                    content = @Content(schema = @Schema(implementation = CarRes.class))
+            ),
+            @ApiResponse(
+                    responseCode = "2000",
+                    description = "필드가 비어있거나 잘못된 형식으로 요청한 경우 발생",
+                    content = @Content()
+            ),
+            @ApiResponse(
+                    responseCode = "3001",
+                    description = "요청한 차량 ID가 DB에 존재하지 않는 경우 발생",
+                    content = @Content()
+            )
+    })
+    BaseResponse<CarRes> getCar(
+            @PathVariable("id") @NotNull Long id
+    );
 }

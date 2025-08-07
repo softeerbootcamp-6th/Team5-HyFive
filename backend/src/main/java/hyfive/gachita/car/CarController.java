@@ -33,7 +33,7 @@ public class CarController implements CarDocs {
     }
 
     @GetMapping("/{id}")
-    public BaseResponse<CarRes> getCarById(@PathVariable("id") @NotNull Long id) {
+    public BaseResponse<CarRes> getCar(@PathVariable("id") @NotNull Long id) {
         Car getCar = carService.getCar(id);
         return BaseResponse.success(CarRes.from(getCar));
     }
