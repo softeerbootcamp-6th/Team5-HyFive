@@ -1,0 +1,27 @@
+name: Frontend CI
+
+on:
+  pull_request:
+    branches: [dev-fe]
+  push:
+    branches: [main, dev]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: frontend/dist
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.ROLE_ARN }}
+          aws-region: ap-northeast-2
+
+      - name: Upload new files to S3
+        run: |
+          aws s3 cp ./dist s3://${{ secrets.BUCKET_NAME }}/frontend --recursive
