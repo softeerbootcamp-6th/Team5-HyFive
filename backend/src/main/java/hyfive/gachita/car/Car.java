@@ -61,5 +61,9 @@ public class Car {
         this.lowFloor = lowFloor;
         this.carImage = carImage;
     }
+
+    public void delete() {
+        this.delYn = DelYn.Y;
+    }
 }
 
