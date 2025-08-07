@@ -1,3 +1,4 @@
+import useInitializeMap from "@/features/map/useInitializeMap";
 import { css } from "@emotion/react";
 import { useEffect, useRef } from "react";
 
@@ -37,22 +38,16 @@ const path = [
 ];
 
 const MapContent = () => {
-  const mapRef = useRef(null);
+  const mapRef = useRef<HTMLDivElement>(null);
+
+  const { map: initializedMap } = useInitializeMap({
+    mapRef,
+    centerLat: path[(path.length - 1) / 2].lng,
+    centerLng: path[(path.length - 1) / 2].lat,
+  });
+
   useEffect(() => {
-    const container = mapRef.current;
-    if (!container) {
-      return;
-    }
-
-    const options = {
-      center: new window.kakao.maps.LatLng(
-        path[(path.length - 1) / 2].lng,
-        path[(path.length - 1) / 2].lat,
-      ),
-      level: 4,
-    };
-
-    const initializedMap = new window.kakao.maps.Map(container, options);
+    if (!initializedMap) return;
 
     const linePath = path.map(
       (point) => new window.kakao.maps.LatLng(point.lng, point.lat),
