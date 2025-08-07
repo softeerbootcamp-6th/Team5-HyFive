@@ -24,7 +24,7 @@ public class CustomCarRepositoryImpl implements CustomCarRepository {
 
     @Override
     public List<CarListRes> searchCarListByCondition(Long centerId) {
-        LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul"));
+        LocalDate today = LocalDate.now();
 
         List<Long> carIds = queryFactory
                 .select(car.id)
