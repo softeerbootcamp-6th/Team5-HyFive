@@ -3,7 +3,7 @@ import { theme } from "@/styles/themes.style";
 
 const { color, typography } = theme;
 
-export interface CenterInfoCardProps {
+interface CenterInfoCardProps {
   icon: React.ReactNode;
   label: string;
   content: string;
