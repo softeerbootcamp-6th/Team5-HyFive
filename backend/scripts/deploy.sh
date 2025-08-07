@@ -18,7 +18,7 @@ if [ -f "$PID_FILE" ]; then
 fi
 
 echo "📦 새 JAR 복사..."
-cp -f /home/ubuntu/deploy/$APP_NAME.jar "$JAR_FILE"
+cp -f /home/ubuntu/app/$APP_NAME.jar "$JAR_FILE"
 
 echo "🚀 애플리케이션 실행..."
 nohup java -jar "$JAR_FILE" > "$LOG_FILE" 2>&1 &
