@@ -4,7 +4,6 @@ import hyfive.gachita.car.dto.CarListRes;
 import hyfive.gachita.car.dto.CarRes;
 import hyfive.gachita.car.dto.CreateCarReq;
 import hyfive.gachita.car.dto.UpdateCarReq;
-import hyfive.gachita.common.dto.ListRes;
 import hyfive.gachita.common.response.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -16,6 +15,8 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 @Tag(name = "car", description = "차량 관련 API")
 public interface CarDocs {
@@ -142,7 +143,7 @@ public interface CarDocs {
                     content = @Content()
             )
     })
-    BaseResponse<ListRes<CarListRes>> getCarList(
+    BaseResponse<List<CarListRes>> getCarList(
             @RequestParam(name = "center_id") Long centerId
     );
 }

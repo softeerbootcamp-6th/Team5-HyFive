@@ -83,17 +83,10 @@ public class CarService {
         return car;
     }
 
-    public ListRes<CarListRes> getCarList(Long centerId) {
+    public List<CarListRes> getCarList(Long centerId) {
         centerRepository.findById(centerId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NO_EXIST_VALUE, "DB에 센터 데이터가 존재하지 않습니다."));
 
-        List<CarListRes> listResult = carRepository.searchCarListByCondition(centerId);
-
-        return ListRes.<CarListRes>builder()
-                .items(listResult)
-                .currentPageNum(1)
-                .totalPageNum(1)
-                .totalItemNum(listResult.size())
-                .build();
+        return carRepository.searchCarListByCondition(centerId);
     }
 }
