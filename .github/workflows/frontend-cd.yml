@@ -61,8 +61,8 @@ jobs:
 
       - name: Remove old S3 files
         run: |
-          aws s3 rm s3://${{ secrets.BUCKET_NAME }}frontend/assets/ --recursive \
-          --exclude "*" --include "*.js" --include "*.css"
+          aws s3 rm s3://${{ secrets.BUCKET_NAME }}/frontend/assets/ --recursive \
+            --exclude "*" --include "*.js" --include "*.css"
 
       - name: Upload new files to S3
         run: |
