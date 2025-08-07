@@ -4,6 +4,7 @@ import hyfive.gachita.book.dto.BookRes;
 import hyfive.gachita.book.dto.CreateBookReq;
 import hyfive.gachita.common.dto.ListRes;
 import hyfive.gachita.book.repository.BookRepository;
+import hyfive.gachita.common.dto.ScrollRes;
 import hyfive.gachita.common.enums.SearchPeriod;
 import hyfive.gachita.common.response.BusinessException;
 import hyfive.gachita.common.response.ErrorCode;
@@ -60,6 +61,27 @@ public class BookService {
                 .currentPageNum(pageResult.getNumber() + 1)
                 .totalPageNum(pageResult.getTotalPages())
                 .totalItemNum(pageResult.getTotalElements())
+                .build();
+    }
+
+    public ScrollRes<BookRes, Long> getBookListScroll(BookStatus bookStatus, Long cursorId, int size) {
+        List<Book> bookList = bookRepository.findBooksForScroll(bookStatus, cursorId, size);
+
+        boolean hasNext = bookList.size() > size;
+
+        List<BookRes> bookResList = (hasNext ? bookList.subList(0, size) : bookList)
+                .stream()
+                .map(BookRes::from)
+                .toList();
+
+        Long lastCursorId = bookResList.isEmpty()
+                ? null
+                : bookResList.get(bookResList.size() - 1).id();
+
+        return ScrollRes.<BookRes, Long>builder()
+                .items(bookResList)
+                .hasNext(hasNext)
+                .cursor(lastCursorId)
                 .build();
     }
 }

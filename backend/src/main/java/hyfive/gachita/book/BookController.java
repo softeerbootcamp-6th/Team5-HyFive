@@ -3,6 +3,7 @@ package hyfive.gachita.book;
 import hyfive.gachita.book.dto.BookRes;
 import hyfive.gachita.book.dto.CreateBookReq;
 import hyfive.gachita.common.dto.ListRes;
+import hyfive.gachita.common.dto.ScrollRes;
 import hyfive.gachita.common.enums.SearchPeriod;
 import hyfive.gachita.common.response.BaseResponse;
 import hyfive.gachita.docs.BookDocs;
@@ -26,11 +27,20 @@ public class BookController implements BookDocs {
 
     @GetMapping("/list")
     public BaseResponse<ListRes<BookRes>> getBookList(
-            @RequestParam(name = "period", defaultValue = "TODAY") SearchPeriod period,
-            @RequestParam(name = "status", required = false) BookStatus bookStatus,
-            @RequestParam(name = "page", defaultValue = "1") int page,
-            @RequestParam(name = "limit", defaultValue = "12") int limit
+            @RequestParam(name = "period", required = false, defaultValue = "TODAY") SearchPeriod period,
+            @RequestParam(name = "status") BookStatus bookStatus,
+            @RequestParam(name = "page", required = false, defaultValue = "1") int page,
+            @RequestParam(name = "limit", required = false, defaultValue = "12") int limit
     ) {
         return BaseResponse.success(bookService.getBookList(period, bookStatus, page, limit));
+    }
+
+    @GetMapping("/scroll")
+    public BaseResponse<ScrollRes<BookRes, Long>> getBookListScroll(
+            @RequestParam(name = "status", defaultValue = "NEW") BookStatus bookStatus,
+            @RequestParam(name = "cursor", required = false) Long cursorId,
+            @RequestParam(name = "size", defaultValue = "10") int size
+    ) {
+        return BaseResponse.success(bookService.getBookListScroll(bookStatus, cursorId, size));
     }
 }

@@ -12,7 +12,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.util.Pair;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import static hyfive.gachita.book.QBook.book;
 
@@ -46,6 +48,24 @@ public class CustomBookRepositoryImpl implements CustomBookRepository {
                 .fetchOne();
 
         return new PageImpl<>(books, pageable, total == null ? 0L : total);
+    }
+
+    @Override
+    public List<Book> findBooksForScroll(BookStatus status, Long cursorId, int size) {
+        LocalDate today = LocalDate.now();
+        LocalDateTime startOfToday = today.atStartOfDay();
+        LocalDateTime endOfToday = today.atTime(LocalTime.MAX);
+
+        return queryFactory
+                .selectFrom(book)
+                .where(
+                        book.bookStatus.eq(status),
+                        book.createdAt.between(startOfToday, endOfToday),
+                        cursorId != null ? book.id.lt(cursorId) : null
+                )
+                .orderBy(book.id.desc())
+                .limit(size + 1)
+                .fetch();
     }
 
     private BooleanExpression betweenCreatedDate(QBook book, Pair<LocalDateTime, LocalDateTime> dateRange) {

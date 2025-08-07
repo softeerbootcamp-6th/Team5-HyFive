@@ -7,9 +7,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.util.Pair;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface CustomBookRepository {
     Page<Book> searchBookPageByCondition(Pair<LocalDateTime, LocalDateTime> dateRange,
                                          BookStatus status,
                                          Pageable pageable);
+    List<Book> findBooksForScroll(BookStatus status, Long cursorId, int size);
 }
