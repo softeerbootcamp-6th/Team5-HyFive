@@ -5,3 +5,9 @@ export type CenterOverviewType = {
   registeredCars: number;
   estimatedRevenue: string;
 };
+
+export type CenterInfoCardType = {
+  icon: React.ReactNode;
+  label: string;
+  content: string;
+};
