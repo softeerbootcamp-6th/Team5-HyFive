@@ -59,7 +59,7 @@ jobs:
           role-to-assume: ${{ secrets.ROLE_ARN }}
           aws-region: ap-northeast-2
 
-      - name: Remove old S3 files
+      - name: Remove old S3 files(js, css)
         run: |
           aws s3 rm s3://${{ secrets.BUCKET_NAME }}/frontend/assets/ --recursive \
             --exclude "*" --include "*.js" --include "*.css"
