@@ -1,5 +1,7 @@
 #!/bin/bash
+set -e
 
+exit 1
 APP_NAME="app"    
 DEPLOY_DIR="/home/ubuntu/app"
 JAR_FILE="$DEPLOY_DIR/$APP_NAME.jar"
