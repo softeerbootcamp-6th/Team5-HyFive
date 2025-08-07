@@ -31,4 +31,10 @@ public class CarController implements CarDocs {
         Car updateCar = carService.updateCar(id, updateCarReq);
         return BaseResponse.success(CarRes.from(updateCar));
     }
+
+    @GetMapping("/{id}")
+    public BaseResponse<CarRes> getCarById(@PathVariable("id") @NotNull Long id) {
+        Car getCar = carService.getCar(id);
+        return BaseResponse.success(CarRes.from(getCar));
+    }
 }

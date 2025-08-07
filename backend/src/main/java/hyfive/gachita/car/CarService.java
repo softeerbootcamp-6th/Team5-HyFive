@@ -71,4 +71,10 @@ public class CarService {
 
         return car;
     }
+
+    public Car getCar(Long id) {
+        Car car = carRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NO_EXIST_VALUE, "DB에 차량 데이터가 존재하지 않습니다."));
+        return car;
+    }
 }
