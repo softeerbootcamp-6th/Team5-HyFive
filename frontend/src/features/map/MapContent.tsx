@@ -1,4 +1,5 @@
 import useInitializeMap from "@/features/map/useInitializeMap";
+import useVisualizeMarker from "@/features/map/useVisualizeMarker";
 import { css } from "@emotion/react";
 import { useEffect, useRef } from "react";
 
@@ -45,6 +46,7 @@ const MapContent = () => {
     centerLat: path[(path.length - 1) / 2].lng,
     centerLng: path[(path.length - 1) / 2].lat,
   });
+  useVisualizeMarker({ map: initializedMap, path });
 
   useEffect(() => {
     if (!initializedMap) return;
@@ -62,37 +64,6 @@ const MapContent = () => {
     });
 
     polyline.setMap(initializedMap);
-
-    const getMarkerType = (
-      index: number,
-      length: number,
-    ): keyof typeof imageSrc => {
-      if (index === 0) return "start";
-      if (index === length - 1) return "end";
-      return "middle";
-    };
-
-    const imageSrc = {
-      start: "/src/assets/icons/marker-start.svg",
-      middle: "/src/assets/icons/marker-default.svg",
-      end: "/src/assets/icons/marker-end.svg",
-    };
-
-    for (let i = 0; i < path.length; i++) {
-      const markerType = getMarkerType(i, path.length);
-      const imageSize = new window.kakao.maps.Size(32, 32);
-      const markerImage = new window.kakao.maps.MarkerImage(
-        imageSrc[markerType],
-        imageSize,
-      );
-
-      new window.kakao.maps.Marker({
-        map: initializedMap,
-        position: new window.kakao.maps.LatLng(path[i].lng, path[i].lat),
-        title: "User Marker",
-        image: markerImage,
-      });
-    }
   }, [initializedMap]);
   return <div id="map" ref={mapRef} css={MapContentContainer} />;
 };
