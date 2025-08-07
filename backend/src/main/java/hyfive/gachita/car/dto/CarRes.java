@@ -1,6 +1,7 @@
 package hyfive.gachita.car.dto;
 
 import hyfive.gachita.car.Car;
+import hyfive.gachita.car.DelYn;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import static hyfive.gachita.common.util.CarNumberFormatter.format;
@@ -29,7 +30,10 @@ public record CarRes(
 
         // TODO : carImage example 추가
         @Schema(description = "차량 이미지 url", example = "(차후 추가 예정)")
-        String carImage
+        String carImage,
+
+        @Schema(description = "차량 삭제 여부", example = "N")
+        DelYn delYn
     ) {
     public static CarRes from(Car car) {
         return new CarRes(
@@ -40,7 +44,8 @@ public record CarRes(
                 format(car.getCarNumber()),
                 car.getCapacity(),
                 car.getLowFloor(),
-                car.getCarImage()
+                car.getCarImage(),
+                car.getDelYn()
         );
     }
 }
