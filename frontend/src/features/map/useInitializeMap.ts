@@ -1,3 +1,4 @@
+import { INITIAL_ZOOM_LEVEL } from "@/features/map/useZoomLevel";
 import { useEffect, useState, type RefObject } from "react";
 
 interface UseInitializeMapProps {
@@ -11,7 +12,7 @@ const useInitializeMap = ({
   centerLng,
 }: UseInitializeMapProps) => {
   const [map, setMap] = useState(null);
-  const INITIAL_ZOOM_SIZE = 4;
+
   useEffect(() => {
     const container = mapRef.current;
     if (!container) {
@@ -20,7 +21,7 @@ const useInitializeMap = ({
 
     const options = {
       center: new window.kakao.maps.LatLng(centerLat, centerLng),
-      level: INITIAL_ZOOM_SIZE,
+      level: INITIAL_ZOOM_LEVEL,
     };
 
     const initializedMap = new window.kakao.maps.Map(container, options);
