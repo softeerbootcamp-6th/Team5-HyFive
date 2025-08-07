@@ -1,6 +1,7 @@
 package hyfive.gachita.docs;
 
 import hyfive.gachita.book.BookStatus;
+import hyfive.gachita.common.dto.ScrollRes;
 import hyfive.gachita.common.enums.SearchPeriod;
 import hyfive.gachita.book.dto.BookRes;
 import hyfive.gachita.book.dto.CreateBookReq;
@@ -95,5 +96,49 @@ public interface BookDocs {
                     required = true,
                     example = "12"
             ) int limit
+    );
+
+    @Operation(
+            summary = "예약 리스트 스크롤 조회 API",
+            description = """
+                커서 기반으로 가장 최근에 등록된 예약 순(ID 값이 큰 순)으로 리스트를 조회합니다.
+                - status: 예약 상태는 필수입니다.
+                - cursor: 마지막으로 받은 bookId를 기준으로, 그보다 더 작은 ID를 조회합니다.
+                - size: 한 번에 가져올 데이터 수 (기본값: 10)
+                """
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "1000",
+                    description = "조회 성공 시, items에 예약 리스트가 포함되며 다음 페이지 여부와 커서 정보도 포함됩니다.",
+                    content = @Content(schema = @Schema(implementation = ScrollRes.class))
+            ),
+            @ApiResponse(
+                    responseCode = "2000",
+                    description = "잘못된 파라미터 값 또는 잘못된 요청 형식",
+                    content = @Content()
+            )
+    })
+    BaseResponse<ScrollRes<BookRes, Long>> getBookListScroll(
+            @Parameter(
+                    name = "status",
+                    description = "예약 상태",
+                    required = true,
+                    example = "NEW"
+            ) BookStatus bookStatus,
+
+            @Parameter(
+                    name = "cursor",
+                    description = "커서 ID (작성하지 않는 경우 가장 최신 예약을 제공)",
+                    required = false,
+                    example = ""
+            ) Long cursorId,
+
+            @Parameter(
+                    name = "size",
+                    description = "한 번에 조회할 데이터 개수 (기본값: 10)",
+                    required = false,
+                    example = "10"
+            ) int size
     );
 }
