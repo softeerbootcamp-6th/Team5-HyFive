@@ -1,0 +1,43 @@
+name: Auto-close linked issues on PR merge
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  close-linked-issues:
+    if: >
+      github.event.pull_request.merged == true &&
+      (
+        github.event.pull_request.base.ref == 'main' ||
+        github.event.pull_request.base.ref == 'dev' ||
+        github.event.pull_request.base.ref == 'dev-fe' ||
+        github.event.pull_request.base.ref == 'dev-be'
+      )
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Extract linked issues
+        id: extract
+        run: |
+          echo "body<<EOF" >> $GITHUB_OUTPUT
+          echo "${{ github.event.pull_request.body }}" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Close linked issues via gh CLI
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "🔍 PR 내용에서 이슈 닫는 키워드를 찾는 중..."
+          echo "${{ steps.extract.outputs.body }}" | grep -Eoi '(close[sd]?|fix(e[sd])?|resolve[sd]?) #[0-9]+' | while read -r match; do
+            issue_number=$(echo "$match" | grep -oE '#[0-9]+' | tr -d '#')
+            echo "➡️  닫는 중: #$issue_number"
+            gh issue close "$issue_number" --reason completed --repo "$GITHUB_REPOSITORY"
+          done
