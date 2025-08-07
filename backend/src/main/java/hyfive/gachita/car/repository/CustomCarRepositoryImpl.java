@@ -40,14 +40,14 @@ public class CustomCarRepositoryImpl implements CustomCarRepository {
             return Collections.emptyList();
         }
 
-        BooleanTemplate runningExpr = Expressions.booleanTemplate(
+        BooleanTemplate drivingExpr = Expressions.booleanTemplate(
                 "sum(case when {0} = {1} then 1 else 0 end) > 0",
                 path.driveStatus,
                 DriveStatus.RUNNING
         );
 
         List<Tuple> carList = queryFactory
-                .select(car, runningExpr)
+                .select(car, drivingExpr)
                 .from(car)
                 .leftJoin(path).on(
                         path.car.id.eq(car.id)
@@ -61,7 +61,7 @@ public class CustomCarRepositoryImpl implements CustomCarRepository {
         return carList.stream()
                 .map(tuple -> CarListRes.from(
                         tuple.get(car),
-                        tuple.get(runningExpr)
+                        tuple.get(drivingExpr)
                 ))
                 .toList();
     }
