@@ -6,6 +6,7 @@ on:
 
 jobs:
   build:
+    name: Static Test and Pre-build
     runs-on: ubuntu-22.04
     strategy:
       matrix:
@@ -53,12 +54,5 @@ jobs:
       - name: Run TypeScript for type check
         run: pnpm tsc --noEmit
 
-      - name: Build Project
+      - name: Pre-Build Project
         run: pnpm build
-
-      - name: Upload production artifacts
-        if: success()
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist
-          path: frontend/dist
