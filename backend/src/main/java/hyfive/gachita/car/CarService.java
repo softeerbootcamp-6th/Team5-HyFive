@@ -83,6 +83,7 @@ public class CarService {
         return car;
     }
 
+    @Transactional
     public List<CarListRes> getCarList(Long centerId) {
         centerRepository.findById(centerId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NO_EXIST_VALUE, "DB에 센터 데이터가 존재하지 않습니다."));

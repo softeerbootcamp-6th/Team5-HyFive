@@ -10,8 +10,6 @@ import hyfive.gachita.path.DriveStatus;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Collections;
 import java.util.List;
 
 import static hyfive.gachita.car.QCar.car;
@@ -22,23 +20,10 @@ public class CustomCarRepositoryImpl implements CustomCarRepository {
 
     private final JPAQueryFactory queryFactory;
 
+
     @Override
     public List<CarListRes> searchCarListByCondition(Long centerId) {
         LocalDate today = LocalDate.now();
-
-        List<Long> carIds = queryFactory
-                .select(car.id)
-                .from(car)
-                .where(
-                        car.center.id.eq(centerId),
-                        car.delYn.eq(DelYn.N)
-                )
-                .orderBy(car.createdAt.asc())
-                .fetch();
-
-        if (carIds.isEmpty()) {
-            return Collections.emptyList();
-        }
 
         BooleanTemplate drivingExpr = Expressions.booleanTemplate(
                 "sum(case when {0} = {1} then 1 else 0 end) > 0",
@@ -50,19 +35,22 @@ public class CustomCarRepositoryImpl implements CustomCarRepository {
                 .select(car, drivingExpr)
                 .from(car)
                 .leftJoin(path).on(
-                        path.car.id.eq(car.id)
+                        path.car.eq(car)
                                 .and(path.driveDate.eq(today))
                 )
-                .where(car.id.in(carIds))
+                .where(
+                        car.center.id.eq(centerId),
+                        car.delYn.eq(DelYn.N)
+                )
                 .groupBy(car.id)
                 .orderBy(car.createdAt.asc())
                 .fetch();
 
         return carList.stream()
-                .map(tuple -> CarListRes.from(
-                        tuple.get(car),
-                        tuple.get(drivingExpr)
-                ))
-                .toList();
+        .map(tuple -> CarListRes.from(
+                tuple.get(car),
+                tuple.get(drivingExpr)
+        ))
+        .toList();
     }
 }
