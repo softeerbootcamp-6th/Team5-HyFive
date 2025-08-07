@@ -49,8 +49,7 @@ public class BookService {
     public PagedListRes<BookRes> getBookList(SearchPeriod period, BookStatus bookStatus, int page, int limit) {
         Pageable pageable = PageRequest.of(
                 page - 1,
-                limit,
-                Sort.by("createdAt").descending()
+                limit
         );
 
         Pair<LocalDateTime, LocalDateTime> dateRange = SearchPeriod.getDateRange(period);
