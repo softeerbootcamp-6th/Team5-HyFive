@@ -3,7 +3,7 @@ package hyfive.gachita.book;
 import hyfive.gachita.book.dto.BookCursor;
 import hyfive.gachita.book.dto.BookRes;
 import hyfive.gachita.book.dto.CreateBookReq;
-import hyfive.gachita.common.dto.ListRes;
+import hyfive.gachita.common.dto.PagedListRes;
 import hyfive.gachita.common.dto.ScrollRes;
 import hyfive.gachita.common.enums.SearchPeriod;
 import hyfive.gachita.common.response.BaseResponse;
@@ -27,7 +27,7 @@ public class BookController implements BookDocs {
     }
 
     @GetMapping("/list")
-    public BaseResponse<ListRes<BookRes>> getBookList(
+    public BaseResponse<PagedListRes<BookRes>> getBookList(
             @RequestParam(name = "period", required = false, defaultValue = "TODAY") SearchPeriod period,
             @RequestParam(name = "status") BookStatus bookStatus,
             @RequestParam(name = "page", required = false, defaultValue = "1") int page,
