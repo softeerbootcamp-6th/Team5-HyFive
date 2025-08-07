@@ -4,6 +4,10 @@ set -e
 APP_DIR="/home/ubuntu/app"
 DEPLOY_DIR="/home/ubuntu/deploy"
 
+if [ -f "$DEPLOY_DIR/.env" ]; then
+  export $(grep -v '^#' "$DEPLOY_DIR/.env" | xargs)
+fi
+
 echo "🔁 현재 실행 중인 프로세스 확인..."
 if [ -f "$APP_DIR/app.pid" ]; then
   PID=$(cat "$APP_DIR/app.pid")
