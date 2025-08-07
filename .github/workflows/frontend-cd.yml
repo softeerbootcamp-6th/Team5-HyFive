@@ -1,4 +1,4 @@
-name: Frontend CI
+name: Frontend CD
 
 on:
   pull_request:
@@ -14,7 +14,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: dist
-          path: frontend/dist
+          path: ./dist
 
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
