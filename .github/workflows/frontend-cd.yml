@@ -1,8 +1,6 @@
 name: Frontend CD
 
 on:
-  pull_request:
-    branches: [dev-fe]
   push:
     branches: [main, dev]
 
