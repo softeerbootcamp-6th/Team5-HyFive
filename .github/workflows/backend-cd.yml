@@ -56,10 +56,49 @@ jobs:
         run: aws s3 cp ./deploy.zip s3://${{ secrets.BUCKET_NAME }}/backend/deploy.zip
 
       - name: Trigger CodeDeploy
+        id: trigger
         run: |
-          aws deploy create-deployment \
+          DEPLOYMENT_ID=$(aws deploy create-deployment \
             --application-name ${{ secrets.DEPLOY_NAME }} \
             --deployment-group-name ${{ secrets.DEPLOY_GROUP }} \
             --s3-location bucket=${{ secrets.BUCKET_NAME }},key=backend/deploy.zip,bundleType=zip \
             --deployment-config-name CodeDeployDefault.AllAtOnce \
-            --region ap-northeast-2
+            --region ap-northeast-2 \
+            --query "deploymentId" \
+            --output text)
+
+          echo "DEPLOYMENT_ID=$DEPLOYMENT_ID" >> $GITHUB_ENV
+          echo "deployment_id=$DEPLOYMENT_ID" >> $GITHUB_OUTPUT
+          echo "✅ CodeDeploy deployment created: $DEPLOYMENT_ID"
+
+      - name: Wait for deployment to complete
+        run: |
+          echo "⏳ Waiting for CodeDeploy deployment ($DEPLOYMENT_ID) to complete..."
+          STATUS="InProgress"
+          TIMEOUT=600
+          INTERVAL=10
+          ELAPSED=0
+
+          while [[ "$STATUS" == "InProgress" || "$STATUS" == "Created" || "$STATUS" == "Queued" ]]; do
+            if [ "$ELAPSED" -ge "$TIMEOUT" ]; then
+              echo "❌ Timeout waiting for deployment to finish."
+              exit 1
+            fi
+
+            STATUS=$(aws deploy get-deployment \
+              --region ap-northeast-2 \
+              --deployment-id "$DEPLOYMENT_ID" \
+              --query "deploymentInfo.status" \
+              --output text)
+
+            echo "⌛ Deployment status: $STATUS"
+            sleep $INTERVAL
+            ELAPSED=$((ELAPSED + INTERVAL))
+          done
+
+          if [ "$STATUS" != "Succeeded" ]; then
+            echo "❌ Deployment failed with status: $STATUS"
+            exit 1
+          fi
+
+          echo "✅ Deployment succeeded!"
