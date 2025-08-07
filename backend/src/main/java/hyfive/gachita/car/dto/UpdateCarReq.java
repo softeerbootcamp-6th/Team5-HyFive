@@ -4,13 +4,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import org.springframework.web.multipart.MultipartFile;
 
-@Schema(description = "차량 등록 요청 DTO")
-public record CreateCarReq(
-
-        @NotNull
-        @Schema(description = "차량이 소속된 센터 ID", example = "1")
-        Long centerId,
-
+@Schema(description = "차량 수정 요청 DTO")
+public record UpdateCarReq(
         @NotBlank
         @Schema(description = "차량 모델명", example = "기아 레이")
         String modelName,
