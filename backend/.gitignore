@@ -45,3 +45,6 @@ out/
 
 ### .properties ###
 application-local.properties
+
+### queryDSL ###
+generated/
