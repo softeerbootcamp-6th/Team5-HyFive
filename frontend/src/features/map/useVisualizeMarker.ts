@@ -1,12 +1,9 @@
+import type { Path } from "@/types/path.types";
 import { useEffect } from "react";
 
-interface LatLng {
-  lat: number;
-  lng: number;
-}
 interface UseVisualizeMarkerProps {
   map: any;
-  path: LatLng[];
+  path: Path[];
 }
 const useVisualizeMarker = ({ map, path }: UseVisualizeMarkerProps) => {
   useEffect(() => {
