@@ -3,7 +3,7 @@ import { theme } from "@/styles/themes.style";
 import type { CenterOverviewType } from "@/features/CenterOverview/CenterOverview.type";
 import CenterInfoCard from "@/features/CenterOverview/CenterInfoCard";
 import { CallIcon, CarIcon, LocationIcon, PayIcon } from "@/assets/icons";
-import type { CenterInfoCardProps } from "@/features/CenterOverview/CenterInfoCard";
+import type { CenterInfoCardType } from "@/features/CenterOverview/CenterOverview.type";
 const { color, typography, borderRadius } = theme;
 
 const CenterOverview = ({
@@ -13,7 +13,7 @@ const CenterOverview = ({
   registeredCars,
   estimatedRevenue,
 }: CenterOverviewType) => {
-  const infoCardData: CenterInfoCardProps[] = [
+  const infoCardData: CenterInfoCardType[] = [
     {
       icon: <CallIcon fill={color.GrayScale.gray5} />,
       label: "전화번호",

@@ -1,15 +1,9 @@
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
-
+import type { CenterInfoCardType } from "@/features/CenterOverview/CenterOverview.type";
 const { color, typography } = theme;
 
-interface CenterInfoCardProps {
-  icon: React.ReactNode;
-  label: string;
-  content: string;
-}
-
-const CenterInfoCard = ({ icon, label, content }: CenterInfoCardProps) => {
+const CenterInfoCard = ({ icon, label, content }: CenterInfoCardType) => {
   return (
     <div css={CardContainer}>
       <div css={CardHeader}>
