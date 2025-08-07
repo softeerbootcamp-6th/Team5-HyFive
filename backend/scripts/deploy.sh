@@ -18,7 +18,7 @@ echo "📦 새 JAR 복사..."
 cp -f "$DEPLOY_DIR/app.jar" "$APP_DIR/app.jar"
 
 echo "🚀 애플리케이션 실행..."
-nohup java -jar "$APP_DIR/app.jar" > "$APP_DIR/app.log" 2>&1 &
+nohup java -Dspring.profiles.active=prod -jar "$APP_DIR/app.jar" > "$APP_DIR/app.log" 2>&1 &
 
 echo $! > "$APP_DIR/app.pid"
 echo "✅ 배포 완료. PID: $(cat $APP_DIR/app.pid)"

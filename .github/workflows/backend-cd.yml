@@ -24,6 +24,12 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Set environment variables for AWS RDS
+        run: |
+          echo "PROD_DB_URL=${{ secrets.PROD_DB_URL }}" >> $GITHUB_ENV
+          echo "PROD_DB_USERNAME=${{ secrets.PROD_DB_USERNAME }}" >> $GITHUB_ENV
+          echo "PROD_DB_PASSWORD=${{ secrets.PROD_DB_PASSWORD }}" >> $GITHUB_ENV
+
       - name: Build with Gradle
         run: |
           cd backend && ./gradlew build -x test
