@@ -25,15 +25,18 @@ jobs:
 
       - name: Build with Gradle
         run: |
-          cd backend
-          ./gradlew build -x test
+          cd backend && ./gradlew build -x test
+
+      - name: Check jar file exists
+        run: |
+          ls -al backend/build/libs
 
       - name: Zip build output
         run: |
           mkdir -p deploy/scripts
-          cp build/libs/*.jar deploy/app.jar
-          cp appspec.yml deploy/
-          cp scripts/deploy.sh deploy/scripts/
+          cp backend/build/libs/*.jar deploy/app.jar
+          cp backend/appspec.yml deploy/
+          cp backend/scripts/deploy.sh deploy/scripts/
           cd deploy && zip -r ../deploy.zip .
 
       - name: Configure AWS credentials via OIDC
