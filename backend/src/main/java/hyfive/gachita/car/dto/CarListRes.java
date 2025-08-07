@@ -26,9 +26,9 @@ public record CarListRes(
         String carImage,
 
         @Schema(description = "차량 운행 상태", example = "false")
-        Boolean running
+        Boolean driving
 ) {
-    public static CarListRes from(Car car, Boolean running) {
+    public static CarListRes from(Car car, Boolean driving) {
         return new CarListRes(
                 car.getId(),
                 car.getModelName(),
@@ -36,7 +36,7 @@ public record CarListRes(
                 car.getCapacity(),
                 car.getLowFloor(),
                 car.getCarImage(),
-                running
+                driving
         );
     }
 }
