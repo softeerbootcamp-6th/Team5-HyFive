@@ -9,9 +9,19 @@ if [ -f "$APP_DIR/app.pid" ]; then
   PID=$(cat "$APP_DIR/app.pid")
   if ps -p $PID > /dev/null; then
     echo "🛑 프로세스 종료: $PID"
-    kill $PID
-    sleep 5
-  fi
+    kill -TERM $PID
+    # Wait up to 5 seconds for process to terminate
+    for i in {1..5}; do
+      if ! ps -p $PID > /dev/null; then
+        break
+      fi
+      sleep 1
+    done
+    # If still running, force kill
+    if ps -p $PID > /dev/null; then
+      echo "⚠️  프로세스가 종료되지 않아 강제 종료합니다: $PID"
+      kill -KILL $PID
+    fi
 fi
 
 echo "📦 새 JAR 복사..."
