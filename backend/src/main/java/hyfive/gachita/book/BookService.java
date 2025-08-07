@@ -1,5 +1,6 @@
 package hyfive.gachita.book;
 
+import hyfive.gachita.book.dto.BookCursor;
 import hyfive.gachita.book.dto.BookRes;
 import hyfive.gachita.book.dto.CreateBookReq;
 import hyfive.gachita.common.dto.ListRes;
@@ -64,24 +65,30 @@ public class BookService {
                 .build();
     }
 
-    public ScrollRes<BookRes, Long> getBookListScroll(BookStatus bookStatus, Long cursorId, int size) {
-        List<Book> bookList = bookRepository.findBooksForScroll(bookStatus, cursorId, size);
+    public ScrollRes<BookRes, BookCursor> getBookListScroll(BookStatus bookStatus, BookCursor cursor, int size) {
+        List<Book> bookList = bookRepository.findBooksForScroll(bookStatus, cursor, size + 1);
 
         boolean hasNext = bookList.size() > size;
 
-        List<BookRes> bookResList = (hasNext ? bookList.subList(0, size) : bookList)
-                .stream()
+        List<Book> actualList = hasNext ? bookList.subList(0, size) : bookList;
+
+        List<BookRes> bookResList = actualList.stream()
                 .map(BookRes::from)
                 .toList();
 
-        Long lastCursorId = bookResList.isEmpty()
-                ? null
-                : bookResList.get(bookResList.size() - 1).id();
+        BookCursor lastCursor = null;
+        if (!actualList.isEmpty()) {
+            Book lastBook = actualList.get(actualList.size() - 1);
+            lastCursor = BookCursor.builder()
+                    .lastId(lastBook.getId())
+                    .lastCreatedAt(lastBook.getCreatedAt())
+                    .build();
+        }
 
-        return ScrollRes.<BookRes, Long>builder()
+        return ScrollRes.<BookRes, BookCursor>builder()
                 .items(bookResList)
                 .hasNext(hasNext)
-                .cursor(lastCursorId)
+                .cursor(lastCursor)
                 .build();
     }
 }

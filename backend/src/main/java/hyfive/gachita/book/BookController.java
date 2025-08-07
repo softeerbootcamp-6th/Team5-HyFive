@@ -1,5 +1,6 @@
 package hyfive.gachita.book;
 
+import hyfive.gachita.book.dto.BookCursor;
 import hyfive.gachita.book.dto.BookRes;
 import hyfive.gachita.book.dto.CreateBookReq;
 import hyfive.gachita.common.dto.ListRes;
@@ -36,11 +37,11 @@ public class BookController implements BookDocs {
     }
 
     @GetMapping("/scroll")
-    public BaseResponse<ScrollRes<BookRes, Long>> getBookListScroll(
+    public BaseResponse<ScrollRes<BookRes, BookCursor>> getBookListScroll(
             @RequestParam(name = "status", defaultValue = "NEW") BookStatus bookStatus,
-            @RequestParam(name = "cursor", required = false) Long cursorId,
+            @ModelAttribute BookCursor cursor,
             @RequestParam(name = "size", defaultValue = "10") int size
     ) {
-        return BaseResponse.success(bookService.getBookListScroll(bookStatus, cursorId, size));
+        return BaseResponse.success(bookService.getBookListScroll(bookStatus, cursor, size));
     }
 }
