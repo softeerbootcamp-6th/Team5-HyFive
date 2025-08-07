@@ -1,8 +1,10 @@
 package hyfive.gachita.car;
 
+import hyfive.gachita.car.dto.CarListRes;
 import hyfive.gachita.car.dto.CarRes;
 import hyfive.gachita.car.dto.CreateCarReq;
 import hyfive.gachita.car.dto.UpdateCarReq;
+import hyfive.gachita.common.dto.ListRes;
 import hyfive.gachita.common.response.BaseResponse;
 import hyfive.gachita.docs.CarDocs;
 import jakarta.validation.constraints.NotNull;
@@ -36,5 +38,12 @@ public class CarController implements CarDocs {
     public BaseResponse<CarRes> getCar(@PathVariable("id") @NotNull Long id) {
         Car getCar = carService.getCar(id);
         return BaseResponse.success(CarRes.from(getCar));
+    }
+
+    @GetMapping("/list")
+    public BaseResponse<ListRes<CarListRes>> getCarList(
+            @RequestParam(name = "center_id") Long centerId
+    ) {
+        return BaseResponse.success(carService.getCarList(centerId));
     }
 }
