@@ -9,6 +9,10 @@ on:
       - dev
       - main
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   backend:
     runs-on: ubuntu-latest
