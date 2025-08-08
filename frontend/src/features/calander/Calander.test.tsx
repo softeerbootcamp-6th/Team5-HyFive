@@ -76,6 +76,25 @@ describe("Calander 컴포넌트", () => {
     expect(screen.getByText("2025년 8월")).toBeInTheDocument();
   });
 
+  it("8월 31일에서 다음 달을 클릭하면 9월 1일로 이동한다.", async () => {
+    const user = userEvent.setup();
+    // 시스템 시간을 2025년 8월 15일로 고정
+    const fixedDate = new Date("2025-08-15T00:00:00");
+    vi.setSystemTime(fixedDate);
+
+    render(<Calander highlightType="week" />);
+
+    // 1. 8월 31일 클릭
+    await user.click(screen.getByTestId("day-2025-8-31"));
+    expect(screen.getByText("2025년 8월")).toBeInTheDocument();
+
+    // 2. 다음 달 버튼 클릭
+    await user.click(screen.getByRole("button", { name: /다음/i }));
+
+    // 3. 현재 날짜가 9월 1일로 변경됨
+    expect(screen.getByText("2025년 9월")).toBeInTheDocument();
+  });
+
   it("hilightType === day 라면 오늘 날짜는 강조 스타일이 적용된다.", () => {
     const fixedDate = new Date("2025-08-01T00:00:00");
     vi.setSystemTime(fixedDate);

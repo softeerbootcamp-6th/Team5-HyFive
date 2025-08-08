@@ -15,6 +15,7 @@ const Calander = ({ highlightType = "day" }: CalanderProps) => {
   const changeMonth = (direction: "next" | "prev") => {
     const offset = direction === "next" ? 1 : -1;
     const newDate = new Date(currentDate);
+    newDate.setDate(1);
     newDate.setMonth(currentDate.getMonth() + offset);
     setCurrentDate(newDate);
   };
