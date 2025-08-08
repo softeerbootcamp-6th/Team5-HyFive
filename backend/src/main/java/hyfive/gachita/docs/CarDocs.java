@@ -1,5 +1,6 @@
 package hyfive.gachita.docs;
 
+import hyfive.gachita.car.dto.CarListRes;
 import hyfive.gachita.car.dto.CarRes;
 import hyfive.gachita.car.dto.CreateCarReq;
 import hyfive.gachita.car.dto.UpdateCarReq;
@@ -13,6 +14,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 @Tag(name = "car", description = "차량 관련 API")
 public interface CarDocs {
@@ -116,5 +120,30 @@ public interface CarDocs {
     })
     BaseResponse<CarRes> getCar(
             @PathVariable("id") @NotNull Long id
+    );
+
+    @Operation(
+            summary = "센터별 차량 리스트 API",
+            description = "센터 ID를 받아 차량 리스트를 가져옵니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "1000",
+                    description = "차량 리스트 정보 조회 성공 시, 차량 리스트를 응답합니다.",
+                    content = @Content(schema = @Schema(implementation = CarRes.class))
+            ),
+            @ApiResponse(
+                    responseCode = "2000",
+                    description = "필드가 비어있거나 잘못된 형식으로 요청한 경우 발생",
+                    content = @Content()
+            ),
+            @ApiResponse(
+                    responseCode = "3001",
+                    description = "요청한 센터 ID가 DB에 존재하지 않는 경우 발생",
+                    content = @Content()
+            )
+    })
+    BaseResponse<List<CarListRes>> getCarList(
+            @RequestParam(name = "center_id") Long centerId
     );
 }

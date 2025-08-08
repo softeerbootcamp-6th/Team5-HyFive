@@ -1,5 +1,6 @@
 package hyfive.gachita.car;
 
+import hyfive.gachita.car.dto.CarListRes;
 import hyfive.gachita.car.dto.CarRes;
 import hyfive.gachita.car.dto.CreateCarReq;
 import hyfive.gachita.car.dto.UpdateCarReq;
@@ -10,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/car")
@@ -36,5 +39,12 @@ public class CarController implements CarDocs {
     public BaseResponse<CarRes> getCar(@PathVariable("id") @NotNull Long id) {
         Car getCar = carService.getCar(id);
         return BaseResponse.success(CarRes.from(getCar));
+    }
+
+    @GetMapping("/list")
+    public BaseResponse<List<CarListRes>> getCarList(
+            @RequestParam(name = "center_id") Long centerId
+    ) {
+        return BaseResponse.success(carService.getCarList(centerId));
     }
 }

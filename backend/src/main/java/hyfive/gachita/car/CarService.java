@@ -1,14 +1,19 @@
 package hyfive.gachita.car;
 
+import hyfive.gachita.car.dto.CarListRes;
 import hyfive.gachita.car.dto.CreateCarReq;
 import hyfive.gachita.car.dto.UpdateCarReq;
+import hyfive.gachita.car.repository.CarRepository;
 import hyfive.gachita.center.Center;
 import hyfive.gachita.center.CenterRepository;
+import hyfive.gachita.common.dto.ListRes;
 import hyfive.gachita.common.response.BusinessException;
 import hyfive.gachita.common.response.ErrorCode;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 import static hyfive.gachita.common.util.CarNumberFormatter.normalize;
 
@@ -76,5 +81,13 @@ public class CarService {
         Car car = carRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NO_EXIST_VALUE, "DB에 차량 데이터가 존재하지 않습니다."));
         return car;
+    }
+
+    @Transactional
+    public List<CarListRes> getCarList(Long centerId) {
+        centerRepository.findById(centerId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NO_EXIST_VALUE, "DB에 센터 데이터가 존재하지 않습니다."));
+
+        return carRepository.searchCarListByCondition(centerId);
     }
 }
