@@ -30,10 +30,7 @@ public record CarRes(
 
         // TODO : carImage example 추가
         @Schema(description = "차량 이미지 url", example = "(차후 추가 예정)")
-        String carImage,
-
-        @Schema(description = "차량 삭제 여부", example = "N")
-        DelYn delYn
+        String carImage
     ) {
     public static CarRes from(Car car) {
         return new CarRes(
@@ -44,8 +41,7 @@ public record CarRes(
                 format(car.getCarNumber()),
                 car.getCapacity(),
                 car.getLowFloor(),
-                car.getCarImage(),
-                car.getDelYn()
+                car.getCarImage()
         );
     }
 }
