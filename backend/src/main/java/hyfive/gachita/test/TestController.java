@@ -1,5 +1,9 @@
 package hyfive.gachita.test;
 
+import hyfive.gachita.api.dto.GeoCodeRequest;
+import hyfive.gachita.api.dto.GeoCodeResult;
+import hyfive.gachita.api.GeoCodeService;
+import hyfive.gachita.api.dto.VWorldApiResponse;
 import hyfive.gachita.common.response.BaseResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TestController {
     private final TestService testService;
+    private final GeoCodeService GeoCodeService;
 
     @PostMapping
     public BaseResponse<Test> createTest(@RequestBody Test test) {
@@ -37,4 +42,13 @@ public class TestController {
         testService.deleteTest(id);
         return BaseResponse.success(null);
     }
+
+    @GetMapping("/api")
+    public VWorldApiResponse<GeoCodeResult> apiTest() {
+        return GeoCodeService.callGeoCodeApi(GeoCodeRequest.builder()
+                        .request("getCoord")
+                        .address("서울시 노원구 공릉로 129 (공릉동)")
+                .build());
+    }
+
 }
