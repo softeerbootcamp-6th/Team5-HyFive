@@ -1,7 +1,9 @@
+import FallbackUI from "@/components/FallbackUI";
 import MapContent from "@/features/map/MapContent";
 import MapHeader from "@/features/map/MapHeader";
 import type { ScheduleType } from "@/features/schedule/Schedule.types";
 import { css } from "@emotion/react";
+import { ErrorBoundary } from "react-error-boundary";
 
 interface MapSectionProps {
   scheduleType: ScheduleType;
@@ -15,7 +17,13 @@ const MapSection = ({ scheduleType, data }: MapSectionProps) => {
   return (
     <div css={MapSectionContainer}>
       <MapHeader scheduleType={scheduleType} data={data} />
-      <MapContent />
+      <ErrorBoundary
+        fallbackRender={({ error, resetErrorBoundary }) => (
+          <FallbackUI error={error} handleRetry={resetErrorBoundary} />
+        )}
+      >
+        <MapContent />
+      </ErrorBoundary>
     </div>
   );
 };
