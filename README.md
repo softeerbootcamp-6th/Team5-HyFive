@@ -37,7 +37,7 @@
 <img alt="기획서" src="https://github.com/user-attachments/assets/c3273ab8-4ef8-4e8b-a741-5d5050beae8c" />
 
 # 📌 주요 기능
-(보류)
+~ 작성중 ~
 
 # ⚙️ 아키텍처
 
@@ -46,6 +46,9 @@
 
 ## ERD
 <img alt="image" src="https://github.com/user-attachments/assets/83562a54-de9d-4e35-970a-fad82c2100f9" style="max-width: 100%; height: auto;"/>
+
+## 폴더 구조
+- [폴더 구조](https://github.com/softeerbootcamp-6th/Team5-HyFive/wiki/%ED%8F%B4%EB%8D%94-%EA%B5%AC%EC%A1%B0)
 
 
 # 🛠 기술 스택
@@ -77,9 +80,6 @@
 
 ### 협업
 ![GitHub](https://github.com/user-attachments/assets/d8fa149a-6cc1-4742-8134-62c4131f6d35)
-
-# 📁 [폴더 구조](https://github.com/softeerbootcamp-6th/Team5-HyFive/wiki/%ED%8F%B4%EB%8D%94-%EA%B5%AC%EC%A1%B0)
-[폴더 구조](https://github.com/softeerbootcamp-6th/Team5-HyFive/wiki/%ED%8F%B4%EB%8D%94-%EA%B5%AC%EC%A1%B0)
 
 # 👨‍👩‍👧‍ 팀 소개
 
