@@ -46,40 +46,45 @@ export const DateLabel = css`
   margin-bottom: 4px;
 `;
 
+// 바디
 export const TableBody = css`
   flex: 1;
   overflow-y: auto;
-`;
-
-export const TimeRow = css`
   display: grid;
   grid-template-columns: 129px repeat(7, 1fr);
-  border-bottom: 1px solid ${color.GrayScale.gray3};
-
-  &:last-child {
-    border-bottom: none;
-  }
+  grid-template-rows: repeat(11, 46px);
 `;
 
 export const TimeLabel = css`
-  padding: 12px 44px;
   display: flex;
   align-items: center;
   justify-content: center;
   font: ${typography.Body.b4_regu};
   color: ${color.GrayScale.gray4};
   border-right: 1px solid ${color.GrayScale.gray3};
+  border-bottom: 1px solid ${color.GrayScale.gray3};
+  background-color: ${color.GrayScale.gray1};
+
+  &:last-of-type {
+    border-bottom: none;
+  }
 `;
 
 export const TimeCell = css`
-  min-height: 46px;
   border-right: 1px solid ${color.GrayScale.gray3};
-
-  &:last-child {
-    border-right: none;
-  }
+  border-bottom: 1px solid ${color.GrayScale.gray3};
 
   &:hover {
     background-color: ${color.GrayScale.gray1};
+  }
+
+  /* 각 행의 마지막 셀 (일요일) */
+  &:nth-of-type(8n) {
+    border-right: none;
+  }
+
+  /* 마지막 행의 셀 (19시 행) */
+  &:nth-last-of-type(-n + 8) {
+    border-bottom: none;
   }
 `;

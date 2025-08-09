@@ -8,7 +8,6 @@ import {
   DayLabel,
   DateLabel,
   TableBody,
-  TimeRow,
   TimeLabel,
   TimeCell,
 } from "./TimeTable.style";
@@ -28,7 +27,7 @@ const TimeTable = ({
   return (
     <div css={TableContainer}>
       <div css={TableHeader}>
-        <div css={TimeAxisPlaceholder} /> {/* 시간 축 자리를 위한 빈칸 */}
+        <div css={TimeAxisPlaceholder} /> {/* 좌측 최상단 빈칸 */}
         {selectedWeek.map((date) => (
           <div key={date.toISOString()} css={DayCell}>
             <div css={DateLabel}>{format(date, "d")}</div>
@@ -38,18 +37,18 @@ const TimeTable = ({
       </div>
 
       <div css={TableBody}>
-        {Array.from({ length: TOTAL_HOURS }).map((_, i) => {
-          const hour = START_HOUR + i;
-          return (
-            <div key={`time-${hour}`} css={TimeRow}>
-              {/* 시간 축 */}
-              <div css={TimeLabel}>{hour}:00</div>
-              {/* 요일별 셀 */}
-              {selectedWeek.map((date) => (
-                <div key={`${date.toISOString()}-${hour}`} css={TimeCell} />
-              ))}
-            </div>
-          );
+        {Array.from({ length: TOTAL_HOURS }).map((_, hourIndex) => {
+          const hour = START_HOUR + hourIndex;
+          return [
+            // 시간 레이블
+            <div key={`time-label-${hour}`} css={TimeLabel}>
+              {hour}:00
+            </div>,
+            // 해당 시간의 7개 요일 셀들
+            ...selectedWeek.map((date, _dayIndex) => (
+              <div key={`${date.toISOString()}-${hourIndex}`} css={TimeCell} />
+            )),
+          ];
         })}
       </div>
     </div>
