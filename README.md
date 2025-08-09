@@ -39,7 +39,7 @@
 <img alt="기획서" src="https://github.com/user-attachments/assets/c3273ab8-4ef8-4e8b-a741-5d5050beae8c" />
 
 # 📌 주요 기능
-~ 작성중 ~
+<img alt="주요기능" src="https://github.com/user-attachments/assets/c6293f2d-cb7f-48d4-9988-b1dec0d4ebfc" />
 
 # ⚙️ 아키텍처
 
