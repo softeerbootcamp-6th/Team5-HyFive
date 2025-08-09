@@ -43,11 +43,13 @@
 # ⚙️ 아키텍처
 
 ## CI/CD 파이프라인
-<img src="https://github.com/user-attachments/assets/2c868aec-54ed-41d8-a5ce-54f4e58d5be2" alt="cicd" style="max-width: 100%; height: auto;">
+<div align="center">
+<img src="https://github.com/user-attachments/assets/2c868aec-54ed-41d8-a5ce-54f4e58d5be2" alt="cicd" style="max-width: 80%; height: auto;">
+</div>
 
 ## ERD
 <div align="center">
- <img alt="erd" src="https://github.com/user-attachments/assets/83562a54-de9d-4e35-970a-fad82c2100f9" style="max-width: 100%; height: auto;"/>
+<img width="2040" height="1634" alt="erd" src="https://github.com/user-attachments/assets/7102fe0b-bb59-4ee1-ae52-e6b9a0c907ae" style="max-width: 80%; height: auto;"/>
 </div>
 
 ## 폴더 구조
