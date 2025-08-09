@@ -1,6 +1,7 @@
 package hyfive.gachita.car.dto;
 
 import hyfive.gachita.car.Car;
+import hyfive.gachita.car.DelYn;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import static hyfive.gachita.common.util.CarNumberFormatter.format;

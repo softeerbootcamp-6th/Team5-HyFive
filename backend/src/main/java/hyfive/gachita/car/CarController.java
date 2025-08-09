@@ -47,4 +47,10 @@ public class CarController implements CarDocs {
     ) {
         return BaseResponse.success(carService.getCarList(centerId));
     }
+
+    @DeleteMapping("/{id}")
+    public BaseResponse<CarRes> deleteCar(@PathVariable("id") @NotNull Long id) {
+        Car deleteCar = carService.deleteCar(id);
+        return BaseResponse.success(CarRes.from(deleteCar));
+    }
 }

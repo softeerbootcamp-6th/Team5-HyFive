@@ -6,7 +6,6 @@ import hyfive.gachita.car.dto.UpdateCarReq;
 import hyfive.gachita.car.repository.CarRepository;
 import hyfive.gachita.center.Center;
 import hyfive.gachita.center.CenterRepository;
-import hyfive.gachita.common.dto.ListRes;
 import hyfive.gachita.common.response.BusinessException;
 import hyfive.gachita.common.response.ErrorCode;
 import jakarta.transaction.Transactional;
@@ -89,5 +88,15 @@ public class CarService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.NO_EXIST_VALUE, "DB에 센터 데이터가 존재하지 않습니다."));
 
         return carRepository.searchCarListByCondition(centerId);
+    }
+
+    @Transactional
+    public Car deleteCar(Long id) {
+        Car car = carRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NO_EXIST_VALUE, "DB에 차량 데이터가 존재하지 않습니다."));
+
+        car.delete();
+
+        return car;
     }
 }
