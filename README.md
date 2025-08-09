@@ -51,12 +51,12 @@
 # 🛠 기술 스택
 
 ### Frontend
-![React](https://github.com/user-attachments/assets/e59b2768-3f50-4646-8181-fe47f64f8912)
 ![pnpm](https://github.com/user-attachments/assets/1d5df84a-cf9f-46ec-91bb-d7cd0d2cac3a)
 ![Vite](https://github.com/user-attachments/assets/bb61c864-3811-4492-ac56-46ad939f2632)
+![React](https://github.com/user-attachments/assets/e59b2768-3f50-4646-8181-fe47f64f8912)
+![TypeScript](https://github.com/user-attachments/assets/20788203-4a3a-4657-9138-83c998ce836f)
 ![Emotion](https://github.com/user-attachments/assets/db0b9097-d081-44fb-97dd-34822e2518fc)
 ![TanStack Query](https://github.com/user-attachments/assets/52d1d033-39b9-4ecf-997d-71a04ba775aa)
-![TypeScript](https://github.com/user-attachments/assets/20788203-4a3a-4657-9138-83c998ce836f)
 ![vitest](https://github.com/user-attachments/assets/ce7018cc-ba98-45bb-b068-42eda615a632)
 ![React Testing Library](https://github.com/user-attachments/assets/dc495313-eb1e-46ae-a32d-c9c1ac678117)
 
