@@ -1,5 +1,6 @@
 # 📋 프로젝트 개요
 <img alt="소개이미지1" src="https://github.com/user-attachments/assets/aced3d90-5c8a-4f3f-b0fc-08732ba3d998" />
+<br/><br/>
 <div align="center">
   <a href="https://서비스링크.com">
     <img src="https://img.shields.io/badge/Service-%2300C4B3?style=for-the-badge&logo=vercel&logoColor=white&color=FF7700" alt="서비스 바로가기" />
@@ -42,10 +43,12 @@
 # ⚙️ 아키텍처
 
 ## CI/CD 파이프라인
-<img src="https://github.com/user-attachments/assets/2c868aec-54ed-41d8-a5ce-54f4e58d5be2" alt="Blank diagram - Page 1" style="max-width: 100%; height: auto;">
+<img src="https://github.com/user-attachments/assets/2c868aec-54ed-41d8-a5ce-54f4e58d5be2" alt="cicd" style="max-width: 100%; height: auto;">
 
 ## ERD
-<img alt="image" src="https://github.com/user-attachments/assets/83562a54-de9d-4e35-970a-fad82c2100f9" style="max-width: 100%; height: auto;"/>
+<div align="center">
+ <img alt="erd" src="https://github.com/user-attachments/assets/83562a54-de9d-4e35-970a-fad82c2100f9" style="max-width: 100%; height: auto;"/>
+</div>
 
 ## 폴더 구조
 - [폴더 구조](https://github.com/softeerbootcamp-6th/Team5-HyFive/wiki/%ED%8F%B4%EB%8D%94-%EA%B5%AC%EC%A1%B0)
