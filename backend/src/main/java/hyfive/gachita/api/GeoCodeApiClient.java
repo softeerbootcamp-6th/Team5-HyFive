@@ -35,11 +35,11 @@ public class GeoCodeApiClient extends ApiClient {
                 .queryParam("request", request.request())
                 .queryParam("type", request.type())
                 .queryParam("format", request.format())
+                .queryParam("errorFormat", request.format())
                 .queryParam("simple", request.simple())
                 .queryParam("address", request.address())   // 주소 -> 좌표 변환에만 값 설정
                 .queryParam("point", request.point());      // 좌표 -> 주소 변환에만 값 설정
         URI uri = uriBuilder.build().toUri();
-        log.info("Request GeoCode API. URI: {}", uri);
 
         GeoCodeApiRes<CoordResult> apiResponse = performApiCall(
                 uri,
@@ -50,8 +50,7 @@ public class GeoCodeApiClient extends ApiClient {
         GeoCodeApiRes.ResponseWrapper<CoordResult> responseWrapper = apiResponse.response();
         if ("ERROR".equalsIgnoreCase(responseWrapper.status())) {
             GeoCodeApiRes.ErrorDetails error = responseWrapper.error();
-            log.error("GeoCode API business error. Code: {}, Message: {}", error.code(), error.text());
-            throw new RuntimeException("API call fail " + error);
+            throw new RuntimeException("API call fail with Service ErrorCode" + error);
         }
 
         return responseWrapper.result();

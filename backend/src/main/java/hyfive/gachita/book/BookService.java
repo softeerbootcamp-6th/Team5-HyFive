@@ -12,6 +12,7 @@ import hyfive.gachita.common.enums.SearchPeriod;
 import hyfive.gachita.common.response.BusinessException;
 import hyfive.gachita.common.response.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +25,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class BookService {
     private final BookRepository bookRepository;
     private final GeoCodeService geoCodeService;
@@ -35,6 +37,8 @@ public class BookService {
 
         LatLng startLoc = geoCodeService.getPointByAddress(createBookReq.startAddr());
         LatLng endLoc = geoCodeService.getPointByAddress(createBookReq.endAddr());
+        log.info("출발지 위도 {} 경도 {}", startLoc.lat(), startLoc.lng());
+        log.info("도착지 위도 {} 경도 {}", endLoc.lat(), endLoc.lng());
 
         //TODO 출발지, 도착지의 위도, 경도 설정
         Book book = Book.builder()
