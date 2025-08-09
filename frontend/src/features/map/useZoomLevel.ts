@@ -11,7 +11,7 @@ const useZoomLevel = ({ map }: UseZoomLevelProps) => {
   useEffect(() => {
     if (!map) return;
     map.setLevel(zoomLevel);
-  }, [zoomLevel]);
+  }, [zoomLevel, map]);
 
   return {
     setZoomLevel,

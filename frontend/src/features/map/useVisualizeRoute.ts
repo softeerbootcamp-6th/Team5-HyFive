@@ -6,32 +6,29 @@ interface UseVisualizeRouteProps {
   path: Path[];
 }
 const useVisualizeRoute = ({ map, path }: UseVisualizeRouteProps) => {
-  const initializeRoute = () => {
-    useEffect(() => {
-      if (!map) return;
+  useEffect(() => {
+    if (!map) return;
 
-      const linePath = path.map(
-        (point) => new window.kakao.maps.LatLng(point.lng, point.lat),
-      );
+    const linePath = path.map(
+      (point) => new window.kakao.maps.LatLng(point.lng, point.lat),
+    );
 
-      const polyline = new window.kakao.maps.Polyline({
-        path: linePath,
-        strokeWeight: 16,
-        strokeColor: "#F70",
-        strokeOpacity: 1,
-        strokeStyle: "solid",
-      });
+    const polyline = new window.kakao.maps.Polyline({
+      path: linePath,
+      strokeWeight: 16,
+      strokeColor: "#F70",
+      strokeOpacity: 1,
+      strokeStyle: "solid",
+    });
 
-      polyline.setMap(map);
-    }, [map]);
-  };
+    polyline.setMap(map);
+  }, [map, path]);
 
   const highlightRoute = () => {};
 
   const resetRoute = () => {};
 
   return {
-    initializeRoute,
     highlightRoute,
     resetRoute,
   };
