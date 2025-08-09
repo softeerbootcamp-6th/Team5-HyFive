@@ -51,6 +51,7 @@ public class GeoCodeApiClient extends ApiClient {
         GeoCodeApiRes.ResponseWrapper<CoordResult> responseWrapper = apiResponse.response();
         if ("ERROR".equalsIgnoreCase(responseWrapper.status())) {
             GeoCodeApiRes.ErrorDetails error = responseWrapper.error();
+            // TODO: 에러 처리 추가
             throw new RuntimeException("API call fail with Service ErrorCode" + error);
         }
 

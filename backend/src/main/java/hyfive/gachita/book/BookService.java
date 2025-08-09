@@ -38,7 +38,6 @@ public class BookService {
         log.info("출발지 위도 {} 경도 {}", startLoc.lat(), startLoc.lng());
         log.info("도착지 위도 {} 경도 {}", endLoc.lat(), endLoc.lng());
 
-        //TODO 출발지, 도착지의 위도, 경도 설정
         Book book = Book.builder()
                 .bookName(createBookReq.bookName())
                 .bookTel(createBookReq.bookTel())

@@ -24,6 +24,7 @@ public abstract class ApiClient {
                     String errorBody = new String(response.getBody().readAllBytes());
                     log.error("API HTTP Error. Status: {}, URI: {}, Body: {}",
                             response.getStatusCode(), request.getURI(), errorBody);
+                    // TODO: 에러 처리 추가
                     throw new RuntimeException("API call failed with HTTP status " + response.getStatusCode());
                 })
                 .body(responseType);
