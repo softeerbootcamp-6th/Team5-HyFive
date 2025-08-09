@@ -78,55 +78,8 @@
 ### 협업
 ![GitHub](https://github.com/user-attachments/assets/d8fa149a-6cc1-4742-8134-62c4131f6d35)
 
-# 📁 폴더 구조
-
-## 프론트엔드 폴더 구조
-경량화된 atomic 기반 폴더 구조를 선택했습니다.
-- components: 공통 UI 컴포넌트
-- features: 특정 도메인 단위로 컴포넌트, 훅, 테스트를 묶음
-- pages: 라우트 진입점으로 각 도메인을 하나의 페이지로 묶음
-```
-frontend/
-└── src/
-    ├── components/                   # 전역 재사용 컴포넌트
-    │   ├── Button.tsx
-    │   ├── Input.tsx
-    │   └── FallbackUI.tsx
-    │
-    ├── features/                      # 기능(도메인) 단위 폴더
-    │   ├── book/
-    │   ├── calander/
-    │   └── map/                       # 지도 관련 기능
-    │       ├── MapComponent.tsx       # 지도 UI 컴포넌트
-    │       ├── Map.style.ts           # 스타일 정의
-    │       ├── Map.types.ts           # 타입 정의
-    │       ├── Map.test.tsx           # 단위 테스트
-    │       └── useInitializeMap.ts
-    │
-    ├── layouts/                        # 페이지 레이아웃
-    │   ├── AdminLayout.tsx
-    │   ├── BookLayout.tsx
-    │   ├── CenterLayout.tsx
-    │   └── index.ts
-    │
-    ├── pages/                          # 라우트 진입점
-    │   ├── admin/
-    │   └── center/
-    │
-    ├── routes/                         # 라우터 설정
-    ├── hooks/                          # 전역 커스텀 훅
-    ├── utils/                          # 유틸 함수
-    ├── types/                          # 전역 타입 정의
-    ├── assets/                         # 정적 파일
-    │   ├── images/
-    │   ├── icons/
-    │   └── fonts/
-    ├── styles/                         # 전역 스타일
-    │   ├── themes.style.ts
-    │   └── globalStyle.ts
-    ├── App.tsx
-    └── main.tsx
-```
+# 📁 [폴더 구조](https://github.com/softeerbootcamp-6th/Team5-HyFive/wiki/%ED%8F%B4%EB%8D%94-%EA%B5%AC%EC%A1%B0)
+[폴더 구조](https://github.com/softeerbootcamp-6th/Team5-HyFive/wiki/%ED%8F%B4%EB%8D%94-%EA%B5%AC%EC%A1%B0)
 
 # 👨‍👩‍👧‍ 팀 소개
 
