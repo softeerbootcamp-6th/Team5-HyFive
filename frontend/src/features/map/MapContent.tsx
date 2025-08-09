@@ -20,9 +20,12 @@ const MapContent = () => {
     centerLat: path[(path.length - 1) / 2].lng,
     centerLng: path[(path.length - 1) / 2].lat,
   });
-  useVisualizeMarker({ map, path });
-  useVisualizeRoute({ map, path });
+  const { initializeMarker } = useVisualizeMarker({ map, path });
+  const { initializeRoute } = useVisualizeRoute({ map, path });
   const { setZoomLevel } = useZoomLevel({ map });
+
+  initializeMarker();
+  initializeRoute();
 
   return (
     <div css={MapContentContainer}>
