@@ -14,12 +14,7 @@ public class ApiClientConfig {
     @Bean
     @Qualifier("GeoCodeRestClient")
     public RestClient geoCodeRestClient() {
-        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-        factory.setConnectTimeout(2000); // 연결 타임아웃 2초
-        factory.setReadTimeout(2000);    // 응답 타임아웃 2초
-
         return RestClient.builder()
-                .requestFactory(factory)
                 .requestInterceptor(loggingInterceptor())
                 .build();
     }
