@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
@@ -36,9 +37,11 @@ public class GlobalExceptionHandler {
                 .body(BaseResponse.fail(ErrorCode.INVALID_INPUT, errorMessages));
     }
 
-    // 요청 본문(JSON 등)의 파싱 실패 시 발생
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<BaseResponse<?>> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
+     // HttpMessageNotReadableException : 요청 본문(JSON 등)의 파싱에 실패한 경우
+     // MissingServletRequestParameterException : 필수 요청 파라미터(@RequestParam)가 누락된 경우
+    @ExceptionHandler({ HttpMessageNotReadableException.class, MissingServletRequestParameterException.class })
+    public ResponseEntity<BaseResponse<?>> handleBadRequestExceptions(Exception e) {
+        log.debug(e.getMessage());
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(BaseResponse.fail(ErrorCode.INVALID_INPUT));
