@@ -11,7 +11,7 @@
     <img src="https://img.shields.io/badge/Notion-%23000000?style=for-the-badge&logo=notion&logoColor=black&color=white" alt="Notion" />
   </a>
   <a href="https://github.com/orgs/softeerbootcamp-6th/projects/5">
-    <img src="https://img.shields.io/badge/Project-%23121011?style=for-the-badge&logo=github&logoColor=white&color=F14251" alt="GitHub Projects" />
+    <img src="https://img.shields.io/badge/Project-%23121011?style=for-the-badge&logo=github&logoColor=white&color=000000" alt="GitHub Projects" />
   </a>
 </div>
 <br/>
@@ -80,6 +80,9 @@
 
 ### 협업
 ![GitHub](https://github.com/user-attachments/assets/d8fa149a-6cc1-4742-8134-62c4131f6d35)
+
+# 📅 프로젝트 타임라인
+~ 작성중 ~
 
 # 👨‍👩‍👧‍ 팀 소개
 
