@@ -3,8 +3,8 @@ package hyfive.gachita.book;
 import hyfive.gachita.book.dto.BookCursor;
 import hyfive.gachita.book.dto.BookRes;
 import hyfive.gachita.book.dto.CreateBookReq;
-import hyfive.gachita.common.dto.ListRes;
 import hyfive.gachita.book.repository.BookRepository;
+import hyfive.gachita.common.dto.ListRes;
 import hyfive.gachita.common.dto.ScrollRes;
 import hyfive.gachita.common.enums.SearchPeriod;
 import hyfive.gachita.common.response.BusinessException;
@@ -66,7 +66,7 @@ public class BookService {
     }
 
     public ScrollRes<BookRes, BookCursor> getBookListScroll(BookStatus bookStatus, BookCursor cursor, int size) {
-        List<Book> bookList = bookRepository.findBooksForScroll(bookStatus, cursor, size + 1);
+        List<Book> bookList = bookRepository.findBooksForScroll(bookStatus, cursor, size);
 
         boolean hasNext = bookList.size() > size;
 
