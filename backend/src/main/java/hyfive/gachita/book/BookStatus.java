@@ -6,5 +6,6 @@ import lombok.Getter;
 public enum BookStatus {
     NEW,
     SUCCESS,
-    FAIL;
+    FAIL,
+    FIXED
 }
