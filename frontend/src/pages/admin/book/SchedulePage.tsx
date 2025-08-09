@@ -1,4 +1,4 @@
-import MapSection from "@/features/schedule/MapSection";
+import MapSection from "@/features/map/MapSection";
 import ScheduleListSection from "@/features/schedule/ScheduleListSection";
 import TabMatcher from "@/utils/TabMatcher";
 import { css } from "@emotion/react";

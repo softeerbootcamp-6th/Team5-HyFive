@@ -32,7 +32,7 @@ const PassengerDropDown = () => {
           <div css={DropDownContent}>
             <Table rows={sampleData} />
           </div>,
-          document.getElementById("map-content")!,
+          document.getElementById("map")!,
         )}
     </>
   );
@@ -68,6 +68,7 @@ const DropDownContent = css`
   z-index: 10;
   width: 100%;
   height: 100%;
+  padding: 0 40px 60px 42px;
   background-color: ${color.GrayScale.white};
   overflow-y: scroll;
 `;

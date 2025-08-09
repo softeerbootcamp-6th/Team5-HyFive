@@ -4,7 +4,7 @@ import {
   InProgressIcon,
   WaitingIcon,
 } from "@/assets/icons";
-import PassengerDropDown from "@/features/schedule/PassengerDropDown";
+import PassengerDropDown from "@/features/map/PassengerDropDown";
 import type { ScheduleType } from "@/features/schedule/Schedule.types";
 import { theme } from "@/styles/themes.style";
 import TabMatcher from "@/utils/TabMatcher";
@@ -54,8 +54,7 @@ const MapHeaderContainer = css`
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding-top: 24px;
-  padding-bottom: 12px;
+  padding: 44px 40px 36px 42px;
 `;
 
 const SectionWrapper = css`
