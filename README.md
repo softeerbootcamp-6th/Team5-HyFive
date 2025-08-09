@@ -84,9 +84,6 @@
 ![AWS CloudFront](https://github.com/user-attachments/assets/a9c4e963-a054-45a4-939e-d5dae33f393d)
 ![GitHub Actions](https://github.com/user-attachments/assets/98ef3abf-347d-4a73-ba21-767762d572f6)
 
-### 협업
-![GitHub](https://github.com/user-attachments/assets/d8fa149a-6cc1-4742-8134-62c4131f6d35)
-
 # 📅 프로젝트 타임라인
 ~ 작성중 ~
 
