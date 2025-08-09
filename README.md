@@ -1,6 +1,5 @@
 # 📋 프로젝트 개요
 <img alt="소개이미지1" src="https://github.com/user-attachments/assets/aced3d90-5c8a-4f3f-b0fc-08732ba3d998" />
-<img alt="소개이미지2" src="https://github.com/user-attachments/assets/9503063a-ff1f-4193-937b-e0b04d9300cd" />
 
 # 🎨 서비스 소개
 <img alt="기획서" src="https://github.com/user-attachments/assets/c3273ab8-4ef8-4e8b-a741-5d5050beae8c" />
