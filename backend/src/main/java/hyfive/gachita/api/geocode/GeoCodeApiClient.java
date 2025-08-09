@@ -4,6 +4,8 @@ import hyfive.gachita.api.ApiClient;
 import hyfive.gachita.api.geocode.dto.GeoCodeApiRes;
 import hyfive.gachita.api.geocode.dto.GeoCodeReq;
 import hyfive.gachita.api.geocode.dto.CoordResult;
+import hyfive.gachita.common.response.BusinessException;
+import hyfive.gachita.common.response.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -49,12 +51,12 @@ public class GeoCodeApiClient extends ApiClient {
 
         // ERROR 응답 수신
         GeoCodeApiRes.ResponseWrapper<CoordResult> responseWrapper = apiResponse.response();
-        if ("ERROR".equalsIgnoreCase(responseWrapper.status())) {
-            GeoCodeApiRes.ErrorDetails error = responseWrapper.error();
-            // TODO: 에러 처리 추가
-            throw new RuntimeException("API call fail with Service ErrorCode" + error);
+        if ("NOT_FOUND".equalsIgnoreCase(responseWrapper.status())) {
+            throw new BusinessException(ErrorCode.INVALID_INPUT);
         }
-
+        if ("ERROR".equalsIgnoreCase(responseWrapper.status())) {
+            throw new BusinessException(ErrorCode.EXTERNAL_API_ERROR);
+        }
         return responseWrapper.result();
     }
 }

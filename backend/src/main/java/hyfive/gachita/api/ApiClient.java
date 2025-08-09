@@ -1,5 +1,7 @@
 package hyfive.gachita.api;
 
+import hyfive.gachita.common.response.BusinessException;
+import hyfive.gachita.common.response.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatusCode;
@@ -24,8 +26,7 @@ public abstract class ApiClient {
                     String errorBody = new String(response.getBody().readAllBytes());
                     log.error("API HTTP Error. Status: {}, URI: {}, Body: {}",
                             response.getStatusCode(), request.getURI(), errorBody);
-                    // TODO: 에러 처리 추가
-                    throw new RuntimeException("API call failed with HTTP status " + response.getStatusCode());
+                    throw new BusinessException(ErrorCode.EXTERNAL_API_ERROR, errorBody);
                 })
                 .body(responseType);
     }
