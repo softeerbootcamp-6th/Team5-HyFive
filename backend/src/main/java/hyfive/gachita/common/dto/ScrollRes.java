@@ -14,6 +14,10 @@ public record ScrollRes<T, C>(
         @Schema(description = "다음 페이지 존재 여부", example = "true")
         boolean hasNext,
 
-        @Schema(description = "마지막 항목의 커서 값 (다음 요청 시 cursorId로 사용)", example = "123")
+        @Schema(description = "마지막 항목의 커서 객체 (Book의 경우, createdAt, id 필드로 구성)",
+                example = "{\n" +
+                "  \"lastId\": null,\n" +
+                "  \"lastCreatedAt\": null\n" +
+                "}")
         C cursor
 ) {}
