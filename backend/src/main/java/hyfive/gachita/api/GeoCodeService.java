@@ -13,8 +13,8 @@ public class GeoCodeService {
         GeoCodeReq request = GeoCodeReq.forCoord(address);
         CoordResult result = geoCodeApiClient.callGeoCodeApi(request);
 
-        double lat = Double.parseDouble(result.point().x());
-        double lng = Double.parseDouble(result.point().y());
+        double lat = Double.parseDouble(result.point().y());
+        double lng = Double.parseDouble(result.point().x());
         return new LatLng(lat, lng);
     }
 }
