@@ -32,11 +32,11 @@ public class GeoCodeApiClient extends ApiClient {
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(baseUrl)
                 .queryParam("key", apiKey)
                 .queryParam("service", "address")
-                .queryParam("request", request.request())
-                .queryParam("type", request.type())
-                .queryParam("format", request.format())
-                .queryParam("errorFormat", request.format())
-                .queryParam("simple", request.simple())
+                .queryParam("type", "ROAD")
+                .queryParam("format", "json")
+                .queryParam("errorFormat", "json")
+                .queryParam("simple", true)
+                .queryParam("request", request.request())   // getCoord, getAddress
                 .queryParam("address", request.address())   // 주소 -> 좌표 변환에만 값 설정
                 .queryParam("point", request.point());      // 좌표 -> 주소 변환에만 값 설정
         URI uri = uriBuilder.build().toUri();

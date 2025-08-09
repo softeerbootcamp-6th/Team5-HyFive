@@ -2,16 +2,9 @@ package hyfive.gachita.api.dto;
 
 public record GeoCodeReq(
         String request,
-        String type,
-        String format,
-        Boolean simple,
         String address,
         String point
 ) {
-    public GeoCodeReq(String request, String address, String point) {
-        this(request, "ROAD", "json", true, address, point);
-    }
-
     // 주소 -> 좌표용 팩토리 메서드
     public static GeoCodeReq forCoord(String address) {
         return new GeoCodeReq("getCoord", address, null);
