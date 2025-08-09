@@ -1,5 +1,28 @@
 # 📋 프로젝트 개요
 <img alt="소개이미지1" src="https://github.com/user-attachments/assets/aced3d90-5c8a-4f3f-b0fc-08732ba3d998" />
+<div align="center">
+  <a href="https://서비스링크.com">
+    <img src="https://img.shields.io/badge/Service-%2300C4B3?style=for-the-badge&logo=vercel&logoColor=white&color=FF7700" alt="서비스 바로가기" />
+  </a>
+  <a href="https://github.com/softeerbootcamp-6th/Team5-HyFive/wiki">
+    <img src="https://img.shields.io/badge/Wiki-%236e6e6e?style=for-the-badge&logo=bookstack&logoColor=white&color=346FFA" alt="Wiki" />
+  </a>
+  <a href="https://spiffy-centipede-875.notion.site/HyFive-23b62570e7c480df80e3ca54de7e7a88?source=copy_link">
+    <img src="https://img.shields.io/badge/Notion-%23000000?style=for-the-badge&logo=notion&logoColor=black&color=white" alt="Notion" />
+  </a>
+  <a href="https://github.com/orgs/softeerbootcamp-6th/projects/5">
+    <img src="https://img.shields.io/badge/Project-%23121011?style=for-the-badge&logo=github&logoColor=white&color=F14251" alt="GitHub Projects" />
+  </a>
+</div>
+<br/>
+<p align="center">
+<a href="#-서비스-소개">🎨 서비스 소개</a> <br>
+<a href="#-주요-기능">📌 주요 기능</a> <br>
+<a href="#-아키텍처">⚙️ 아키텍처</a> <br>
+<a href="#-기술-스택">🛠 기술 스택</a> <br>
+<a href="#-프로젝트-타임라인">📅 프로젝트 타임라인</a> <br>
+<a href="#-팀-소개">👨‍👩‍👧‍ 팀 소개</a> <br>
+</p>
 
 # 🎨 서비스 소개
 <img alt="기획서" src="https://github.com/user-attachments/assets/c3273ab8-4ef8-4e8b-a741-5d5050beae8c" />
