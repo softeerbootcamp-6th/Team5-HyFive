@@ -8,47 +8,42 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.client.RestClient;
 
 @Component
 @Slf4j
 public class VWorldApiClient {
 
-    private final WebClient webClient;
+    private final RestClient restClient;
     private final String apiKey;
 
     public VWorldApiClient(@Value("${vworld.api.base-url}") String baseUrl,
                            @Value("${vworld.api.key}") String apiKey) {
         this.apiKey = apiKey;
-        this.webClient = WebClient.builder()
-                .baseUrl(baseUrl)
-                .build();
+        this.restClient = RestClient.create(baseUrl);
     }
 
     public VWorldApiResponse<GeoCodeResult> callGeoCodeApi(GeoCodeRequest request) {
-        return webClient.get()
+        return restClient.get()
                 .uri(uriBuilder -> {
                     uriBuilder.queryParam("key", apiKey)
                             .queryParam("request", request.getRequest())
                             .queryParam("type", request.getType())
                             .queryParam("format", request.getFormat())
-                            .queryParam("simple", request.getSimple());
+                            .queryParam("simple", request.getSimple())
+                            // TODO: getAddress 서비스 (좌표 -> 주소)도 사용 가능하도록 반영
+                            .queryParam("address", request.getAddress()); // getCoord (주소 -> 좌표)
+//                            .queryParam("point", request.getPoint()); // getAddress (좌표 -> 주소)
 
-                    if ("getCoord".equalsIgnoreCase(request.getRequest())) {
-                        uriBuilder.queryParam("address", request.getAddress());
-                    } else if ("getAddress".equalsIgnoreCase(request.getRequest())) {
-                        uriBuilder.queryParam("point", request.getPoint());
-                    }
-                    String uri = uriBuilder.toUriString();
-                    log.info("URI: " + uri);
+                    String uriString = uriBuilder.build().toString();
+                    log.info("Request URI: {}", uriString);
                     return uriBuilder.build();
                 })
                 .retrieve()
-                .onStatus(HttpStatusCode::isError, clientResponse ->
-                        clientResponse.bodyToMono(String.class)
-                                .map(error -> new RuntimeException("API Error: " + error))
-                )
-                .bodyToMono(new ParameterizedTypeReference<VWorldApiResponse<GeoCodeResult>>() {})
-                .block();
+                .onStatus(HttpStatusCode::isError, (req, res) -> {
+                    String errorBody = new String(res.getBody().readAllBytes());
+                    throw new RuntimeException("API Error: " + errorBody);
+                })
+                .body(new ParameterizedTypeReference<VWorldApiResponse<GeoCodeResult>>() {});
     }
 }
