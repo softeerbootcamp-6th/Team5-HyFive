@@ -1,8 +1,9 @@
-package hyfive.gachita.api;
+package hyfive.gachita.api.geocode;
 
-import hyfive.gachita.api.dto.GeoCodeApiRes;
-import hyfive.gachita.api.dto.GeoCodeReq;
-import hyfive.gachita.api.dto.CoordResult;
+import hyfive.gachita.api.ApiClient;
+import hyfive.gachita.api.geocode.dto.GeoCodeApiRes;
+import hyfive.gachita.api.geocode.dto.GeoCodeReq;
+import hyfive.gachita.api.geocode.dto.CoordResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;

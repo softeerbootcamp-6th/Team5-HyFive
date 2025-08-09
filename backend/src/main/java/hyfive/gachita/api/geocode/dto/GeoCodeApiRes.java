@@ -1,4 +1,4 @@
-package hyfive.gachita.api.dto;
+package hyfive.gachita.api.geocode.dto;
 
 public record GeoCodeApiRes<T>(ResponseWrapper<T> response) {
 
