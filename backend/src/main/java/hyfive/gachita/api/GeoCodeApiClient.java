@@ -36,7 +36,8 @@ public class GeoCodeApiClient extends ApiClient {
                 .queryParam("type", request.type())
                 .queryParam("format", request.format())
                 .queryParam("simple", request.simple())
-                .queryParam("point", request.point());
+                .queryParam("address", request.address())   // 주소 -> 좌표 변환에만 값 설정
+                .queryParam("point", request.point());      // 좌표 -> 주소 변환에만 값 설정
         URI uri = uriBuilder.build().toUri();
         log.info("Request GeoCode API. URI: {}", uri);
 
