@@ -14,19 +14,15 @@ const useInitializeMap = ({
   const [map, setMap] = useState(null);
 
   useEffect(() => {
-    const container = mapRef.current;
-    if (!container) {
-      return;
-    }
+    if (!mapRef.current) return;
 
     const options = {
       center: new window.kakao.maps.LatLng(centerLat, centerLng),
       level: INITIAL_ZOOM_LEVEL,
     };
-
-    const initializedMap = new window.kakao.maps.Map(container, options);
+    const initializedMap = new window.kakao.maps.Map(mapRef.current, options);
     setMap(initializedMap);
-  }, []);
+  }, [mapRef, centerLat, centerLng]);
 
   return { map };
 };
