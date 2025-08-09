@@ -1,5 +1,9 @@
 package hyfive.gachita.book;
 
+import hyfive.gachita.api.GeoCodeApiClient;
+import hyfive.gachita.api.GeoCodeService;
+import hyfive.gachita.api.LatLng;
+import hyfive.gachita.api.dto.CoordResult;
 import hyfive.gachita.book.dto.BookRes;
 import hyfive.gachita.book.dto.CreateBookReq;
 import hyfive.gachita.common.dto.ListRes;
@@ -22,11 +26,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookService {
     private final BookRepository bookRepository;
+    private final GeoCodeService geoCodeService;
 
     public Book createBook(CreateBookReq createBookReq) {
         if (bookRepository.existsBookByBookTelAndHospitalDate(createBookReq.bookTel(), createBookReq.hospitalDate())) {
             throw new BusinessException(ErrorCode.DUPLICATE_BOOK_DATE);
         }
+
+        LatLng startLoc = geoCodeService.getPointByAddress(createBookReq.startAddr());
+        LatLng endLoc = geoCodeService.getPointByAddress(createBookReq.endAddr());
 
         //TODO 출발지, 도착지의 위도, 경도 설정
         Book book = Book.builder()
@@ -35,7 +43,11 @@ public class BookService {
                 .hospitalDate(createBookReq.hospitalDate())
                 .hospitalTime(createBookReq.hospitalTime())
                 .startAddr(createBookReq.startAddr())
+                .startLat(startLoc.lat())
+                .startLng(startLoc.lng())
                 .endAddr(createBookReq.endAddr())
+                .endLat(endLoc.lat())
+                .endLng(endLoc.lng())
                 .walker(createBookReq.walker())
                 .bookStatus(BookStatus.NEW)
                 .deadline(createBookReq.hospitalTime().minusMinutes(30))
