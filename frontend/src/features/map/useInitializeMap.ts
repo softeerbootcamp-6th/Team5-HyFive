@@ -11,16 +11,17 @@ const useInitializeMap = ({
   centerLat,
   centerLng,
 }: UseInitializeMapProps) => {
-  const [map, setMap] = useState(null);
+  const [map, setMap] = useState<MapInstance | null>(null);
 
   useEffect(() => {
-    if (!mapRef.current) return;
+    const kakaoMaps = window.kakao.maps;
+    if (!mapRef.current || !kakaoMaps) return;
 
     const options = {
-      center: new window.kakao.maps.LatLng(centerLat, centerLng),
+      center: new kakaoMaps.LatLng(centerLat, centerLng),
       level: INITIAL_ZOOM_LEVEL,
     };
-    const initializedMap = new window.kakao.maps.Map(mapRef.current, options);
+    const initializedMap = new kakaoMaps.Map(mapRef.current, options);
     setMap(initializedMap);
   }, [mapRef, centerLat, centerLng]);
 

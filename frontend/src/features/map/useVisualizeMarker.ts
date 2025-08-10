@@ -2,12 +2,13 @@ import type { Path } from "@/types/path.types";
 import { useEffect } from "react";
 
 interface UseVisualizeMarkerProps {
-  map: any;
+  map: MapInstance | null;
   path: Path[];
 }
 const useVisualizeMarker = ({ map, path }: UseVisualizeMarkerProps) => {
   useEffect(() => {
-    if (!map) return;
+    const kakaoMaps = window.kakao.maps;
+    if (!kakaoMaps || !map) return;
 
     const getMarkerType = (
       index: number,
@@ -26,15 +27,15 @@ const useVisualizeMarker = ({ map, path }: UseVisualizeMarkerProps) => {
 
     for (let i = 0; i < path.length; i++) {
       const markerType = getMarkerType(i, path.length);
-      const imageSize = new window.kakao.maps.Size(32, 32);
-      const markerImage = new window.kakao.maps.MarkerImage(
+      const imageSize = new kakaoMaps.Size(32, 32);
+      const markerImage = new kakaoMaps.MarkerImage(
         imageSrc[markerType],
         imageSize,
       );
 
-      new window.kakao.maps.Marker({
+      new kakaoMaps.Marker({
         map,
-        position: new window.kakao.maps.LatLng(path[i].lng, path[i].lat),
+        position: new kakaoMaps.LatLng(path[i].lng, path[i].lat),
         title: "User Marker",
         image: markerImage,
       });

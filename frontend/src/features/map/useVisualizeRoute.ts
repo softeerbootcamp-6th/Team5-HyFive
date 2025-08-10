@@ -2,18 +2,19 @@ import type { Path } from "@/types/path.types";
 import { useEffect } from "react";
 
 interface UseVisualizeRouteProps {
-  map: any;
+  map: MapInstance | null;
   path: Path[];
 }
 const useVisualizeRoute = ({ map, path }: UseVisualizeRouteProps) => {
   useEffect(() => {
-    if (!map) return;
+    const kakaoMaps = window.kakao.maps;
+    if (!kakaoMaps || !map) return;
 
     const linePath = path.map(
-      (point) => new window.kakao.maps.LatLng(point.lng, point.lat),
+      (point) => new kakaoMaps.LatLng(point.lng, point.lat),
     );
 
-    const polyline = new window.kakao.maps.Polyline({
+    const polyline = new kakaoMaps.Polyline({
       path: linePath,
       strokeWeight: 16,
       strokeColor: "#F70",

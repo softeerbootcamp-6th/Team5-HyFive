@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 interface UseZoomLevelProps {
-  map: any;
+  map: MapInstance | null;
 }
 export const INITIAL_ZOOM_LEVEL = 4;
 

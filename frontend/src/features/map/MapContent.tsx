@@ -7,12 +7,6 @@ import { path } from "@/mocks/pathMocks";
 import { css } from "@emotion/react";
 import { useRef } from "react";
 
-declare global {
-  interface Window {
-    kakao: any;
-  }
-}
-
 const MapContent = () => {
   const mapRef = useRef<HTMLDivElement>(null);
   const { map } = useInitializeMap({
