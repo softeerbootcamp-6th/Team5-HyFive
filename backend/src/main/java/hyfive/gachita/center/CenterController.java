@@ -1,6 +1,7 @@
 package hyfive.gachita.center;
 
 import hyfive.gachita.common.response.BaseResponse;
+import hyfive.gachita.docs.CenterDocs;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/center")
 @RequiredArgsConstructor
-public class CenterController {
+public class CenterController implements CenterDocs {
     private final CenterService centerService;
 
     @GetMapping("/{id}")
