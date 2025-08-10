@@ -7,18 +7,19 @@ const { color, typography } = theme;
 type Color = "gray" | "orange";
 type Size = "small" | "big";
 interface ButtonProps {
-  bgColor: Color;
-  size: Size;
+  label: string;
+  bgColor?: Color;
+  size?: Size;
 }
 
-const Button = ({ bgColor, size }: ButtonProps) => {
+const Button = ({ label, bgColor = "orange", size = "small" }: ButtonProps) => {
   const [isPressing, setIsPressing] = useState(false);
   const handlers = usePressDetection({
     setIsPressing,
   });
   return (
     <div {...handlers} css={ButtonContainer(bgColor, size, isPressing)}>
-      Button
+      {label}
     </div>
   );
 };

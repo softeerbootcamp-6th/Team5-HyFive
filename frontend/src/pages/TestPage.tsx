@@ -155,10 +155,10 @@ const TestPage = () => {
       label: "🔘 버튼 컴포넌트",
       component: (
         <div css={buttonStyle}>
-          <Button bgColor="gray" size="small" />
-          <Button bgColor="orange" size="small" />
-          <Button bgColor="gray" size="big" />
-          <Button bgColor="orange" size="big" />
+          <Button bgColor="gray" size="small" label="button" />
+          <Button bgColor="orange" size="small" label="button" />
+          <Button bgColor="gray" size="big" label="button" />
+          <Button bgColor="orange" size="big" label="button" />
         </div>
       ),
     },

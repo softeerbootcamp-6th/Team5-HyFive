@@ -28,6 +28,13 @@ import NoRouteIcon from "./no-route.svg?react";
 import WaitingIcon from "./waiting.svg?react";
 import InProgressIcon from "./inProgress.svg?react";
 import CompletedIcon from "./completed.svg?react";
+import MarkerDefaultIcon from "./marker-default.svg?react";
+import MarkerEndIcon from "./marker-end.svg?react";
+import MarkerEnterNumIcon from "./marker-enter-num.svg?react";
+import MarkerEnterIcon from "./marker-enter.svg?react";
+import MarkerOutNumIcon from "./marker-out-num.svg?react";
+import MarkerOutIcon from "./marker-out.svg?react";
+import MarkerStartIcon from "./marker-start.svg?react";
 
 export {
   AddIcon,
@@ -60,4 +67,11 @@ export {
   WaitingIcon,
   InProgressIcon,
   CompletedIcon,
+  MarkerDefaultIcon,
+  MarkerEndIcon,
+  MarkerEnterNumIcon,
+  MarkerEnterIcon,
+  MarkerOutNumIcon,
+  MarkerOutIcon,
+  MarkerStartIcon,
 };
