@@ -24,24 +24,20 @@ const calenderReducer = (
   switch (action.type) {
     case "SELECT_DATE": {
       const clickedDate = action.payload;
-      const newState = { ...state, selectedDate: clickedDate };
-
-      // 주 설정
-      newState.selectedWeek = getWeekRange(clickedDate);
 
       // 다른 월이면 월 변경
-      if (
+      const calendarDate =
         clickedDate.getMonth() !== state.calendarDate.getMonth() ||
         clickedDate.getFullYear() !== state.calendarDate.getFullYear()
-      ) {
-        newState.calendarDate = new Date(
-          clickedDate.getFullYear(),
-          clickedDate.getMonth(),
-          1,
-        );
-      }
+          ? new Date(clickedDate.getFullYear(), clickedDate.getMonth(), 1)
+          : state.calendarDate;
 
-      return newState;
+      return {
+        ...state,
+        selectedDate: clickedDate,
+        selectedWeek: getWeekRange(clickedDate),
+        calendarDate,
+      };
     }
     case "CHANGE_MONTH": {
       const newDate = new Date(state.calendarDate);
