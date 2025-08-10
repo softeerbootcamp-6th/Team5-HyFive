@@ -19,5 +19,5 @@ public record CenterRes(
         int carCount,
 
         @Schema(description = "이번 수 예상 수익", example = "1500000")
-        int weekAmount
+        int payAmount
 ) {}
