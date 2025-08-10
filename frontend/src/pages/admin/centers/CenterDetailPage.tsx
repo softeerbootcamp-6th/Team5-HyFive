@@ -43,7 +43,7 @@ const CenterDetailPage = () => {
       {/* 등록된 차량 */}
       <div css={SectionWrapper}>
         <h4 css={SectionLabel}>등록된 차량</h4>
-        <div css={ConetentSecion}>
+        <div css={ContentSection}>
           {mockCarData.map((car) => (
             <CarInfoCard
               key={car.carId}
@@ -58,7 +58,7 @@ const CenterDetailPage = () => {
       {/* 타임 테이블 */}
       <div css={SectionWrapper}>
         <h4 css={SectionLabel}>차량 시간표</h4>
-        <div css={ConetentSecion}>
+        <div css={ContentSection}>
           <TimeTable
             selectedCarId={selectedCarId}
             selectedWeek={state.selectedWeek}
@@ -103,7 +103,7 @@ const SectionLabel = css`
   color: ${color.GrayScale.black};
 `;
 
-const ConetentSecion = css`
+const ContentSection = css`
   display: flex;
   gap: 20px;
   width: 100%;
