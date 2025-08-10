@@ -85,7 +85,7 @@
 ![GitHub Actions](https://github.com/user-attachments/assets/98ef3abf-347d-4a73-ba21-767762d572f6)
 
 # 📅 프로젝트 타임라인
-~ 작성중 ~
+(추후 작성 예정)
 
 # 👨‍👩‍👧‍ 팀 소개
 
