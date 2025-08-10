@@ -82,3 +82,8 @@ declare global {
     size: SizeInstance;
   }
 }
+
+export interface LatLng {
+  lat: number;
+  lng: number;
+}

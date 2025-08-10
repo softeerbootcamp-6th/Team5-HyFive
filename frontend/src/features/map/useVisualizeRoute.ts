@@ -1,9 +1,9 @@
-import type { Path } from "@/types/path.types";
+import type { LatLng } from "@/features/map/Map.types";
 import { useEffect } from "react";
 
 interface UseVisualizeRouteProps {
   map: MapInstance | null;
-  path: Path[];
+  path: LatLng[];
 }
 const useVisualizeRoute = ({ map, path }: UseVisualizeRouteProps) => {
   useEffect(() => {
