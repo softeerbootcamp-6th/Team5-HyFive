@@ -85,6 +85,12 @@ export const isSelectedDate = (target: Date, selected: Date) => {
   return isSameDay(target, selected);
 };
 
+/** 현재 선택된 날짜가 week 배열에 포함되어있는지 확인합니다.
+ * @param week - 날짜 배열 (주 단위)
+ * @param selectedDate - 선택된 날짜
+ * @returns 선택된 날짜가 주 배열에 포함되어있으면 true, 아니면 false
+ *
+ */
 export const isSelectedWeek = (
   week: Date[],
   selectedDate: Date | null,
