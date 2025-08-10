@@ -1,23 +1,24 @@
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
-import type { HighlightType } from "@/features/calander/Calander";
 
 const { color, typography, borderRadius } = theme;
 
-// Calander.tsx
-const CalanderContainer = css`
+// Calender.tsx
+const CalenderContainer = css`
   display: flex;
   width: 446px;
+  height: 100%;
   padding: 60px 36px;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
   gap: 52px;
   flex-shrink: 0;
   border-radius: ${borderRadius.Large};
   border: 1px solid ${color.GrayScale.gray3};
 `;
 
-// CalanderHeader.tsx
+// CalenderHeader.tsx
 const HeaderContainer = css`
   width: 100%;
   display: flex;
@@ -45,11 +46,12 @@ const StyledButton = css`
   }
 `;
 
-// CalanderContent.tsx
+// CalenderContent.tsx
 const ContentContainer = css`
   width: 100%;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 30px;
 `;
 
@@ -104,7 +106,7 @@ const getDaySectionStyle = (
   isCurrentMonth: boolean,
   isSelected: boolean,
   isToday: boolean,
-  highlightType: HighlightType,
+  highlightType: "day" | "week",
 ) => {
   if (isSelected && highlightType === "day") {
     return css`
@@ -130,7 +132,7 @@ const getDaySectionStyle = (
 };
 
 export {
-  CalanderContainer,
+  CalenderContainer,
   HeaderContainer,
   HeaderTitle,
   StyledButton,

@@ -1,23 +1,23 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "@/assets/icons";
-import { getYearMonth } from "@/features/calander/Calander.util";
+import { getYearMonth } from "@/features/calender/Calender.util";
 import {
   HeaderContainer,
   StyledButton,
   HeaderTitle,
-} from "@/features/calander/Calander.style";
+} from "@/features/calender/Calender.style";
 
-interface CalanderHeaderProps {
-  date: Date;
+interface CalenderHeaderProps {
+  calendarDate: Date;
   onClickPrev: () => void;
   onClickNext: () => void;
 }
 
-const CalanderHeader = ({
-  date,
+const CalenderHeader = ({
+  calendarDate,
   onClickPrev,
   onClickNext,
-}: CalanderHeaderProps) => {
-  const formattedYearMonth = getYearMonth(date);
+}: CalenderHeaderProps) => {
+  const formattedYearMonth = getYearMonth(calendarDate);
 
   return (
     <div css={HeaderContainer}>
@@ -32,4 +32,4 @@ const CalanderHeader = ({
   );
 };
 
-export default CalanderHeader;
+export default CalenderHeader;

@@ -23,7 +23,7 @@ import Tag from "@/components/Tag";
 import Input from "@/components/Input";
 import ToggleButton from "@/components/ToggleButton";
 import DropdownInput from "@/components/DropdownInput";
-import Calander from "@/features/calander/Calander";
+import Calender from "@/features/calender/Calender";
 import CarInfoCard from "@/features/Car/CarInfoCard";
 import type { CarType } from "@/features/Car/Car.type";
 
@@ -292,8 +292,8 @@ const TestPage = () => {
       label: "달력 컴포넌트",
       component: (
         <div css={{ display: "flex", gap: "30px", justifyContent: "center" }}>
-          <Calander highlightType="day"></Calander>
-          <Calander highlightType="week"></Calander>,
+          <Calender highlightType="day"></Calender>
+          <Calender highlightType="week"></Calender>,
         </div>
       ),
     },

@@ -1,10 +1,11 @@
 import {
   generateCalendarMatrix,
   isCurrentMonth,
-  isSelectedDate,
   isSelectedWeek,
   isToday,
-} from "@/features/calander/Calander.util";
+  WEEKDAYS_KR,
+  checkIsDaySelected,
+} from "@/features/calender/Calender.util";
 
 import {
   ContentContainer,
@@ -13,24 +14,22 @@ import {
   DaySection,
   getDaySectionStyle,
   getWeekSectionStyle,
-} from "@/features/calander/Calander.style";
-import type { HighlightType } from "@/features/calander/Calander";
+} from "@/features/calender/Calender.style";
 
-interface CalanderContentProps {
-  date: Date;
-  selectedDate: Date | null; // TODO: reducer로 상태 변경하기
+interface CalenderContentProps {
+  calendarDate: Date;
+  highlightType: "day" | "week";
+  selectedDate: Date | null;
   handleClickDate: (date: Date) => void;
-  highlightType: HighlightType;
 }
 
-const CalanderContent = ({
-  date,
+const CalenderContent = ({
+  calendarDate,
   selectedDate,
   handleClickDate,
   highlightType,
-}: CalanderContentProps) => {
-  const WEEKDAYS_KR = ["일", "월", "화", "수", "목", "금", "토"];
-  const weeks = generateCalendarMatrix(date);
+}: CalenderContentProps) => {
+  const weeks = generateCalendarMatrix(calendarDate);
   return (
     <div css={ContentContainer}>
       <div css={DayLabelSection}>
@@ -44,7 +43,6 @@ const CalanderContent = ({
       {weeks.map((week, i) => {
         const isHighlightedWeek =
           highlightType === "week" && isSelectedWeek(week, selectedDate);
-
         return (
           <div
             css={getWeekSectionStyle(isHighlightedWeek)}
@@ -52,16 +50,23 @@ const CalanderContent = ({
             data-testid={`week-${i}`}
           >
             {week.map((day) => {
-              const current = isCurrentMonth(day, date);
-              const selected = selectedDate
-                ? isSelectedDate(day, selectedDate)
-                : false;
-              const today = isToday(day);
+              const isInCurrentMonth = isCurrentMonth(day, calendarDate);
+              const isCurrentDaySelected = checkIsDaySelected(
+                day,
+                selectedDate,
+              );
+              const isTodayDate = isToday(day);
+
               return (
                 <div
                   css={[
                     DaySection,
-                    getDaySectionStyle(current, selected, today, highlightType),
+                    getDaySectionStyle(
+                      isInCurrentMonth,
+                      isCurrentDaySelected,
+                      isTodayDate,
+                      highlightType,
+                    ),
                   ]}
                   key={day.toISOString()}
                   data-testid={`day-${day.getFullYear()}-${day.getMonth() + 1}-${day.getDate()}`}
@@ -78,4 +83,4 @@ const CalanderContent = ({
   );
 };
 
-export default CalanderContent;
+export default CalenderContent;

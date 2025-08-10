@@ -9,12 +9,13 @@ import {
   format,
 } from "date-fns";
 
+export const WEEKDAYS_KR = ["일", "월", "화", "수", "목", "금", "토"] as const;
+
 /**
  * 주어진 날짜를 "yyyy년 M월" 형식으로 반환합니다.
  * @param {Date} date - 포맷할 대상 날짜 객체
  * @return {string} 포맷된 날짜 문자열
  *
- * @author 유재민
  */
 export const getYearMonth = (date: Date): string => {
   return format(date, "yyyy년 M월");
@@ -29,7 +30,6 @@ export const getYearMonth = (date: Date): string => {
  * @param {Date} baseDate - 기준이 되는 날짜 (예: 현재 선택된 날짜)
  * @return {Date[][]} 주 단위(7일)로 나눈 날짜 배열
  *
- * @author 유재민
  */
 export const generateCalendarMatrix = (baseDate: Date): Date[][] => {
   // baseDate의 시작 날짜가 포함된 주의 일요일을 시작 날짜로 초기화
@@ -57,7 +57,6 @@ export const generateCalendarMatrix = (baseDate: Date): Date[][] => {
  * 오늘인지 확인합니다.
  * @param target 비교할 날짜
  * @returns 오늘이면 true
- * @author 유재민
  */
 export const isToday = (target: Date): boolean => {
   return isSameDay(target, new Date());
@@ -68,7 +67,6 @@ export const isToday = (target: Date): boolean => {
  * @param target 비교할 날짜
  * @param base 기준 날짜
  * @returns 같은 월이면 true
- * @author 유재민
  */
 export const isCurrentMonth = (target: Date, base: Date) => {
   return isSameMonth(target, base);
@@ -79,16 +77,44 @@ export const isCurrentMonth = (target: Date, base: Date) => {
  * @param target 비교할 날짜
  * @param selected 선택된 날짜
  * @returns 같으면 true
- * @author 유재민
  */
 export const isSelectedDate = (target: Date, selected: Date) => {
   return isSameDay(target, selected);
 };
 
+/** 현재 선택된 날짜가 week 배열에 포함되어있는지 확인합니다.
+ * @param week - 날짜 배열 (주 단위)
+ * @param selectedDate - 선택된 날짜
+ * @returns 선택된 날짜가 주 배열에 포함되어있으면 true, 아니면 false
+ *
+ */
 export const isSelectedWeek = (
   week: Date[],
   selectedDate: Date | null,
 ): boolean => {
   if (!selectedDate) return false;
   return week.some((day) => isSelectedDate(day, selectedDate));
+};
+
+/**
+ * 주어진 날짜가 포함된 주의 일요일부터 토요일까지 7일 배열을 반환합니다.
+ * @param date - 기준이 되는 날짜
+ * @returns 일요일부터 토요일까지의 날짜 배열 (7개)
+ */
+export const getWeekRange = (date: Date): Date[] => {
+  const startOfCurrentWeek = startOfWeek(date, { weekStartsOn: 0 });
+  return Array.from({ length: 7 }, (_, i) => addDays(startOfCurrentWeek, i));
+};
+
+/**
+ * 특정 날짜가 선택된 날짜인지 확인합니다.
+ * @param day - 확인할 날짜
+ * @param selectedDate - 선택된 날짜 (null 가능)
+ * @returns 해당 날짜가 선택된 날짜이면 true, 아니면 false
+ */
+export const checkIsDaySelected = (
+  day: Date,
+  selectedDate: Date | null,
+): boolean => {
+  return Boolean(selectedDate && isSelectedDate(day, selectedDate));
 };
