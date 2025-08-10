@@ -20,15 +20,15 @@ describe("TimeTable 컴포넌트", () => {
     }
   });
 
-  it("11개 시간 레이블이 렌더링된다.", () => {
+  it("9시부터 19시까지 11개 시간 레이블이 렌더링된다.", () => {
     const timeLabels = screen.getAllByText(/\d{1,2}:00/);
     expect(timeLabels).toHaveLength(11);
   });
 
   it("범위 밖의 시간은 렌더링되지 않는다.", () => {
+    expect(screen.queryByText("7:00")).not.toBeInTheDocument();
     expect(screen.queryByText("8:00")).not.toBeInTheDocument();
     expect(screen.queryByText("20:00")).not.toBeInTheDocument();
-    expect(screen.queryByText("7:00")).not.toBeInTheDocument();
     expect(screen.queryByText("21:00")).not.toBeInTheDocument();
   });
 
