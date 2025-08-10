@@ -12,7 +12,7 @@ interface ButtonProps {
   size?: Size;
 }
 
-const Button = ({ label, bgColor = "gray", size = "small" }: ButtonProps) => {
+const Button = ({ label, bgColor = "orange", size = "small" }: ButtonProps) => {
   const [isPressing, setIsPressing] = useState(false);
   const handlers = usePressDetection({
     setIsPressing,
