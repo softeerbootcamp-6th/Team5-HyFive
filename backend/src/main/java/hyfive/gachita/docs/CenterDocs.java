@@ -1,6 +1,6 @@
 package hyfive.gachita.docs;
 
-import hyfive.gachita.center.CenterRes;
+import hyfive.gachita.center.dto.CenterRes;
 import hyfive.gachita.common.response.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

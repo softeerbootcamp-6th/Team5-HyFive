@@ -1,4 +1,4 @@
-package hyfive.gachita.center;
+package hyfive.gachita.center.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
