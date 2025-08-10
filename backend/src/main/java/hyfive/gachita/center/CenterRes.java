@@ -16,8 +16,8 @@ public record CenterRes(
         String centerAddr,
 
         @Schema(description = "등록 차량 대수", example = "4")
-        int carCount,
+        long carCount,
 
         @Schema(description = "이번 수 예상 수익", example = "1500000")
-        int payAmount
+        long payAmount
 ) {}
