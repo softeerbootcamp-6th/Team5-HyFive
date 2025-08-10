@@ -18,8 +18,8 @@ public enum SearchPeriod {
             case TODAY -> Pair.of(today, today);
             case YESTERDAY -> Pair.of(today.minusDays(1), today.minusDays(1));
             case WEEK -> Pair.of(
-                    today.with(TemporalAdjusters.previous(DayOfWeek.SUNDAY)),
-                    today.with(DayOfWeek.SATURDAY)
+                    today.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY)),
+                    today.with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY))
             );
             case MONTH -> Pair.of(
                     today.withDayOfMonth(1),
