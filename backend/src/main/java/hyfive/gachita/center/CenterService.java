@@ -30,6 +30,7 @@ public class CenterService {
         long weeklyPayAmount = payService.getWeeklyPayAmount(center.getId());
 
         return CenterRes.builder()
+                .centerId(center.getId())
                 .centerName(center.getCenterName())
                 .centerAddr(center.getCenterAddr())
                 .centerTel(center.getCenterTel())
