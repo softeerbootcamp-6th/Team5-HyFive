@@ -1,9 +1,10 @@
 import {
   generateCalendarMatrix,
   isCurrentMonth,
-  isSelectedDate,
   isSelectedWeek,
   isToday,
+  WEEKDAYS_KR,
+  checkIfDayIsSelected,
 } from "@/features/calender/Calender.util";
 
 import {
@@ -28,7 +29,6 @@ const CalenderContent = ({
   handleClickDate,
   highlightType,
 }: CalenderContentProps) => {
-  const WEEKDAYS_KR = ["일", "월", "화", "수", "목", "금", "토"];
   const weeks = generateCalendarMatrix(calendarDate);
   return (
     <div css={ContentContainer}>
@@ -51,8 +51,9 @@ const CalenderContent = ({
           >
             {week.map((day) => {
               const isInCurrentMonth = isCurrentMonth(day, calendarDate);
-              const isCurrentDaySelected = Boolean(
-                selectedDate && isSelectedDate(day, selectedDate),
+              const isCurrentDaySelected = checkIfDayIsSelected(
+                day,
+                selectedDate,
               );
               const isTodayDate = isToday(day);
 

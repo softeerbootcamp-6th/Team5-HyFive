@@ -1,4 +1,4 @@
-import { addDays, startOfWeek } from "date-fns";
+import { getWeekRange } from "./Calender.util";
 
 interface CalenderState {
   calendarDate: Date; // 렌더링되는 기준 날짜
@@ -14,11 +14,7 @@ type CalenderAction =
 const initialState: CalenderState = {
   selectedDate: new Date(),
   calendarDate: new Date(),
-  selectedWeek: (() => {
-    const today = new Date();
-    const startOfCurrentWeek = startOfWeek(today, { weekStartsOn: 0 });
-    return Array.from({ length: 7 }, (_, i) => addDays(startOfCurrentWeek, i));
-  })(),
+  selectedWeek: getWeekRange(new Date()),
 };
 
 const calenderReducer = (
@@ -31,10 +27,7 @@ const calenderReducer = (
       const newState = { ...state, selectedDate: clickedDate };
 
       // 주 설정
-      const firstDayOfWeek = startOfWeek(clickedDate, { weekStartsOn: 0 });
-      newState.selectedWeek = Array.from({ length: 7 }, (_, i) =>
-        addDays(firstDayOfWeek, i),
-      );
+      newState.selectedWeek = getWeekRange(clickedDate);
 
       // 다른 월이면 월 변경
       if (
@@ -62,13 +55,9 @@ const calenderReducer = (
       };
     }
     case "SET_SELECTED_WEEK": {
-      const firstDayOfWeek = startOfWeek(action.payload, { weekStartsOn: 0 });
-      const selectedWeek = Array.from({ length: 7 }, (_, i) => {
-        return addDays(firstDayOfWeek, i);
-      });
       return {
         ...state,
-        selectedWeek,
+        selectedWeek: getWeekRange(action.payload),
       };
     }
 

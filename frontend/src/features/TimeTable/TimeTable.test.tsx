@@ -1,16 +1,11 @@
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import TimeTable from "./TimeTable";
-import { addDays, startOfWeek } from "date-fns";
+import { getWeekRange } from "@/features/calender/Calender.util";
 
 const testData = {
   selectedCarId: 1,
-  selectedWeek: Array.from({ length: 7 }, (_, i) => {
-    const startOfCurrentWeek = startOfWeek(new Date("2025-08-13"), {
-      weekStartsOn: 0,
-    });
-    return addDays(startOfCurrentWeek, i);
-  }),
+  selectedWeek: getWeekRange(new Date("2025-08-13")),
 };
 
 describe("TimeTable 컴포넌트", () => {
