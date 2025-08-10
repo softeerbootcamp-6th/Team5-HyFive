@@ -24,8 +24,8 @@ public class GeoCodeApiClient extends ApiClient {
     private final String baseUrl;
 
     public GeoCodeApiClient(@Qualifier("GeoCodeRestClient") RestClient restClient,
-                            @Value("${geocode.api.key}") String apiKey,
-                            @Value("${geocode.api.base-url}") String baseUrl) {
+                            @Value("${geocode.api.key:defaultKey}") String apiKey,
+                            @Value("${geocode.api.base-url:defaultUrl}") String baseUrl) {
         super(restClient);
         this.apiKey = apiKey;
         this.baseUrl = baseUrl;
