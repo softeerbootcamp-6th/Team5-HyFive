@@ -13,26 +13,26 @@ describe("TimeTable 컴포넌트", () => {
     render(<TimeTable {...testData} />);
   });
 
-  test("9시부터 19시까지의 시간이 렌더링된다.", () => {
+  it("9시부터 19시까지의 시간이 렌더링된다.", () => {
     for (let hour = 9; hour <= 19; hour++) {
       const timeLabel = screen.getByText(`${hour}:00`);
       expect(timeLabel).toBeInTheDocument();
     }
   });
 
-  test("11개 시간 레이블이 렌더링된다.", () => {
+  it("11개 시간 레이블이 렌더링된다.", () => {
     const timeLabels = screen.getAllByText(/\d{1,2}:00/);
     expect(timeLabels).toHaveLength(11);
   });
 
-  test("범위 밖의 시간은 렌더링되지 않는다.", () => {
+  it("범위 밖의 시간은 렌더링되지 않는다.", () => {
     expect(screen.queryByText("8:00")).not.toBeInTheDocument();
     expect(screen.queryByText("20:00")).not.toBeInTheDocument();
     expect(screen.queryByText("7:00")).not.toBeInTheDocument();
     expect(screen.queryByText("21:00")).not.toBeInTheDocument();
   });
 
-  test("props로 전달된 날짜가 올바르게 렌더링된다.", () => {
+  it("props로 전달된 날짜가 올바르게 렌더링된다.", () => {
     expect(screen.getByText("10")).toBeInTheDocument();
     expect(screen.getByText("11")).toBeInTheDocument();
     expect(screen.getByText("12")).toBeInTheDocument();
