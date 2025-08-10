@@ -4,7 +4,7 @@ import {
   isSelectedWeek,
   isToday,
   WEEKDAYS_KR,
-  checkIfDayIsSelected,
+  checkIsDaySelected,
 } from "@/features/calender/Calender.util";
 
 import {
@@ -51,7 +51,7 @@ const CalenderContent = ({
           >
             {week.map((day) => {
               const isInCurrentMonth = isCurrentMonth(day, calendarDate);
-              const isCurrentDaySelected = checkIfDayIsSelected(
+              const isCurrentDaySelected = checkIsDaySelected(
                 day,
                 selectedDate,
               );

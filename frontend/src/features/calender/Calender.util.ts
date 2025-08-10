@@ -112,7 +112,7 @@ export const getWeekRange = (date: Date): Date[] => {
  * @param selectedDate - 선택된 날짜 (null 가능)
  * @returns 해당 날짜가 선택된 날짜이면 true, 아니면 false
  */
-export const checkIfDayIsSelected = (
+export const checkIsDaySelected = (
   day: Date,
   selectedDate: Date | null,
 ): boolean => {
