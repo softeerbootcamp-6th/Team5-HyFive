@@ -35,7 +35,7 @@ const useVisualizeMarker = ({ map, path }: UseVisualizeMarkerProps) => {
 
       new kakaoMaps.Marker({
         map,
-        position: new kakaoMaps.LatLng(path[i].lng, path[i].lat),
+        position: new kakaoMaps.LatLng(path[i].lat, path[i].lng),
         title: "User Marker",
         image: markerImage,
       });

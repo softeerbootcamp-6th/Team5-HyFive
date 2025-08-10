@@ -11,8 +11,8 @@ const MapContent = () => {
   const mapRef = useRef<HTMLDivElement>(null);
   const { map } = useInitializeMap({
     mapRef,
-    centerLat: path[(path.length - 1) / 2].lng,
-    centerLng: path[(path.length - 1) / 2].lat,
+    centerLat: path[(path.length - 1) / 2].lat,
+    centerLng: path[(path.length - 1) / 2].lng,
   });
   useVisualizeMarker({ map, path });
   useVisualizeRoute({ map, path });

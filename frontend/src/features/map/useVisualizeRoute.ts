@@ -11,7 +11,7 @@ const useVisualizeRoute = ({ map, path }: UseVisualizeRouteProps) => {
     if (!kakaoMaps || !map) return;
 
     const linePath = path.map(
-      (point) => new kakaoMaps.LatLng(point.lng, point.lat),
+      (point) => new kakaoMaps.LatLng(point.lat, point.lng),
     );
 
     const polyline = new kakaoMaps.Polyline({
