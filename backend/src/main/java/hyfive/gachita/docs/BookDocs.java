@@ -6,7 +6,7 @@ import hyfive.gachita.common.dto.ScrollRes;
 import hyfive.gachita.common.enums.SearchPeriod;
 import hyfive.gachita.book.dto.BookRes;
 import hyfive.gachita.book.dto.CreateBookReq;
-import hyfive.gachita.common.dto.ListRes;
+import hyfive.gachita.common.dto.PagedListRes;
 import hyfive.gachita.common.response.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -60,7 +60,7 @@ public interface BookDocs {
                     responseCode = "1000",
                     description = "조회 성공, 예약 생성 시와 동일한 형식의 BookRes 배열을 items 필드에 담아 반환합니다",
                     content = @Content(
-                            schema = @Schema(implementation = ListRes.class)
+                            schema = @Schema(implementation = PagedListRes.class)
 //                            array = @ArraySchema(schema = @Schema(implementation = BookRes.class))
                     )
             ),
@@ -70,7 +70,7 @@ public interface BookDocs {
                     content = @Content()
             )
     })
-    BaseResponse<ListRes<BookRes>> getBookList(
+    BaseResponse<PagedListRes<BookRes>> getBookList(
             @Parameter(
                     name = "period",
                     description = "조회 기간 (예: TODAY, YESTERDAY, WEEK, MONTH / 기본값: TODAY)",

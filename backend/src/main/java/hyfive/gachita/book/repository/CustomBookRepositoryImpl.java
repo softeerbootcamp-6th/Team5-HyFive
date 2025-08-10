@@ -35,6 +35,7 @@ public class CustomBookRepositoryImpl implements CustomBookRepository {
                         betweenCreatedDate(book, dateRange),
                         statusEq(book, status)
                 )
+                .orderBy(book.createdAt.desc(), book.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -83,7 +84,6 @@ public class CustomBookRepositoryImpl implements CustomBookRepository {
         if (dateRange == null) {
             return null;
         }
-
         return book.createdAt.between(dateRange.getFirst(), dateRange.getSecond());
     }
 

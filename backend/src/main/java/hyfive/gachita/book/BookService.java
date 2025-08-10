@@ -3,8 +3,8 @@ package hyfive.gachita.book;
 import hyfive.gachita.book.dto.BookCursor;
 import hyfive.gachita.book.dto.BookRes;
 import hyfive.gachita.book.dto.CreateBookReq;
+import hyfive.gachita.common.dto.PagedListRes;
 import hyfive.gachita.book.repository.BookRepository;
-import hyfive.gachita.common.dto.ListRes;
 import hyfive.gachita.common.dto.ScrollRes;
 import hyfive.gachita.common.enums.SearchPeriod;
 import hyfive.gachita.common.response.BusinessException;
@@ -46,18 +46,17 @@ public class BookService {
         return bookRepository.save(book);
     }
 
-    public ListRes<BookRes> getBookList(SearchPeriod period, BookStatus bookStatus, int page, int limit) {
+    public PagedListRes<BookRes> getBookList(SearchPeriod period, BookStatus bookStatus, int page, int limit) {
         Pageable pageable = PageRequest.of(
                 page - 1,
-                limit,
-                Sort.by("createdAt").descending()
+                limit
         );
 
         Pair<LocalDateTime, LocalDateTime> dateRange = SearchPeriod.getDateRange(period);
         Page<Book> pageResult = bookRepository.searchBookPageByCondition(dateRange, bookStatus, pageable);
 
         List<BookRes> bookResList = pageResult.getContent().stream().map(BookRes::from).toList();
-        return ListRes.<BookRes>builder()
+        return PagedListRes.<BookRes>builder()
                 .items(bookResList)
                 .currentPageNum(pageResult.getNumber() + 1)
                 .totalPageNum(pageResult.getTotalPages())
