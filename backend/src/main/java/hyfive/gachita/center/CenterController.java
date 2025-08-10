@@ -16,7 +16,7 @@ public class CenterController {
 
     @GetMapping("/{id}")
     public BaseResponse<CenterRes> getCenter(@PathVariable("id") @NotNull Long id) {
-        Center center = centerService.getCenter(id);
-        return BaseResponse.success(CenterRes.from(center));
+        CenterRes centerRes = centerService.getCenter(id);
+        return BaseResponse.success(centerRes);
     }
 }
