@@ -7,9 +7,11 @@ const { color, typography, borderRadius } = theme;
 const CalenderContainer = css`
   display: flex;
   width: 446px;
+  height: 100%;
   padding: 60px 36px;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
   gap: 52px;
   flex-shrink: 0;
   border-radius: ${borderRadius.Large};
@@ -49,6 +51,7 @@ const ContentContainer = css`
   width: 100%;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 30px;
 `;
 
