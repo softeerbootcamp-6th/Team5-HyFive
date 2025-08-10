@@ -16,13 +16,20 @@ import { theme } from "@/styles/themes.style";
 interface TestCalenderProps {
   highlightType?: "day" | "week";
   handleClickDate?: (date: Date) => void;
+  initialDate?: Date;
 }
 
 const TestCalender = ({
   highlightType = "day",
   handleClickDate = () => {},
+  initialDate = new Date(),
 }: TestCalenderProps) => {
-  const [state, dispatch] = useReducer(calenderReducer, initialState);
+  const testInitialState = {
+    ...initialState,
+    calendarDate: initialDate,
+    selectedDate: initialDate,
+  };
+  const [state, dispatch] = useReducer(calenderReducer, testInitialState);
 
   const handleMonthChange = (direction: "next" | "prev") => {
     dispatch({
@@ -69,7 +76,7 @@ describe("Calender 컴포넌트", () => {
     const fixedDate = new Date("2025-08-01T00:00:00");
     vi.setSystemTime(fixedDate);
 
-    render(<TestCalender />);
+    render(<TestCalender initialDate={fixedDate} />);
 
     // 1. 초기 렌더링: 2025년 8월
     expect(screen.getByText("2025년 8월")).toBeInTheDocument();
@@ -88,7 +95,7 @@ describe("Calender 컴포넌트", () => {
     const fixedDate = new Date("2025-01-01T00:00:00");
     vi.setSystemTime(fixedDate);
 
-    render(<TestCalender />);
+    render(<TestCalender initialDate={fixedDate} />);
 
     // 2025년 1월에서 "이전 달" 버튼 클릭: 2024년 12월
     await user.click(screen.getByRole("button", { name: /이전/i }));
@@ -105,7 +112,7 @@ describe("Calender 컴포넌트", () => {
     const fixedDate = new Date("2025-08-01T00:00:00");
     vi.setSystemTime(fixedDate);
 
-    render(<TestCalender />);
+    render(<TestCalender initialDate={fixedDate} />);
 
     expect(screen.getByText("2025년 8월")).toBeInTheDocument();
 
@@ -124,7 +131,7 @@ describe("Calender 컴포넌트", () => {
     const fixedDate = new Date("2025-08-15T00:00:00");
     vi.setSystemTime(fixedDate);
 
-    render(<TestCalender highlightType="week" />);
+    render(<TestCalender highlightType="week" initialDate={fixedDate} />);
 
     // 1. 8월 31일 클릭
     await user.click(screen.getByTestId("day-2025-8-31"));
@@ -137,21 +144,23 @@ describe("Calender 컴포넌트", () => {
     expect(screen.getByText("2025년 9월")).toBeInTheDocument();
   });
 
-  it("hilightType === day 라면 오늘 날짜는 강조 스타일이 적용된다.", () => {
-    const fixedDate = new Date("2025-08-01T00:00:00");
-    vi.setSystemTime(fixedDate);
+  it("오늘 날짜는 다른 색상이 적용된다.", () => {
+    const mockToday = new Date("2025-08-10T00:00:00");
+    vi.setSystemTime(mockToday);
 
-    render(<TestCalender highlightType="day" />);
+    render(<TestCalender highlightType="week" initialDate={mockToday} />);
 
-    const todayCell = screen.getByTestId("day-2025-8-1");
-    expect(todayCell).toHaveStyle(`color: ${theme.color.Maincolor.primary};`);
+    const todayCell = screen.getByTestId("day-2025-8-10");
+    expect(todayCell).toHaveStyle(`color: ${theme.color.Maincolor.primary}`);
+
+    vi.useRealTimers();
   });
 
   it("현재 월이 아닌 날짜는 흐리게 표시된다.", () => {
     const fixedDate = new Date("2025-08-01");
     vi.setSystemTime(fixedDate);
 
-    render(<TestCalender />);
+    render(<TestCalender initialDate={fixedDate} />);
 
     const prevMonthDay = screen.getByTestId("day-2025-7-31");
     expect(prevMonthDay).toHaveStyle(`color: ${theme.color.GrayScale.gray3};`);
@@ -162,7 +171,7 @@ describe("Calender 컴포넌트", () => {
     const fixedDate = new Date("2025-08-01T00:00:00");
     vi.setSystemTime(fixedDate);
 
-    render(<TestCalender highlightType="week" />);
+    render(<TestCalender highlightType="week" initialDate={fixedDate} />);
 
     const targetDay = screen.getByTestId("day-2025-8-3");
     await user.click(targetDay);
