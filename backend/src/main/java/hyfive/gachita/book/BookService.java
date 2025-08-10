@@ -65,7 +65,7 @@ public class BookService {
     }
 
     public ScrollRes<BookRes, BookCursor> getBookListScroll(BookStatus bookStatus, BookCursor cursor, int size) {
-        List<Book> bookList = bookRepository.findBooksForScroll(bookStatus, cursor, size + 1);
+        List<Book> bookList = bookRepository.findBooksForScroll(bookStatus, cursor, size);
 
         boolean hasNext = bookList.size() > size;
 
