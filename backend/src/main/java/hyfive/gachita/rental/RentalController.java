@@ -1,6 +1,7 @@
 package hyfive.gachita.rental;
 
 import hyfive.gachita.common.response.BaseResponse;
+import hyfive.gachita.docs.RentalDocs;
 import hyfive.gachita.rental.dto.ReplaceRental;
 import hyfive.gachita.rental.dto.RentalRes;
 import jakarta.validation.constraints.NotNull;
@@ -14,7 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/rental")
 @RequiredArgsConstructor
-public class RentalController {
+public class RentalController implements RentalDocs {
     private final RentalService rentalService;
 
     @PostMapping
