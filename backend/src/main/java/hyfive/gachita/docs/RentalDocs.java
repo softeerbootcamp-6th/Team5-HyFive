@@ -47,7 +47,7 @@ public interface RentalDocs {
     })
     BaseResponse<List<RentalRes>> replaceWeeklyRentals(
             @Parameter(
-                    name = "car_id",
+                    name = "car-id",
                     description = "유휴 시간을 등록하려는 차량 id",
                     required = true,
                     example = "1"
@@ -92,7 +92,7 @@ public interface RentalDocs {
     })
     BaseResponse<List<RentalRes>> getRentalList(
             @Parameter(
-                    name = "car_id",
+                    name = "car-id",
                     description = "유휴 시간을 조회하려는 차량 id",
                     required = true,
                     example = "1"
