@@ -20,12 +20,20 @@ public class RentalController implements RentalDocs {
 
     @PostMapping
     public BaseResponse<List<RentalRes>> replaceWeeklyRentals(
-            @RequestParam("car_id") @NotNull(message = "차량 id는 필수입니다.") Long carId,
+            @RequestParam("car-id") @NotNull(message = "차량 id는 필수입니다.") Long carId,
             @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate targetDate,
             @RequestBody List<ReplaceRental> rentalList
     ) {
         List<RentalRes> replaceResult = rentalService.replaceWeeklyRentals(carId, targetDate, rentalList);
         return BaseResponse.success(replaceResult);
+    }
+
+    @GetMapping
+    public BaseResponse<List<RentalRes>> getRentalList(
+            @RequestParam("car-id") @NotNull(message = "차량 id는 필수입니다.") Long carId,
+            @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate targetDate
+    ) {
+        return BaseResponse.success(rentalService.getRentalList(carId, targetDate));
     }
 
 }
