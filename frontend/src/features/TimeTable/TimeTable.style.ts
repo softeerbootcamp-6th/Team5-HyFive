@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
 import { getDayIndex } from "@/features/calender/Calender.util";
-import type { AvailableTimeSlot } from "./TimeTable.type";
+import type { AvailableTimeSlotType } from "./TimeTable.type";
 
 const { color, typography, borderRadius } = theme;
 
@@ -106,7 +106,7 @@ export const getTimeCellStyle = (hourIndex: number, dayIndex: number) => {
   `;
 };
 export const getTimeBlockGridStyle = (
-  block: AvailableTimeSlot,
+  block: AvailableTimeSlotType,
   selectedWeek: Date[],
 ) => {
   const startHour = parseInt(block.rentalStartTime.split(":")[0]);

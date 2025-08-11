@@ -9,10 +9,11 @@ import {
   getDateLabelStyle,
   TableBody,
   TimeLabel,
-  getTimeCellStyle,
 } from "./TimeTable.style";
-import { generateAvailableTimeSlots } from "@/mocks/timeBlockMocks";
+import type { AvailableTimeSlotType } from "@/features/TimeTable/TimeTable.type";
 import AvailableTimeSlot from "@/features/availableTimeSlot/AvailableTimeSlot";
+import TimeCell from "@/features/TimeTable/TimeCell";
+import { generateAvailableTimeSlots } from "@/mocks/timeBlockMocks";
 
 interface TimeTableProps {
   selectedCarId: number;
@@ -26,7 +27,8 @@ const TimeTable = ({
   selectedCarId: _selectedCarId,
   selectedWeek,
 }: TimeTableProps) => {
-  const mockAvailableTimes = generateAvailableTimeSlots(selectedWeek);
+  const availableTimeSlots: AvailableTimeSlotType[] =
+    generateAvailableTimeSlots(selectedWeek);
 
   return (
     <div css={TableContainer}>
@@ -64,19 +66,17 @@ const TimeTable = ({
         {/* 시간 셀들 */}
         {Array.from({ length: TOTAL_HOURS }).map((_, hourIndex) =>
           selectedWeek.map((date, dayIndex) => (
-            <div
+            <TimeCell
               key={`${date.toISOString()}-${hourIndex}`}
-              css={getTimeCellStyle(hourIndex, dayIndex)}
-              style={{
-                gridColumn: dayIndex + 2,
-                gridRow: hourIndex + 1,
-              }}
+              hourIndex={hourIndex}
+              dayIndex={dayIndex}
+              date={date}
             />
           )),
         )}
 
         {/* 유휴시간 블록들 */}
-        {mockAvailableTimes.map((block) => (
+        {availableTimeSlots.map((block) => (
           <AvailableTimeSlot
             key={`${block.rentalDate}-${block.rentalStartTime}-${block.rentalEndTime}`}
             block={block}

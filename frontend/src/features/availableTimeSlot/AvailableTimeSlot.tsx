@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
-import type { AvailableTimeSlot as AvailableTimeSlotType } from "../TimeTable/TimeTable.type";
+import type { AvailableTimeSlotType } from "../TimeTable/TimeTable.type";
 import { getTimeBlockGridStyle } from "../TimeTable/TimeTable.style";
 import { isBefore, startOfDay } from "date-fns";
 

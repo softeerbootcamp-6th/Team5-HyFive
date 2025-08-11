@@ -1,4 +1,4 @@
-export interface AvailableTimeSlot {
+export interface AvailableTimeSlotType {
   rentalDate: string;
   rentalStartTime: string;
   rentalEndTime: string;
