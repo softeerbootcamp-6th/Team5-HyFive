@@ -15,6 +15,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<BaseResponse<?>> handleBusinessException(BusinessException e) {
+        log.info("{}", e.getMessage());
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(BaseResponse.fail(e.getErrorCode(), e.getMessage()));
@@ -28,7 +29,7 @@ public class GlobalExceptionHandler {
                 .reduce((msg1, msg2) -> msg1 + ", " + msg2)
                 .orElse("입력값이 올바르지 않습니다.");
 
-        log.debug(errorMessages);
+        log.info("{}", e.getMessage());
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(BaseResponse.fail(ErrorCode.INVALID_INPUT, errorMessages));
@@ -44,6 +45,7 @@ public class GlobalExceptionHandler {
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(BaseResponse.fail(ErrorCode.INTERNAL_SERVER_ERROR));
         }
+        log.info("{}", e.getMessage());
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(BaseResponse.fail(errorCode));
