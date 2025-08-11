@@ -9,7 +9,7 @@ const TEST_PATH = [
 ];
 
 describe("전체 경로를 지정된 크기로 분할한다.", () => {
-  describe.each([
+  it.each([
     {
       label: "지정된 크기가 2이면, 경로를 2개씩 묶어 정상적으로 반환한다.",
       size: 2,
@@ -46,8 +46,6 @@ describe("전체 경로를 지정된 크기로 분할한다.", () => {
       expected: [],
     },
   ])("$label", ({ size, expected }) => {
-    it(`size=${size}`, () => {
-      expect(getRouteSegments({ path: TEST_PATH, size })).toEqual(expected);
-    });
+    expect(getRouteSegments({ path: TEST_PATH, size })).toEqual(expected);
   });
 });
