@@ -49,6 +49,6 @@ describe("지도의 중점을 올바르게 반환한다.", () => {
     const centerLatLng = getRouteMidPoint(TEST_PATH.slice(0, 0));
 
     //then
-    expect(centerLatLng).toEqual({ lat: undefined, lng: undefined });
+    expect(centerLatLng).toEqual({ lat: null, lng: null });
   });
 });
