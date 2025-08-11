@@ -53,6 +53,19 @@ public class RentalService {
                 .map(RentalRes::from).toList();
     }
 
+    public List<RentalRes> getWeeklyRentals(Long carId, LocalDate targetDate) {
+        Car car = carRepository.findById(carId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NO_EXIST_VALUE, "DB에 차량 데이터가 존재하지 않습니다."));
+
+        // TODO : SearchPeriod 병합되면 유진님과 enum 확장 논의
+        LocalDate startOfWeek = targetDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
+        LocalDate endOfWeek = startOfWeek.plusDays(6);
+
+        return rentalRepository.findRentalsBetween(carId, startOfWeek, endOfWeek).stream()
+                .map(RentalRes::from)
+                .toList();
+    }
+
     private boolean invalidDuration(List<ReplaceRental> rentalList) {
         return rentalList.stream()
                 .anyMatch(dto -> Duration.between(dto.rentalStartTime(), dto.rentalEndTime()).toHours() < 2);
