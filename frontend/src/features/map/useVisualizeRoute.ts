@@ -13,9 +13,6 @@ const useVisualizeRoute = ({ map, path }: UseVisualizeRouteProps) => {
     const kakaoMaps = window.kakao?.maps;
     if (!kakaoMaps || !map || path.length === 0) return;
 
-    const SEGMENT_SIZE = 2;
-    const segments = getRouteSegments({ path, size: SEGMENT_SIZE });
-
     const polyline = new kakaoMaps.Polyline({
       path: [],
       strokeWeight: 16,
@@ -26,6 +23,9 @@ const useVisualizeRoute = ({ map, path }: UseVisualizeRouteProps) => {
     polyline.setMap(map);
 
     //requestAnimationFrame 기반 순차 렌더링
+    const SEGMENT_SIZE = 2;
+    const segments = getRouteSegments({ path, size: SEGMENT_SIZE });
+
     const accumulatedPath: LatLngInstance[] = [];
     animateRouteSegments({
       segments,

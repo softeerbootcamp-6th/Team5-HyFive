@@ -10,7 +10,7 @@ const TEST_PATH = [
   { lat: 37.65311019551619, lng: 127.0547229078438 },
 ];
 
-describe("ruquestAnimationFrame로 지도 위에 분할한 경로들을 순차 렌더링한다.", () => {
+describe("requestAnimationFrame로 지도 위에 분할한 경로들을 순차적으로 호출한다.", () => {
   let requestAnimationFrameCallback: FrameRequestCallback; //실행 타이밍 수동 제어
   const renderSegment = vi.fn(); //비즈니스 로직에 포함된 콜백 함수 모킹
 
