@@ -11,7 +11,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest --ui",
-    "test-util": "vitest"
+    "test-cli": "vitest"
   },
   "dependencies": {
     "date-fns": "^4.1.0",
