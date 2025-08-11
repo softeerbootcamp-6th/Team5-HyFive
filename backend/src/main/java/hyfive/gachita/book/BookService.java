@@ -2,10 +2,12 @@ package hyfive.gachita.book;
 
 import hyfive.gachita.api.geocode.GeoCodeService;
 import hyfive.gachita.api.geocode.dto.LatLng;
+import hyfive.gachita.book.dto.BookCursor;
 import hyfive.gachita.book.dto.BookRes;
 import hyfive.gachita.book.dto.CreateBookReq;
-import hyfive.gachita.common.dto.ListRes;
+import hyfive.gachita.common.dto.PagedListRes;
 import hyfive.gachita.book.repository.BookRepository;
+import hyfive.gachita.common.dto.ScrollRes;
 import hyfive.gachita.common.enums.SearchPeriod;
 import hyfive.gachita.common.response.BusinessException;
 import hyfive.gachita.common.response.ErrorCode;
@@ -57,22 +59,48 @@ public class BookService {
         return bookRepository.save(book);
     }
 
-    public ListRes<BookRes> getBookList(SearchPeriod period, BookStatus bookStatus, int page, int limit) {
+    public PagedListRes<BookRes> getBookList(SearchPeriod period, BookStatus bookStatus, int page, int limit) {
         Pageable pageable = PageRequest.of(
                 page - 1,
-                limit,
-                Sort.by("createdAt").descending()
+                limit
         );
 
         Pair<LocalDateTime, LocalDateTime> dateRange = SearchPeriod.getDateRange(period);
         Page<Book> pageResult = bookRepository.searchBookPageByCondition(dateRange, bookStatus, pageable);
 
         List<BookRes> bookResList = pageResult.getContent().stream().map(BookRes::from).toList();
-        return ListRes.<BookRes>builder()
+        return PagedListRes.<BookRes>builder()
                 .items(bookResList)
                 .currentPageNum(pageResult.getNumber() + 1)
                 .totalPageNum(pageResult.getTotalPages())
                 .totalItemNum(pageResult.getTotalElements())
+                .build();
+    }
+
+    public ScrollRes<BookRes, BookCursor> getBookListScroll(BookStatus bookStatus, BookCursor cursor, int size) {
+        List<Book> bookList = bookRepository.findBooksForScroll(bookStatus, cursor, size);
+
+        boolean hasNext = bookList.size() > size;
+
+        List<Book> actualList = hasNext ? bookList.subList(0, size) : bookList;
+
+        List<BookRes> bookResList = actualList.stream()
+                .map(BookRes::from)
+                .toList();
+
+        BookCursor lastCursor = null;
+        if (!actualList.isEmpty()) {
+            Book lastBook = actualList.get(actualList.size() - 1);
+            lastCursor = BookCursor.builder()
+                    .lastId(lastBook.getId())
+                    .lastCreatedAt(lastBook.getCreatedAt())
+                    .build();
+        }
+
+        return ScrollRes.<BookRes, BookCursor>builder()
+                .items(bookResList)
+                .hasNext(hasNext)
+                .cursor(lastCursor)
                 .build();
     }
 }
