@@ -28,4 +28,12 @@ public class RentalController implements RentalDocs {
         return BaseResponse.success(replaceResult);
     }
 
+    @GetMapping
+    public List<RentalRes> getRentalList(
+            @RequestParam("car_id") @NotNull(message = "차량 id는 필수입니다.") Long carId,
+            @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate targetDate
+    ) {
+        return rentalService.getRentalList(carId, targetDate);
+    }
+
 }

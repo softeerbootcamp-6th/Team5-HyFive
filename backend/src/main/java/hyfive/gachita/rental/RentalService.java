@@ -53,7 +53,7 @@ public class RentalService {
                 .map(RentalRes::from).toList();
     }
 
-    public List<RentalRes> getWeeklyRentals(Long carId, LocalDate targetDate) {
+    public List<RentalRes> getRentalList(Long carId, LocalDate targetDate) {
         Car car = carRepository.findById(carId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NO_EXIST_VALUE, "DB에 차량 데이터가 존재하지 않습니다."));
 
