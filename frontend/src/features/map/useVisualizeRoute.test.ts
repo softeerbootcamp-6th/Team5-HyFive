@@ -33,7 +33,9 @@ beforeAll(() => {
 //유틸 함수 mocking
 vi.mock("@/features/map/getRouteSegments.util", () => ({
   default: vi.fn(({ path, size }) => {
-    return path.map((p: any) => Array.from({ length: size }, () => [p]));
+    return path.map((p: LatLngInstance[]) =>
+      Array.from({ length: size }, () => [p]),
+    );
   }),
 }));
 
