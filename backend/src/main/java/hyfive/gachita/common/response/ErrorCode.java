@@ -29,7 +29,10 @@ public enum ErrorCode {
     DUPLICATE_CAR_NUMBER(false, 4501, "동일한 차량 번호를 가진 차량이 존재합니다."),
 
     /*예약 5000*/
-    DUPLICATE_BOOK_DATE(false, 5000, "동일한 사용자에 의해 이미 예약된 날짜입니다.");
+    DUPLICATE_BOOK_DATE(false, 5000, "동일한 사용자에 의해 이미 예약된 날짜입니다."),
+
+    /*유휴 시간 6000*/
+    INVALID_DURATION(false, 6000, "유휴시간은 최소 2시간 이상이어야 합니다.");
 
     private final boolean isSuccess;
     private final int code;
