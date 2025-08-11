@@ -4,12 +4,9 @@ import io.swagger.v3.oas.annotations.Hidden;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 @Hidden
 @RestControllerAdvice
@@ -37,22 +34,18 @@ public class GlobalExceptionHandler {
                 .body(BaseResponse.fail(ErrorCode.INVALID_INPUT, errorMessages));
     }
 
-     // HttpMessageNotReadableException : 요청 본문(JSON 등)의 파싱에 실패한 경우
-     // MissingServletRequestParameterException : 필수 요청 파라미터(@RequestParam)가 누락된 경우
-    @ExceptionHandler({ HttpMessageNotReadableException.class, MissingServletRequestParameterException.class })
-    public ResponseEntity<BaseResponse<?>> handleBadRequestExceptions(Exception e) {
-        log.debug(e.getMessage());
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<BaseResponse<?>> handleException(Exception e) {
+        ErrorCode errorCode = ErrorCode.findByException(e);
+
+        if (errorCode == null) {
+            log.error("{}", e.getMessage());
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(BaseResponse.fail(ErrorCode.INTERNAL_SERVER_ERROR));
+        }
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(BaseResponse.fail(ErrorCode.INVALID_INPUT));
+                .body(BaseResponse.fail(errorCode));
     }
-
-    // multipart 업로드 사이즈 초과 시 발생
-    @ExceptionHandler(MaxUploadSizeExceededException.class)
-    public ResponseEntity<BaseResponse<?>> handleMaxUploadSizeExceededException(MaxUploadSizeExceededException e) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(BaseResponse.fail(ErrorCode.MAX_UPLOAD_SIZE_EXCEEDED));
-    }
-
 }
