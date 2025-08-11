@@ -9,10 +9,10 @@ import {
   DateLabel,
   TableBody,
   TimeLabel,
-  getTimeBlockGridStyle,
   getTimeCellStyle,
 } from "./TimeTable.style";
 import { generateAvailableTimeSlots } from "@/mocks/timeBlockMocks";
+import AvailableTimeSlot from "@/features/availableTimeSlot/AvailableTimeSlot";
 
 interface TimeTableProps {
   selectedCarId: number;
@@ -71,15 +71,11 @@ const TimeTable = ({
 
         {/* 유휴시간 블록들 */}
         {mockAvailableTimes.map((block) => (
-          <div
+          <AvailableTimeSlot
             key={`${block.rentalDate}-${block.rentalStartTime}-${block.rentalEndTime}`}
-            css={getTimeBlockGridStyle(block, selectedWeek)}
-          >
-            <span>유휴 시간</span>
-            <span>
-              {block.rentalStartTime} ~ {block.rentalEndTime}
-            </span>
-          </div>
+            block={block}
+            selectedWeek={selectedWeek}
+          />
         ))}
       </div>
     </div>
