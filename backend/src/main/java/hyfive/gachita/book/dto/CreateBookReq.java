@@ -32,7 +32,7 @@ public record CreateBookReq(
         @NotBlank(message = "출발 주소는 필수입니다.")
         String startAddr,
 
-        @Schema(description = "도착지 주소", example = "서울특별시 노원구 노해로 45")
+        @Schema(description = "도착지 주소", example = "서울특별시 노원구 동일로 1413 상계병원")
         @NotBlank(message = "도착 주소는 필수입니다.")
         String endAddr,
 

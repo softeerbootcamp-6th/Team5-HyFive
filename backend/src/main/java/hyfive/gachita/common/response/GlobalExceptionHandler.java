@@ -15,7 +15,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<BaseResponse<?>> handleBusinessException(BusinessException e) {
-        log.info("{}", e.getMessage());
+        log.info("BusinessException : {}", e.getMessage());
+
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(BaseResponse.fail(e.getErrorCode(), e.getMessage()));
@@ -29,7 +30,7 @@ public class GlobalExceptionHandler {
                 .reduce((msg1, msg2) -> msg1 + ", " + msg2)
                 .orElse("입력값이 올바르지 않습니다.");
 
-        log.info("{}", e.getMessage());
+        log.info("MethodArgumentNotValidException : {}", errorMessages);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(BaseResponse.fail(ErrorCode.INVALID_INPUT, errorMessages));

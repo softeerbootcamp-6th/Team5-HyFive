@@ -5,7 +5,7 @@ import hyfive.gachita.car.dto.CreateCarReq;
 import hyfive.gachita.car.dto.UpdateCarReq;
 import hyfive.gachita.car.repository.CarRepository;
 import hyfive.gachita.center.Center;
-import hyfive.gachita.center.CenterRepository;
+import hyfive.gachita.center.repository.CenterRepository;
 import hyfive.gachita.common.response.BusinessException;
 import hyfive.gachita.common.response.ErrorCode;
 import jakarta.transaction.Transactional;
