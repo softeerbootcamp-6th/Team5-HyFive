@@ -9,8 +9,10 @@ import {
   DateLabel,
   TableBody,
   TimeLabel,
-  TimeCell,
+  getTimeBlockGridStyle,
+  getTimeCellStyle,
 } from "./TimeTable.style";
+import { generateAvailableTimeSlots } from "@/mocks/timeBlockMocks";
 
 interface TimeTableProps {
   selectedCarId: number;
@@ -24,6 +26,8 @@ const TimeTable = ({
   selectedCarId: _selectedCarId,
   selectedWeek,
 }: TimeTableProps) => {
+  const mockAvailableTimes = generateAvailableTimeSlots(selectedWeek);
+
   return (
     <div css={TableContainer}>
       <div css={TableHeader}>
@@ -37,19 +41,46 @@ const TimeTable = ({
       </div>
 
       <div css={TableBody}>
+        {/* 시간 레이블들 */}
         {Array.from({ length: TOTAL_HOURS }).map((_, hourIndex) => {
           const hour = START_HOUR + hourIndex;
-          return [
-            // 시간 레이블
-            <div key={`time-label-${hour}`} css={TimeLabel}>
+          return (
+            <div
+              key={`time-label-${hour}`}
+              css={TimeLabel}
+              style={{ gridColumn: 1, gridRow: hourIndex + 1 }}
+            >
               {hour}:00
-            </div>,
-            // 해당 시간의 7개 요일 셀들
-            ...selectedWeek.map((date, _dayIndex) => (
-              <div key={`${date.toISOString()}-${hourIndex}`} css={TimeCell} />
-            )),
-          ];
+            </div>
+          );
         })}
+
+        {/* 시간 셀들 */}
+        {Array.from({ length: TOTAL_HOURS }).map((_, hourIndex) =>
+          selectedWeek.map((date, dayIndex) => (
+            <div
+              key={`${date.toISOString()}-${hourIndex}`}
+              css={getTimeCellStyle(hourIndex, dayIndex)}
+              style={{
+                gridColumn: dayIndex + 2,
+                gridRow: hourIndex + 1,
+              }}
+            />
+          )),
+        )}
+
+        {/* 유휴시간 블록들 */}
+        {mockAvailableTimes.map((block) => (
+          <div
+            key={`${block.rentalDate}-${block.rentalStartTime}-${block.rentalEndTime}`}
+            css={getTimeBlockGridStyle(block, selectedWeek)}
+          >
+            <span>유휴 시간</span>
+            <span>
+              {block.rentalStartTime} ~ {block.rentalEndTime}
+            </span>
+          </div>
+        ))}
       </div>
     </div>
   );
