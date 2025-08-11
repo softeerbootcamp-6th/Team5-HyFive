@@ -1,6 +1,8 @@
 import type { LatLng } from "@/features/map/Map.types";
 
-const getRouteMidPoint = (path: LatLng[]): LatLng | {} => {
+const getRouteMidPoint = (
+  path: LatLng[],
+): LatLng | { lat: undefined; lng: undefined } => {
   const pathLength = path.length;
   if (pathLength === 0) return { lat: undefined, lng: undefined };
 
