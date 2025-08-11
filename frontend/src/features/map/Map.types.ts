@@ -68,6 +68,7 @@ declare global {
 
   interface PolylineInstance {
     setMap(map: MapInstance | null): void;
+    setPath(path: LatLngInstance[]): void;
     getPath(): LatLngInstance[];
     setOptions(options: Partial<PolylineOptions>): void;
   }
@@ -81,4 +82,9 @@ declare global {
     url: string;
     size: SizeInstance;
   }
+}
+
+export interface LatLng {
+  lat: number;
+  lng: number;
 }

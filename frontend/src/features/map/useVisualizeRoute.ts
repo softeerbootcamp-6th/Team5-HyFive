@@ -1,32 +1,45 @@
-import type { Path } from "@/types/path.types";
+import animateRouteSegments from "@/features/map/animateRouteSegments.util";
+import getRouteSegments from "@/features/map/getRouteSegments.util";
+import type { LatLng } from "@/features/map/Map.types";
 import { useEffect } from "react";
 
 interface UseVisualizeRouteProps {
   map: MapInstance | null;
-  path: Path[];
+  path: LatLng[];
 }
+
 const useVisualizeRoute = ({ map, path }: UseVisualizeRouteProps) => {
   useEffect(() => {
-    const kakaoMaps = window.kakao.maps;
-    if (!kakaoMaps || !map) return;
-
-    const linePath = path.map(
-      (point) => new kakaoMaps.LatLng(point.lat, point.lng),
-    );
+    const kakaoMaps = window.kakao?.maps;
+    if (!kakaoMaps || !map || path.length === 0) return;
 
     const polyline = new kakaoMaps.Polyline({
-      path: linePath,
+      path: [],
       strokeWeight: 16,
       strokeColor: "#F70",
       strokeOpacity: 1,
       strokeStyle: "solid",
     });
-
     polyline.setMap(map);
+
+    //requestAnimationFrame 기반 순차 렌더링
+    const SEGMENT_SIZE = 2;
+    const segments = getRouteSegments({ path, size: SEGMENT_SIZE });
+
+    const accumulatedPath: LatLngInstance[] = [];
+    animateRouteSegments({
+      segments,
+      renderSegment: (segment) => {
+        const kakaoPath = segment.map(
+          (p) => new kakaoMaps.LatLng(p.lat, p.lng),
+        );
+        accumulatedPath.push(...kakaoPath);
+        polyline.setPath(accumulatedPath);
+      },
+    });
   }, [map, path]);
 
   const highlightRoute = () => {};
-
   const resetRoute = () => {};
 
   return {

@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "vitest --ui"
+    "test": "vitest --ui",
+    "test-cli": "vitest"
   },
   "dependencies": {
     "date-fns": "^4.1.0",
