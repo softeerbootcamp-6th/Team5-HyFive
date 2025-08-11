@@ -1,4 +1,4 @@
-package hyfive.gachita.center;
+package hyfive.gachita.center.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -6,6 +6,9 @@ import lombok.Builder;
 @Builder
 @Schema(description = "센터 응답 DTO")
 public record CenterRes(
+        @Schema(description = "센터 ID", example = "1")
+        Long centerId,
+
         @Schema(description = "센터 이름", example = "노원바른데이케어")
         String centerName,
 
