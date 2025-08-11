@@ -20,8 +20,7 @@ public class BookController implements BookDocs {
     private final BookService bookService;
 
     @PostMapping
-    public BaseResponse<BookRes> createBook(@RequestBody
-                                                CreateBookReq createBookReq) {
+    public BaseResponse<BookRes> createBook(@RequestBody CreateBookReq createBookReq) {
         Book createdBook = bookService.createBook(createBookReq);
         return BaseResponse.success(BookRes.from(createdBook));
     }

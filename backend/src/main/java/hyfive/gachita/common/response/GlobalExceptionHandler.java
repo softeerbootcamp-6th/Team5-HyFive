@@ -18,6 +18,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<BaseResponse<?>> handleBusinessException(BusinessException e) {
+        log.info("BusinessException : {}", e.getMessage());
+
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(BaseResponse.fail(e.getErrorCode(), e.getMessage()));
@@ -31,7 +33,7 @@ public class GlobalExceptionHandler {
                 .reduce((msg1, msg2) -> msg1 + ", " + msg2)
                 .orElse("입력값이 올바르지 않습니다.");
 
-        log.debug(errorMessages);
+        log.info("MethodArgumentNotValidException : {}", errorMessages);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(BaseResponse.fail(ErrorCode.INVALID_INPUT, errorMessages));
@@ -41,7 +43,7 @@ public class GlobalExceptionHandler {
      // MissingServletRequestParameterException : 필수 요청 파라미터(@RequestParam)가 누락된 경우
     @ExceptionHandler({ HttpMessageNotReadableException.class, MissingServletRequestParameterException.class })
     public ResponseEntity<BaseResponse<?>> handleBadRequestExceptions(Exception e) {
-        log.debug(e.getMessage());
+        log.info("BadRequestExceptions : {}", e.getMessage());
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(BaseResponse.fail(ErrorCode.INVALID_INPUT));

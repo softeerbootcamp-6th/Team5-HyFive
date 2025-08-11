@@ -1,5 +1,7 @@
 package hyfive.gachita.book;
 
+import hyfive.gachita.api.geocode.GeoCodeService;
+import hyfive.gachita.api.geocode.dto.LatLng;
 import hyfive.gachita.book.dto.BookCursor;
 import hyfive.gachita.book.dto.BookRes;
 import hyfive.gachita.book.dto.CreateBookReq;
@@ -10,6 +12,7 @@ import hyfive.gachita.common.enums.SearchPeriod;
 import hyfive.gachita.common.response.BusinessException;
 import hyfive.gachita.common.response.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,22 +25,32 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class BookService {
     private final BookRepository bookRepository;
+    private final GeoCodeService geoCodeService;
 
     public Book createBook(CreateBookReq createBookReq) {
         if (bookRepository.existsBookByBookTelAndHospitalDate(createBookReq.bookTel(), createBookReq.hospitalDate())) {
             throw new BusinessException(ErrorCode.DUPLICATE_BOOK_DATE);
         }
 
-        //TODO 출발지, 도착지의 위도, 경도 설정
+        LatLng startLoc = geoCodeService.getPointByAddress(createBookReq.startAddr());
+        LatLng endLoc = geoCodeService.getPointByAddress(createBookReq.endAddr());
+        log.info("출발지 위도 {} 경도 {}", startLoc.lat(), startLoc.lng());
+        log.info("도착지 위도 {} 경도 {}", endLoc.lat(), endLoc.lng());
+
         Book book = Book.builder()
                 .bookName(createBookReq.bookName())
                 .bookTel(createBookReq.bookTel())
                 .hospitalDate(createBookReq.hospitalDate())
                 .hospitalTime(createBookReq.hospitalTime())
                 .startAddr(createBookReq.startAddr())
+                .startLat(startLoc.lat())
+                .startLng(startLoc.lng())
                 .endAddr(createBookReq.endAddr())
+                .endLat(endLoc.lat())
+                .endLng(endLoc.lng())
                 .walker(createBookReq.walker())
                 .bookStatus(BookStatus.NEW)
                 .deadline(createBookReq.hospitalTime().minusMinutes(30))
