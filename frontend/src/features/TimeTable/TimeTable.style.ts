@@ -49,6 +49,17 @@ export const DateLabel = css`
   margin-bottom: 4px;
 `;
 
+export const getDayLabelStyle = (isToday: boolean) => css`
+  font: ${typography.Body.b4_medi};
+  color: ${isToday ? color.Maincolor.primary : color.GrayScale.gray4};
+`;
+
+export const getDateLabelStyle = (isToday: boolean) => css`
+  font: ${typography.Body.b2_semi};
+  color: ${isToday ? color.Maincolor.primary : color.GrayScale.gray5};
+  margin-bottom: 4px;
+`;
+
 // 바디
 export const TableBody = css`
   flex: 1;
@@ -107,17 +118,6 @@ export const getTimeBlockGridStyle = (
   return css`
     grid-column: ${dayIndex + 2}; /* +2는 시간축(1) + 0-based 인덱스 */
     grid-row: ${startHour - 8} / ${endHour - 8}; /* 9시가 1행이므로 -8 */
-    background: ${color.SemanticScale.orange[100]};
-    border-left: 4px solid ${color.Maincolor.primary};
-    border-radius: 0 10px 10px 0;
-    margin: 8px;
-    padding: 20px;
-    font: ${typography.Label.l4_semi};
-    color: ${color.Maincolor.primary};
     z-index: 10;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
   `;
 };

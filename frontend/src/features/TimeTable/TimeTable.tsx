@@ -1,12 +1,12 @@
-import { format } from "date-fns";
+import { format, isToday } from "date-fns";
 import { ko } from "date-fns/locale";
 import {
   TableContainer,
   TableHeader,
   TimeAxisPlaceholder,
   DayCell,
-  DayLabel,
-  DateLabel,
+  getDayLabelStyle,
+  getDateLabelStyle,
   TableBody,
   TimeLabel,
   getTimeCellStyle,
@@ -32,12 +32,18 @@ const TimeTable = ({
     <div css={TableContainer}>
       <div css={TableHeader}>
         <div css={TimeAxisPlaceholder} /> {/* 좌측 최상단 빈칸 */}
-        {selectedWeek.map((date) => (
-          <div key={date.toISOString()} css={DayCell}>
-            <div css={DateLabel}>{format(date, "d")}</div>
-            <div css={DayLabel}>{format(date, "E", { locale: ko })}요일</div>
-          </div>
-        ))}
+        {selectedWeek.map((date) => {
+          const todayCheck = isToday(date); // 오늘인지 확인
+
+          return (
+            <div key={date.toISOString()} css={DayCell}>
+              <div css={getDateLabelStyle(todayCheck)}>{format(date, "d")}</div>
+              <div css={getDayLabelStyle(todayCheck)}>
+                {format(date, "E", { locale: ko })}요일
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       <div css={TableBody}>
