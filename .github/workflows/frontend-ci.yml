@@ -54,5 +54,8 @@ jobs:
       - name: Run TypeScript for type check
         run: pnpm tsc --noEmit
 
+      - name: Run Vitest & Testing-library
+        run: pnpm vitest
+
       - name: Pre-Build Project
         run: pnpm build
