@@ -1,5 +1,6 @@
 package hyfive.gachita.rental;
 
+import hyfive.gachita.rental.repository.RentalRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
