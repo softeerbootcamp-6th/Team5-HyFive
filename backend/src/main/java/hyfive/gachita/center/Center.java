@@ -4,13 +4,11 @@ import hyfive.gachita.car.Car;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
-@Setter
 @Entity
 @Table(name = "center")
 public class Center {

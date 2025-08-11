@@ -1,20 +1,13 @@
 package hyfive.gachita.car.dto;
 
 import hyfive.gachita.car.Car;
-import hyfive.gachita.car.DelYn;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import static hyfive.gachita.common.util.CarNumberFormatter.format;
 
-public record CarRes(
+public record CarListRes(
         @Schema(description = "차량 ID", example = "1")
         Long id,
-
-        @Schema(description = "차량이 소속된 센터 ID", example = "1")
-        Long centerId,
-
-        @Schema(description = "센터명", example = "공릉노인복지관")
-        String centerName,
 
         @Schema(description = "차량 모델명", example = "기아 레이")
         String modelName,
@@ -30,18 +23,21 @@ public record CarRes(
 
         // TODO : carImage example 추가
         @Schema(description = "차량 이미지 url", example = "(차후 추가 예정)")
-        String carImage
-    ) {
-    public static CarRes from(Car car) {
-        return new CarRes(
+        String carImage,
+
+        @Schema(description = "차량 운행 상태", example = "false")
+        Boolean driving
+) {
+    public static CarListRes from(Car car, Boolean driving) {
+        return new CarListRes(
                 car.getId(),
-                car.getCenter().getId(),
-                car.getCenter().getCenterName(),
                 car.getModelName(),
                 format(car.getCarNumber()),
                 car.getCapacity(),
                 car.getLowFloor(),
-                car.getCarImage()
+                car.getCarImage(),
+                driving
         );
     }
 }
+
