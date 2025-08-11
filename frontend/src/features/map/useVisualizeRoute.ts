@@ -26,15 +26,15 @@ const useVisualizeRoute = ({ map, path }: UseVisualizeRouteProps) => {
     polyline.setMap(map);
 
     //requestAnimationFrame 기반 순차 렌더링
-    let accumulatedPath: LatLng[] = [];
+    const accumulatedPath: LatLngInstance[] = [];
     animateRouteSegments({
       segments,
       renderSegment: (segment) => {
-        accumulatedPath = [...accumulatedPath, ...segment];
-        const kakaoLatLngPath = accumulatedPath.map(
+        const kakaoPath = segment.map(
           (p) => new kakaoMaps.LatLng(p.lat, p.lng),
         );
-        polyline.setPath(kakaoLatLngPath);
+        accumulatedPath.push(...kakaoPath);
+        polyline.setPath(accumulatedPath);
       },
     });
   }, [map, path]);
