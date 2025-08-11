@@ -1,5 +1,8 @@
 package hyfive.gachita.test;
 
+import hyfive.gachita.api.kakao.KakaoNaviApiClient;
+import hyfive.gachita.api.kakao.dto.request.DirectionsReq;
+import hyfive.gachita.api.kakao.dto.response.KakaoNaviRes;
 import hyfive.gachita.common.response.BaseResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TestController {
     private final TestService testService;
+    private final KakaoNaviApiClient kakaoNaviApiClient;
 
     @PostMapping
     public BaseResponse<Test> createTest(@RequestBody Test test) {
@@ -36,5 +40,14 @@ public class TestController {
     public BaseResponse<Void> deleteTest(@PathVariable Long id) {
         testService.deleteTest(id);
         return BaseResponse.success(null);
+    }
+
+    @GetMapping("/kakao")
+    public BaseResponse<KakaoNaviRes> kakaoNaviApiTest() {
+        String origin = "127.10764191124568,37.402464820205246";
+        String destination = "127.11056336672839,37.39419693653072";
+        DirectionsReq req = new DirectionsReq(origin, destination);
+        KakaoNaviRes naviRes = kakaoNaviApiClient.getDirections(req);
+        return BaseResponse.success(naviRes);
     }
 }
