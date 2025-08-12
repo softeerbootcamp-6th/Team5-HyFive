@@ -12,9 +12,10 @@ interface InputProps {
   icon?: React.ReactNode;
   placeholder?: string;
   readOnly?: boolean;
-  value?: string | number;
+  value?: string;
   onClick?: () => void;
   register?: UseFormRegisterReturn;
+  errorMessage?: string;
 }
 
 const Input = ({
@@ -27,6 +28,7 @@ const Input = ({
   readOnly = false,
   onClick,
   register,
+  errorMessage = "",
 }: InputProps) => {
   const [isFocused, setIsFocused] = useState(false);
   return (
@@ -42,7 +44,7 @@ const Input = ({
       </div>
       <div css={InputWrapper}>
         <input
-          css={StyledInput(isFocused, readOnly)}
+          css={StyledInput(isFocused, readOnly, errorMessage)}
           type="text"
           placeholder={placeholder}
           onFocus={() => setIsFocused(true)}
@@ -54,6 +56,7 @@ const Input = ({
         />
         {icon && <span css={IconWrapper}>{icon}</span>}
       </div>
+      {errorMessage && <p css={ErrorText}>{errorMessage}</p>}
     </div>
   );
 };
@@ -104,7 +107,16 @@ const IconWrapper = css`
   right: 24px;
 `;
 
-const StyledInput = (isFocused: boolean, readOnly: boolean) => css`
+const ErrorText = css`
+  font: ${typography.Body.b4_regu};
+  color: ${color.Semantic.error};
+`;
+
+const StyledInput = (
+  isFocused: boolean,
+  readOnly: boolean,
+  errorMessage: string,
+) => css`
   box-sizing: border-box;
   display: flex;
   width: 100%;
@@ -113,7 +125,11 @@ const StyledInput = (isFocused: boolean, readOnly: boolean) => css`
   font: ${typography.Body.b3_regu};
   color: ${color.GrayScale.black};
   border: 1px solid
-    ${isFocused ? color.Maincolor.primary : color.GrayScale.gray3};
+    ${errorMessage
+      ? color.Semantic.error
+      : isFocused
+        ? color.Maincolor.primary
+        : color.GrayScale.gray3};
   border-radius: ${borderRadius.Medium};
   cursor: ${readOnly ? "pointer" : "text"};
   &::placeholder {

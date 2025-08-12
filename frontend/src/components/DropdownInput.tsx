@@ -11,9 +11,9 @@ interface DropdownInputProps {
   required?: boolean;
   requiredLabel?: string;
   placeholder?: string;
-  options: string[] | number[];
-  value: string | number;
-  onSelect?: (value: string | number) => void;
+  options: string[];
+  value: string;
+  onSelect?: (value: string) => void;
 }
 
 const DropdownInput = ({
@@ -28,7 +28,7 @@ const DropdownInput = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleSelect = (option: string | number) => {
+  const handleSelect = (option: string) => {
     onSelect?.(option);
     setIsOpen(false);
   };
