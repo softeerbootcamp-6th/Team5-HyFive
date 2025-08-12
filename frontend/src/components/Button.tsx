@@ -28,6 +28,7 @@ const Button = ({
       type={type}
       {...handlers}
       css={ButtonContainer(bgColor, size, isPressing)}
+      disabled={bgColor === "gray"}
     >
       {label}
     </button>
