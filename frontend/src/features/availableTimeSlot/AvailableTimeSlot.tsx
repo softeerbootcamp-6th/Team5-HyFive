@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
-import type { AvailableTimeSlotType } from "../TimeTable/TimeTable.type";
-import { getTimeBlockGridStyle } from "../TimeTable/TimeTable.style";
+import type { AvailableTimeSlotType } from "../timeTable/TimeTable.type";
+import { getTimeBlockGridStyle } from "../timeTable/TimeTable.style";
 import { isBefore, startOfDay } from "date-fns";
 
 const { color, typography } = theme;
@@ -60,17 +60,6 @@ const PastSlotStyle = css`
   color: ${color.GrayScale.gray4};
 `;
 
-// 수정 모드 스타일 (나중에 사용)
-// const EditModeStyle = css`
-//   cursor: pointer;
-//   transition: all 0.2s ease;
-
-//   &:hover {
-//     transform: translateY(-1px);
-//     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-//   }
-// `;
-
 // 스타일 조합 함수
 const getSlotContainerStyle = (isPastDate: boolean) => {
   const styles = [BaseSlotStyle];
@@ -80,11 +69,5 @@ const getSlotContainerStyle = (isPastDate: boolean) => {
   } else {
     styles.push(ActiveSlotStyle);
   }
-
-  // TODO: 수정모드일 때 EditModeStyle 추가
-  // if (isEditMode) {
-  //   styles.push(EditModeStyle);
-  // }
-
   return styles;
 };
