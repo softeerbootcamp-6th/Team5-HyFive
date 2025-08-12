@@ -10,7 +10,8 @@ import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const InputSection = () => {
-  const dropdownOptions = Array.from({ length: 5 }, (_, index) =>
+  const MAX_PASSENGER = 25;
+  const dropdownOptions = Array.from({ length: MAX_PASSENGER }, (_, index) =>
     String(index + 1),
   );
   const carSchema = z
@@ -32,8 +33,9 @@ const InputSection = () => {
     register,
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm({
+    mode: "all",
     resolver: zodResolver(carSchema),
     defaultValues: {
       carModel: "",
@@ -95,7 +97,12 @@ const InputSection = () => {
           />
         )}
       />
-      <Button type="submit" bgColor="gray" label="등록하기" size="big" />
+      <Button
+        type="submit"
+        bgColor={isValid ? "orange" : "gray"}
+        label="등록하기"
+        size="big"
+      />
     </form>
   );
 };
