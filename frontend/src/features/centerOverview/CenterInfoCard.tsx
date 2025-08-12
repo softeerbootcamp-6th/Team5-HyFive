@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
-import type { CenterInfoCardType } from "@/features/CenterOverview/CenterOverview.type";
+import type { CenterInfoCardType } from "@/features/centerOverview/CenterOverview.type";
 const { color, typography } = theme;
 
 const CenterInfoCard = ({ icon, label, content }: CenterInfoCardType) => {

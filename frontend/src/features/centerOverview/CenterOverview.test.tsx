@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import type { CenterOverviewType } from "@/features/CenterOverview/CenterOverview.type";
-import CenterOverview from "@/features/CenterOverview/CenterOverview";
-import CenterInfoCard from "@/features/CenterOverview/CenterInfoCard";
+import type { CenterOverviewType } from "@/features/centerOverview/CenterOverview.type";
+import CenterOverview from "@/features/centerOverview/CenterOverview";
+import CenterInfoCard from "@/features/centerOverview/CenterInfoCard";
 import { CallIcon } from "@/assets/icons";
 const mockCenterData: CenterOverviewType = {
   centerName: "남동구 노인 이동 센터",

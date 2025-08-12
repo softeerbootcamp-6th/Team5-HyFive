@@ -118,3 +118,18 @@ export const checkIsDaySelected = (
 ): boolean => {
   return Boolean(selectedDate && isSelectedDate(day, selectedDate));
 };
+
+/**
+ * 날짜를 문자열로 받아 선택된 주 배열에서 몇 번째 인덱스에 위치하는지 반환합니다.
+ * @param dateString - 비교할 날짜 문자열 (예: "2025-08-01")
+ * @param selectedWeek - 선택된 주 배열
+ * @returns - 날짜 문자열이 포함된 주의 인덱스
+ */
+export const getDayIndex = (
+  dateString: string,
+  selectedWeek: Date[],
+): number => {
+  return selectedWeek.findIndex(
+    (date) => format(date, "yyyy-MM-dd") === dateString,
+  );
+};
