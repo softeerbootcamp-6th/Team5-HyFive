@@ -23,10 +23,8 @@ import Tag from "@/components/Tag";
 import Input from "@/components/Input";
 import ToggleButton from "@/components/ToggleButton";
 import DropdownInput from "@/components/DropdownInput";
-import Calender from "@/features/calender/Calender";
 import CarInfoCard from "@/features/car/CarInfoCard";
 import type { CarType } from "@/features/car/Car.type";
-
 
 import CarImage from "@/assets/images/OriginalCarImg.png";
 
