@@ -5,27 +5,14 @@ import ImageInput from "@/features/carUploader/ImageInput";
 import { css } from "@emotion/react";
 import OriginCarImg from "@/assets/images/OriginalCarImg.png";
 import Button from "@/components/Button";
-import { Controller, useForm } from "react-hook-form";
-import z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller } from "react-hook-form";
+import useCarForm from "@/features/carUploader/useCarForm";
 
 const InputSection = () => {
   const MAX_PASSENGER = 25;
   const dropdownOptions = Array.from({ length: MAX_PASSENGER }, (_, index) =>
     String(index + 1),
   );
-  const carSchema = z.object({
-    carModel: z.string().min(1, "필수 입력값입니다"),
-    carNumber: z
-      .string()
-      .refine((value) => /^\d{2,3}[가-힣]\d{4}$/.test(value), {
-        message: "올바른 차량 번호 형식이 아닙니다 (예: 12가3456)",
-      }),
-    maxPassenger: z.string().refine((value) => value !== "", {
-      message: "필수 입력값입니다",
-    }),
-    isLowFloor: z.boolean(),
-  });
 
   const {
     register,
@@ -33,16 +20,7 @@ const InputSection = () => {
     handleSubmit,
     reset,
     formState: { errors, isValid },
-  } = useForm({
-    mode: "onSubmit",
-    resolver: zodResolver(carSchema),
-    defaultValues: {
-      carModel: "",
-      carNumber: "",
-      maxPassenger: "",
-      isLowFloor: false,
-    },
-  });
+  } = useCarForm();
 
   return (
     <form
