@@ -87,14 +87,27 @@ export const TimeLabel = css`
 export const TimeCell = css`
   border-right: 1px solid ${color.GrayScale.gray3};
   border-bottom: 1px solid ${color.GrayScale.gray3};
+
+  &:hover {
+    background-color: ${color.GrayScale.gray2};
+  }
 `;
 
-export const getTimeCellStyle = (hourIndex: number, dayIndex: number) => {
+export const getTimeCellStyle = (
+  hourIndex: number,
+  dayIndex: number,
+  isPreviewCell: boolean,
+) => {
   const isLastColumn = dayIndex === 6; // 토요일
   const isLastRow = hourIndex === 10; // 19시
 
   return css`
     ${TimeCell}
+    ${isPreviewCell &&
+    css`
+      border-left: 4px solid ${color.Maincolor.primary};
+      background-color: ${color.SemanticScale.orange[100]} !important;
+    `}
     ${isLastColumn &&
     css`
       border-right: none;

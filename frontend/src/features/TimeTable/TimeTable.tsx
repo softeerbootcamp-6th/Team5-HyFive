@@ -10,10 +10,13 @@ import {
   TableBody,
   TimeLabel,
 } from "./TimeTable.style";
-import type { AvailableTimeSlotType } from "@/features/TimeTable/TimeTable.type";
+import type { AvailableTimeSlotType } from "@/features/timeTable/TimeTable.type";
 import AvailableTimeSlot from "@/features/availableTimeSlot/AvailableTimeSlot";
-import TimeCell from "@/features/TimeTable/TimeCell";
+import TimeCell from "@/features/timeTable/TimeCell";
+// import PreviewTimeSlot from "@/features/timeTable/PreviewTimeSlot";
 import { generateAvailableTimeSlots } from "@/mocks/timeBlockMocks";
+import { useTimeTableDrag } from "@/features/timeTable/useTimeTableDrag";
+import { useState } from "react";
 
 interface TimeTableProps {
   selectedCarId: number;
@@ -22,13 +25,24 @@ interface TimeTableProps {
 
 const START_HOUR = 9; // 9시부터
 const TOTAL_HOURS = 11; // 19시까지 총 11칸
-
+const mockWeek: Date[] = Array.from({ length: 7 }, (_, i) => {
+  return new Date(2025, 7, 10 + i);
+});
+const mockTimeSlot: AvailableTimeSlotType[] =
+  generateAvailableTimeSlots(mockWeek);
 const TimeTable = ({
   selectedCarId: _selectedCarId,
   selectedWeek,
 }: TimeTableProps) => {
-  const availableTimeSlots: AvailableTimeSlotType[] =
-    generateAvailableTimeSlots(selectedWeek);
+  const [availableTimeSlots, setAvailableTimeSlots] =
+    useState<AvailableTimeSlotType[]>(mockTimeSlot);
+
+  const { handleCellMouseDown, handleCellMouseEnter, isPreviewCell } =
+    useTimeTableDrag({
+      selectedWeek,
+      availableTimeSlots,
+      onSlotsUpdate: (slots) => setAvailableTimeSlots(slots),
+    });
 
   return (
     <div css={TableContainer}>
@@ -70,7 +84,9 @@ const TimeTable = ({
               key={`${date.toISOString()}-${hourIndex}`}
               hourIndex={hourIndex}
               dayIndex={dayIndex}
-              date={date}
+              onMouseDown={() => handleCellMouseDown(dayIndex, hourIndex)}
+              onMouseEnter={() => handleCellMouseEnter(dayIndex, hourIndex)}
+              isPreviewCell={isPreviewCell(dayIndex, hourIndex)}
             />
           )),
         )}
@@ -83,6 +99,17 @@ const TimeTable = ({
             selectedWeek={selectedWeek}
           />
         ))}
+
+        {/* 드래그 미리보기 */}
+        {/* {dragState.isDragging &&
+          dragState.startPosition &&
+          dragState.currentPosition && (
+            <PreviewTimeSlot
+              startPosition={dragState.startPosition}
+              endPosition={dragState.currentPosition}
+              selectedWeek={selectedWeek}
+            />
+          )} */}
       </div>
     </div>
   );
