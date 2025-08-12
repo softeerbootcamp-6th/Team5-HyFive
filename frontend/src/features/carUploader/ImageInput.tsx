@@ -11,7 +11,7 @@ const ImageInput = ({ imageSrc }: ImageInputProps) => {
     <div css={ImageInputContainer}>
       <div css={LabelWrapper}>
         <label css={InputLabelText}>차량 사진 등록</label>
-        <span css={RequiredStar}>*</span>{" "}
+        <span css={RequiredStar}>*</span>
       </div>
       {imageSrc ? (
         <div css={ImageUploadedWrapper}>
