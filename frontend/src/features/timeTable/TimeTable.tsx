@@ -68,6 +68,8 @@ const TimeTable = ({
           const hour = START_HOUR + hourIndex;
           return (
             <div
+              data-testid="time-label"
+              data-testid-hour={`time-label-${hour}`}
               key={`time-label-${hour}`}
               css={TimeLabel}
               style={{ gridColumn: 1, gridRow: hourIndex + 1 }}
