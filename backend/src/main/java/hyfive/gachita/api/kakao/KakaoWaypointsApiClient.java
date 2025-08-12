@@ -15,19 +15,19 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 
+// 다중 경유지 길찾기 API : 최대 30개의 경유지 추가 가능
 @Component
 @Slf4j
-public class KakaoNaviApiClient extends ApiClient {
+public class KakaoWaypointsApiClient extends ApiClient {
+
+    private static final String WAYPOINTS_URI = "/waypoints/directions";
 
     private final String apiKey;
     private final String baseUrl;
 
-    private static final String DIRECTIONS_URI = "/directions";
-    private static final String WAYPOINTS_URI = "/waypoints/directions";
-
-    public KakaoNaviApiClient(@Qualifier("KakaoNaviRestClient") RestClient restClient,
-                              @Value("${kakao.navi.api.key}") String apiKey,
-                              @Value("${kakao.navi.api.base-url}") String baseUrl) {
+    public KakaoWaypointsApiClient(@Qualifier("KakaoNaviRestClient") RestClient restClient,
+                                   @Value("${kakao.navi.api.key}") String apiKey,
+                                   @Value("${kakao.navi.api.base-url}") String baseUrl) {
         super(restClient);
         this.apiKey = apiKey;
         this.baseUrl = baseUrl;
@@ -40,25 +40,6 @@ public class KakaoNaviApiClient extends ApiClient {
                 .uri(uri)
                 .header("Authorization", "KakaoAK " + apiKey)
                 .body(request)
-                .retrieve()
-                .body(KakaoNaviRes.class);
-    }
-
-    // 자동차 길찾기 API
-    public KakaoNaviRes getDirections(DirectionsReq request) {
-        URI uri = UriComponentsBuilder.fromUriString(baseUrl + DIRECTIONS_URI)
-                .queryParam("origin", request.origin())
-                .queryParam("destination", request.destination())
-                .build()
-                .toUri();
-
-        return callKakaoApi(uri);
-    }
-
-    private KakaoNaviRes callKakaoApi(URI uri) {
-        return restClient.get()
-                .uri(uri)
-                .header("Authorization", "KakaoAK " + apiKey)
                 .retrieve()
                 .onStatus(HttpStatusCode::isError, (req, res) -> {
                     log.error("Kakao Navi API error. Status: {}, Body: {}", res.getStatusCode(), res.getBody());

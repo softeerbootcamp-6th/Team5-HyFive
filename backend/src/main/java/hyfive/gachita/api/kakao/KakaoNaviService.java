@@ -15,7 +15,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class KakaoNaviService {
-    private final KakaoNaviApiClient kakaoNaviApiClient;
+    private final KakaoWaypointsApiClient kakaoNaviApiClient;
 
     public RouteInfo geRouteInfo(List<LatLng> nodeList) {
         DirectionsReq request = createDirectionsReq(nodeList);
