@@ -3,7 +3,7 @@ import { theme } from "@/styles/themes.style";
 import Button from "@/components/Button";
 import InputSection from "@/features/carUploader/InputSection";
 
-const { color, typography } = theme;
+const { typography } = theme;
 
 const CenterRegisterPage = () => {
   return (
