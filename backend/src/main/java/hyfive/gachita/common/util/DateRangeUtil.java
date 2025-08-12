@@ -1,0 +1,25 @@
+package hyfive.gachita.common.util;
+
+import hyfive.gachita.common.enums.SearchPeriod;
+import org.springframework.data.util.Pair;
+
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
+
+public class DateRangeUtil {
+    public static Pair<LocalDateTime, LocalDateTime> getDateRange(LocalDateTime date, SearchPeriod period) {
+        return switch (period) {
+            case TODAY -> Pair.of(date, date);
+            case YESTERDAY -> Pair.of(date.minusDays(1), date.minusDays(1));
+            case WEEK -> Pair.of(
+                    date.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY)),
+                    date.with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY))
+            );
+            case MONTH -> Pair.of(
+                    date.withDayOfMonth(1),
+                    date.withDayOfMonth(date.getDayOfMonth())
+            );
+        };
+    }
+}
