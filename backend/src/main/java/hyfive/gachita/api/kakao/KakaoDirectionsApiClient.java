@@ -33,21 +33,23 @@ public class KakaoDirectionsApiClient extends ApiClient {
         this.baseUrl = baseUrl;
     }
 
-    public KakaoNaviRes getDirections(DirectionsReq request) {
+    public KakaoNaviRes.Route getDirections(DirectionsReq request) {
         URI uri = UriComponentsBuilder.fromUriString(baseUrl + DIRECTIONS_URI)
                 .queryParam("origin", request.origin())
                 .queryParam("destination", request.destination())
                 .build()
                 .toUri();
 
-        return restClient.get()
+        KakaoNaviRes result = restClient.get()
                 .uri(uri)
                 .header("Authorization", "KakaoAK " + apiKey)
                 .retrieve()
-                .onStatus(HttpStatusCode::isError, (req, res) -> {
-                    log.error("Kakao Navi API error. Status: {}, Body: {}", res.getStatusCode(), res.getBody());
-                    throw new BusinessException(ErrorCode.EXTERNAL_API_ERROR, "카카오 API 호출 중 오류가 발생했습니다.");
-                })
                 .body(KakaoNaviRes.class);
+
+        KakaoNaviRes.Route route = result.routes().get(0);  // 첫 번째 추천 경로 기준
+        if (route.resultCode() != NaviResultCode.SUCCSS.code) {
+            throw new BusinessException(ErrorCode.EXTERNAL_API_ERROR);
+        }
+        return route;
     }
 }

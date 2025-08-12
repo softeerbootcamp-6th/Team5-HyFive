@@ -21,12 +21,7 @@ public class KakaoNaviService {
         DirectionsReq request = createDirectionsReq(nodeList);
 
         // API 호출
-        KakaoNaviRes result = kakaoNaviApiClient.getWaypointsDirections(request);
-
-        KakaoNaviRes.Route route = result.routes().get(0);  // 첫 번째 추천 경로 기준
-        if (route.resultCode() != NaviResultCode.SUCCSS.code) {
-            throw new BusinessException(ErrorCode.EXTERNAL_API_ERROR);
-        }
+        KakaoNaviRes.Route route = kakaoNaviApiClient.getWaypointsDirections(request);
 
         int totalTime = route.summary().duration();
 
