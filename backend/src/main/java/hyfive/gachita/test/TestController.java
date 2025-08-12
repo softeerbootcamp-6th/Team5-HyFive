@@ -53,4 +53,15 @@ public class TestController {
         log.info("이동시간 : {} 분", minutes);
         return BaseResponse.success(seconds);
     }
+
+    @GetMapping("/kakao/list")
+    public BaseResponse<List<List<LatLng>>> kakaoNaviApiListTest() {
+        LatLng hakdong = new LatLng(127.03167,37.51417);
+        LatLng nonhyeon = new LatLng(127.02139,37.51111);
+        LatLng sinsa = new LatLng(127.01950,37.51615);
+
+        List<LatLng> nodes = List.of(hakdong, nonhyeon, sinsa);
+        List<List<LatLng>> polyLine = kakaoNaviService.getTotalRouteTime(nodes);
+        return BaseResponse.success(polyLine);
+    }
 }
