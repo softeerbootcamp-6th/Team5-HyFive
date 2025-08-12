@@ -1,6 +1,7 @@
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
 import { useState } from "react";
+import type { UseFormRegisterReturn } from "react-hook-form";
 
 const { color, typography, borderRadius } = theme;
 
@@ -11,8 +12,9 @@ interface InputProps {
   icon?: React.ReactNode;
   placeholder?: string;
   readOnly?: boolean;
-  value?: string;
+  value?: string | number;
   onClick?: () => void;
+  register?: UseFormRegisterReturn;
 }
 
 const Input = ({
@@ -24,6 +26,7 @@ const Input = ({
   value,
   readOnly = false,
   onClick,
+  register,
 }: InputProps) => {
   const [isFocused, setIsFocused] = useState(false);
   return (
@@ -47,6 +50,7 @@ const Input = ({
           readOnly={readOnly}
           onClick={onClick}
           value={value}
+          {...register}
         />
         {icon && <span css={IconWrapper}>{icon}</span>}
       </div>
