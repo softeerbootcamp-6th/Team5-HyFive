@@ -3,14 +3,17 @@ import Input from "@/components/Input";
 import ToggleButton from "@/components/ToggleButton";
 import ImageInput from "@/features/carUploader/ImageInput";
 import { css } from "@emotion/react";
+import { useState } from "react";
+import OriginCarImg from "@/assets/images/OriginalCarImg.png";
 
 const InputSection = () => {
   const dropdownOptions = Array.from({ length: 5 }, (_, index) =>
     String(index + 1),
   );
+  const [imageSrc, setImageSrc] = useState(OriginCarImg);
   return (
     <div css={InputSectionContainer}>
-      <ImageInput />
+      <ImageInput imageSrc={imageSrc} />
       <Input
         label={"모델명"}
         required={true}
