@@ -118,6 +118,7 @@ export const getTimeCellStyle = (
     `}
   `;
 };
+
 export const getTimeBlockGridStyle = (
   block: AvailableTimeSlotType,
   selectedWeek: Date[],
