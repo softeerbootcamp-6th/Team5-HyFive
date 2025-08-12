@@ -1,4 +1,4 @@
-import CenterOverview from "@/features/CenterOverview/CenterOverview";
+import CenterOverview from "@/features/centerOverview/CenterOverview";
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
 
@@ -6,9 +6,9 @@ const { color, typography } = theme;
 
 import { mockCenterData, mockCarData } from "@/mocks/centerDetailMocks";
 import { useReducer, useState } from "react";
-import CarInfoCard from "@/features/Car/CarInfoCard";
+import CarInfoCard from "@/features/car/CarInfoCard";
 import Calender from "@/features/calender/Calender";
-import TimeTable from "@/features/TimeTable/TimeTable";
+import TimeTable from "@/features/timeTable/TimeTable";
 import {
   calenderReducer,
   initialState,
@@ -58,7 +58,7 @@ const CenterDetailPage = () => {
       {/* 타임 테이블 */}
       <div css={SectionWrapper}>
         <h4 css={SectionLabel}>차량 시간표</h4>
-        <div css={ContentSection}>
+        <div css={TableSection}>
           <TimeTable
             selectedCarId={selectedCarId}
             selectedWeek={state.selectedWeek}
@@ -91,7 +91,6 @@ const PageContainer = css`
 const SectionWrapper = css`
   display: flex;
   width: 100%;
-
   flex-direction: column;
   align-items: flex-start;
   gap: 20px;
@@ -108,4 +107,12 @@ const ContentSection = css`
   gap: 20px;
   width: 100%;
   align-items: flex-start;
+`;
+
+const TableSection = css`
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  align-items: flex-start;
+  height: 600px;
 `;

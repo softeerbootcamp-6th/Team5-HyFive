@@ -21,7 +21,7 @@ describe("TimeTable 컴포넌트", () => {
   });
 
   it("9시부터 19시까지 11개 시간 레이블이 렌더링된다.", () => {
-    const timeLabels = screen.getAllByText(/\d{1,2}:00/);
+    const timeLabels = screen.getAllByTestId("time-label");
     expect(timeLabels).toHaveLength(11);
   });
 
