@@ -23,7 +23,6 @@ import Tag from "@/components/Tag";
 import Input from "@/components/Input";
 import ToggleButton from "@/components/ToggleButton";
 import DropdownInput from "@/components/DropdownInput";
-import Calender from "@/features/calender/Calender";
 import CarInfoCard from "@/features/car/CarInfoCard";
 import type { CarType } from "@/features/car/Car.type";
 
@@ -281,20 +280,12 @@ const TestPage = () => {
         <DropdownInput
           label="최대탑승 인원"
           required={true}
+          requiredLabel="운전자 제외"
           placeholder="인원"
           options={dropdownOptions}
           value={maxPassenger}
           onSelect={setMaxPassenger}
         />
-      ),
-    },
-    {
-      label: "달력 컴포넌트",
-      component: (
-        <div css={{ display: "flex", gap: "30px", justifyContent: "center" }}>
-          <Calender highlightType="day"></Calender>
-          <Calender highlightType="week"></Calender>,
-        </div>
       ),
     },
     {

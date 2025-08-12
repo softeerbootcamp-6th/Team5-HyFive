@@ -10,7 +10,7 @@ import {
   CentersPage,
   CenterDetailPage,
   CenterPage,
-  VehicleRegisterPage,
+  CenterRegisterPage,
   NotFoundPage,
   TestPage,
 } from "@/pages";
@@ -39,7 +39,7 @@ const Router = () => {
         {/* Center 영역 */}
         <Route path="/center/*" element={<CenterLayout />}>
           <Route index element={<CenterPage />} />
-          <Route path="register" element={<VehicleRegisterPage />} />
+          <Route path="register" element={<CenterRegisterPage />} />
         </Route>
 
         {/* 초기 진입 시 리디렉션 */}

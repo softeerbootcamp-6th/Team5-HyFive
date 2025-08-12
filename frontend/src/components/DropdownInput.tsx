@@ -9,6 +9,7 @@ const { color, typography, borderRadius } = theme;
 interface DropdownInputProps {
   label: string;
   required?: boolean;
+  requiredLabel?: string;
   placeholder?: string;
   options: string[];
   value: string;
@@ -18,6 +19,7 @@ interface DropdownInputProps {
 const DropdownInput = ({
   label,
   required = false,
+  requiredLabel = "",
   placeholder,
   options,
   value,
@@ -56,6 +58,7 @@ const DropdownInput = ({
       <Input
         label={label}
         required={required}
+        requiredLabel={requiredLabel}
         placeholder={placeholder}
         readOnly
         onClick={() => setIsOpen((prev) => !prev)}
