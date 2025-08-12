@@ -1,9 +1,9 @@
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { userEvent } from "@testing-library/user-event";
-import type { CarType } from "@/features/Car/Car.type";
+import type { CarType } from "@/features/car/Car.type";
 import CarImage from "@/assets/images/OriginalCarImg.png";
-import CarInfoCard from "@/features/Car/CarInfoCard";
+import CarInfoCard from "@/features/car/CarInfoCard";
 import { theme } from "@/styles/themes.style";
 import { useState } from "react";
 

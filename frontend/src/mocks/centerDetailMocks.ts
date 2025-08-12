@@ -1,6 +1,6 @@
 // /admin/centers/:id | /center 에서 사용되는 목데이터
-import type { CenterOverviewType } from "@/features/CenterOverview/CenterOverview.type";
-import type { CarType } from "@/features/Car/Car.type";
+import type { CenterOverviewType } from "@/features/centerOverview/CenterOverview.type";
+import type { CarType } from "@/features/car/Car.type";
 import CarImage from "@/assets/images/OriginalCarImg.png";
 
 export const mockCenterData: CenterOverviewType = {

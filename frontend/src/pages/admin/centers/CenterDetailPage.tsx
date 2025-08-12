@@ -1,4 +1,4 @@
-import CenterOverview from "@/features/CenterOverview/CenterOverview";
+import CenterOverview from "@/features/centerOverview/CenterOverview";
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
 
@@ -6,9 +6,9 @@ const { color, typography } = theme;
 
 import { mockCenterData, mockCarData } from "@/mocks/centerDetailMocks";
 import { useReducer, useState } from "react";
-import CarInfoCard from "@/features/Car/CarInfoCard";
+import CarInfoCard from "@/features/car/CarInfoCard";
 import Calender from "@/features/calender/Calender";
-import TimeTable from "@/features/TimeTable/TimeTable";
+import TimeTable from "@/features/timeTable/TimeTable";
 import {
   calenderReducer,
   initialState,

@@ -1,4 +1,4 @@
-import type { CarType } from "@/features/Car/Car.type";
+import type { CarType } from "@/features/car/Car.type";
 import Tag from "@/components/Tag";
 import {
   CardContainer,
@@ -9,7 +9,7 @@ import {
   NameLabel,
   TagSection,
   CarTag,
-} from "@/features/Car/CarInfoCard.style";
+} from "@/features/car/CarInfoCard.style";
 import { CarIcon } from "@/assets/icons";
 import { theme } from "@/styles/themes.style";
 import { useState } from "react";
