@@ -27,8 +27,8 @@ public class DateRangeUtil {
                     date.with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY))
             );
             case MONTH -> Pair.of(
-                    date.withDayOfMonth(1),
-                    date.withDayOfMonth(date.getDayOfMonth())
+                    date.with(TemporalAdjusters.firstDayOfMonth()),
+                    date.with(TemporalAdjusters.lastDayOfMonth())
             );
         };
     }
