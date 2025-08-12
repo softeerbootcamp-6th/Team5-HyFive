@@ -31,6 +31,7 @@ const Input = ({
   errorMessage = "",
 }: InputProps) => {
   const [isFocused, setIsFocused] = useState(false);
+  const { onBlur: rhfOnBlur = () => {}, ...restRegister } = register || {};
   return (
     <div css={InputContainer}>
       <div css={LabelContainer}>
@@ -48,11 +49,14 @@ const Input = ({
           type="text"
           placeholder={placeholder}
           onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
+          onBlur={(e) => {
+            setIsFocused(false);
+            rhfOnBlur(e); //onBlur 덮어쓰기 문제 해결 위한 이벤트 병합
+          }}
           readOnly={readOnly}
           onClick={onClick}
           value={value}
-          {...register}
+          {...restRegister}
         />
         {icon && <span css={IconWrapper}>{icon}</span>}
       </div>

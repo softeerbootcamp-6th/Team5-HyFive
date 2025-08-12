@@ -33,9 +33,10 @@ const InputSection = () => {
     register,
     control,
     handleSubmit,
+    reset,
     formState: { errors, isValid },
   } = useForm({
-    mode: "all",
+    mode: "onSubmit",
     resolver: zodResolver(carSchema),
     defaultValues: {
       carModel: "",
@@ -48,7 +49,10 @@ const InputSection = () => {
   return (
     <form
       css={InputSectionContainer}
-      onSubmit={handleSubmit((e) => console.log(e))}
+      onSubmit={handleSubmit((e) => {
+        console.log(e);
+        reset();
+      })}
     >
       <ImageInput imageSrc={OriginCarImg} />
       <Input
