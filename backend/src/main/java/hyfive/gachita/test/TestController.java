@@ -45,10 +45,10 @@ public class TestController {
     }
 
     @GetMapping("/kakao")
-    public BaseResponse<Integer> kakaoNaviApiTest() {
+    public BaseResponse<Long> kakaoNaviApiTest() {
         LatLng start = new LatLng(127.10764191124568,37.402464820205246);
         LatLng end = new LatLng(127.11056336672839,37.39419693653072);
-        int seconds = kakaoNaviService.getTotalRouteTime(start, end);
+        long seconds = kakaoNaviService.getTotalRouteTime(start, end);
         Long minutes = TimeUnit.SECONDS.toMinutes(seconds);
         log.info("이동시간 : {} 분", minutes);
         return BaseResponse.success(seconds);
