@@ -1,5 +1,6 @@
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
+import { RemoveCircleIcon } from "@/assets/icons";
 const { color, typography } = theme;
 
 interface ImageInputProps {
@@ -15,6 +16,10 @@ const ImageInput = ({ imageSrc }: ImageInputProps) => {
       {imageSrc ? (
         <div css={ImageUploadedWrapper}>
           <img src={imageSrc} alt="car image" css={ImageWrapper} />
+          <div data-hover css={ImageHoverWrapper}>
+            <RemoveCircleIcon />
+            <p css={HoverText}>사진 지우기</p>
+          </div>
         </div>
       ) : (
         <div css={ImagePendingWrapper}>
@@ -55,10 +60,17 @@ const RequiredStar = css`
 `;
 
 const ImageUploadedWrapper = css`
+  position: relative;
   width: 100%;
   height: 196px;
   border-radius: 10px;
   border: 1px solid ${color.GrayScale.gray3};
+  overflow: hidden;
+
+  &:hover > div[data-hover] {
+    opacity: 1;
+    visibility: visible;
+  }
 `;
 
 const ImagePendingWrapper = css`
@@ -78,6 +90,29 @@ const ImageWrapper = css`
   width: 100%;
   height: 100%;
   object-fit: contain;
+`;
+
+const ImageHoverWrapper = css`
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(6.5px);
+  cursor: pointer;
+`;
+
+const HoverText = css`
+  font: ${typography.Heading.h5_semi};
+  color: ${color.GrayScale.white};
 `;
 
 const TextWrapper = css`

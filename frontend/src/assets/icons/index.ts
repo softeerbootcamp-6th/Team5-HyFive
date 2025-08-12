@@ -18,6 +18,7 @@ import PayIcon from "./pay_default.svg?react";
 import PersonIcon from "./person_default.svg?react";
 import RefreashIcon from "./refreash_default.svg?react";
 import RemoveIcon from "./remove_default.svg?react";
+import RemoveCircleIcon from "./remove-circle.svg?react";
 import RouteIcon from "./route_default.svg?react";
 import SearchIcon from "./search_default.svg?react";
 import TimeIcon from "./time_default.svg?react";
@@ -56,6 +57,7 @@ export {
   PersonIcon,
   RefreashIcon,
   RemoveIcon,
+  RemoveCircleIcon,
   RouteIcon,
   SearchIcon,
   TimeIcon,
