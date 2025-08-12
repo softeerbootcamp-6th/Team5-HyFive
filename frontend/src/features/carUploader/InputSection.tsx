@@ -6,15 +6,39 @@ import { css } from "@emotion/react";
 import OriginCarImg from "@/assets/images/OriginalCarImg.png";
 import Button from "@/components/Button";
 import { Controller, useForm } from "react-hook-form";
+import z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const InputSection = () => {
-  const dropdownOptions = Array.from({ length: 5 }, (_, index) => index + 1);
+  const dropdownOptions = Array.from({ length: 5 }, (_, index) =>
+    String(index + 1),
+  );
+  const carSchema = z
+    .object({
+      carModel: z.string().min(1, "필수 입력값입니다"),
+      carNumber: z
+        .string()
+        .refine((value) => /^\d{2,3}[가-힣]\d{4}$/.test(value), {
+          message: "올바른 차량 번호 형식이 아닙니다 (예: 12가3456)",
+        }),
+      maxPassenger: z.string().refine((value) => value !== "", {
+        message: "필수 입력값입니다",
+      }),
+      isLowFloor: z.boolean(),
+    })
+    .refine((data) => data.carModel);
 
-  const { register, control, handleSubmit } = useForm({
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(carSchema),
     defaultValues: {
       carModel: "",
       carNumber: "",
-      maxPassenger: 0,
+      maxPassenger: "",
       isLowFloor: false,
     },
   });
@@ -31,6 +55,7 @@ const InputSection = () => {
         placeholder="모델명을 입력해주세요"
         readOnly={false}
         register={register("carModel", { required: true })}
+        errorMessage={errors.carModel?.message}
       />
       <Input
         label={"차량 번호"}
@@ -38,6 +63,7 @@ const InputSection = () => {
         placeholder="차량 번호를 입력해주세요"
         readOnly={false}
         register={register("carNumber", { required: true })}
+        errorMessage={errors.carNumber?.message}
       />
       <Controller
         name="maxPassenger"
@@ -51,6 +77,7 @@ const InputSection = () => {
             options={dropdownOptions}
             value={field.value}
             onSelect={(value) => field.onChange(value)}
+            errorMessage={errors.maxPassenger?.message}
           />
         )}
       />
