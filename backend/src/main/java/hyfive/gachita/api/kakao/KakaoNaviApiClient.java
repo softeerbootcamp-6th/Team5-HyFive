@@ -23,9 +23,7 @@ public class KakaoNaviApiClient extends ApiClient {
     private final String baseUrl;
 
     private static final String DIRECTIONS_URI = "/directions";
-
-    // TODO: 다중 경유지 길찾기 API 추가
-//    private static final String WAYPOINTS_URI = "/waypoints/directions";
+    private static final String WAYPOINTS_URI = "/waypoints/directions";
 
     public KakaoNaviApiClient(@Qualifier("KakaoNaviRestClient") RestClient restClient,
                               @Value("${kakao.navi.api.key}") String apiKey,
@@ -33,6 +31,17 @@ public class KakaoNaviApiClient extends ApiClient {
         super(restClient);
         this.apiKey = apiKey;
         this.baseUrl = baseUrl;
+    }
+
+    public KakaoNaviRes getWaypointsDirections(DirectionsReq request) {
+        URI uri = UriComponentsBuilder.fromUriString(baseUrl + WAYPOINTS_URI).build().toUri();
+
+        return restClient.post()
+                .uri(uri)
+                .header("Authorization", "KakaoAK " + apiKey)
+                .body(request)
+                .retrieve()
+                .body(KakaoNaviRes.class);
     }
 
     // 자동차 길찾기 API

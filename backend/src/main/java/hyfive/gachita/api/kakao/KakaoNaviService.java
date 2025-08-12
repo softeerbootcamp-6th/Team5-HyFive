@@ -20,9 +20,9 @@ public class KakaoNaviService {
         DirectionsReq request = DirectionsReq.builder()
                 .origin(Location.fromLatLng(start))
                 .destination(Location.fromLatLng(end))
-                .waypoints(null)
+                .waypoints(List.of())
                 .build();
-        KakaoNaviRes result = kakaoNaviApiClient.getDirections(request);
+        KakaoNaviRes result = kakaoNaviApiClient.getWaypointsDirections(request);
 
         long totalTime = 0L;
         List<KakaoNaviRes.Route> routeList = result.routes();
