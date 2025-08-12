@@ -7,6 +7,7 @@ const { color, typography, borderRadius } = theme;
 interface InputProps {
   label: string;
   required?: boolean;
+  requiredLabel?: string;
   icon?: React.ReactNode;
   placeholder?: string;
   readOnly?: boolean;
@@ -17,6 +18,7 @@ interface InputProps {
 const Input = ({
   label,
   required = false,
+  requiredLabel = "",
   icon,
   placeholder,
   value,
@@ -28,7 +30,12 @@ const Input = ({
     <div css={InputContainer}>
       <div css={LabelContainer}>
         <label css={InputLabel}>{label}</label>
-        {required && <span css={RequiredStar}>*</span>}
+        {required && (
+          <>
+            <span css={RequiredStar}>*</span>
+            <span css={RequiredLabel}>{requiredLabel}</span>
+          </>
+        )}
       </div>
       <div css={InputWrapper}>
         <input
@@ -60,6 +67,7 @@ const InputContainer = css`
 const LabelContainer = css`
   display: flex;
   gap: 4px;
+  align-items: center;
 `;
 
 const InputLabel = css`
@@ -69,6 +77,11 @@ const InputLabel = css`
 
 const RequiredStar = css`
   font: ${typography.Heading.h5_semi};
+  color: ${color.Maincolor.primary};
+`;
+
+const RequiredLabel = css`
+  font: ${typography.Label.l5_semi};
   color: ${color.Maincolor.primary};
 `;
 
