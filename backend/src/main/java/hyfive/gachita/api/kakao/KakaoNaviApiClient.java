@@ -43,12 +43,12 @@ public class KakaoNaviApiClient extends ApiClient {
                 .build()
                 .toUri();
 
-        RestClient.RequestHeadersSpec<?> requestSpec = restClient.get().uri(uri);
-        return callKakaoApi(requestSpec);
+        return callKakaoApi(uri);
     }
 
-    private KakaoNaviRes callKakaoApi(RestClient.RequestHeadersSpec<?> requestSpec) {
-        return requestSpec
+    private KakaoNaviRes callKakaoApi(URI uri) {
+        return restClient.get()
+                .uri(uri)
                 .header("Authorization", "KakaoAK " + apiKey)
                 .retrieve()
                 .onStatus(HttpStatusCode::isError, (req, res) -> {
