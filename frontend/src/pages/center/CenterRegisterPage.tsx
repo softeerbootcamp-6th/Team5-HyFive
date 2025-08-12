@@ -20,7 +20,8 @@ const CenterRegisterPageContainer = css`
   flex-direction: column;
   gap: 44px;
   max-width: 660px;
-  margin: 44px auto;
+  margin: 0 auto;
+  padding: 40px 0;
 `;
 
 const HeaderText = css`
