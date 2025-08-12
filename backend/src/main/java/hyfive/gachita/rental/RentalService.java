@@ -2,19 +2,20 @@ package hyfive.gachita.rental;
 
 import hyfive.gachita.car.Car;
 import hyfive.gachita.car.repository.CarRepository;
+import hyfive.gachita.common.enums.SearchPeriod;
 import hyfive.gachita.common.response.BusinessException;
 import hyfive.gachita.common.response.ErrorCode;
+import hyfive.gachita.common.util.DateRangeUtil;
 import hyfive.gachita.rental.dto.ReplaceRental;
 import hyfive.gachita.rental.dto.RentalRes;
 import hyfive.gachita.rental.repository.RentalRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
-import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
-import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
 @Service
@@ -33,9 +34,9 @@ public class RentalService {
             throw new BusinessException(ErrorCode.INVALID_DURATION, "유휴시간은 최소 2시간 이상이어야 합니다.");
         }
 
-        // TODO : SearchPeriod 병합되면 유진님과 enum 확장 논의
-        LocalDate startOfWeek = targetDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
-        LocalDate endOfWeek = startOfWeek.plusDays(6);
+        Pair<LocalDate, LocalDate> weekRange = DateRangeUtil.getDateRange(targetDate, SearchPeriod.WEEK);
+        LocalDate startOfWeek = weekRange.getFirst();
+        LocalDate endOfWeek = weekRange.getSecond();
 
         rentalRepository.deleteRentalsBetween(carId, startOfWeek, endOfWeek);
 
@@ -57,9 +58,9 @@ public class RentalService {
         Car car = carRepository.findById(carId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NO_EXIST_VALUE, "DB에 차량 데이터가 존재하지 않습니다."));
 
-        // TODO : SearchPeriod 병합되면 유진님과 enum 확장 논의
-        LocalDate startOfWeek = targetDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
-        LocalDate endOfWeek = startOfWeek.plusDays(6);
+        Pair<LocalDate, LocalDate> weekRange = DateRangeUtil.getDateRange(targetDate, SearchPeriod.WEEK);
+        LocalDate startOfWeek = weekRange.getFirst();
+        LocalDate endOfWeek = weekRange.getSecond();
 
         return rentalRepository.findRentalsBetween(carId, startOfWeek, endOfWeek).stream()
                 .map(RentalRes::from)
