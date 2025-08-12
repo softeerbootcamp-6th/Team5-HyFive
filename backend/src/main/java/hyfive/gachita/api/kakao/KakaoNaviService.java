@@ -17,62 +17,55 @@ import java.util.List;
 public class KakaoNaviService {
     private final KakaoNaviApiClient kakaoNaviApiClient;
 
-    public long getTotalRouteTime(LatLng start, LatLng end) {
-        DirectionsReq request = DirectionsReq.builder()
-                .origin(Location.fromLatLng(start))
-                .destination(Location.fromLatLng(end))
-                .waypoints(List.of())
-                .build();
+    public RouteInfo geRouteInfo(List<LatLng> nodeList) {
+        DirectionsReq request = createDirectionsReq(nodeList);
+
+        // API 호출
         KakaoNaviRes result = kakaoNaviApiClient.getWaypointsDirections(request);
 
-        long totalTime = 0L;
-        List<KakaoNaviRes.Route> routeList = result.routes();
-        for (KakaoNaviRes.Route route : routeList) {
-            if (route.resultCode() != NaviResultCode.SUCCSS.code) {
-                throw new BusinessException(ErrorCode.EXTERNAL_API_ERROR);
-            }
-            totalTime += route.summary().duration();
+        KakaoNaviRes.Route route = result.routes().get(0);  // 첫 번째 추천 경로 기준
+        if (route.resultCode() != NaviResultCode.SUCCSS.code) {
+            throw new BusinessException(ErrorCode.EXTERNAL_API_ERROR);
         }
-        return totalTime;
+
+        int totalTime = route.summary().duration();
+
+        List<List<LatLng>> polylineList = new ArrayList<>();
+
+        // 각 지점 사이의 경로 순회
+        for (KakaoNaviRes.Section section : route.sections()) {
+            List<LatLng> pointList = extractedSectionPoint(section);
+            polylineList.add(pointList);
+        }
+        return RouteInfo.builder()
+                .totalTime(totalTime)
+                .polylineList(polylineList)
+                .build();
     }
 
-    public List<List<LatLng>> getTotalRouteTime(List<LatLng> nodeList) {
+    // 경로를 구성하는 좌표를 하나의 리스트로 통합
+    private List<LatLng> extractedSectionPoint(KakaoNaviRes.Section section) {
+        List<LatLng> pointList = new ArrayList<>();
+        for (KakaoNaviRes.Road road : section.roads()) {
+            List<Double> vertexes = road.vertexes();
+            for (int i = 0; i < vertexes.size(); i += 2) {
+                pointList.add(new LatLng(vertexes.get(i), vertexes.get(i + 1)));
+            }
+        }
+        return pointList;
+    }
+
+    private DirectionsReq createDirectionsReq(List<LatLng> nodeList) {
         LatLng start = nodeList.get(0);
         LatLng end = nodeList.get(nodeList.size() - 1);
         List<Location> waypoints = nodeList.subList(1, nodeList.size() - 1).stream()
                 .map(Location::fromLatLng)
                 .toList();
 
-        DirectionsReq request = DirectionsReq.builder()
+        return DirectionsReq.builder()
                 .origin(Location.fromLatLng(start))
                 .destination(Location.fromLatLng(end))
                 .waypoints(waypoints)
                 .build();
-        KakaoNaviRes result = kakaoNaviApiClient.getWaypointsDirections(request);
-
-        long totalTime = 0L;
-        List<List<LatLng>> polylineList = new ArrayList<>();
-
-        List<KakaoNaviRes.Route> routeList = result.routes();
-        for (KakaoNaviRes.Route route : routeList) {
-            if (route.resultCode() != NaviResultCode.SUCCSS.code) {
-                throw new BusinessException(ErrorCode.EXTERNAL_API_ERROR);
-            }
-            for (KakaoNaviRes.Section section : route.sections()) {
-                List<LatLng> points = new ArrayList<>();
-                for (KakaoNaviRes.Road road : section.roads()) {
-                    List<Double> vertexes = road.vertexes();
-                    for (int i = 0; i < vertexes.size(); i += 2) {
-                        double x = vertexes.get(i);
-                        double y = vertexes.get(i + 1);
-                        points.add(new LatLng(x, y));
-                    }
-                }
-                polylineList.add(points);
-            }
-
-            totalTime += route.summary().duration();
-        }
-        return polylineList;
     }
 }
