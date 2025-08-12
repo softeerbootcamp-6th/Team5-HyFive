@@ -1,20 +1,22 @@
 package hyfive.gachita.test;
 
-import hyfive.gachita.api.kakao.KakaoNaviApiClient;
-import hyfive.gachita.api.kakao.dto.request.DirectionsReq;
-import hyfive.gachita.api.kakao.dto.response.KakaoNaviRes;
+import hyfive.gachita.api.geocode.dto.LatLng;
+import hyfive.gachita.api.kakao.KakaoNaviService;
 import hyfive.gachita.common.response.BaseResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/api/test")
 @RequiredArgsConstructor
+@Slf4j
 public class TestController {
     private final TestService testService;
-    private final KakaoNaviApiClient kakaoNaviApiClient;
+    private final KakaoNaviService kakaoNaviService;
 
     @PostMapping
     public BaseResponse<Test> createTest(@RequestBody Test test) {
@@ -43,11 +45,12 @@ public class TestController {
     }
 
     @GetMapping("/kakao")
-    public BaseResponse<KakaoNaviRes> kakaoNaviApiTest() {
-        String origin = "127.10764191124568,37.402464820205246";
-        String destination = "127.11056336672839,37.39419693653072";
-        DirectionsReq req = new DirectionsReq(origin, destination);
-        KakaoNaviRes naviRes = kakaoNaviApiClient.getDirections(req);
-        return BaseResponse.success(naviRes);
+    public BaseResponse<Integer> kakaoNaviApiTest() {
+        LatLng start = new LatLng(127.10764191124568,37.402464820205246);
+        LatLng end = new LatLng(127.11056336672839,37.39419693653072);
+        int seconds = kakaoNaviService.getTotalRouteTime(start, end);
+        Long minutes = TimeUnit.SECONDS.toMinutes(seconds);
+        log.info("이동시간 : {} 분", minutes);
+        return BaseResponse.success(seconds);
     }
 }
