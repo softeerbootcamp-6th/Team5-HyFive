@@ -1,10 +1,13 @@
 package hyfive.gachita.api.kakao.dto.request;
 
+import hyfive.gachita.api.kakao.dto.Location;
+import lombok.Builder;
+
+import java.util.List;
+
+@Builder
 public record DirectionsReq(
-        String origin,
-        String destination
-) {
-    public static DirectionsReq of(String origin, String destination) {
-        return new DirectionsReq(origin, destination);
-    }
-}
+        Location origin,
+        Location destination,
+        List<Location> waypoints
+) {}

@@ -1,6 +1,7 @@
 package hyfive.gachita.api.kakao;
 
 import hyfive.gachita.api.geocode.dto.LatLng;
+import hyfive.gachita.api.kakao.dto.Location;
 import hyfive.gachita.api.kakao.dto.request.DirectionsReq;
 import hyfive.gachita.api.kakao.dto.response.KakaoNaviRes;
 import hyfive.gachita.common.response.BusinessException;
@@ -16,7 +17,11 @@ public class KakaoNaviService {
     private final KakaoNaviApiClient kakaoNaviApiClient;
 
     public long getTotalRouteTime(LatLng start, LatLng end) {
-        DirectionsReq request = DirectionsReq.of(start.toString(), end.toString());
+        DirectionsReq request = DirectionsReq.builder()
+                .origin(Location.fromLatLng(start))
+                .destination(Location.fromLatLng(end))
+                .waypoints(null)
+                .build();
         KakaoNaviRes result = kakaoNaviApiClient.getDirections(request);
 
         long totalTime = 0L;

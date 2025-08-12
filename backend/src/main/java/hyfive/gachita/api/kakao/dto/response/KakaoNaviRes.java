@@ -1,6 +1,7 @@
 package hyfive.gachita.api.kakao.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import hyfive.gachita.api.kakao.dto.Location;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 
@@ -149,21 +150,6 @@ public record KakaoNaviRes(
             @Schema(description = "해당 안내가 포함된 도로의 인덱스 (sections.roads)", example = "0")
             @JsonProperty("road_index")
             int roadIndex
-    ) {}
-
-    @Schema(description = "장소(출발지, 목적지, 경유지) 정보")
-    public record Location(
-            @Schema(description = "장소 명칭", example = "카카오판교오피스")
-            @JsonProperty("name")
-            String name,
-
-            @Schema(description = "경도", example = "127.108640")
-            @JsonProperty("x")
-            double x,
-
-            @Schema(description = "위도", example = "37.402111")
-            @JsonProperty("y")
-            double y
     ) {}
 
     @Schema(description = "요금 정보")
