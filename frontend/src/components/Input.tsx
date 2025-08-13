@@ -128,15 +128,16 @@ const StyledInput = (
   padding: 16px 48px 16px 24px;
   font: ${typography.Body.b3_regu};
   color: ${color.GrayScale.black};
-  border: 1px solid
-    ${errorMessage
-      ? color.Semantic.error
-      : isFocused
-        ? color.Maincolor.primary
-        : color.GrayScale.gray3};
+  border: 1px solid ${getBorderColor(errorMessage, isFocused)};
   border-radius: ${borderRadius.Medium};
   cursor: ${readOnly ? "pointer" : "text"};
   &::placeholder {
     color: ${color.GrayScale.gray4};
   }
 `;
+
+function getBorderColor(errorMessage: string, isFocused: boolean) {
+  if (errorMessage) return color.Semantic.error;
+  if (isFocused) return color.Maincolor.primary;
+  return color.GrayScale.gray3;
+}
