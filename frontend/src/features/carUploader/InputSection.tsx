@@ -3,7 +3,6 @@ import Input from "@/components/Input";
 import ToggleButton from "@/components/ToggleButton";
 import ImageInput from "@/features/carUploader/ImageInput";
 import { css } from "@emotion/react";
-import OriginCarImg from "@/assets/images/OriginalCarImg.png";
 import Button from "@/components/Button";
 import { Controller } from "react-hook-form";
 import useCarForm from "@/features/carUploader/useCarForm";
@@ -25,11 +24,22 @@ const InputSection = () => {
   return (
     <form
       css={InputSectionContainer}
-      onSubmit={handleSubmit(() => {
+      onSubmit={handleSubmit((e) => {
+        console.log(e);
         reset();
       })}
     >
-      <ImageInput imageSrc={""} />
+      <Controller
+        name="carImage"
+        control={control}
+        render={({ field }) => (
+          <ImageInput
+            value={field.value}
+            onChange={field.onChange}
+            errorMessage={errors.carImage?.message}
+          />
+        )}
+      />
       <Input
         label={"모델명"}
         required={true}

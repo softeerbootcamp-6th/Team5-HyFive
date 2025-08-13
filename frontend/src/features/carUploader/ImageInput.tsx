@@ -1,35 +1,41 @@
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
 import { RemoveCircleIcon } from "@/assets/icons";
-import { useState, type ChangeEvent } from "react";
+import { useEffect, useState, type ChangeEvent } from "react";
 const { color, typography } = theme;
 
 interface ImageInputProps {
-  imageSrc: string;
+  value: File | null;
+  onChange: (value: File | null) => void;
+  errorMessage?: string;
 }
-const ImageInput = ({ imageSrc }: ImageInputProps) => {
+const ImageInput = ({ value, onChange, errorMessage }: ImageInputProps) => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [file, setFile] = useState<File | null>(null);
   const [dragActive, setDragActive] = useState(false);
+
+  useEffect(() => {
+    if (value) {
+      const url = URL.createObjectURL(value);
+      setPreviewUrl(url);
+      return () => URL.revokeObjectURL(url);
+    } else {
+      setPreviewUrl(null);
+    }
+  }, [value]);
 
   const handleUploadImage = (e: ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (!selectedFile) return;
-    setFile(selectedFile);
-    setPreviewUrl(URL.createObjectURL(selectedFile));
+    onChange(selectedFile);
   };
   const handleRemoveImage = () => {
-    if (!previewUrl || !file) return;
-    setFile(null);
-    URL.revokeObjectURL(previewUrl);
-    setPreviewUrl(null);
+    onChange(null);
   };
   const handleDropImage = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     if (e.dataTransfer?.files[0] && e.dataTransfer.files.length > 0) {
       const selectedFile = e.dataTransfer?.files[0];
-      setFile(selectedFile);
-      setPreviewUrl(URL.createObjectURL(selectedFile));
+      onChange(selectedFile);
     }
     setDragActive(false);
   };
@@ -52,7 +58,7 @@ const ImageInput = ({ imageSrc }: ImageInputProps) => {
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDropImage}
-        css={ImageContainer(dragActive)}
+        css={ImageContainer(dragActive, errorMessage)}
       >
         {previewUrl ? (
           <div css={ImageUploadedWrapper}>
@@ -110,9 +116,20 @@ const RequiredStar = css`
   color: ${color.Maincolor.primary};
 `;
 
-const ImageContainer = (dragActive: boolean) => css`
+const getImageContainerBorder = (
+  dragActive: boolean,
+  errorMessage: string | undefined,
+) => {
+  if (errorMessage) return `1px solid ${color.Semantic.error}`;
+  if (dragActive) return `2px dotted ${color.GrayScale.gray3}`;
+  return `1px solid ${color.GrayScale.gray3}`;
+};
+const ImageContainer = (
+  dragActive: boolean,
+  errorMessage: string | undefined,
+) => css`
   border-radius: 10px;
-  border: ${dragActive ? "2px dotted" : "1px solid"} ${color.GrayScale.gray3};
+  border: ${getImageContainerBorder(dragActive, errorMessage)};
 `;
 
 const ImageUploadedWrapper = css`
