@@ -8,12 +8,12 @@ import hyfive.gachita.common.response.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.Map;
 
 // 자동차 길찾기 API : 최대 5개의 경유지 추가 가능
 @Component
@@ -41,11 +41,8 @@ public class KakaoNaviApiClient extends ApiClient {
                 .build()
                 .toUri();
 
-        KakaoNaviRes result = restClient.get()
-                .uri(uri)
-                .header("Authorization", "KakaoAK " + apiKey)
-                .retrieve()
-                .body(KakaoNaviRes.class);
+        Map<String, String> header = Map.of("Authorization", "KakaoAK " + apiKey);
+        KakaoNaviRes result = get(uri, header, KakaoNaviRes.class);
 
         return getValidRoute(result);
     }
@@ -53,13 +50,9 @@ public class KakaoNaviApiClient extends ApiClient {
     public KakaoNaviRes.Route getWaypointsDirections(DirectionsReq request) {
         URI uri = UriComponentsBuilder.fromUriString(baseUrl + WAYPOINTS_URI).build().toUri();
 
-        KakaoNaviRes result =  restClient.post()
-                .uri(uri)
-                .header("Authorization", "KakaoAK " + apiKey)
-                .body(request)
-                .retrieve()
-                .body(KakaoNaviRes.class);
+        Map<String, String> header = Map.of("Authorization", "KakaoAK " + apiKey);
 
+        KakaoNaviRes result = post(uri, header, request, KakaoNaviRes.class);
         return getValidRoute(result);
     }
 
