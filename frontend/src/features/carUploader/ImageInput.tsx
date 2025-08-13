@@ -10,6 +10,8 @@ interface ImageInputProps {
 const ImageInput = ({ imageSrc }: ImageInputProps) => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
+  const [dragActive, setDragActive] = useState(false);
+
   const handleUploadImage = (e: ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (!selectedFile) return;
@@ -22,40 +24,65 @@ const ImageInput = ({ imageSrc }: ImageInputProps) => {
     URL.revokeObjectURL(previewUrl);
     setPreviewUrl(null);
   };
+  const handleDropImage = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    if (e.dataTransfer?.files[0] && e.dataTransfer.files.length > 0) {
+      const selectedFile = e.dataTransfer?.files[0];
+      setFile(selectedFile);
+      setPreviewUrl(URL.createObjectURL(selectedFile));
+    }
+    setDragActive(false);
+  };
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setDragActive(true);
+  };
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setDragActive(false);
+  };
+
   return (
     <div css={ImageInputContainer}>
       <div css={LabelWrapper}>
         <label css={InputLabelText}>차량 사진 등록</label>
         <span css={RequiredStar}>*</span>
       </div>
-      {previewUrl ? (
-        <div css={ImageUploadedWrapper}>
-          <img src={previewUrl} alt="car image" css={ImageWrapper} />
-          <div data-hover onClick={handleRemoveImage} css={ImageHoverWrapper}>
-            <RemoveCircleIcon />
-            <p css={HoverText}>사진 지우기</p>
+      <div
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDropImage}
+        css={ImageContainer(dragActive)}
+      >
+        {previewUrl ? (
+          <div css={ImageUploadedWrapper}>
+            <img src={previewUrl} alt="car image" css={ImageWrapper} />
+            <div data-hover onClick={handleRemoveImage} css={ImageHoverWrapper}>
+              <RemoveCircleIcon />
+              <p css={HoverText}>사진 지우기</p>
+            </div>
           </div>
-        </div>
-      ) : (
-        <div css={ImagePendingWrapper}>
-          <div css={TextWrapper}>
-            <p css={TitleText}>업로드할 파일을 끌어다 놓으세요.</p>
-            <p css={DescriptionText}>
-              JPG, PNG 형식의 파일을 업로드할 수 있습니다.
-            </p>
+        ) : (
+          <div css={ImagePendingWrapper}>
+            <div css={TextWrapper}>
+              <p css={TitleText}>업로드할 파일을 끌어다 놓으세요.</p>
+              <p css={DescriptionText}>
+                JPG, PNG 형식의 파일을 업로드할 수 있습니다.
+              </p>
+            </div>
+            <label htmlFor="carImage" css={Linktext}>
+              파일 브라우저
+            </label>
+            <input
+              id="carImage"
+              type="file"
+              accept="image/*"
+              css={ImageInputWrapper}
+              onChange={handleUploadImage}
+            />
           </div>
-          <label htmlFor="carImage" css={Linktext}>
-            파일 브라우저
-          </label>
-          <input
-            id="carImage"
-            type="file"
-            accept="image/*"
-            css={ImageInputWrapper}
-            onChange={handleUploadImage}
-          />
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
@@ -83,17 +110,21 @@ const RequiredStar = css`
   color: ${color.Maincolor.primary};
 `;
 
+const ImageContainer = (dragActive: boolean) => css`
+  border-radius: 10px;
+  border: ${dragActive ? "2px dotted" : "1px solid"} ${color.GrayScale.gray3};
+`;
+
 const ImageUploadedWrapper = css`
   position: relative;
   width: 100%;
   height: 196px;
-  border-radius: 10px;
-  border: 1px solid ${color.GrayScale.gray3};
   overflow: hidden;
 
   &:hover > div[data-hover] {
     opacity: 1;
     visibility: visible;
+    border-radius: 10px;
   }
 `;
 
@@ -106,8 +137,6 @@ const ImagePendingWrapper = css`
   height: 196px;
   gap: 29px;
   padding: 20px;
-  border-radius: 10px;
-  border: 1px solid ${color.GrayScale.gray3};
 `;
 
 const ImageWrapper = css`
