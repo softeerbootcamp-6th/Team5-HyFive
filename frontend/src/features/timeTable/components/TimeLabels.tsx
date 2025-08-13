@@ -1,6 +1,7 @@
 import { TIME_TABLE_CONFIG } from "@/features/timeTable/TimeTable.constants";
 import { TimeLabel } from "@/features/timeTable/TimeTable.style";
 import { formatHourWithColons } from "@/features/timeTable/TimeTable.util";
+import { memo } from "react";
 
 interface TimeLabelsProps {
   startHour?: number;
@@ -18,7 +19,7 @@ const TimeLabels = ({
       {hours.map((hour, hourIndex) => (
         <div
           key={hour}
-          data-testid={`time-label-${hour}`}
+          data-testid={`time-label`}
           css={TimeLabel}
           style={{ gridColumn: 1, gridRow: hourIndex + 1 }}
         >
@@ -29,4 +30,4 @@ const TimeLabels = ({
   );
 };
 
-export default TimeLabels;
+export default memo(TimeLabels);
