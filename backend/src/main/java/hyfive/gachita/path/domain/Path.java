@@ -1,7 +1,8 @@
-package hyfive.gachita.path;
+package hyfive.gachita.path.domain;
 
 import hyfive.gachita.car.Car;
 import hyfive.gachita.node.Node;
+import hyfive.gachita.path.DriveStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

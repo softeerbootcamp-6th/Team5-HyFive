@@ -1,6 +1,6 @@
 package hyfive.gachita.node;
 
-import hyfive.gachita.path.Path;
+import hyfive.gachita.path.domain.Path;
 import hyfive.gachita.book.Book;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

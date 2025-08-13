@@ -1,4 +1,4 @@
-package hyfive.gachita.path;
+package hyfive.gachita.path.domain;
 
 import hyfive.gachita.node.Node;
 import jakarta.persistence.*;
