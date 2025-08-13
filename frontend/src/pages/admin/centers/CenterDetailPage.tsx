@@ -8,7 +8,7 @@ import { mockCenterData, mockCarData } from "@/mocks/centerDetailMocks";
 import { useReducer, useState } from "react";
 import CarInfoCard from "@/features/car/CarInfoCard";
 import Calender from "@/features/calender/Calender";
-import TimeTable from "@/features/timeTable/TimeTable";
+import TimeTable from "@/features/timeTable/components/TimeTable";
 import {
   calenderReducer,
   initialState,

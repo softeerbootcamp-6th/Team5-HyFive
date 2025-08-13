@@ -2,6 +2,7 @@ import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
 import { getDayIndex } from "@/features/calender/Calender.util";
 import type { AvailableTimeSlotType } from "./TimeTable.type";
+import { TIME_TABLE_CONFIG } from "@/features/timeTable/TimeTable.constants";
 
 const { color, typography, borderRadius } = theme;
 
@@ -131,7 +132,8 @@ export const getTimeBlockGridStyle = (
 
   return css`
     grid-column: ${dayIndex + 2}; /* +2는 시간축(1) + 0-based 인덱스 */
-    grid-row: ${startHour - 8} / ${endHour - 8}; /* 9시가 1행이므로 -8 */
+    grid-row: ${startHour - TIME_TABLE_CONFIG.START_HOUR + 1} /
+      ${endHour - TIME_TABLE_CONFIG.START_HOUR + 1};
     z-index: 10;
   `;
 };

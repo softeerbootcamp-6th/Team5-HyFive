@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import TimeTable from "./TimeTable";
+import TimeTable from "./components/TimeTable";
 import { getWeekRange } from "@/features/calender/Calender.util";
 
 const testData = {
