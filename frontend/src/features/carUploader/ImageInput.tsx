@@ -1,7 +1,9 @@
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
 import { RemoveCircleIcon } from "@/assets/icons";
-import { useEffect, useState, type ChangeEvent } from "react";
+import useDragImage from "@/features/carUploader/useDragImage";
+import useUploadImage from "@/features/carUploader/useUploadImage";
+import usePreviewImage from "@/features/carUploader/usePreviewImage";
 const { color, typography } = theme;
 
 interface ImageInputProps {
@@ -10,43 +12,12 @@ interface ImageInputProps {
   errorMessage?: string;
 }
 const ImageInput = ({ value, onChange, errorMessage }: ImageInputProps) => {
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [dragActive, setDragActive] = useState(false);
-
-  useEffect(() => {
-    if (value) {
-      const url = URL.createObjectURL(value);
-      setPreviewUrl(url);
-      return () => URL.revokeObjectURL(url);
-    } else {
-      setPreviewUrl(null);
-    }
-  }, [value]);
-
-  const handleUploadImage = (e: ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0];
-    if (!selectedFile) return;
-    onChange(selectedFile);
-  };
-  const handleRemoveImage = () => {
-    onChange(null);
-  };
-  const handleDropImage = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    if (e.dataTransfer?.files[0] && e.dataTransfer.files.length > 0) {
-      const selectedFile = e.dataTransfer?.files[0];
-      onChange(selectedFile);
-    }
-    setDragActive(false);
-  };
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setDragActive(true);
-  };
-  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setDragActive(false);
-  };
+  const { handleUploadImage, handleUploadImageByDrag, handleRemoveImage } =
+    useUploadImage({ onChange });
+  const { previewUrl } = usePreviewImage({ value });
+  const { dragActive, handleDropImage, handleDragActive } = useDragImage({
+    handleUploadImage: handleUploadImageByDrag,
+  });
 
   return (
     <div css={ImageInputContainer}>
@@ -55,8 +26,8 @@ const ImageInput = ({ value, onChange, errorMessage }: ImageInputProps) => {
         <span css={RequiredStar}>*</span>
       </div>
       <div
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
+        onDragOver={(e) => handleDragActive(e, true)}
+        onDragLeave={(e) => handleDragActive(e, false)}
         onDrop={handleDropImage}
         css={ImageContainer(dragActive, errorMessage)}
       >
