@@ -1,21 +1,30 @@
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
 import { RemoveCircleIcon } from "@/assets/icons";
+import { useState, type ChangeEvent } from "react";
 const { color, typography } = theme;
 
 interface ImageInputProps {
   imageSrc: string;
 }
 const ImageInput = ({ imageSrc }: ImageInputProps) => {
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [file, setFile] = useState<File | null>(null);
+  const handleUploadImage = (e: ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0];
+    if (!selectedFile) return;
+    setFile(selectedFile);
+    setPreviewUrl(URL.createObjectURL(selectedFile));
+  };
   return (
     <div css={ImageInputContainer}>
       <div css={LabelWrapper}>
         <label css={InputLabelText}>차량 사진 등록</label>
         <span css={RequiredStar}>*</span>
       </div>
-      {imageSrc ? (
+      {previewUrl ? (
         <div css={ImageUploadedWrapper}>
-          <img src={imageSrc} alt="car image" css={ImageWrapper} />
+          <img src={previewUrl} alt="car image" css={ImageWrapper} />
           <div data-hover css={ImageHoverWrapper}>
             <RemoveCircleIcon />
             <p css={HoverText}>사진 지우기</p>
@@ -29,7 +38,16 @@ const ImageInput = ({ imageSrc }: ImageInputProps) => {
               JPG, PNG 형식의 파일을 업로드할 수 있습니다.
             </p>
           </div>
-          <div css={Linktext}>파일 브라우저</div>
+          <label htmlFor="carImage" css={Linktext}>
+            파일 브라우저
+          </label>
+          <input
+            id="carImage"
+            type="file"
+            accept="image/*"
+            css={ImageInputWrapper}
+            onChange={handleUploadImage}
+          />
         </div>
       )}
     </div>
@@ -143,4 +161,8 @@ const Linktext = css`
   text-underline-offset: auto;
   text-underline-position: from-font;
   cursor: pointer;
+`;
+
+const ImageInputWrapper = css`
+  display: none;
 `;

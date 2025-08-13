@@ -29,7 +29,7 @@ const InputSection = () => {
         reset();
       })}
     >
-      <ImageInput imageSrc={OriginCarImg} />
+      <ImageInput imageSrc={""} />
       <Input
         label={"모델명"}
         required={true}
