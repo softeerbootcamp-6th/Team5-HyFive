@@ -1,4 +1,4 @@
-package hyfive.gachita.dispatch.module.provider;
+package hyfive.gachita.dispatch.provider;
 
 import hyfive.gachita.dispatch.dto.DispatchLocation;
 
