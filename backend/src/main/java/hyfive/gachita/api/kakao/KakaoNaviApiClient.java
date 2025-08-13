@@ -27,8 +27,8 @@ public class KakaoNaviApiClient extends ApiClient {
     private final String baseUrl;
 
     public KakaoNaviApiClient(@Qualifier("KakaoNaviRestClient") RestClient restClient,
-                                    @Value("${kakao.navi.api.key}") String apiKey,
-                                    @Value("${kakao.navi.api.base-url}") String baseUrl) {
+                                    @Value("${kakao.navi.api.key:defaultKey}") String apiKey,
+                                    @Value("${kakao.navi.api.base-url:defaultUrl}") String baseUrl) {
         super(restClient);
         this.apiKey = apiKey;
         this.baseUrl = baseUrl;
