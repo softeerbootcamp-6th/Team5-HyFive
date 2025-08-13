@@ -6,6 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,4 +29,7 @@ public class PathSegment {
 
     @Column(name = "duration", nullable = false, columnDefinition = "INT")
     private int duration;
+
+    @OneToMany(mappedBy = "pathSegment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Point> points = new ArrayList<>();
 }
