@@ -25,8 +25,7 @@ const InputSection = () => {
   return (
     <form
       css={InputSectionContainer}
-      onSubmit={handleSubmit((e) => {
-        console.log(e);
+      onSubmit={handleSubmit(() => {
         reset();
       })}
     >
