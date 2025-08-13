@@ -34,6 +34,7 @@ public enum ErrorCode {
     MAX_UPLOAD_SIZE_EXCEEDED(false, 3005, "파일 사이즈는 최대 10MB 까지 업로드 할 수 있습니다.",
             MaxUploadSizeExceededException.class
     ),
+    S3_UPLOAD_FAILED(false, 3006, "S3 업로드 중 알 수 없는 예외 발생"),
 
     /*차량 4500*/
     MAX_CAR_COUNT_EXCEEDED(false, 4500, "등록 가능한 최대 차량 수는 6대 입니다."),
