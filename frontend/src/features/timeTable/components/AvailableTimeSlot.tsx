@@ -1,8 +1,9 @@
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
-import type { AvailableTimeSlotType } from "../timeTable/TimeTable.type";
-import { getTimeBlockGridStyle } from "../timeTable/TimeTable.style";
+
 import { isBefore, startOfDay } from "date-fns";
+import type { AvailableTimeSlotType } from "@/features/timeTable/TimeTable.type";
+import { getTimeBlockGridStyle } from "@/features/timeTable/TimeTable.style";
 
 const { color, typography } = theme;
 
