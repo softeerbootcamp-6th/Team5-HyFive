@@ -17,7 +17,9 @@ const ImageInput = ({ imageSrc }: ImageInputProps) => {
     setPreviewUrl(URL.createObjectURL(selectedFile));
   };
   const handleRemoveImage = () => {
+    if (!previewUrl || !file) return;
     setFile(null);
+    URL.revokeObjectURL(previewUrl);
     setPreviewUrl(null);
   };
   return (
