@@ -1,6 +1,7 @@
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
 import { useState } from "react";
+import type { UseFormRegisterReturn } from "react-hook-form";
 
 const { color, typography, borderRadius } = theme;
 
@@ -13,6 +14,8 @@ interface InputProps {
   readOnly?: boolean;
   value?: string;
   onClick?: () => void;
+  register?: UseFormRegisterReturn;
+  errorMessage?: string;
 }
 
 const Input = ({
@@ -24,8 +27,11 @@ const Input = ({
   value,
   readOnly = false,
   onClick,
+  register,
+  errorMessage = "",
 }: InputProps) => {
   const [isFocused, setIsFocused] = useState(false);
+  const { onBlur: rhfOnBlur = () => {}, ...restRegister } = register || {};
   return (
     <div css={InputContainer}>
       <div css={LabelContainer}>
@@ -39,17 +45,22 @@ const Input = ({
       </div>
       <div css={InputWrapper}>
         <input
-          css={StyledInput(isFocused, readOnly)}
+          css={StyledInput(isFocused, readOnly, errorMessage)}
           type="text"
           placeholder={placeholder}
           onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
+          onBlur={(e) => {
+            setIsFocused(false);
+            void rhfOnBlur(e); //onBlur 덮어쓰기 문제 해결 위한 이벤트 병합
+          }}
           readOnly={readOnly}
           onClick={onClick}
           value={value}
+          {...restRegister}
         />
         {icon && <span css={IconWrapper}>{icon}</span>}
       </div>
+      {errorMessage && <p css={ErrorText}>{errorMessage}</p>}
     </div>
   );
 };
@@ -100,7 +111,16 @@ const IconWrapper = css`
   right: 24px;
 `;
 
-const StyledInput = (isFocused: boolean, readOnly: boolean) => css`
+const ErrorText = css`
+  font: ${typography.Body.b4_regu};
+  color: ${color.Semantic.error};
+`;
+
+const StyledInput = (
+  isFocused: boolean,
+  readOnly: boolean,
+  errorMessage: string,
+) => css`
   box-sizing: border-box;
   display: flex;
   width: 100%;
@@ -108,11 +128,16 @@ const StyledInput = (isFocused: boolean, readOnly: boolean) => css`
   padding: 16px 48px 16px 24px;
   font: ${typography.Body.b3_regu};
   color: ${color.GrayScale.black};
-  border: 1px solid
-    ${isFocused ? color.Maincolor.primary : color.GrayScale.gray3};
+  border: 1px solid ${getBorderColor(errorMessage, isFocused)};
   border-radius: ${borderRadius.Medium};
   cursor: ${readOnly ? "pointer" : "text"};
   &::placeholder {
     color: ${color.GrayScale.gray4};
   }
 `;
+
+function getBorderColor(errorMessage: string, isFocused: boolean) {
+  if (errorMessage) return color.Semantic.error;
+  if (isFocused) return color.Maincolor.primary;
+  return color.GrayScale.gray3;
+}

@@ -14,14 +14,17 @@
     "test-cli": "vitest"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.2.1",
     "date-fns": "^4.1.0",
     "eslint-config-prettier": "^10.1.8",
     "prettier": "^3.6.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-error-boundary": "^6.0.0",
+    "react-hook-form": "^7.62.0",
     "react-router": "^7.7.1",
-    "vite-plugin-svgr": "^4.3.0"
+    "vite-plugin-svgr": "^4.3.0",
+    "zod": "^4.0.17"
   },
   "devDependencies": {
     "@emotion/react": "^11.14.0",

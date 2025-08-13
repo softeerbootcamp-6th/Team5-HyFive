@@ -10,17 +10,27 @@ interface ButtonProps {
   label: string;
   bgColor?: Color;
   size?: Size;
+  type?: "submit" | "button" | "reset";
 }
 
-const Button = ({ label, bgColor = "orange", size = "small" }: ButtonProps) => {
+const Button = ({
+  label,
+  bgColor = "orange",
+  size = "small",
+  type = "button",
+}: ButtonProps) => {
   const [isPressing, setIsPressing] = useState(false);
   const handlers = usePressDetection({
     setIsPressing,
   });
   return (
-    <div {...handlers} css={ButtonContainer(bgColor, size, isPressing)}>
+    <button
+      type={type}
+      {...handlers}
+      css={ButtonContainer(bgColor, size, isPressing)}
+    >
       {label}
-    </div>
+    </button>
   );
 };
 

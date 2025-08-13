@@ -19,7 +19,11 @@ const ToggleButton = ({
   onToggle,
 }: ToggleButtonProps) => {
   return (
-    <button css={ButtonContainer(type, isChecked)} onClick={onToggle}>
+    <button
+      type="button"
+      css={ButtonContainer(type, isChecked)}
+      onClick={onToggle}
+    >
       <p css={StyledLabel(isChecked)}>{label}</p>
       {type === "check" &&
         (isChecked ? (

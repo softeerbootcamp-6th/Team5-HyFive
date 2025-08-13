@@ -1,6 +1,5 @@
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
-import Button from "@/components/Button";
 import InputSection from "@/features/carUploader/InputSection";
 
 const { typography } = theme;
@@ -10,7 +9,6 @@ const CenterRegisterPage = () => {
     <div css={CenterRegisterPageContainer}>
       <p css={HeaderText}>차량 등록하기</p>
       <InputSection />
-      <Button bgColor="gray" label="등록하기" size="big" />
     </div>
   );
 };
@@ -22,7 +20,8 @@ const CenterRegisterPageContainer = css`
   flex-direction: column;
   gap: 44px;
   max-width: 660px;
-  margin: 44px auto;
+  margin: 0 auto;
+  padding: 40px 0;
 `;
 
 const HeaderText = css`
