@@ -1,4 +1,6 @@
+import { TIME_TABLE_CONFIG } from "@/features/timeTable/TimeTable.constants";
 import type { AvailableTimeSlotType } from "@/features/timeTable/TimeTable.type";
+import { formatHourWithColons } from "@/features/timeTable/TimeTable.util";
 import { format } from "date-fns";
 import { useState, useEffect, useCallback } from "react";
 
@@ -138,7 +140,9 @@ const isSlotAtPosition = (
   const startHour = parseInt(slot.rentalStartTime.split(":")[0], 10);
   const endHour = parseInt(slot.rentalEndTime.split(":")[0], 10);
 
-  const isInHourRange = hourIndex >= startHour - 9 && hourIndex < endHour - 9; // START_HOUR가 9시이므로 -9
+  const isInHourRange =
+    hourIndex >= startHour - TIME_TABLE_CONFIG.START_HOUR &&
+    hourIndex < endHour - TIME_TABLE_CONFIG.START_HOUR;
 
   return slotDayIndex === dayIndex && isInHourRange;
 };
@@ -149,13 +153,13 @@ const createSlotFromDrag = (
   selectedWeek: Date[],
 ): AvailableTimeSlotType => {
   const slotDay = selectedWeek[startPosition.dayIndex];
-  const startHour = startPosition.hourIndex + 9;
-  const endHour = currentPosition.hourIndex + 10; //
+  const startHour = startPosition.hourIndex + TIME_TABLE_CONFIG.START_HOUR;
+  const endHour = currentPosition.hourIndex + TIME_TABLE_CONFIG.START_HOUR + 1; // 완료시간은 표 기준 +1시간이어야 하기 때문
   const rentalDate = format(slotDay, "yyyy-MM-dd");
 
   return {
     rentalDate,
-    rentalStartTime: `${startHour.toString().padStart(2, "0")}:00`,
-    rentalEndTime: `${endHour.toString().padStart(2, "0")}:00`,
+    rentalStartTime: formatHourWithColons(startHour),
+    rentalEndTime: formatHourWithColons(endHour),
   };
 };
