@@ -16,6 +16,10 @@ const ImageInput = ({ imageSrc }: ImageInputProps) => {
     setFile(selectedFile);
     setPreviewUrl(URL.createObjectURL(selectedFile));
   };
+  const handleRemoveImage = () => {
+    setFile(null);
+    setPreviewUrl(null);
+  };
   return (
     <div css={ImageInputContainer}>
       <div css={LabelWrapper}>
@@ -25,7 +29,7 @@ const ImageInput = ({ imageSrc }: ImageInputProps) => {
       {previewUrl ? (
         <div css={ImageUploadedWrapper}>
           <img src={previewUrl} alt="car image" css={ImageWrapper} />
-          <div data-hover css={ImageHoverWrapper}>
+          <div data-hover onClick={handleRemoveImage} css={ImageHoverWrapper}>
             <RemoveCircleIcon />
             <p css={HoverText}>사진 지우기</p>
           </div>
