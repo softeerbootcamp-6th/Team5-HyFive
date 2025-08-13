@@ -51,7 +51,7 @@ const Input = ({
           onFocus={() => setIsFocused(true)}
           onBlur={(e) => {
             setIsFocused(false);
-            rhfOnBlur(e); //onBlur 덮어쓰기 문제 해결 위한 이벤트 병합
+            void rhfOnBlur(e); //onBlur 덮어쓰기 문제 해결 위한 이벤트 병합
           }}
           readOnly={readOnly}
           onClick={onClick}
