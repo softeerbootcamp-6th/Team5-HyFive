@@ -6,7 +6,7 @@ import type {
 
 import { generateAvailableTimeSlots } from "@/mocks/timeBlockMocks";
 import { useTimeTableDrag } from "@/features/timeTable/useTimeTableDrag";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   AvailableTimeSlots,
   TimeTableHeader,
@@ -14,12 +14,14 @@ import {
   TimeCells,
 } from "./index";
 import { TIME_TABLE_CONFIG } from "@/features/timeTable/TimeTable.constants";
+import { isAllSlotsInSelectedWeek } from "@/features/timeTable/TimeTable.util";
 
 const mockWeek: Date[] = Array.from({ length: 7 }, (_, i) => {
   return new Date(2025, 7, 10 + i);
 });
 const mockTimeSlot: AvailableTimeSlotType[] =
   generateAvailableTimeSlots(mockWeek);
+
 const TimeTable = ({
   selectedCarId: _selectedCarId,
   selectedWeek,
@@ -27,6 +29,15 @@ const TimeTable = ({
 }: TimeTableProps) => {
   const [availableTimeSlots, setAvailableTimeSlots] =
     useState<AvailableTimeSlotType[]>(mockTimeSlot);
+
+  useEffect(() => {
+    const TimeSlot = generateAvailableTimeSlots(selectedWeek);
+    setAvailableTimeSlots(TimeSlot);
+  }, [selectedWeek]);
+  const canRenderSlots = isAllSlotsInSelectedWeek(
+    availableTimeSlots,
+    selectedWeek,
+  );
 
   const { handleCellMouseDown, handleCellMouseEnter, isPreviewCell } =
     useTimeTableDrag({
@@ -60,10 +71,12 @@ const TimeTable = ({
         />
 
         {/* 유휴시간 블록들 - TimeCell 위 블록*/}
-        <AvailableTimeSlots
-          availableTimeData={availableTimeSlots}
-          selectedWeek={selectedWeek}
-        />
+        {canRenderSlots && (
+          <AvailableTimeSlots
+            availableTimeData={availableTimeSlots}
+            selectedWeek={selectedWeek}
+          />
+        )}
       </div>
     </div>
   );
