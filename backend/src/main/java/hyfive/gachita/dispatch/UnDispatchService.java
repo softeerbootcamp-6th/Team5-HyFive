@@ -13,13 +13,13 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class DispatchService {
+public class UnDispatchService {
 
     private final CenterDispatchLocationProvider centerDispatchLocationProvider;
     private final BoundingBoxFilter boundingBoxFilter;
     private final HaversineFilter haversineFilter;
 
-    public List<DispatchLocation> getFilteredLocations(double centerLat, double centerLng, double radiusMeters) {
+    public List<DispatchLocation> createPath(double centerLat, double centerLng, double radiusMeters) {
         // 1. 원본 데이터 가져오기
         List<DispatchLocation> centerCandidates = centerDispatchLocationProvider.getAll();
 
