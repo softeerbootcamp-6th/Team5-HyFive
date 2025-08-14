@@ -22,8 +22,8 @@ const TimeCell = ({
     <div
       css={getTimeCellStyle(mode, hourIndex, dayIndex, isPreviewCell)}
       style={{
-        gridColumn: dayIndex + 2,
-        gridRow: hourIndex + 1,
+        gridColumn: dayIndex + 1 + 1, // grid 인덱스 보정 + 시간 축 컬럼
+        gridRow: hourIndex + 1, // grid 인덱스 보정
       }}
       onMouseDown={onMouseDown}
       onMouseEnter={onMouseEnter}
