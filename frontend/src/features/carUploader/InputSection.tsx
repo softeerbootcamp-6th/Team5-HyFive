@@ -37,10 +37,7 @@ const InputSection = () => {
         render={({ field }) => (
           <ImageInput
             value={field.value}
-            onChange={(value) => {
-              field.onChange(value);
-              trigger("carImage");
-            }}
+            onChange={(value) => field.onChange(value)}
             setError={setError}
             errorMessage={errors.carImage?.message}
           />

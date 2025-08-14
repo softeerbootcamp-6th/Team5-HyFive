@@ -12,10 +12,12 @@ const useUploadImage = ({ onChange, setError }: UseUploadImageProps) => {
     const { validateImageType, validateImageSize } = ImageValidator(file);
 
     if (!validateImageType()) {
+      onChange(null);
       setError("carImage", { message: "JPG/PNG만 업로드 가능합니다" });
       return;
     }
     if (!validateImageSize()) {
+      onChange(null);
       setError("carImage", { message: "최대 크기는 50MB입니다" });
       return;
     }
