@@ -5,7 +5,7 @@ import hyfive.gachita.car.dto.CreateCarReq;
 import hyfive.gachita.car.dto.UpdateCarReq;
 import hyfive.gachita.car.repository.CarRepository;
 import hyfive.gachita.center.Center;
-import hyfive.gachita.center.CenterRepository;
+import hyfive.gachita.center.repository.CenterRepository;
 import hyfive.gachita.common.response.BusinessException;
 import hyfive.gachita.common.response.ErrorCode;
 import jakarta.transaction.Transactional;
@@ -21,6 +21,7 @@ import static hyfive.gachita.common.util.CarNumberFormatter.normalize;
 public class CarService {
     private final CarRepository carRepository;
     private final CenterRepository centerRepository;
+    private final S3Service s3Service;
 
     public Car createCar(CreateCarReq createCarReq){
         Center center = centerRepository.findById(createCarReq.centerId())
@@ -36,8 +37,7 @@ public class CarService {
             throw new BusinessException(ErrorCode.DUPLICATE_CAR_NUMBER);
         }
 
-        // TODO : 이미지 저장 service 개발 필요
-        String imageUrl = "test";
+        String imageUrl = s3Service.uploadImage(createCarReq.imageFile());
 
         // 엔티티 생성
         Car car = Car.builder()
@@ -62,8 +62,7 @@ public class CarService {
             throw new BusinessException(ErrorCode.DUPLICATE_CAR_NUMBER);
         }
 
-        // TODO : 이미지 저장 service 개발 필요 - 기존 사진 덮어 쓰기
-        String imageUrl = "test_change";
+        String imageUrl = s3Service.uploadImage(updateCarReq.imageFile());
 
         car.update(
                 updateCarReq.modelName(),

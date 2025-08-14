@@ -11,12 +11,12 @@ import hyfive.gachita.common.dto.ScrollRes;
 import hyfive.gachita.common.enums.SearchPeriod;
 import hyfive.gachita.common.response.BusinessException;
 import hyfive.gachita.common.response.ErrorCode;
+import hyfive.gachita.common.util.DateRangeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
@@ -65,7 +65,7 @@ public class BookService {
                 limit
         );
 
-        Pair<LocalDateTime, LocalDateTime> dateRange = SearchPeriod.getDateRange(period);
+        Pair<LocalDateTime, LocalDateTime> dateRange = DateRangeUtil.getDateRange(LocalDateTime.now(), period);
         Page<Book> pageResult = bookRepository.searchBookPageByCondition(dateRange, bookStatus, pageable);
 
         List<BookRes> bookResList = pageResult.getContent().stream().map(BookRes::from).toList();
