@@ -3,12 +3,14 @@ import { getTimeCellStyle } from "@/features/timeTable/TimeTable.style";
 interface TimeCellProps {
   hourIndex: number;
   dayIndex: number;
+  mode: "view" | "edit";
   onMouseDown?: () => void;
   onMouseEnter?: () => void;
   isPreviewCell: boolean;
 }
 
 const TimeCell = ({
+  mode,
   hourIndex,
   dayIndex,
   onMouseDown,
@@ -17,7 +19,7 @@ const TimeCell = ({
 }: TimeCellProps) => {
   return (
     <div
-      css={getTimeCellStyle(hourIndex, dayIndex, isPreviewCell)}
+      css={getTimeCellStyle(mode, hourIndex, dayIndex, isPreviewCell)}
       style={{
         gridColumn: dayIndex + 2,
         gridRow: hourIndex + 1,

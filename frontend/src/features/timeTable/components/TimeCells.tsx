@@ -4,6 +4,7 @@ import { memo, useMemo } from "react";
 interface TimeCellsProps {
   totalHours: number;
   selectedWeek: Date[];
+  mode: "view" | "edit";
   handleCellMouseDown: (dayIndex: number, hourIndex: number) => void;
   handleCellMouseEnter: (dayIndex: number, hourIndex: number) => void;
   isPreviewCell: (dayIndex: number, hourIndex: number) => boolean;
@@ -12,6 +13,7 @@ interface TimeCellsProps {
 const TimeCells = ({
   totalHours,
   selectedWeek,
+  mode,
   handleCellMouseDown,
   handleCellMouseEnter,
   isPreviewCell,
@@ -37,6 +39,7 @@ const TimeCells = ({
       {cells.map(({ key, hourIndex, dayIndex }) => (
         <TimeCell
           key={key}
+          mode={mode}
           hourIndex={hourIndex}
           dayIndex={dayIndex}
           onMouseDown={() => handleCellMouseDown(dayIndex, hourIndex)}

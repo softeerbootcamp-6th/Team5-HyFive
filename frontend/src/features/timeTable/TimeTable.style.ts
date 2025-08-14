@@ -88,13 +88,10 @@ export const TimeLabel = css`
 export const TimeCell = css`
   border-right: 1px solid ${color.GrayScale.gray3};
   border-bottom: 1px solid ${color.GrayScale.gray3};
-
-  &:hover {
-    background-color: ${color.GrayScale.gray2};
-  }
 `;
 
 export const getTimeCellStyle = (
+  mode: "view" | "edit",
   hourIndex: number,
   dayIndex: number,
   isPreviewCell: boolean,
@@ -104,6 +101,13 @@ export const getTimeCellStyle = (
 
   return css`
     ${TimeCell}
+    ${mode === "edit" &&
+    css`
+      cursor: pointer;
+      &:hover {
+        background-color: ${color.GrayScale.gray2};
+      }
+    `}
     ${isPreviewCell &&
     css`
       border-left: 4px solid ${color.Maincolor.primary};
