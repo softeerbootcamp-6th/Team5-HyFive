@@ -74,35 +74,32 @@ export const useTimeTableDrag = ({
     }));
   };
 
+  const finalizeDrag = useCallback(() => {
+    const state = dragState;
+    if (!canFinalizeDrag(state)) {
+      resetDrag(setDragState);
+      return;
+    }
+
+    const newSlot = createSlotFromDrag(
+      dragState.startPosition!,
+      dragState.currentPosition!,
+      selectedWeek,
+    );
+    const newSlotData = [newSlot, ...availableTimeSlots];
+    onSlotsUpdate?.(newSlotData);
+
+    resetDrag(setDragState);
+  }, [dragState, onSlotsUpdate, selectedWeek, availableTimeSlots]);
+
   useEffect(() => {
-    const handleMouseUp = () => {
-      if (
-        dragState.isDragging &&
-        dragState.startPosition &&
-        dragState.currentPosition
-      ) {
-        // 슬롯 추가 함수
-        const newSlot = createSlotFromDrag(
-          dragState.startPosition,
-          dragState.currentPosition,
-          selectedWeek,
-        );
-        const newSlotData = [newSlot, ...availableTimeSlots];
-        onSlotsUpdate?.(newSlotData);
+    const onMouseUp = () => finalizeDrag();
 
-        setDragState({
-          isDragging: false,
-          startPosition: null,
-          currentPosition: null,
-        });
-      }
-    };
-
-    document.addEventListener("mouseup", handleMouseUp);
+    document.addEventListener("mouseup", onMouseUp);
     return () => {
-      document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener("mouseup", onMouseUp);
     };
-  }, [dragState, selectedWeek, availableTimeSlots, onSlotsUpdate]);
+  }, [finalizeDrag]);
 
   const isPreviewCell = useCallback(
     (dayIndex: number, hourIndex: number) => {
@@ -171,4 +168,25 @@ const createSlotFromDrag = (
     rentalStartTime: formatHourWithColons(startHour),
     rentalEndTime: formatHourWithColons(endHour),
   };
+};
+
+const canFinalizeDrag = (state: DragState): boolean => {
+  const { isDragging, startPosition, currentPosition } = state;
+  if (!isDragging || !startPosition || !currentPosition) return false;
+
+  const isSameDay = startPosition.dayIndex === currentPosition.dayIndex;
+  const isDownward = startPosition.hourIndex < currentPosition.hourIndex;
+  const hasMinLength = currentPosition.hourIndex - startPosition.hourIndex >= 1;
+
+  return isSameDay && isDownward && hasMinLength;
+};
+
+const resetDrag = (
+  setDragState: React.Dispatch<React.SetStateAction<DragState>>,
+) => {
+  setDragState({
+    isDragging: false,
+    startPosition: null,
+    currentPosition: null,
+  });
 };
