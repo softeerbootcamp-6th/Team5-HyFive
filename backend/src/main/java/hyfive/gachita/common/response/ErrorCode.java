@@ -28,12 +28,13 @@ public enum ErrorCode {
     /*서버, DB, s3 3000*/
     DATABASE_ERROR(false, 3000, "DB에 문제가 발생했습니다."),
     NO_EXIST_VALUE(false, 3001, "DB에 데이터가 존재하지 않습니다."),
-    EMPTY_FILE(false, 3002, "S3 업로드 실패 - 빈 파일을 주셨습니다."),
+    EMPTY_FILE(false, 3002, "빈 파일 입니다."),
     FILE_TYPE_NOT_ALLOWED(false, 3003, "허용되지 않은 확장자 입니다."),
     FILE_DELETE_FAIL(false, 3004, "S3 이미지 삭제에 실패했습니다."),
     MAX_UPLOAD_SIZE_EXCEEDED(false, 3005, "파일 사이즈는 최대 10MB 까지 업로드 할 수 있습니다.",
             MaxUploadSizeExceededException.class
     ),
+    S3_UPLOAD_FAILED(false, 3006, "S3 업로드 중 알 수 없는 예외 발생"),
 
     /*차량 4500*/
     MAX_CAR_COUNT_EXCEEDED(false, 4500, "등록 가능한 최대 차량 수는 6대 입니다."),

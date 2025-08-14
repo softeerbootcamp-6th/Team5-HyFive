@@ -19,6 +19,14 @@ public class ApiClientConfig {
                 .build();
     }
 
+    @Bean
+    @Qualifier("KakaoNaviRestClient")
+    public RestClient kaKaoNaviRestClient() {
+        return RestClient.builder()
+                .requestInterceptor(loggingInterceptor())
+                .build();
+    }
+
     private ClientHttpRequestInterceptor loggingInterceptor() {
         return (request, body, execution) -> {
             log.info("요청 URI: {}", request.getURI());
