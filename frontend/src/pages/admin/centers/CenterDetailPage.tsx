@@ -60,6 +60,7 @@ const CenterDetailPage = () => {
         <h4 css={SectionLabel}>차량 시간표</h4>
         <div css={TableSection}>
           <TimeTable
+            mode="view"
             selectedCarId={selectedCarId}
             selectedWeek={state.selectedWeek}
           />

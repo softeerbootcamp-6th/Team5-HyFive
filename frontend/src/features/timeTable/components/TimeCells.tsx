@@ -1,17 +1,20 @@
 import TimeCell from "@/features/timeTable/components/TimeCell";
+import type { TimeTableMode } from "@/features/timeTable/TimeTable.type";
 import { memo, useMemo } from "react";
 
 interface TimeCellsProps {
   totalHours: number;
   selectedWeek: Date[];
-  handleCellMouseDown: (dayIndex: number, hourIndex: number) => void;
-  handleCellMouseEnter: (dayIndex: number, hourIndex: number) => void;
-  isPreviewCell: (dayIndex: number, hourIndex: number) => boolean;
+  mode: TimeTableMode;
+  handleCellMouseDown?: (dayIndex: number, hourIndex: number) => void;
+  handleCellMouseEnter?: (dayIndex: number, hourIndex: number) => void;
+  isPreviewCell?: (dayIndex: number, hourIndex: number) => boolean;
 }
 
 const TimeCells = ({
   totalHours,
   selectedWeek,
+  mode,
   handleCellMouseDown,
   handleCellMouseEnter,
   isPreviewCell,
@@ -37,11 +40,12 @@ const TimeCells = ({
       {cells.map(({ key, hourIndex, dayIndex }) => (
         <TimeCell
           key={key}
+          mode={mode}
           hourIndex={hourIndex}
           dayIndex={dayIndex}
-          onMouseDown={() => handleCellMouseDown(dayIndex, hourIndex)}
-          onMouseEnter={() => handleCellMouseEnter(dayIndex, hourIndex)}
-          isPreviewCell={isPreviewCell(dayIndex, hourIndex)}
+          onMouseDown={() => handleCellMouseDown?.(dayIndex, hourIndex)}
+          onMouseEnter={() => handleCellMouseEnter?.(dayIndex, hourIndex)}
+          isPreviewCell={!!isPreviewCell?.(dayIndex, hourIndex)}
         />
       ))}
     </>

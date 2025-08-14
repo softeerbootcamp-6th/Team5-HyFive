@@ -1,3 +1,4 @@
+import type { AvailableTimeSlotType } from "@/features/timeTable/TimeTable.type";
 import { format, isSameDay } from "date-fns";
 import { ko } from "date-fns/locale";
 
@@ -36,4 +37,19 @@ export const formatDayOfWeek = (date: Date): string => {
  */
 export const formatHourWithColons = (hour: number): string => {
   return `${hour}:00`;
+};
+
+/**
+ * 배열의 모든 데이터의 날짜가 selectedWeek의 날짜에 포함되는지 확인합니다.
+ * @param slots 확인할 시간 슬롯 배열
+ * @param selectedWeek 선택된 주의 날짜 배열
+ * @returns 모든 슬롯이 선택된 주에 포함되면 true, 아니면 false
+ */
+export const isAllSlotsInSelectedWeek = (
+  slots: AvailableTimeSlotType[],
+  selectedWeek: Date[],
+): boolean => {
+  const formattedWeek = selectedWeek.map((date) => format(date, "yyyy-MM-dd"));
+
+  return slots.every((slot) => formattedWeek.includes(slot.rentalDate));
 };

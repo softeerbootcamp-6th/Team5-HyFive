@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
 import { getDayIndex } from "@/features/calender/Calender.util";
-import type { AvailableTimeSlotType } from "./TimeTable.type";
+import type { AvailableTimeSlotType, TimeTableMode } from "./TimeTable.type";
 import { TIME_TABLE_CONFIG } from "@/features/timeTable/TimeTable.constants";
 
 const { color, typography, borderRadius } = theme;
@@ -88,13 +88,10 @@ export const TimeLabel = css`
 export const TimeCell = css`
   border-right: 1px solid ${color.GrayScale.gray3};
   border-bottom: 1px solid ${color.GrayScale.gray3};
-
-  &:hover {
-    background-color: ${color.GrayScale.gray2};
-  }
 `;
 
 export const getTimeCellStyle = (
+  mode: TimeTableMode,
   hourIndex: number,
   dayIndex: number,
   isPreviewCell: boolean,
@@ -104,6 +101,13 @@ export const getTimeCellStyle = (
 
   return css`
     ${TimeCell}
+    ${mode === "edit" &&
+    css`
+      cursor: pointer;
+      &:hover {
+        background-color: ${color.GrayScale.gray2};
+      }
+    `}
     ${isPreviewCell &&
     css`
       border-left: 4px solid ${color.Maincolor.primary};

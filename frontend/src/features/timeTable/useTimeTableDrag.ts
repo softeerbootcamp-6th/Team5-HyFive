@@ -1,5 +1,8 @@
 import { TIME_TABLE_CONFIG } from "@/features/timeTable/TimeTable.constants";
-import type { AvailableTimeSlotType } from "@/features/timeTable/TimeTable.type";
+import type {
+  AvailableTimeSlotType,
+  TimeTableMode,
+} from "@/features/timeTable/TimeTable.type";
 import { formatHourWithColons } from "@/features/timeTable/TimeTable.util";
 import { format } from "date-fns";
 import { useState, useEffect, useCallback } from "react";
@@ -11,12 +14,14 @@ interface DragState {
 }
 
 interface useTimeTableDragProps {
+  mode: TimeTableMode;
   selectedWeek: Date[];
   availableTimeSlots: AvailableTimeSlotType[];
   onSlotsUpdate?: (slots: AvailableTimeSlotType[]) => void;
 }
 
 export const useTimeTableDrag = ({
+  mode,
   selectedWeek,
   availableTimeSlots,
   onSlotsUpdate,
@@ -28,6 +33,7 @@ export const useTimeTableDrag = ({
   });
 
   const handleCellMouseDown = (dayIndex: number, hourIndex: number) => {
+    if (mode !== "edit") return;
     if (dragState.isDragging) return;
 
     // 해당 위치에 이미 슬롯이 있는지 확인
@@ -50,6 +56,8 @@ export const useTimeTableDrag = ({
   };
 
   const handleCellMouseEnter = (dayIndex: number, hourIndex: number) => {
+    if (mode !== "edit") return;
+
     if (!dragState.isDragging) return;
 
     // 가로 드래그 무시
@@ -66,38 +74,36 @@ export const useTimeTableDrag = ({
     }));
   };
 
+  const finalizeDrag = useCallback(() => {
+    const state = dragState;
+    if (!canFinalizeDrag(state)) {
+      resetDrag(setDragState);
+      return;
+    }
+
+    const newSlot = createSlotFromDrag(
+      dragState.startPosition!,
+      dragState.currentPosition!,
+      selectedWeek,
+    );
+    const newSlotData = [newSlot, ...availableTimeSlots];
+    onSlotsUpdate?.(newSlotData);
+
+    resetDrag(setDragState);
+  }, [dragState, onSlotsUpdate, selectedWeek, availableTimeSlots]);
+
   useEffect(() => {
-    const handleMouseUp = () => {
-      if (
-        dragState.isDragging &&
-        dragState.startPosition &&
-        dragState.currentPosition
-      ) {
-        // 슬롯 추가 함수
-        const newSlot = createSlotFromDrag(
-          dragState.startPosition,
-          dragState.currentPosition,
-          selectedWeek,
-        );
-        const newSlotData = [newSlot, ...availableTimeSlots];
-        onSlotsUpdate?.(newSlotData);
+    const onMouseUp = () => finalizeDrag();
 
-        setDragState({
-          isDragging: false,
-          startPosition: null,
-          currentPosition: null,
-        });
-      }
-    };
-
-    document.addEventListener("mouseup", handleMouseUp);
+    document.addEventListener("mouseup", onMouseUp);
     return () => {
-      document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener("mouseup", onMouseUp);
     };
-  }, [dragState, selectedWeek, availableTimeSlots, onSlotsUpdate]);
+  }, [finalizeDrag]);
 
   const isPreviewCell = useCallback(
     (dayIndex: number, hourIndex: number) => {
+      if (mode !== "edit") return false;
       const { isDragging, startPosition, currentPosition } = dragState;
 
       if (!isDragging || !startPosition || !currentPosition) {
@@ -110,7 +116,7 @@ export const useTimeTableDrag = ({
         hourIndex <= currentPosition.hourIndex
       );
     },
-    [dragState],
+    [dragState, mode],
   );
 
   return {
@@ -162,4 +168,25 @@ const createSlotFromDrag = (
     rentalStartTime: formatHourWithColons(startHour),
     rentalEndTime: formatHourWithColons(endHour),
   };
+};
+
+const canFinalizeDrag = (state: DragState): boolean => {
+  const { isDragging, startPosition, currentPosition } = state;
+  if (!isDragging || !startPosition || !currentPosition) return false;
+
+  const isSameDay = startPosition.dayIndex === currentPosition.dayIndex;
+  const isDownward = startPosition.hourIndex < currentPosition.hourIndex;
+  const hasMinLength = currentPosition.hourIndex - startPosition.hourIndex >= 1;
+
+  return isSameDay && isDownward && hasMinLength;
+};
+
+const resetDrag = (
+  setDragState: React.Dispatch<React.SetStateAction<DragState>>,
+) => {
+  setDragState({
+    isDragging: false,
+    startPosition: null,
+    currentPosition: null,
+  });
 };
