@@ -18,6 +18,7 @@ const InputSection = () => {
     control,
     trigger,
     handleSubmit,
+    setError,
     reset,
     formState: { errors, isValid },
   } = useCarForm();
@@ -40,6 +41,7 @@ const InputSection = () => {
               field.onChange(value);
               trigger("carImage");
             }}
+            setError={setError}
             errorMessage={errors.carImage?.message}
           />
         )}

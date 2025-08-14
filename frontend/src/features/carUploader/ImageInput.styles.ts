@@ -127,6 +127,11 @@ const ImageInputWrapper = css`
   display: none;
 `;
 
+const ErrorText = css`
+  font: ${typography.Body.b4_regu};
+  color: ${color.Semantic.error};
+`;
+
 export {
   ImageInputContainer,
   LabelWrapper,
@@ -143,4 +148,5 @@ export {
   DescriptionText,
   Linktext,
   ImageInputWrapper,
+  ErrorText,
 };

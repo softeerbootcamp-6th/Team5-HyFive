@@ -4,6 +4,7 @@ import useUploadImage from "@/features/carUploader/useUploadImage";
 import usePreviewImage from "@/features/carUploader/usePreviewImage";
 import {
   DescriptionText,
+  ErrorText,
   HoverText,
   ImageContainer,
   ImageHoverWrapper,
@@ -20,16 +21,23 @@ import {
   TitleText,
 } from "@/features/carUploader/ImageInput.styles";
 import useDocumentEvent from "@/hooks/useDocumentEvent";
+import type { UseFormSetError } from "react-hook-form";
 
 interface ImageInputProps {
   value: File | null;
   onChange: (value: File | null) => void;
   errorMessage?: string;
+  setError: UseFormSetError<{ carImage: File }>;
 }
-const ImageInput = ({ value, onChange, errorMessage }: ImageInputProps) => {
+const ImageInput = ({
+  value,
+  onChange,
+  setError,
+  errorMessage,
+}: ImageInputProps) => {
   useDocumentEvent();
   const { handleUploadImage, handleUploadImageByDrag, handleRemoveImage } =
-    useUploadImage({ onChange });
+    useUploadImage({ onChange, setError });
   const { previewUrl } = usePreviewImage({ value });
   const { dragActive, handleDropImage, handleDragActive } = useDragImage({
     handleUploadImage: handleUploadImageByDrag,
@@ -76,6 +84,7 @@ const ImageInput = ({ value, onChange, errorMessage }: ImageInputProps) => {
           </div>
         )}
       </div>
+      {errorMessage && <p css={ErrorText}>{errorMessage}</p>}
     </div>
   );
 };
