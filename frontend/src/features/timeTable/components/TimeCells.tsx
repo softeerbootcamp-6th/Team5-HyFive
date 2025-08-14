@@ -6,9 +6,9 @@ interface TimeCellsProps {
   totalHours: number;
   selectedWeek: Date[];
   mode: TimeTableMode;
-  handleCellMouseDown: (dayIndex: number, hourIndex: number) => void;
-  handleCellMouseEnter: (dayIndex: number, hourIndex: number) => void;
-  isPreviewCell: (dayIndex: number, hourIndex: number) => boolean;
+  handleCellMouseDown?: (dayIndex: number, hourIndex: number) => void;
+  handleCellMouseEnter?: (dayIndex: number, hourIndex: number) => void;
+  isPreviewCell?: (dayIndex: number, hourIndex: number) => boolean;
 }
 
 const TimeCells = ({
@@ -43,9 +43,9 @@ const TimeCells = ({
           mode={mode}
           hourIndex={hourIndex}
           dayIndex={dayIndex}
-          onMouseDown={() => handleCellMouseDown(dayIndex, hourIndex)}
-          onMouseEnter={() => handleCellMouseEnter(dayIndex, hourIndex)}
-          isPreviewCell={isPreviewCell(dayIndex, hourIndex)}
+          onMouseDown={() => handleCellMouseDown?.(dayIndex, hourIndex)}
+          onMouseEnter={() => handleCellMouseEnter?.(dayIndex, hourIndex)}
+          isPreviewCell={!!isPreviewCell?.(dayIndex, hourIndex)}
         />
       ))}
     </>

@@ -23,12 +23,14 @@ const mockTimeSlot: AvailableTimeSlotType[] =
 const TimeTable = ({
   selectedCarId: _selectedCarId,
   selectedWeek,
+  mode,
 }: TimeTableProps) => {
   const [availableTimeSlots, setAvailableTimeSlots] =
     useState<AvailableTimeSlotType[]>(mockTimeSlot);
 
   const { handleCellMouseDown, handleCellMouseEnter, isPreviewCell } =
     useTimeTableDrag({
+      mode,
       selectedWeek,
       availableTimeSlots,
       onSlotsUpdate: (slots) => setAvailableTimeSlots(slots),
@@ -45,11 +47,16 @@ const TimeTable = ({
 
         {/* 시간 셀들 - 빈 7 * 11개의 셀 */}
         <TimeCells
+          mode={mode}
           totalHours={TIME_TABLE_CONFIG.TOTAL_HOURS}
           selectedWeek={selectedWeek}
-          handleCellMouseDown={handleCellMouseDown}
-          handleCellMouseEnter={handleCellMouseEnter}
-          isPreviewCell={isPreviewCell}
+          handleCellMouseDown={
+            mode === "edit" ? handleCellMouseDown : undefined
+          }
+          handleCellMouseEnter={
+            mode === "edit" ? handleCellMouseEnter : undefined
+          }
+          isPreviewCell={mode === "edit" ? isPreviewCell : undefined}
         />
 
         {/* 유휴시간 블록들 - TimeCell 위 블록*/}

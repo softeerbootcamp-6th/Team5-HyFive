@@ -1,5 +1,8 @@
 import { TIME_TABLE_CONFIG } from "@/features/timeTable/TimeTable.constants";
-import type { AvailableTimeSlotType } from "@/features/timeTable/TimeTable.type";
+import type {
+  AvailableTimeSlotType,
+  TimeTableMode,
+} from "@/features/timeTable/TimeTable.type";
 import { formatHourWithColons } from "@/features/timeTable/TimeTable.util";
 import { format } from "date-fns";
 import { useState, useEffect, useCallback } from "react";
@@ -11,12 +14,14 @@ interface DragState {
 }
 
 interface useTimeTableDragProps {
+  mode: TimeTableMode;
   selectedWeek: Date[];
   availableTimeSlots: AvailableTimeSlotType[];
   onSlotsUpdate?: (slots: AvailableTimeSlotType[]) => void;
 }
 
 export const useTimeTableDrag = ({
+  mode,
   selectedWeek,
   availableTimeSlots,
   onSlotsUpdate,
@@ -28,6 +33,7 @@ export const useTimeTableDrag = ({
   });
 
   const handleCellMouseDown = (dayIndex: number, hourIndex: number) => {
+    if (mode !== "edit") return;
     if (dragState.isDragging) return;
 
     // 해당 위치에 이미 슬롯이 있는지 확인
@@ -50,6 +56,8 @@ export const useTimeTableDrag = ({
   };
 
   const handleCellMouseEnter = (dayIndex: number, hourIndex: number) => {
+    if (mode !== "edit") return;
+
     if (!dragState.isDragging) return;
 
     // 가로 드래그 무시
@@ -98,6 +106,7 @@ export const useTimeTableDrag = ({
 
   const isPreviewCell = useCallback(
     (dayIndex: number, hourIndex: number) => {
+      if (mode !== "edit") return false;
       const { isDragging, startPosition, currentPosition } = dragState;
 
       if (!isDragging || !startPosition || !currentPosition) {
@@ -110,7 +119,7 @@ export const useTimeTableDrag = ({
         hourIndex <= currentPosition.hourIndex
       );
     },
-    [dragState],
+    [dragState, mode],
   );
 
   return {

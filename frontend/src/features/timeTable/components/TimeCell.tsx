@@ -7,7 +7,7 @@ interface TimeCellProps {
   mode: TimeTableMode;
   onMouseDown?: () => void;
   onMouseEnter?: () => void;
-  isPreviewCell: boolean;
+  isPreviewCell?: boolean;
 }
 
 const TimeCell = ({
@@ -16,7 +16,7 @@ const TimeCell = ({
   dayIndex,
   onMouseDown,
   onMouseEnter,
-  isPreviewCell,
+  isPreviewCell = false,
 }: TimeCellProps) => {
   return (
     <div
