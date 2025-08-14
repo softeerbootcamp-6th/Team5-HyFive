@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static hyfive.gachita.car.QCar.car;
-import static hyfive.gachita.path.QPath.path;
+import static hyfive.gachita.path.domain.QPath.path;
 
 @RequiredArgsConstructor
 public class CustomCarRepositoryImpl implements CustomCarRepository {
