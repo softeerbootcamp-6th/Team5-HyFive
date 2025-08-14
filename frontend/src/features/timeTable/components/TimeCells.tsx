@@ -1,10 +1,11 @@
 import TimeCell from "@/features/timeTable/components/TimeCell";
+import type { TimeTableMode } from "@/features/timeTable/TimeTable.type";
 import { memo, useMemo } from "react";
 
 interface TimeCellsProps {
   totalHours: number;
   selectedWeek: Date[];
-  mode: "view" | "edit";
+  mode: TimeTableMode;
   handleCellMouseDown: (dayIndex: number, hourIndex: number) => void;
   handleCellMouseEnter: (dayIndex: number, hourIndex: number) => void;
   isPreviewCell: (dayIndex: number, hourIndex: number) => boolean;

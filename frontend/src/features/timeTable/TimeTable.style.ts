@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
 import { getDayIndex } from "@/features/calender/Calender.util";
-import type { AvailableTimeSlotType } from "./TimeTable.type";
+import type { AvailableTimeSlotType, TimeTableMode } from "./TimeTable.type";
 import { TIME_TABLE_CONFIG } from "@/features/timeTable/TimeTable.constants";
 
 const { color, typography, borderRadius } = theme;
@@ -91,7 +91,7 @@ export const TimeCell = css`
 `;
 
 export const getTimeCellStyle = (
-  mode: "view" | "edit",
+  mode: TimeTableMode,
   hourIndex: number,
   dayIndex: number,
   isPreviewCell: boolean,

@@ -17,5 +17,7 @@ export interface CellPosition {
 export interface TimeTableProps {
   selectedCarId: number;
   selectedWeek: Date[];
-  mode: "view" | "edit";
+  mode: TimeTableMode;
 }
+
+export type TimeTableMode = "view" | "edit";

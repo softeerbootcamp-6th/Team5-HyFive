@@ -1,9 +1,10 @@
 import { getTimeCellStyle } from "@/features/timeTable/TimeTable.style";
+import type { TimeTableMode } from "@/features/timeTable/TimeTable.type";
 
 interface TimeCellProps {
   hourIndex: number;
   dayIndex: number;
-  mode: "view" | "edit";
+  mode: TimeTableMode;
   onMouseDown?: () => void;
   onMouseEnter?: () => void;
   isPreviewCell: boolean;
