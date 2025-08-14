@@ -19,6 +19,7 @@ import {
   TextWrapper,
   TitleText,
 } from "@/features/carUploader/ImageInput.styles";
+import useDocumentEvent from "@/hooks/useDocumentEvent";
 
 interface ImageInputProps {
   value: File | null;
@@ -26,6 +27,7 @@ interface ImageInputProps {
   errorMessage?: string;
 }
 const ImageInput = ({ value, onChange, errorMessage }: ImageInputProps) => {
+  useDocumentEvent();
   const { handleUploadImage, handleUploadImageByDrag, handleRemoveImage } =
     useUploadImage({ onChange });
   const { previewUrl } = usePreviewImage({ value });
