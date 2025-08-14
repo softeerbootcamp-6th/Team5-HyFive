@@ -16,6 +16,7 @@ const InputSection = () => {
   const {
     register,
     control,
+    trigger,
     handleSubmit,
     reset,
     formState: { errors, isValid },
@@ -35,7 +36,10 @@ const InputSection = () => {
         render={({ field }) => (
           <ImageInput
             value={field.value}
-            onChange={field.onChange}
+            onChange={(value) => {
+              field.onChange(value);
+              trigger("carImage");
+            }}
             errorMessage={errors.carImage?.message}
           />
         )}
