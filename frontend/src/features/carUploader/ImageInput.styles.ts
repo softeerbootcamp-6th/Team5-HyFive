@@ -28,7 +28,7 @@ const getImageContainerBorder = (
   errorMessage: string | undefined,
 ) => {
   if (errorMessage) return `1px solid ${color.Semantic.error}`;
-  if (dragActive) return `2px dotted ${color.GrayScale.gray3}`;
+  if (dragActive) return `2px dotted ${color.Maincolor.primary}`;
   return `1px solid ${color.GrayScale.gray3}`;
 };
 
