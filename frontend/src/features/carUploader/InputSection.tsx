@@ -16,7 +16,6 @@ const InputSection = () => {
   const {
     register,
     control,
-    trigger,
     handleSubmit,
     setError,
     reset,

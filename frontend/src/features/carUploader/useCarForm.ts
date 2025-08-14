@@ -15,30 +15,22 @@ const carSchema = z.object({
 });
 
 const useCarForm = () => {
-  const {
-    register,
-    control,
-    trigger,
-    handleSubmit,
-    setError,
-    reset,
-    formState,
-  } = useForm({
-    mode: "onSubmit",
-    resolver: zodResolver(carSchema),
-    defaultValues: {
-      carImage: undefined,
-      carModel: "",
-      carNumber: "",
-      maxPassenger: "",
-      isLowFloor: false,
-    },
-  });
+  const { register, control, handleSubmit, setError, reset, formState } =
+    useForm({
+      mode: "onSubmit",
+      resolver: zodResolver(carSchema),
+      defaultValues: {
+        carImage: undefined,
+        carModel: "",
+        carNumber: "",
+        maxPassenger: "",
+        isLowFloor: false,
+      },
+    });
 
   return {
     register,
     control,
-    trigger,
     handleSubmit,
     setError,
     reset,
