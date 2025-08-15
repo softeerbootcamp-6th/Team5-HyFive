@@ -10,7 +10,7 @@ export type CarFormValues = {
   isLowFloor: boolean;
 };
 
-const EMPTY_VALUES = {
+const emptyValues = {
   carImage: null,
   carModel: "",
   carNumber: "",
@@ -38,13 +38,13 @@ const useCarForm = (initValues?: CarFormValues) => {
       mode: "onSubmit",
       resolver: zodResolver(carSchema),
       defaultValues: {
-        ...EMPTY_VALUES,
+        ...emptyValues,
         ...initValues,
       },
     });
 
   const handleReset = () => {
-    reset(EMPTY_VALUES);
+    reset(emptyValues);
   };
 
   return {
