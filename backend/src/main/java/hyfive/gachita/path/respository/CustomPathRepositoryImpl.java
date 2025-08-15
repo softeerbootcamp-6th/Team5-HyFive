@@ -4,7 +4,7 @@ import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hyfive.gachita.dispatch.dto.NodeDispatchLocationDto;
 import hyfive.gachita.dispatch.dto.PathDispatchDto;
-import hyfive.gachita.dispatch.module.filter.condition.PathCondition;
+import hyfive.gachita.dispatch.module.condition.PathCondition;
 import hyfive.gachita.node.Node;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

@@ -1,8 +1,7 @@
 package hyfive.gachita.path.respository;
 
 import hyfive.gachita.dispatch.dto.PathDispatchDto;
-import hyfive.gachita.dispatch.module.filter.condition.FilterCondition;
-import hyfive.gachita.dispatch.module.filter.condition.PathCondition;
+import hyfive.gachita.dispatch.module.condition.PathCondition;
 
 import java.util.List;
 

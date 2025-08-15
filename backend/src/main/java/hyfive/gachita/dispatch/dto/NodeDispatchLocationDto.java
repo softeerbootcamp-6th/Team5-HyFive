@@ -1,5 +1,6 @@
 package hyfive.gachita.dispatch.dto;
 
+import hyfive.gachita.dispatch.module.condition.Condition;
 import hyfive.gachita.node.NodeType;
 import lombok.Builder;
 import org.springframework.data.util.Pair;
@@ -15,4 +16,4 @@ public record NodeDispatchLocationDto (
         NodeType type,
 
         Pair<LocalTime, LocalTime> deadline // 도착 보장 시간 <시작, 끝>
-) {}
+) implements Condition {}

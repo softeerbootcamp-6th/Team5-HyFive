@@ -1,4 +1,4 @@
-package hyfive.gachita.dispatch.module.filter.condition;
+package hyfive.gachita.dispatch.module.condition;
 
 import lombok.Builder;
 
@@ -7,5 +7,5 @@ public record RadiusCondition(
         double centerLat,
         double centerLng,
         double radiusMeters
-) implements FilterCondition {
+) implements Condition {
 }

@@ -1,8 +1,8 @@
-package hyfive.gachita.dispatch.provider;
+package hyfive.gachita.dispatch.module.provider;
 
 import hyfive.gachita.dispatch.dto.DispatchLocation;
-import hyfive.gachita.dispatch.module.filter.condition.FilterCondition;
-import hyfive.gachita.dispatch.module.filter.condition.PathCondition;
+import hyfive.gachita.dispatch.module.condition.Condition;
+import hyfive.gachita.dispatch.module.condition.PathCondition;
 import hyfive.gachita.path.respository.PathRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -21,7 +21,9 @@ public class NodeDispatchLocationProvider implements DispatchLocationProvider {
     }
 
     @Override
-    public List<DispatchLocation> getByCondition(PathCondition pathCondition) {
-        return pathRepository.searchPathList(pathCondition);
+    public List<DispatchLocation> getByCondition(Condition pathCondition) {
+        return pathRepository.searchPathList((PathCondition) pathCondition).stream()
+                .map(dto -> (DispatchLocation) dto)
+                .toList();
     }
 }

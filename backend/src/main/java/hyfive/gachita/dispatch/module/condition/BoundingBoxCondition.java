@@ -1,4 +1,4 @@
-package hyfive.gachita.dispatch.module.filter.condition;
+package hyfive.gachita.dispatch.module.condition;
 
 import lombok.Builder;
 
@@ -8,7 +8,7 @@ public record BoundingBoxCondition(
         double maxLat,
         double minLng,
         double maxLng
-) implements FilterCondition {
+) implements Condition {
     private static final double EARTH_RADIUS_METERS = 6371000; // 단위 : meters
 
     public static BoundingBoxCondition from(double centerLat, double centerLng, double radiusMeters) {

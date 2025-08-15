@@ -1,7 +1,7 @@
 package hyfive.gachita.dispatch.module.filter;
 
 import hyfive.gachita.dispatch.dto.FilterDto;
-import hyfive.gachita.dispatch.module.filter.condition.RadiusCondition;
+import hyfive.gachita.dispatch.module.condition.RadiusCondition;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

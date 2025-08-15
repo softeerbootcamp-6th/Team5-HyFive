@@ -1,4 +1,4 @@
-package hyfive.gachita.dispatch.module.filter.condition;
+package hyfive.gachita.dispatch.module.condition;
 
 /**
  * 요약 : 필터 조건 인터페이스
@@ -6,5 +6,5 @@ package hyfive.gachita.dispatch.module.filter.condition;
  * 사용 방법 :
  *  - (예시 구현체) RadiusCondition.java
  */
-public interface FilterCondition {
+public interface Condition {
 }

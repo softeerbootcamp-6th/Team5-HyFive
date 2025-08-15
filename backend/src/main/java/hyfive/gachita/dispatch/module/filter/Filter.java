@@ -1,7 +1,7 @@
 package hyfive.gachita.dispatch.module.filter;
 
 import hyfive.gachita.dispatch.dto.FilterDto;
-import hyfive.gachita.dispatch.module.filter.condition.FilterCondition;
+import hyfive.gachita.dispatch.module.condition.Condition;
 
 import java.util.List;
 
@@ -12,6 +12,6 @@ import java.util.List;
  * 사용 방법 :
  *  - (예시 구현체) HarversineFilter.java
  */
-public interface Filter<C extends FilterCondition> {
+public interface Filter<C extends Condition> {
     List<FilterDto> filter(List<FilterDto> candidates, C condition);
 }

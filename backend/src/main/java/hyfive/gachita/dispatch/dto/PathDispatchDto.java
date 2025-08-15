@@ -10,4 +10,4 @@ public record PathDispatchDto (
         List<NodeDispatchLocationDto> nodes,
         int duration,                        // 단위 : sec : 총 이동 시간
         int distance                         // 단위 : meters
-) {}
+) implements DispatchLocation {}
