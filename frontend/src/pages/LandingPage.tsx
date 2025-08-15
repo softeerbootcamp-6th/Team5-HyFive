@@ -9,13 +9,13 @@ const LandingPage = () => {
       <div css={PartPageContainer} className="admin">
         <div css={PartPageWrapper}>
           <p css={PageTitleText}>관리자용 페이지</p>
-          <NavigationButton />
+          <NavigationButton navigate="admin" />
         </div>
       </div>
       <div css={PartPageContainer} className="center">
         <div css={PartPageWrapper}>
           <p css={PageTitleText}>센터용 페이지</p>
-          <NavigationButton />
+          <NavigationButton navigate="center" />
         </div>
       </div>
     </div>
