@@ -12,12 +12,9 @@ import useCarForm, {
 type InputMode = "register" | "edit";
 interface InputSectionProps {
   type?: InputMode;
-  defaultValues?: Partial<CarFormValues>;
+  initValues?: CarFormValues;
 }
-const InputSection = ({
-  type = "register",
-  defaultValues,
-}: InputSectionProps) => {
+const InputSection = ({ type = "register", initValues }: InputSectionProps) => {
   const MAX_PASSENGER = 25;
   const dropdownOptions = Array.from({ length: MAX_PASSENGER }, (_, index) =>
     String(index + 1),
@@ -27,17 +24,17 @@ const InputSection = ({
     register,
     control,
     handleSubmit,
+    handleReset,
     setError,
-    reset,
     formState: { errors, isValid },
-  } = useCarForm(defaultValues);
+  } = useCarForm(initValues);
 
   return (
     <form
       css={InputSectionContainer}
       onSubmit={handleSubmit((e) => {
         console.log(e);
-        reset();
+        handleReset();
       })}
     >
       <Controller
