@@ -8,6 +8,7 @@ import { Controller } from "react-hook-form";
 import useCarForm, {
   type CarFormValues,
 } from "@/features/carUploader/useCarForm";
+import { useMemo } from "react";
 
 type InputMode = "register" | "edit";
 interface InputSectionProps {
@@ -23,11 +24,22 @@ const InputSection = ({ type = "register", initValues }: InputSectionProps) => {
   const {
     register,
     control,
+    watch,
     handleSubmit,
     handleReset,
     clearErrors,
     formState: { errors, isValid },
   } = useCarForm(initValues);
+
+  const watchValues = watch();
+  const isChanged = useMemo(() => {
+    if (!initValues) return true;
+    return Object.keys(initValues).some(
+      (key) =>
+        watchValues[key as keyof CarFormValues] !==
+        initValues[key as keyof CarFormValues],
+    );
+  }, [watchValues, initValues]);
 
   return (
     <form
@@ -97,9 +109,10 @@ const InputSection = ({ type = "register", initValues }: InputSectionProps) => {
       />
       <Button
         type="submit"
-        bgColor={isValid ? "orange" : "gray"}
+        bgColor={isChanged && isValid ? "orange" : "gray"}
         label={type === "register" ? "등록하기" : "수정하기"}
         size="big"
+        disabled={!isChanged}
       />
     </form>
   );

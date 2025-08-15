@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 export type CarFormValues = {
-  carImage: File | string;
+  carImage: File | string | null;
   carModel: string;
   carNumber: string;
   maxPassenger: string;
@@ -33,15 +33,22 @@ const carSchema = z.object({
 });
 
 const useCarForm = (initValues?: CarFormValues) => {
-  const { register, control, handleSubmit, clearErrors, reset, formState } =
-    useForm({
-      mode: "onSubmit",
-      resolver: zodResolver(carSchema),
-      defaultValues: {
-        ...emptyValues,
-        ...initValues,
-      },
-    });
+  const {
+    register,
+    control,
+    watch,
+    handleSubmit,
+    clearErrors,
+    reset,
+    formState,
+  } = useForm<CarFormValues>({
+    mode: "onSubmit",
+    resolver: zodResolver(carSchema),
+    defaultValues: {
+      ...emptyValues,
+      ...initValues,
+    },
+  });
 
   const handleReset = () => {
     reset(emptyValues);
@@ -50,6 +57,7 @@ const useCarForm = (initValues?: CarFormValues) => {
   return {
     register,
     control,
+    watch,
     handleSubmit,
     handleReset,
     clearErrors,
