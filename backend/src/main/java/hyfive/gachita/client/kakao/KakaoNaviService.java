@@ -21,18 +21,25 @@ public class KakaoNaviService {
         // API 호출
         KakaoNaviRes.Route route = kakaoNaviApiClient.getWaypointsDirections(request);
 
-        int totalTime = route.summary().duration();
+        KakaoNaviRes.Summary total = route.summary();
 
         List<List<LatLng>> polylineList = new ArrayList<>();
+        List<Integer> durationList = new ArrayList<>();
+        List<Integer> distanceList = new ArrayList<>();
 
         // 각 지점 사이의 경로 순회
         for (KakaoNaviRes.Section section : route.sections()) {
             List<LatLng> pointList = extractedSectionPoint(section);
             polylineList.add(pointList);
+            durationList.add(section.duration());
+            distanceList.add(section.distance());
         }
         return RouteInfo.builder()
-                .totalTime(totalTime)
+                .totalDuration(total.duration())
+                .totalDistance(total.distance())
                 .polylineList(polylineList)
+                .distanceList(durationList)
+                .durationList(distanceList)
                 .build();
     }
 
