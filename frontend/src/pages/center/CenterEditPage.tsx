@@ -7,11 +7,21 @@ const { typography } = theme;
 
 const CenterEditPage = () => {
   const location = useLocation();
-  console.log(location.state.file);
+  const { carImage, carModel, carNumber, maxPassenger, isLowFloor } =
+    location.state;
   return (
     <div css={CenterEditPageContainer}>
       <p css={HeaderText}>차량 수정하기</p>
-      <InputSection type="edit" />
+      <InputSection
+        type="edit"
+        defaultValues={{
+          carImage,
+          carModel,
+          carNumber,
+          maxPassenger,
+          isLowFloor,
+        }}
+      />
     </div>
   );
 };

@@ -5,9 +5,19 @@ import ImageInput from "@/features/carUploader/ImageInput";
 import { css } from "@emotion/react";
 import Button from "@/components/Button";
 import { Controller } from "react-hook-form";
-import useCarForm from "@/features/carUploader/useCarForm";
+import useCarForm, {
+  type CarFormValues,
+} from "@/features/carUploader/useCarForm";
 
-const InputSection = () => {
+type InputMode = "register" | "edit";
+interface InputSectionProps {
+  type?: InputMode;
+  defaultValues?: Partial<CarFormValues>;
+}
+const InputSection = ({
+  type = "register",
+  defaultValues,
+}: InputSectionProps) => {
   const MAX_PASSENGER = 25;
   const dropdownOptions = Array.from({ length: MAX_PASSENGER }, (_, index) =>
     String(index + 1),
@@ -20,7 +30,7 @@ const InputSection = () => {
     setError,
     reset,
     formState: { errors, isValid },
-  } = useCarForm();
+  } = useCarForm(defaultValues);
 
   return (
     <form
@@ -91,7 +101,7 @@ const InputSection = () => {
       <Button
         type="submit"
         bgColor={isValid ? "orange" : "gray"}
-        label="등록하기"
+        label={type === "register" ? "등록하기" : "수정하기"}
         size="big"
       />
     </form>

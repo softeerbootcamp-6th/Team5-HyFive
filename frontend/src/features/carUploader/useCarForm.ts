@@ -2,6 +2,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+export type CarFormValues = {
+  carImage: File;
+  carModel: string;
+  carNumber: string;
+  maxPassenger: string;
+  isLowFloor: boolean;
+};
+
 const carSchema = z.object({
   carImage: z.instanceof(File, { message: "필수 입력값입니다" }),
   carModel: z.string().min(1, "필수 입력값입니다"),
@@ -14,9 +22,9 @@ const carSchema = z.object({
   isLowFloor: z.boolean(),
 });
 
-const useCarForm = () => {
+const useCarForm = (defaultValues?: Partial<CarFormValues>) => {
   const { register, control, handleSubmit, setError, reset, formState } =
-    useForm({
+    useForm<CarFormValues>({
       mode: "onSubmit",
       resolver: zodResolver(carSchema),
       defaultValues: {
@@ -25,6 +33,7 @@ const useCarForm = () => {
         carNumber: "",
         maxPassenger: "",
         isLowFloor: false,
+        ...defaultValues,
       },
     });
 
