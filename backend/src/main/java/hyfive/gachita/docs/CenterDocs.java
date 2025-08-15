@@ -1,9 +1,9 @@
 package hyfive.gachita.docs;
 
-import hyfive.gachita.domain.center.dto.CenterListRes;
-import hyfive.gachita.domain.center.dto.CenterRes;
-import hyfive.gachita.domain.common.dto.PagedListRes;
-import hyfive.gachita.domain.common.response.BaseResponse;
+import hyfive.gachita.application.center.dto.CenterListRes;
+import hyfive.gachita.application.center.dto.CenterRes;
+import hyfive.gachita.application.common.dto.PagedListRes;
+import hyfive.gachita.global.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

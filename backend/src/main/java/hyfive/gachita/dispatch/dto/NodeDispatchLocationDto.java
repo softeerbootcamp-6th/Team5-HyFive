@@ -1,7 +1,7 @@
 package hyfive.gachita.dispatch.dto;
 
 import hyfive.gachita.dispatch.module.condition.Condition;
-import hyfive.gachita.domain.node.NodeType;
+import hyfive.gachita.application.node.NodeType;
 import lombok.Builder;
 import org.springframework.data.util.Pair;
 

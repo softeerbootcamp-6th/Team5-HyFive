@@ -1,10 +1,10 @@
 package hyfive.gachita.docs;
 
-import hyfive.gachita.domain.car.dto.CarListRes;
-import hyfive.gachita.domain.car.dto.CarRes;
-import hyfive.gachita.domain.car.dto.CreateCarReq;
-import hyfive.gachita.domain.car.dto.UpdateCarReq;
-import hyfive.gachita.domain.common.response.BaseResponse;
+import hyfive.gachita.application.car.dto.CarListRes;
+import hyfive.gachita.application.car.dto.CarRes;
+import hyfive.gachita.application.car.dto.CreateCarReq;
+import hyfive.gachita.application.car.dto.UpdateCarReq;
+import hyfive.gachita.global.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

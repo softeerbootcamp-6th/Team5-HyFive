@@ -1,6 +1,6 @@
 package hyfive.gachita.dispatch.dto;
 
-import hyfive.gachita.domain.center.Center;
+import hyfive.gachita.application.center.Center;
 import lombok.Builder;
 
 import java.time.LocalTime;
