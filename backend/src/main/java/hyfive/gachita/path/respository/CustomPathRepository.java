@@ -1,8 +1,9 @@
 package hyfive.gachita.path.respository;
 
-import java.time.LocalTime;
+import hyfive.gachita.dispatch.module.filter.condition.PathCondition;
+
 import java.util.List;
 
 public interface CustomPathRepository {
-    List<Long> getAll(LocalTime maybeOnTime, LocalTime deadline, boolean walker);
+    List<Long> searchPathList(PathCondition condition);
 }
