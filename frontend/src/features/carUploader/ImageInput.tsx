@@ -24,7 +24,7 @@ import useDocumentEvent from "@/hooks/useDocumentEvent";
 import type { UseFormClearErrors, UseFormSetError } from "react-hook-form";
 
 interface ImageInputProps {
-  value: File | null;
+  value: File | string | null;
   onChange: (value: File | null) => void;
   errorMessage?: string;
   setError: UseFormSetError<{ carImage: File }>;

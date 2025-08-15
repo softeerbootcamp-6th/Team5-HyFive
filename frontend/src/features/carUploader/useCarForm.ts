@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 export type CarFormValues = {
-  carImage: File | null;
+  carImage: File | string;
   carModel: string;
   carNumber: string;
   maxPassenger: string;
@@ -19,7 +19,7 @@ const emptyValues = {
 };
 
 const carSchema = z.object({
-  carImage: z.any().refine((value) => value instanceof File, {
+  carImage: z.any().refine((value) => value !== null && value !== undefined, {
     message: "필수 입력값입니다",
   }),
   carModel: z.string().min(1, "필수 입력값입니다"),
