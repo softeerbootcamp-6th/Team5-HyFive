@@ -1,6 +1,8 @@
 package hyfive.gachita.dispatch.provider;
 
 import hyfive.gachita.dispatch.dto.DispatchLocation;
+import hyfive.gachita.dispatch.module.filter.condition.FilterCondition;
+import hyfive.gachita.dispatch.module.filter.condition.PathCondition;
 
 import java.util.List;
 
@@ -12,4 +14,6 @@ import java.util.List;
  */
 public interface DispatchLocationProvider {
     List<DispatchLocation> getAll();
+
+    List<DispatchLocation> getByCondition(FilterCondition condition);
 }
