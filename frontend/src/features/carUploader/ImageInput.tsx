@@ -21,25 +21,26 @@ import {
   TitleText,
 } from "@/features/carUploader/ImageInput.styles";
 import useDocumentEvent from "@/hooks/useDocumentEvent";
-import type { UseFormClearErrors, UseFormSetError } from "react-hook-form";
+import type { UseFormClearErrors } from "react-hook-form";
+import { useState } from "react";
 
 interface ImageInputProps {
   value: File | string | null;
   onChange: (value: File | null) => void;
   errorMessage?: string;
-  setError: UseFormSetError<{ carImage: File }>;
   clearErrors: UseFormClearErrors<{ carImage: File }>;
 }
 const ImageInput = ({
   value,
   onChange,
-  setError,
   clearErrors,
   errorMessage,
 }: ImageInputProps) => {
+  const [realTimeError, setRealTimeError] = useState<string | null>(null);
+
   useDocumentEvent();
   const { handleUploadImage, handleUploadImageByDrag, handleRemoveImage } =
-    useUploadImage({ onChange, setError, clearErrors });
+    useUploadImage({ onChange, setRealTimeError, clearErrors });
   const { previewUrl } = usePreviewImage({ value });
   const { dragActive, handleDropImage, handleDragActive } = useDragImage({
     handleUploadImage: handleUploadImageByDrag,
@@ -86,7 +87,9 @@ const ImageInput = ({
           </div>
         )}
       </div>
-      {errorMessage && <p css={ErrorText}>{errorMessage}</p>}
+      {(errorMessage || realTimeError) && (
+        <p css={ErrorText}>{realTimeError ? realTimeError : errorMessage}</p>
+      )}
     </div>
   );
 };
