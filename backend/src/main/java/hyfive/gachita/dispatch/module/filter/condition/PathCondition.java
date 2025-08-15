@@ -6,4 +6,5 @@ public record PathCondition (
         LocalTime maybeOnTime,
         LocalTime deadline,
         boolean walker
-) {}
+) implements FilterCondition {
+}

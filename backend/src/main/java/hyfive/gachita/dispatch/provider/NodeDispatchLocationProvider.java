@@ -1,7 +1,7 @@
 package hyfive.gachita.dispatch.provider;
 
 import hyfive.gachita.dispatch.dto.DispatchLocation;
-import hyfive.gachita.dispatch.dto.PathDispatchDto;
+import hyfive.gachita.dispatch.module.filter.condition.FilterCondition;
 import hyfive.gachita.dispatch.module.filter.condition.PathCondition;
 import hyfive.gachita.path.respository.PathRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,8 @@ public class NodeDispatchLocationProvider implements DispatchLocationProvider {
         return List.of();
     }
 
-    public List<PathDispatchDto> getByCondition(PathCondition pathCondition) {
+    @Override
+    public List<DispatchLocation> getByCondition(PathCondition pathCondition) {
         return pathRepository.searchPathList(pathCondition);
     }
 }
