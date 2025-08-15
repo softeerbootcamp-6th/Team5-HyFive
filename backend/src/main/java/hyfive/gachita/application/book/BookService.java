@@ -1,7 +1,7 @@
 package hyfive.gachita.application.book;
 
-import hyfive.gachita.api.geocode.GeoCodeService;
-import hyfive.gachita.api.geocode.dto.LatLng;
+import hyfive.gachita.client.geocode.GeoCodeService;
+import hyfive.gachita.client.geocode.dto.LatLng;
 import hyfive.gachita.application.book.dto.BookCursor;
 import hyfive.gachita.application.book.dto.BookRes;
 import hyfive.gachita.application.book.dto.CreateBookReq;

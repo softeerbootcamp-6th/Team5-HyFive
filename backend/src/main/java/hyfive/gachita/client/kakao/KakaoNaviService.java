@@ -1,9 +1,9 @@
-package hyfive.gachita.api.kakao;
+package hyfive.gachita.client.kakao;
 
-import hyfive.gachita.api.geocode.dto.LatLng;
-import hyfive.gachita.api.kakao.dto.Location;
-import hyfive.gachita.api.kakao.dto.request.DirectionsReq;
-import hyfive.gachita.api.kakao.dto.response.KakaoNaviRes;
+import hyfive.gachita.client.geocode.dto.LatLng;
+import hyfive.gachita.client.kakao.dto.Location;
+import hyfive.gachita.client.kakao.dto.request.DirectionsReq;
+import hyfive.gachita.client.kakao.dto.response.KakaoNaviRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,7 @@
-package hyfive.gachita.api.kakao.dto;
+package hyfive.gachita.client.kakao.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import hyfive.gachita.api.geocode.dto.LatLng;
+import hyfive.gachita.client.geocode.dto.LatLng;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "장소(출발지, 목적지, 경유지) 정보")

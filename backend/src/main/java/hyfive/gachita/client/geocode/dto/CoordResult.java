@@ -1,4 +1,4 @@
-package hyfive.gachita.api.geocode.dto;
+package hyfive.gachita.client.geocode.dto;
 
 
 public record CoordResult(String crs, Point point) {

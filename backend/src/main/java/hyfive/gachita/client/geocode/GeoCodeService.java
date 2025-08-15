@@ -1,8 +1,8 @@
-package hyfive.gachita.api.geocode;
+package hyfive.gachita.client.geocode;
 
-import hyfive.gachita.api.geocode.dto.CoordResult;
-import hyfive.gachita.api.geocode.dto.GeoCodeReq;
-import hyfive.gachita.api.geocode.dto.LatLng;
+import hyfive.gachita.client.geocode.dto.CoordResult;
+import hyfive.gachita.client.geocode.dto.GeoCodeReq;
+import hyfive.gachita.client.geocode.dto.LatLng;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

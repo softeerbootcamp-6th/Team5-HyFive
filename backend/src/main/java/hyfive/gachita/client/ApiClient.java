@@ -1,4 +1,4 @@
-package hyfive.gachita.api;
+package hyfive.gachita.client;
 
 import hyfive.gachita.global.BusinessException;
 import hyfive.gachita.global.ErrorCode;

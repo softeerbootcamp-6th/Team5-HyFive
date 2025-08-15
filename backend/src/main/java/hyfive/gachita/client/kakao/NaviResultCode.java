@@ -1,4 +1,4 @@
-package hyfive.gachita.api.kakao;
+package hyfive.gachita.client.kakao;
 
 public enum NaviResultCode {
     SUCCSS(0);

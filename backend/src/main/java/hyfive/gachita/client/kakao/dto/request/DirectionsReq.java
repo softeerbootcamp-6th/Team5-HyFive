@@ -1,6 +1,6 @@
-package hyfive.gachita.api.kakao.dto.request;
+package hyfive.gachita.client.kakao.dto.request;
 
-import hyfive.gachita.api.kakao.dto.Location;
+import hyfive.gachita.client.kakao.dto.Location;
 import lombok.Builder;
 
 import java.util.List;

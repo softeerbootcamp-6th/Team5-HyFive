@@ -1,6 +1,6 @@
-package hyfive.gachita.api.kakao;
+package hyfive.gachita.client.kakao;
 
-import hyfive.gachita.api.geocode.dto.LatLng;
+import hyfive.gachita.client.geocode.dto.LatLng;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 

@@ -1,7 +1,7 @@
-package hyfive.gachita.api.kakao.dto.response;
+package hyfive.gachita.client.kakao.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import hyfive.gachita.api.kakao.dto.Location;
+import hyfive.gachita.client.kakao.dto.Location;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 

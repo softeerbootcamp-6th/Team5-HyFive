@@ -1,9 +1,9 @@
-package hyfive.gachita.api.geocode;
+package hyfive.gachita.client.geocode;
 
-import hyfive.gachita.api.ApiClient;
-import hyfive.gachita.api.geocode.dto.GeoCodeApiRes;
-import hyfive.gachita.api.geocode.dto.GeoCodeReq;
-import hyfive.gachita.api.geocode.dto.CoordResult;
+import hyfive.gachita.client.ApiClient;
+import hyfive.gachita.client.geocode.dto.GeoCodeApiRes;
+import hyfive.gachita.client.geocode.dto.GeoCodeReq;
+import hyfive.gachita.client.geocode.dto.CoordResult;
 import hyfive.gachita.global.BusinessException;
 import hyfive.gachita.global.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
