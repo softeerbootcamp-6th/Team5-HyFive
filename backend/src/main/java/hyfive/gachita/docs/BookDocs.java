@@ -1,13 +1,13 @@
 package hyfive.gachita.docs;
 
-import hyfive.gachita.book.BookStatus;
-import hyfive.gachita.book.dto.BookCursor;
-import hyfive.gachita.common.dto.ScrollRes;
-import hyfive.gachita.common.enums.SearchPeriod;
-import hyfive.gachita.book.dto.BookRes;
-import hyfive.gachita.book.dto.CreateBookReq;
-import hyfive.gachita.common.dto.PagedListRes;
-import hyfive.gachita.common.response.BaseResponse;
+import hyfive.gachita.domain.book.BookStatus;
+import hyfive.gachita.domain.book.dto.BookCursor;
+import hyfive.gachita.domain.common.dto.ScrollRes;
+import hyfive.gachita.domain.common.enums.SearchPeriod;
+import hyfive.gachita.domain.book.dto.BookRes;
+import hyfive.gachita.domain.book.dto.CreateBookReq;
+import hyfive.gachita.domain.common.dto.PagedListRes;
+import hyfive.gachita.domain.common.response.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

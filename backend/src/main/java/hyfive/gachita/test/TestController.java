@@ -3,7 +3,7 @@ package hyfive.gachita.test;
 import hyfive.gachita.api.geocode.dto.LatLng;
 import hyfive.gachita.api.kakao.KakaoNaviService;
 import hyfive.gachita.api.kakao.RouteInfo;
-import hyfive.gachita.common.response.BaseResponse;
+import hyfive.gachita.domain.common.response.BaseResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

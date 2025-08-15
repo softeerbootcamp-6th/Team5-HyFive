@@ -1,8 +1,8 @@
 package hyfive.gachita.docs;
 
-import hyfive.gachita.common.response.BaseResponse;
-import hyfive.gachita.rental.dto.ReplaceRental;
-import hyfive.gachita.rental.dto.RentalRes;
+import hyfive.gachita.domain.common.response.BaseResponse;
+import hyfive.gachita.domain.rental.dto.ReplaceRental;
+import hyfive.gachita.domain.rental.dto.RentalRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

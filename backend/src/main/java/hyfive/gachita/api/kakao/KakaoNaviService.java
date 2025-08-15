@@ -4,8 +4,6 @@ import hyfive.gachita.api.geocode.dto.LatLng;
 import hyfive.gachita.api.kakao.dto.Location;
 import hyfive.gachita.api.kakao.dto.request.DirectionsReq;
 import hyfive.gachita.api.kakao.dto.response.KakaoNaviRes;
-import hyfive.gachita.common.response.BusinessException;
-import hyfive.gachita.common.response.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,7 @@
 package hyfive.gachita.api;
 
-import hyfive.gachita.common.response.BusinessException;
-import hyfive.gachita.common.response.ErrorCode;
+import hyfive.gachita.domain.common.response.BusinessException;
+import hyfive.gachita.domain.common.response.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpRequest;

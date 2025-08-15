@@ -1,0 +1,69 @@
+package hyfive.gachita.domain.path.domain;
+
+import hyfive.gachita.domain.car.Car;
+import hyfive.gachita.domain.node.Node;
+import hyfive.gachita.domain.path.DriveStatus;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
+
+@Getter
+@Setter
+@Entity
+@Table(name = "path")
+public class Path {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "path_id", nullable = false, columnDefinition = "BIGINT")
+    private Long id;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "car_id", nullable = false)
+    private Car car;
+
+    @NotNull
+    @Column(name = "maybe_start_time", nullable = false, columnDefinition = "TIME")
+    private LocalTime maybeStartTime;
+
+    @NotNull
+    @Column(name = "maybe_end_time", nullable = false, columnDefinition = "TIME")
+    private LocalTime maybeEndTime;
+
+    @NotNull
+    @Column(name = "real_start_time", nullable = false, columnDefinition = "TIME")
+    private LocalTime realStartTime;
+
+    @NotNull
+    @Column(name = "real_end_time", nullable = false, columnDefinition = "TIME")
+    private LocalTime realEndTime;
+
+    @NotNull
+    @Column(name = "drive_date", nullable = false, columnDefinition = "DATE")
+    private LocalDate driveDate;
+
+    @NotNull
+    @Column(name = "start_addr", nullable = false, columnDefinition = "VARCHAR(255)")
+    private String startAddr;
+
+    @NotNull
+    @Column(name = "end_addr", nullable = false, columnDefinition = "VARCHAR(255)")
+    private String endAddr;
+
+    @NotNull
+    @Column(name = "user_count", nullable = false, columnDefinition = "INT")
+    private int userCount;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "drive_status", nullable = false, columnDefinition = "VARCHAR(50)")
+    private DriveStatus driveStatus = DriveStatus.WAITING;
+
+    @OneToMany(mappedBy = "path", fetch = FetchType.LAZY)
+    private List<Node> nodeList;
+}

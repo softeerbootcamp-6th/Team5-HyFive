@@ -1,7 +1,7 @@
 package hyfive.gachita.config;
 
-import hyfive.gachita.common.response.BusinessException;
-import hyfive.gachita.common.response.ErrorCode;
+import hyfive.gachita.domain.common.response.BusinessException;
+import hyfive.gachita.domain.common.response.ErrorCode;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.converter.GenericConverter;
 import org.springframework.stereotype.Component;

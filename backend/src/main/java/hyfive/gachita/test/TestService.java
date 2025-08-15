@@ -1,7 +1,7 @@
 package hyfive.gachita.test;
 
-import hyfive.gachita.common.response.BusinessException;
-import hyfive.gachita.common.response.ErrorCode;
+import hyfive.gachita.domain.common.response.BusinessException;
+import hyfive.gachita.domain.common.response.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -3,7 +3,7 @@ package hyfive.gachita.dispatch.module.provider;
 import hyfive.gachita.dispatch.dto.DispatchLocation;
 import hyfive.gachita.dispatch.module.condition.Condition;
 import hyfive.gachita.dispatch.module.condition.PathCondition;
-import hyfive.gachita.path.respository.PathRepository;
+import hyfive.gachita.domain.path.respository.PathRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
