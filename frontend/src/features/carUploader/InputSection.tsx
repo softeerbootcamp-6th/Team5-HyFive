@@ -45,7 +45,7 @@ const InputSection = ({ type = "register", initValues }: InputSectionProps) => {
             value={field.value}
             onChange={(value) => field.onChange(value)}
             setError={setError}
-            errorMessage={errors.carImage?.message}
+            errorMessage={errors.carImage?.message?.toString()}
           />
         )}
       />
