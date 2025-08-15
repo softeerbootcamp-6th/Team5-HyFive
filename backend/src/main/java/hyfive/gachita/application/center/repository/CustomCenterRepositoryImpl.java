@@ -6,6 +6,8 @@ import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hyfive.gachita.application.car.DelYn;
 import hyfive.gachita.application.center.dto.CenterListRes;
+import hyfive.gachita.dispatch.dto.IdleCarDto;
+import hyfive.gachita.dispatch.module.condition.CenterCondition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -47,6 +49,36 @@ public class CustomCenterRepositoryImpl implements CustomCenterRepository{
                 .fetchOne();
 
         return new PageImpl<>(centerList, pageable, total == null ? 0L : total);
+    }
+
+    @Override
+    public List<IdleCarDto> searchCarListWithCenter(CenterCondition condition) {
+        // TODO: 배차 되어있는 유휴시간인지 판단하는 로직 추가 필요
+//        return queryFactory
+//                .select(Projections.constructor(IdleCarDto.class,
+//                        center.id,
+//                        center.lat,
+//                        center.lng,
+//                        car.id
+//                ))
+//                .where(
+//                        center.id.in(condition.centerIdList())
+//                )
+//                .from(center)
+//                .join(center.carList, car)
+//                .where(
+//                        car.lowFloor.eq(condition.walker()),
+//                        car.delYn.eq(DelYn.N)
+//                )
+//                .leftJoin(rental)
+//                .on(
+//                        rental.car.id.eq(car.id),
+//                        rental.rentalDate.eq(condition.hospitalDate()),
+//                        rental.rentalStartTime.loe(condition.maybeOnTime()),
+//                        rental.rentalEndTime.goe(condition.deadline())
+//                )
+//                .fetch();
+        return List.of();
     }
 
     private static NumberExpression<Long> getLowCarCount() {
