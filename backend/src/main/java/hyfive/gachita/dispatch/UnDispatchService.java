@@ -5,7 +5,6 @@ import hyfive.gachita.dispatch.module.filter.BoundingBoxFilter;
 import hyfive.gachita.dispatch.module.filter.HaversineFilter;
 import hyfive.gachita.dispatch.module.filter.condition.BoundingBoxCondition;
 import hyfive.gachita.dispatch.module.filter.condition.RadiusCondition;
-import hyfive.gachita.dispatch.provider.CenterDispatchLocationProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +14,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UnDispatchService {
 
-    private final CenterDispatchLocationProvider centerDispatchLocationProvider;
     private final BoundingBoxFilter boundingBoxFilter;
     private final HaversineFilter haversineFilter;
 
