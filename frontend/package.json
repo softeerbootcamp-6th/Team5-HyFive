@@ -17,6 +17,7 @@
     "@hookform/resolvers": "^5.2.1",
     "date-fns": "^4.1.0",
     "eslint-config-prettier": "^10.1.8",
+    "lottie-web": "^5.13.0",
     "prettier": "^3.6.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
