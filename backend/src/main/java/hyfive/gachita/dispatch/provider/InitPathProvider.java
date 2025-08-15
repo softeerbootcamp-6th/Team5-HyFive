@@ -1,8 +1,8 @@
 package hyfive.gachita.dispatch.provider;
 
 import hyfive.gachita.center.repository.CenterRepository;
-import hyfive.gachita.dispatch.dto.CenterDispatchLocationDto;
 import hyfive.gachita.dispatch.dto.DispatchLocation;
+import hyfive.gachita.dispatch.dto.InitPathDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -11,14 +11,13 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class CenterDispatchLocationProvider implements DispatchLocationProvider {
-
+public class InitPathProvider implements DispatchLocationProvider {
     private final CenterRepository centerRepository;
 
     @Override
     public List<DispatchLocation> getAll() {
         return centerRepository.findAll().stream()
-                .<DispatchLocation>map(CenterDispatchLocationDto::from)
+                .<DispatchLocation>map(InitPathDto::from)
                 .collect(Collectors.toList());
     }
 }

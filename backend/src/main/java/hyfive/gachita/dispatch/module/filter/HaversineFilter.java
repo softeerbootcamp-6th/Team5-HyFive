@@ -1,6 +1,6 @@
 package hyfive.gachita.dispatch.module.filter;
 
-import hyfive.gachita.dispatch.dto.DispatchLocation;
+import hyfive.gachita.dispatch.dto.FilterDto;
 import hyfive.gachita.dispatch.module.filter.condition.RadiusCondition;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +24,7 @@ public class HaversineFilter implements Filter<RadiusCondition> {
     }
 
     @Override
-    public List<DispatchLocation> filter(List<DispatchLocation> candidates, RadiusCondition condition) {
+    public List<FilterDto> filter(List<FilterDto> candidates, RadiusCondition condition) {
         return candidates.stream()
                 .filter(c ->
                         haversine(condition.centerLat(), condition.centerLng(), c.lat(), c.lng()) <= condition.radiusMeters()
