@@ -26,6 +26,7 @@ const InputSection = ({ type = "register", initValues }: InputSectionProps) => {
     handleSubmit,
     handleReset,
     setError,
+    clearErrors,
     formState: { errors, isValid },
   } = useCarForm(initValues);
 
@@ -45,6 +46,7 @@ const InputSection = ({ type = "register", initValues }: InputSectionProps) => {
             value={field.value}
             onChange={(value) => field.onChange(value)}
             setError={setError}
+            clearErrors={clearErrors}
             errorMessage={errors.carImage?.message?.toString()}
           />
         )}

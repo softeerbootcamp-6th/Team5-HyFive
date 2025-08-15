@@ -33,15 +33,22 @@ const carSchema = z.object({
 });
 
 const useCarForm = (initValues?: CarFormValues) => {
-  const { register, control, handleSubmit, setError, reset, formState } =
-    useForm({
-      mode: "onSubmit",
-      resolver: zodResolver(carSchema),
-      defaultValues: {
-        ...emptyValues,
-        ...initValues,
-      },
-    });
+  const {
+    register,
+    control,
+    handleSubmit,
+    setError,
+    clearErrors,
+    reset,
+    formState,
+  } = useForm({
+    mode: "onSubmit",
+    resolver: zodResolver(carSchema),
+    defaultValues: {
+      ...emptyValues,
+      ...initValues,
+    },
+  });
 
   const handleReset = () => {
     reset(emptyValues);
@@ -53,6 +60,7 @@ const useCarForm = (initValues?: CarFormValues) => {
     handleSubmit,
     handleReset,
     setError,
+    clearErrors,
     formState,
   };
 };

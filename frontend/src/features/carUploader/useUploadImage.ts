@@ -1,13 +1,18 @@
 import ImageValidator from "@/features/carUploader/ImageValidator.util";
 import type { ChangeEvent } from "react";
-import type { UseFormSetError } from "react-hook-form";
+import type { UseFormClearErrors, UseFormSetError } from "react-hook-form";
 
 interface UseUploadImageProps {
   onChange: (value: File | null) => void;
   setError: UseFormSetError<{ carImage: File }>;
+  clearErrors: UseFormClearErrors<{ carImage: File }>;
 }
 
-const useUploadImage = ({ onChange, setError }: UseUploadImageProps) => {
+const useUploadImage = ({
+  onChange,
+  setError,
+  clearErrors,
+}: UseUploadImageProps) => {
   const handleUploadImageTemplate = (file: File) => {
     const { validateImageType, validateImageSize } = ImageValidator(file);
 
@@ -21,7 +26,7 @@ const useUploadImage = ({ onChange, setError }: UseUploadImageProps) => {
       setError("carImage", { message: "최대 크기는 50MB입니다" });
       return;
     }
-
+    clearErrors("carImage");
     onChange(file);
   };
 
