@@ -71,7 +71,7 @@ const ImageInput = ({
             <div css={TextWrapper}>
               <p css={TitleText}>업로드할 파일을 끌어다 놓으세요.</p>
               <p css={DescriptionText}>
-                JPG, PNG 형식의 파일을 업로드할 수 있습니다.
+                JPG, PNG, GIF, WEBP 형식의 파일을 업로드할 수 있습니다.
               </p>
             </div>
             <label htmlFor="carImage" css={Linktext}>
