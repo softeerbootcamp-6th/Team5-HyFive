@@ -3,6 +3,7 @@ package hyfive.gachita.application.book.repository;
 import hyfive.gachita.application.book.Book;
 import hyfive.gachita.application.book.BookStatus;
 import hyfive.gachita.application.book.dto.BookCursor;
+import hyfive.gachita.dispatch.module.condition.PathCandidateCondition;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.util.Pair;
@@ -15,4 +16,5 @@ public interface CustomBookRepository {
                                          BookStatus status,
                                          Pageable pageable);
     List<Book> findBooksForScroll(BookStatus status, BookCursor cursorId, int size);
+    List<Book> searchCandidates(PathCandidateCondition pathCandidateCondition);
 }

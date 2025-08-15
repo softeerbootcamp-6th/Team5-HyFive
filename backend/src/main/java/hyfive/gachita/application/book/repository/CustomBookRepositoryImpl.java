@@ -8,6 +8,7 @@ import hyfive.gachita.application.book.BookStatus;
 
 import hyfive.gachita.application.book.QBook;
 import hyfive.gachita.application.book.dto.BookCursor;
+import hyfive.gachita.dispatch.module.condition.PathCandidateCondition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -80,6 +81,16 @@ public class CustomBookRepositoryImpl implements CustomBookRepository {
                 )
                 .orderBy(book.createdAt.desc(), book.id.desc())
                 .limit(size + 1)
+                .fetch();
+    }
+
+    @Override
+    public List<Book> searchCandidates(PathCandidateCondition pathCandidateCondition) {
+        return queryFactory
+                .selectFrom(book)
+                .where(book.hospitalDate.eq(pathCandidateCondition.hospitalDate())
+                        .and(book.path.isNotNull())
+                        .and(book.bookStatus.eq(BookStatus.SUCCESS)))
                 .fetch();
     }
 
