@@ -18,6 +18,6 @@ public class InitPathProvider implements DispatchLocationProvider {
     public List<DispatchLocation> getAll() {
         return centerRepository.findAll().stream()
                 .<DispatchLocation>map(InitPathDto::from)
-                .collect(Collectors.toList());
+                .toList();
     }
 }
