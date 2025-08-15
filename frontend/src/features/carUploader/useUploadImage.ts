@@ -18,7 +18,7 @@ const useUploadImage = ({
 
     if (!validateImageType()) {
       onChange(null);
-      setError("carImage", { message: "JPG/PNG만 업로드 가능합니다" });
+      setError("carImage", { message: "이미지만 업로드 가능합니다" });
       return;
     }
     if (!validateImageSize()) {
