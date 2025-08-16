@@ -91,7 +91,7 @@ const TimeTable = ({
         {previewSlot && (
           <AvailableTimeSlot
             key={`preview-${previewSlot.rentalDate}-${previewSlot.rentalStartTime}-${previewSlot.rentalEndTime}`}
-            block={previewSlot}
+            slot={previewSlot}
             selectedWeek={selectedWeek}
             variant="preview"
             mode={mode}

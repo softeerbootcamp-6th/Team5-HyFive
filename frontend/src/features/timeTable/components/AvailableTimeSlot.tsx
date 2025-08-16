@@ -6,7 +6,7 @@ import type {
   AvailableTimeSlotType,
   TimeTableMode,
 } from "@/features/timeTable/TimeTable.type";
-import { getTimeBlockGridStyle } from "@/features/timeTable/TimeTable.style";
+import { getTimeSlotGridStyle } from "@/features/timeTable/TimeTable.style";
 import { RemoveIcon } from "@/assets/icons";
 import { useState } from "react";
 import { isBeforeToday } from "@/features/calender/Calender.util";
@@ -14,7 +14,7 @@ import { isBeforeToday } from "@/features/calender/Calender.util";
 const { color, typography } = theme;
 
 interface AvailableTimeSlotProps {
-  block: AvailableTimeSlotType;
+  slot: AvailableTimeSlotType;
   selectedWeek: Date[];
   variant?: "default" | "preview";
   mode?: TimeTableMode;
@@ -23,7 +23,7 @@ interface AvailableTimeSlotProps {
 }
 
 const AvailableTimeSlot = ({
-  block,
+  slot,
   selectedWeek,
   variant = "default",
   mode = "view",
@@ -32,7 +32,7 @@ const AvailableTimeSlot = ({
 }: AvailableTimeSlotProps) => {
   const [hovered, setHovered] = useState(false);
 
-  const isPastDate = isBeforeToday(block.rentalDate);
+  const isPastDate = isBeforeToday(slot.rentalDate);
 
   const canInteract =
     mode === "edit" && variant === "default" && !disabled && !isPastDate;
@@ -40,7 +40,7 @@ const AvailableTimeSlot = ({
   const handleDeleteClick = (e: ReactMouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    onDelete?.(block);
+    onDelete?.(slot);
   };
 
   return (
@@ -48,7 +48,7 @@ const AvailableTimeSlot = ({
       onMouseEnter={() => canInteract && setHovered(true)}
       onMouseLeave={() => canInteract && setHovered(false)}
       css={[
-        getTimeBlockGridStyle(block, selectedWeek),
+        getTimeSlotGridStyle(slot, selectedWeek),
         getSlotContainerStyle(isPastDate, variant, canInteract, hovered),
       ]}
     >
@@ -64,8 +64,8 @@ const AvailableTimeSlot = ({
               <RemoveIcon fill={color.Maincolor.primary} />
             </button>
           )}
-          <time dateTime={`${block.rentalStartTime}/${block.rentalEndTime}`}>
-            {block.rentalStartTime} ~ {block.rentalEndTime}
+          <time dateTime={`${slot.rentalStartTime}/${slot.rentalEndTime}`}>
+            {slot.rentalStartTime} ~ {slot.rentalEndTime}
           </time>
         </>
       )}

@@ -121,13 +121,13 @@ export const getTimeCellStyle = (
   `;
 };
 
-export const getTimeBlockGridStyle = (
-  block: AvailableTimeSlotType,
+export const getTimeSlotGridStyle = (
+  slot: AvailableTimeSlotType,
   selectedWeek: Date[],
 ) => {
-  const startHour = formatTimeToNumber(block.rentalStartTime);
-  const endHour = formatTimeToNumber(block.rentalEndTime);
-  const dayIndex = getDayIndex(block.rentalDate, selectedWeek);
+  const startHour = formatTimeToNumber(slot.rentalStartTime);
+  const endHour = formatTimeToNumber(slot.rentalEndTime);
+  const dayIndex = getDayIndex(slot.rentalDate, selectedWeek);
 
   if (dayIndex === -1) return css``;
 

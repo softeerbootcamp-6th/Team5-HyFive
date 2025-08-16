@@ -15,15 +15,15 @@ export interface GridSlotFormat {
 
 /**
  * 백엔드에서 받은 유휴시간 데이터를 그리드에 맞는 형식으로 변환합니다.
- * @param block 유휴시간 데이터
+ * @param slot 유휴시간 데이터
  * @param selectedWeek 현재 선택된 주
  * @returns - grid에서 해당 날짜 / 시간에 맞는 형식으로 변환된 데이터
  */
 export const changeSlotFormatForGrid = (
-  block: AvailableTimeSlotType,
+  slot: AvailableTimeSlotType,
   selectedWeek: Date[],
 ): GridSlotFormat => {
-  const { rentalDate, rentalStartTime, rentalEndTime } = block;
+  const { rentalDate, rentalStartTime, rentalEndTime } = slot;
 
   const dayIndex = getDayIndex(rentalDate, selectedWeek);
 
@@ -47,7 +47,7 @@ export const changeSlotFormatForGrid = (
  * @param currentPosition 드래그 현재 위치
  * @param selectedWeek 현재 선택된 주
  */
-export const changeSlotFormatForDomain = (
+export const changeSlotFormatForServer = (
   dayIndex: number,
   startPosition: number,
   currentPosition: number,
@@ -66,13 +66,13 @@ export const changeSlotFormatForDomain = (
 
 /**
  * 배열 데이터를 한 번에 포맷팅 하기 위한 wrapper 함수입니다.
- * @param blocks 유휴시간 데이터 배열
+ * @param slots 유휴시간 데이터 배열
  * @param selectedWeek 선택된 주
  * @returns 그리드 형식으로 변환된 유휴시간 데이터 배열
  */
 export const changeSlotFormatForGridList = (
-  blocks: AvailableTimeSlotType[],
+  slots: AvailableTimeSlotType[],
   selectedWeek: Date[],
 ): GridSlotFormat[] => {
-  return blocks.map((block) => changeSlotFormatForGrid(block, selectedWeek));
+  return slots.map((slot) => changeSlotFormatForGrid(slot, selectedWeek));
 };

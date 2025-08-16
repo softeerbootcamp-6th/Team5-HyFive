@@ -8,7 +8,7 @@ interface AvailableTimeSlotsType {
   availableTimeData: AvailableTimeSlotType[];
   selectedWeek: Date[];
   mode: TimeTableMode;
-  onDelete: (block: AvailableTimeSlotType) => void;
+  onDelete: (slot: AvailableTimeSlotType) => void;
   disabled: boolean;
 }
 
@@ -21,10 +21,10 @@ const AvailableTimeSlots = ({
 }: AvailableTimeSlotsType) => {
   return (
     <>
-      {availableTimeData.map((block) => (
+      {availableTimeData.map((slot) => (
         <AvailableTimeSlot
-          key={`${block.rentalDate}-${block.rentalStartTime}-${block.rentalEndTime}`}
-          block={block}
+          key={`${slot.rentalDate}-${slot.rentalStartTime}-${slot.rentalEndTime}`}
+          slot={slot}
           selectedWeek={selectedWeek}
           variant="default"
           mode={mode}
