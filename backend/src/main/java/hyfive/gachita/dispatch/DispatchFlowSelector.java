@@ -29,7 +29,7 @@ import java.util.stream.Stream;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class DispatchModeSelector {
+public class DispatchFlowSelector {
 
     private final int RADIUS_METERS = 500;
     private final DrivingTimeEvaluation drivingTimeEvaluation;
