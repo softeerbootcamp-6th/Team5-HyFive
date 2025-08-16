@@ -5,7 +5,6 @@ import type {
 } from "@/features/timeTable/TimeTable.type";
 
 import { generateAvailableTimeSlots } from "@/mocks/timeBlockMocks";
-import { useTimeTableDrag } from "@/features/timeTable/useTimeTableDrag";
 import { useEffect, useState } from "react";
 import {
   AvailableTimeSlots,
@@ -15,10 +14,8 @@ import {
   AvailableTimeSlot,
 } from "./index";
 import { TIME_TABLE_CONFIG } from "@/features/timeTable/TimeTable.constants";
-import {
-  isAllSlotsInSelectedWeek,
-  isSameSlot,
-} from "@/features/timeTable/TimeTable.util";
+import { isAllSlotsInSelectedWeek } from "@/features/timeTable/TimeTable.util";
+import { useTimeTableDrag } from "@/features/timeTable/hooks/useTimeTableDrag";
 
 const mockWeek: Date[] = Array.from({ length: 7 }, (_, i) => {
   return new Date(2025, 7, 10 + i);
@@ -47,19 +44,14 @@ const TimeTable = ({
     selectedWeek,
   );
 
-  const { handleCellMouseDown, handleCellMouseEnter } = useTimeTableDrag({
-    mode,
-    selectedWeek,
-    availableTimeSlots,
-    onSlotsUpdate: (slots) => setAvailableTimeSlots(slots),
-    setPreviewSlot: setPreviewSlot,
-  });
-
-  const handleSlotDelete = (block: AvailableTimeSlotType) => {
-    setAvailableTimeSlots((prevSlots) =>
-      prevSlots.filter((slot) => !isSameSlot(slot, block)),
-    );
-  };
+  const { handleCellMouseDown, handleCellMouseEnter, deleteSlot } =
+    useTimeTableDrag({
+      mode,
+      selectedWeek,
+      availableTimeSlots,
+      onSlotsUpdate: (slots) => setAvailableTimeSlots(slots),
+      setPreviewSlot: setPreviewSlot,
+    });
 
   const slotsDisabled = Boolean(previewSlot);
 
@@ -91,7 +83,7 @@ const TimeTable = ({
             availableTimeData={availableTimeSlots}
             selectedWeek={selectedWeek}
             mode={mode}
-            onDelete={handleSlotDelete}
+            onDelete={deleteSlot}
             disabled={slotsDisabled}
           />
         )}
