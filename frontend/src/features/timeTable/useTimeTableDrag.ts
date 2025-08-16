@@ -1,4 +1,5 @@
 import {
+  formatTimeToHHMM,
   formatTimeToNumber,
   getDayIndex,
 } from "@/features/calender/Calender.util";
@@ -74,8 +75,6 @@ export const useTimeTableDrag = ({
     if (dragState.startPosition?.dayIndex !== dayIndex) return; // 가로 드래그 무시
     if (dragState.startPosition?.hourIndex > hourIndex) return; // 윗쪽 드래그 무시
 
-    // TODO: 이미 데이터 있을 때 처리
-
     const startHourIndex = dragState.startPosition!.hourIndex;
     const endHourIndex = hourIndex;
 
@@ -94,19 +93,35 @@ export const useTimeTableDrag = ({
   };
 
   const finalizeDrag = useCallback(() => {
-    const state = dragState;
-    if (canFinalizeDrag(state)) {
+    if (canFinalizeDrag(dragState)) {
       const newSlot = createSlotFromDrag(
         dragState.startPosition!,
         dragState.currentPosition!,
         selectedWeek,
       );
-      const newSlotData = [newSlot, ...availableTimeSlots];
-      onSlotsUpdate?.(newSlotData);
-    }
 
-    setPreviewSlot(null);
-    resetDrag(setDragState);
+      const overlappingSlots = findOverlappingSlots(
+        newSlot,
+        availableTimeSlots,
+        selectedWeek,
+      );
+
+      if (overlappingSlots.length > 0) {
+        const mergedSlot = mergeSlots(newSlot, overlappingSlots);
+        const remainingSlots = availableTimeSlots.filter(
+          (slot) => !overlappingSlots.includes(slot),
+        );
+
+        const newSlotData = [mergedSlot, ...remainingSlots];
+        onSlotsUpdate?.(newSlotData);
+      } else {
+        // 겹치는 슬롯이 없으면 그냥 추가
+        const newSlotData = [newSlot, ...availableTimeSlots];
+        onSlotsUpdate?.(newSlotData);
+      }
+      setPreviewSlot(null);
+      resetDrag(setDragState);
+    }
   }, [
     dragState,
     onSlotsUpdate,
@@ -132,6 +147,40 @@ export const useTimeTableDrag = ({
     handleCellMouseDown,
     handleCellMouseEnter,
   };
+};
+
+const findOverlappingSlots = (
+  newSlot: AvailableTimeSlotType,
+  existingSlots: AvailableTimeSlotType[],
+  selectedWeek: Date[],
+): AvailableTimeSlotType[] => {
+  const { rentalDate, rentalStartTime, rentalEndTime } = newSlot;
+
+  const newDayIndex = getDayIndex(rentalDate, selectedWeek);
+  const newStartHour = formatTimeToNumber(rentalStartTime);
+  const newEndHour = formatTimeToNumber(rentalEndTime);
+
+  const existingSlotsAtSameDay = existingSlots.filter((slot) => {
+    const dayIndex = getDayIndex(slot.rentalDate, selectedWeek);
+    return dayIndex === newDayIndex;
+  });
+
+  // 겹치거나 인접한 슬롯들 찾기
+  return existingSlotsAtSameDay.filter((slot) => {
+    const oldStartHour = formatTimeToNumber(slot.rentalStartTime);
+    const oldEndHour = formatTimeToNumber(slot.rentalEndTime);
+
+    // 1. 겹치는 경우: 시간 범위가 겹침
+    const isOverlapping = !(
+      newEndHour <= oldStartHour || oldEndHour <= newStartHour
+    );
+
+    // 2. 인접한 경우: 새로운 슬롯이 기존 슬롯 바로 위에 있거나 바로 아래에 있음
+    const isAdjacentAbove = newEndHour === oldStartHour;
+    const isAdjacentBelow = oldEndHour === newStartHour;
+
+    return isOverlapping || isAdjacentAbove || isAdjacentBelow;
+  });
 };
 
 const isSlotAtPosition = (
@@ -182,4 +231,31 @@ const resetDrag = (
     startPosition: null,
     currentPosition: null,
   });
+};
+
+const mergeSlots = (
+  newSlot: AvailableTimeSlotType,
+  existingSlots: AvailableTimeSlotType[],
+): AvailableTimeSlotType => {
+  const newStartHour = formatTimeToNumber(newSlot.rentalStartTime);
+  const newEndHour = formatTimeToNumber(newSlot.rentalEndTime);
+
+  let mergedStartHour = newStartHour;
+  let mergedEndHour = newEndHour;
+
+  // 겹치는 슬롯들의 시작과 끝 시간을 통합
+  existingSlots.forEach((slot) => {
+    const slotStartHour = formatTimeToNumber(slot.rentalStartTime);
+    const slotEndHour = formatTimeToNumber(slot.rentalEndTime);
+
+    mergedStartHour = Math.min(mergedStartHour, slotStartHour);
+    mergedEndHour = Math.max(mergedEndHour, slotEndHour);
+  });
+
+  // 통합된 슬롯 생성
+  return {
+    rentalDate: newSlot.rentalDate,
+    rentalStartTime: formatTimeToHHMM(mergedStartHour),
+    rentalEndTime: formatTimeToHHMM(mergedEndHour),
+  };
 };
