@@ -33,7 +33,7 @@ const InputSection = ({ type = "register", initValues }: InputSectionProps) => {
 
   const watchValues = watch();
   const isChanged = useMemo(() => {
-    if (!initValues) return true;
+    if (!initValues) return false;
     return Object.keys(initValues).some(
       (key) =>
         watchValues[key as keyof CarFormValues] !==
