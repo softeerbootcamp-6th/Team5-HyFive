@@ -5,9 +5,17 @@ import ImageInput from "@/features/carUploader/ImageInput";
 import { css } from "@emotion/react";
 import Button from "@/components/Button";
 import { Controller } from "react-hook-form";
-import useCarForm from "@/features/carUploader/useCarForm";
+import useCarForm, {
+  type CarFormValues,
+} from "@/features/carUploader/useCarForm";
+import { useMemo } from "react";
 
-const InputSection = () => {
+type InputMode = "register" | "edit";
+interface InputSectionProps {
+  type?: InputMode;
+  initValues?: CarFormValues;
+}
+const InputSection = ({ type = "register", initValues }: InputSectionProps) => {
   const MAX_PASSENGER = 25;
   const dropdownOptions = Array.from({ length: MAX_PASSENGER }, (_, index) =>
     String(index + 1),
@@ -16,18 +24,28 @@ const InputSection = () => {
   const {
     register,
     control,
+    watch,
     handleSubmit,
-    setError,
-    reset,
+    handleReset,
+    clearErrors,
     formState: { errors, isValid },
-  } = useCarForm();
+  } = useCarForm(initValues);
+
+  const watchValues = watch();
+  const isChanged = useMemo(() => {
+    if (!initValues) return false;
+    return Object.keys(initValues).some(
+      (key) =>
+        watchValues[key as keyof CarFormValues] !==
+        initValues[key as keyof CarFormValues],
+    );
+  }, [watchValues, initValues]);
 
   return (
     <form
       css={InputSectionContainer}
-      onSubmit={handleSubmit((e) => {
-        console.log(e);
-        reset();
+      onSubmit={handleSubmit(() => {
+        handleReset();
       })}
     >
       <Controller
@@ -37,8 +55,8 @@ const InputSection = () => {
           <ImageInput
             value={field.value}
             onChange={(value) => field.onChange(value)}
-            setError={setError}
-            errorMessage={errors.carImage?.message}
+            clearErrors={clearErrors}
+            errorMessage={errors.carImage?.message?.toString()}
           />
         )}
       />
@@ -90,9 +108,10 @@ const InputSection = () => {
       />
       <Button
         type="submit"
-        bgColor={isValid ? "orange" : "gray"}
-        label="등록하기"
+        bgColor={isChanged && isValid ? "orange" : "gray"}
+        label={type === "register" ? "등록하기" : "수정하기"}
         size="big"
+        disabled={!isChanged}
       />
     </form>
   );

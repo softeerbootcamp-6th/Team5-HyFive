@@ -21,23 +21,26 @@ import {
   TitleText,
 } from "@/features/carUploader/ImageInput.styles";
 import useDocumentEvent from "@/hooks/useDocumentEvent";
-import type { UseFormSetError } from "react-hook-form";
+import type { UseFormClearErrors } from "react-hook-form";
+import { useState } from "react";
 
 interface ImageInputProps {
-  value: File | null;
+  value: File | string | null;
   onChange: (value: File | null) => void;
   errorMessage?: string;
-  setError: UseFormSetError<{ carImage: File }>;
+  clearErrors: UseFormClearErrors<{ carImage: File }>;
 }
 const ImageInput = ({
   value,
   onChange,
-  setError,
+  clearErrors,
   errorMessage,
 }: ImageInputProps) => {
+  const [realTimeError, setRealTimeError] = useState<string | null>(null);
+
   useDocumentEvent();
   const { handleUploadImage, handleUploadImageByDrag, handleRemoveImage } =
-    useUploadImage({ onChange, setError });
+    useUploadImage({ onChange, setRealTimeError, clearErrors });
   const { previewUrl } = usePreviewImage({ value });
   const { dragActive, handleDropImage, handleDragActive } = useDragImage({
     handleUploadImage: handleUploadImageByDrag,
@@ -68,7 +71,7 @@ const ImageInput = ({
             <div css={TextWrapper}>
               <p css={TitleText}>업로드할 파일을 끌어다 놓으세요.</p>
               <p css={DescriptionText}>
-                JPG, PNG 형식의 파일을 업로드할 수 있습니다.
+                JPG, PNG, GIF, WEBP 형식의 파일을 업로드할 수 있습니다.
               </p>
             </div>
             <label htmlFor="carImage" css={Linktext}>
@@ -84,7 +87,9 @@ const ImageInput = ({
           </div>
         )}
       </div>
-      {errorMessage && <p css={ErrorText}>{errorMessage}</p>}
+      {(errorMessage || realTimeError) && (
+        <p css={ErrorText}>{realTimeError ? realTimeError : errorMessage}</p>
+      )}
     </div>
   );
 };

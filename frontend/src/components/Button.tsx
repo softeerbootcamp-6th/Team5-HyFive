@@ -11,6 +11,7 @@ interface ButtonProps {
   bgColor?: Color;
   size?: Size;
   type?: "submit" | "button" | "reset";
+  disabled?: boolean;
 }
 
 const Button = ({
@@ -18,6 +19,7 @@ const Button = ({
   bgColor = "orange",
   size = "small",
   type = "button",
+  disabled = false,
 }: ButtonProps) => {
   const [isPressing, setIsPressing] = useState(false);
   const handlers = usePressDetection({
@@ -28,6 +30,7 @@ const Button = ({
       type={type}
       {...handlers}
       css={ButtonContainer(bgColor, size, isPressing)}
+      disabled={disabled}
     >
       {label}
     </button>

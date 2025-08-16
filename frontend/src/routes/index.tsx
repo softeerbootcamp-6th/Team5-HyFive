@@ -13,6 +13,7 @@ import {
   CenterRegisterPage,
   NotFoundPage,
   TestPage,
+  CenterEditPage,
 } from "@/pages";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 
@@ -41,6 +42,7 @@ const Router = () => {
         <Route path="/center/*" element={<CenterLayout />}>
           <Route index element={<CenterPage />} />
           <Route path="register" element={<CenterRegisterPage />} />
+          <Route path="edit" element={<CenterEditPage />} />
         </Route>
 
         {/* 초기 진입 시 리디렉션 */}

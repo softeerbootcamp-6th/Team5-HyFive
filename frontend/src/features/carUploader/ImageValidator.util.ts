@@ -1,5 +1,11 @@
-const MAX_FILE_SIZE = 1024 * 1024 * 1024 * 500;
-const ACCEPTED_IMAGE_MIME_TYPES = ["image/jpeg", "image/jpg", "image/png"];
+const MAX_FILE_SIZE = 1024 * 1024 * 20; //20MB
+const ACCEPTED_IMAGE_MIME_TYPES = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/gif",
+  "image/webp",
+];
 
 const ImageValidator = (file: File) => {
   const validateImageSize = () => {
