@@ -7,7 +7,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import hyfive.gachita.application.car.DelYn;
 import hyfive.gachita.application.center.dto.CenterListRes;
 import hyfive.gachita.dispatch.dto.IdleCarDto;
-import hyfive.gachita.dispatch.dto.IdleTimeDto;
 import hyfive.gachita.dispatch.module.condition.CenterCondition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -54,8 +53,8 @@ public class CustomCenterRepositoryImpl implements CustomCenterRepository{
     }
 
     public List<IdleCarDto> searchCarListWithCenter(CenterCondition condition) {
-        List<IdleTimeDto> result = queryFactory
-                .select(Projections.constructor(IdleTimeDto.class,
+        return queryFactory
+                .select(Projections.constructor(IdleCarDto.class,
                             center.id,
                             center.lat,
                             center.lng,
@@ -80,7 +79,6 @@ public class CustomCenterRepositoryImpl implements CustomCenterRepository{
                                 .and(rental.rentalEndTime.goe(condition.deadline()))
                 )
                 .fetch();
-        return List.of();
     }
 
     private NumberExpression<Long> getLowCarCount() {
