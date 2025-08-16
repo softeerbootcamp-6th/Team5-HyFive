@@ -83,5 +83,9 @@ public class Book {
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime createdAt;
+
+    public void update(BookStatus bookStatus) {
+        this.bookStatus = bookStatus;
+    }
 }
 
