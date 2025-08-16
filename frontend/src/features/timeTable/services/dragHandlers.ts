@@ -1,4 +1,4 @@
-import { changeSlotFormatForDomain } from "@/features/timeTable/GridConverter";
+import { changeSlotFormatForServer } from "@/features/timeTable/GridConverter";
 import type {
   AvailableTimeSlotType,
   TimeTableMode,
@@ -49,7 +49,7 @@ export const dragHandlers = {
       currentPosition: { dayIndex, hourIndex },
     });
 
-    const previewSlot = changeSlotFormatForDomain(
+    const previewSlot = changeSlotFormatForServer(
       dayIndex,
       hourIndex,
       hourIndex,
@@ -79,7 +79,7 @@ export const dragHandlers = {
     const startHourIndex = dragState.startPosition!.hourIndex;
     const endHourIndex = hourIndex;
 
-    const previewSlot = changeSlotFormatForDomain(
+    const previewSlot = changeSlotFormatForServer(
       dayIndex,
       startHourIndex,
       endHourIndex,
@@ -134,7 +134,7 @@ export const dragHandlers = {
     const startHour = startPosition.hourIndex;
     const endHour = currentPosition.hourIndex;
 
-    return changeSlotFormatForDomain(
+    return changeSlotFormatForServer(
       dayIndex,
       startHour,
       endHour,
