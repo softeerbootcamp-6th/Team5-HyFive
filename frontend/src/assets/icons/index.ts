@@ -36,6 +36,7 @@ import MarkerEnterIcon from "./marker-enter.svg?react";
 import MarkerOutNumIcon from "./marker-out-num.svg?react";
 import MarkerOutIcon from "./marker-out.svg?react";
 import MarkerStartIcon from "./marker-start.svg?react";
+import CloseIcon from "./close.svg?react";
 
 export {
   AddIcon,
@@ -76,4 +77,5 @@ export {
   MarkerOutNumIcon,
   MarkerOutIcon,
   MarkerStartIcon,
+  CloseIcon,
 };
