@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.util.Pair;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -15,4 +16,5 @@ public interface CustomBookRepository {
                                          BookStatus status,
                                          Pageable pageable);
     List<Book> findBooksForScroll(BookStatus status, BookCursor cursorId, int size);
+    List<Book> searchCandidates(LocalDate hospitalTime);
 }

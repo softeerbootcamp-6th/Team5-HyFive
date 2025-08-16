@@ -83,6 +83,16 @@ public class CustomBookRepositoryImpl implements CustomBookRepository {
                 .fetch();
     }
 
+    @Override
+    public List<Book> searchCandidates(LocalDate hospitalDate) {
+        return queryFactory
+                .selectFrom(book)
+                .where(book.hospitalDate.eq(hospitalDate)
+                        .and(book.path.isNotNull())
+                        .and(book.bookStatus.eq(BookStatus.SUCCESS)))
+                .fetch();
+    }
+
     private BooleanExpression betweenCreatedDate(QBook book, Pair<LocalDateTime, LocalDateTime> dateRange) {
         if (dateRange == null) {
             return null;
