@@ -8,7 +8,7 @@ import hyfive.gachita.dispatch.dto.PathCandidateDto;
 import hyfive.gachita.dispatch.module.condition.BoundingBoxCondition;
 import hyfive.gachita.dispatch.module.condition.RadiusCondition;
 import hyfive.gachita.dispatch.module.evaluation.DrivingTimeEvaluation;
-import hyfive.gachita.dispatch.module.evaluation.dto.DrivingTimeEvaluationResult;
+import hyfive.gachita.dispatch.module.evaluation.DrivingTimeEvaluationResult;
 import hyfive.gachita.dispatch.module.filter.BoundingBoxFilter;
 import hyfive.gachita.dispatch.module.filter.HaversineFilter;
 import hyfive.gachita.dispatch.module.provider.PathCandidateProvider;

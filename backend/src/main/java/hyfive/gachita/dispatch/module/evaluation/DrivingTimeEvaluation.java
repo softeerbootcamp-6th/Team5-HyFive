@@ -5,7 +5,6 @@ import hyfive.gachita.client.geocode.dto.LatLng;
 import hyfive.gachita.client.kakao.KakaoNaviService;
 import hyfive.gachita.client.kakao.RouteInfo;
 import hyfive.gachita.dispatch.dto.NewBookDto;
-import hyfive.gachita.dispatch.module.evaluation.dto.DrivingTimeEvaluationResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

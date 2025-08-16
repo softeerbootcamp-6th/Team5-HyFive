@@ -1,11 +1,8 @@
 package hyfive.gachita.dispatch.module.evaluation;
 
 import hyfive.gachita.application.book.Book;
-import hyfive.gachita.client.geocode.dto.LatLng;
 import hyfive.gachita.client.kakao.KakaoNaviService;
 import hyfive.gachita.client.kakao.RouteInfo;
-import hyfive.gachita.dispatch.dto.NewBookDto;
-import hyfive.gachita.dispatch.module.evaluation.dto.DrivingTimeEvaluationResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

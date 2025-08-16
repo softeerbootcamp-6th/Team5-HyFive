@@ -16,7 +16,7 @@ public record InitPathDto(
         LocalTime deadline,    // 마지노선 하차 시간
         int duration,          // 총 이동 시간 (단위 : sec)
         int distance           // 총 이동 거리 (단위 : meters)
-) implements FilterDto, DispatchLocation {
+) implements FilterDto {
 
     public static InitPathDto from(Center center) {
         return InitPathDto.builder()

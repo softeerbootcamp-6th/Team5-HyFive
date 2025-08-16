@@ -1,4 +1,4 @@
-package hyfive.gachita.dispatch.module.evaluation.dto;
+package hyfive.gachita.dispatch.module.evaluation;
 
 import hyfive.gachita.dispatch.dto.NewBookDto;
 
