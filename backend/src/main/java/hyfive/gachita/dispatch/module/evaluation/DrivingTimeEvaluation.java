@@ -1,8 +1,6 @@
 package hyfive.gachita.dispatch.module.evaluation;
 
 import hyfive.gachita.application.book.Book;
-import hyfive.gachita.application.book.BookService;
-import hyfive.gachita.application.book.BookStatus;
 import hyfive.gachita.client.geocode.dto.LatLng;
 import hyfive.gachita.client.kakao.KakaoNaviService;
 import hyfive.gachita.client.kakao.RouteInfo;
@@ -11,7 +9,6 @@ import hyfive.gachita.dispatch.module.evaluation.dto.DrivingTimeEvaluationResult
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
