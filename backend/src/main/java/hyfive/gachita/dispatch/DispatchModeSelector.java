@@ -4,11 +4,15 @@ import hyfive.gachita.application.book.Book;
 import hyfive.gachita.application.book.BookService;
 import hyfive.gachita.application.book.BookStatus;
 import hyfive.gachita.dispatch.dto.NewBookDto;
+import hyfive.gachita.dispatch.dto.PathCandidateDto;
 import hyfive.gachita.dispatch.module.evaluation.DrivingTimeEvaluation;
 import hyfive.gachita.dispatch.module.evaluation.dto.DrivingTimeEvaluationResult;
+import hyfive.gachita.dispatch.module.provider.PathCandidateProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * 배차 모드 선택
@@ -22,6 +26,7 @@ public class DispatchModeSelector {
 
     private final DrivingTimeEvaluation drivingTimeEvaluation;
     private final BookService bookService;
+    private final PathCandidateProvider pathCandidateProvider;
 
     public void execute(Book newBook){
         DrivingTimeEvaluationResult result = drivingTimeEvaluation.evaluate(newBook);
@@ -34,6 +39,7 @@ public class DispatchModeSelector {
         }
 
         NewBookDto newBookDto = result.bookDto();
+        List<PathCandidateDto> candidates = pathCandidateProvider.getByCondition(newBookDto.hospitalDate());
 
     };
 }
