@@ -24,11 +24,11 @@ public class HaversineFilter implements Filter<RadiusCondition> {
     }
 
     @Override
-    public List<FilterDto> filter(List<FilterDto> candidates, RadiusCondition condition) {
+    public <T extends FilterDto> List<T> filter(List<T> candidates, RadiusCondition condition) {
         return candidates.stream()
                 .filter(c ->
                         haversine(condition.centerLat(), condition.centerLng(), c.lat(), c.lng()) <= condition.radiusMeters()
                 )
-                .collect(Collectors.toList());
+                .toList();
     }
 }
