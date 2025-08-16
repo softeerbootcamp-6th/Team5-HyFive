@@ -7,6 +7,8 @@ import {
   isSameMonth,
   isSameDay,
   format,
+  startOfDay,
+  isBefore,
 } from "date-fns";
 
 export const WEEKDAYS_KR = ["일", "월", "화", "수", "목", "금", "토"] as const;
@@ -178,4 +180,15 @@ export const getDateFromDayIndex = (
   }
 
   return formatDateToYYMMDD(selectedWeek[dayIndex]);
+};
+
+/**
+ * 문자열 형식의 날짜가 오늘보다 이전인지 확인합니다.
+ * @param dateString - "yyyy-MM-dd" 형식의 날짜 문자열
+ * @returns 이전 날짜이면 true, 아니면 false
+ */
+export const isBeforeToday = (dateString: string): boolean => {
+  const targetDate = new Date(dateString);
+  const today = startOfDay(new Date());
+  return isBefore(targetDate, today);
 };
