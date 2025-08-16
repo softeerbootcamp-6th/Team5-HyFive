@@ -3,9 +3,9 @@ package hyfive.gachita.dispatch;
 import hyfive.gachita.dispatch.module.filter.BoundingBoxFilter;
 import hyfive.gachita.dispatch.module.filter.HaversineFilter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class NewPathDispatchFlow {
 
