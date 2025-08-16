@@ -23,7 +23,7 @@ const useUploadImage = ({
     }
     if (!validateImageSize()) {
       onChange(null);
-      setRealTimeError("최대 크기는 50MB입니다");
+      setRealTimeError("최대 크기는 20MB입니다");
       return;
     }
     clearErrors("carImage");

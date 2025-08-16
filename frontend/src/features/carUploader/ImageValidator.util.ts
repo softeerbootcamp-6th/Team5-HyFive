@@ -1,4 +1,4 @@
-const MAX_FILE_SIZE = 1024 * 1024 * 50; //50MB
+const MAX_FILE_SIZE = 1024 * 1024 * 20; //20MB
 const ACCEPTED_IMAGE_MIME_TYPES = [
   "image/jpeg",
   "image/jpg",
