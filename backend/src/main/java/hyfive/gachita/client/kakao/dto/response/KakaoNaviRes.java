@@ -48,7 +48,11 @@ public record KakaoNaviRes(
 
             @Schema(description = "전체 경로 소요 시간(s)", example = "3494")
             @JsonProperty("duration")
-            int duration
+            int duration,
+
+            @Schema(description = "전체 경로 거리(m)", example = "19032")
+            @JsonProperty("distance")
+            int distance
     ) {}
 
     @Schema(description = "경로를 구성하는 한 개의 구간(Section)")
@@ -56,6 +60,10 @@ public record KakaoNaviRes(
             @Schema(description = "구간 소요 시간(s)", example = "1880")
             @JsonProperty("duration")
             int duration,
+
+            @Schema(description = "구간 거리(m)", example = "10035")
+            @JsonProperty("distance")
+            int distance,
 
             @Schema(description = "구간을 구성하는 도로 목록")
             @JsonProperty("roads")
