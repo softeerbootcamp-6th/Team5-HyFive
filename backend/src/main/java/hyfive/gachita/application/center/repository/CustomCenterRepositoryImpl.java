@@ -3,6 +3,7 @@ package hyfive.gachita.application.center.repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.NumberExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hyfive.gachita.application.car.DelYn;
 import hyfive.gachita.application.center.dto.CenterListRes;
@@ -18,6 +19,7 @@ import java.util.List;
 import static hyfive.gachita.application.car.QCar.car;
 import static hyfive.gachita.application.center.QCenter.center;
 import static hyfive.gachita.application.rental.QRental.rental;
+import static hyfive.gachita.application.path.QPath.path;
 
 @RequiredArgsConstructor
 public class CustomCenterRepositoryImpl implements CustomCenterRepository{
@@ -66,14 +68,19 @@ public class CustomCenterRepositoryImpl implements CustomCenterRepository{
                 .from(center)
                 .join(center.carList, car)
                 .where(
-                        center.id.in(condition.centerIdList()),
                         car.lowFloor.eq(condition.walker()),
                         car.delYn.eq(DelYn.N)
                 )
                 .leftJoin(rental)
                 .on(
                         rental.car.id.eq(car.id)
-                                .and(rental.pathList.isEmpty()) // 배차 여부 확인
+                                .and(
+                                        JPAExpressions
+                                                .selectOne()
+                                                .from(path)
+                                                .where(path.rental.eq(rental))
+                                                .notExists()
+                                )
                                 .and(rental.rentalDate.eq(condition.hospitalDate()))
                                 .and(rental.rentalStartTime.loe(condition.maybeOnTime()))
                                 .and(rental.rentalEndTime.goe(condition.deadline()))
