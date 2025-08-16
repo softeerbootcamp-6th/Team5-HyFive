@@ -44,8 +44,7 @@ const InputSection = ({ type = "register", initValues }: InputSectionProps) => {
   return (
     <form
       css={InputSectionContainer}
-      onSubmit={handleSubmit((e) => {
-        console.log(e);
+      onSubmit={handleSubmit(() => {
         handleReset();
       })}
     >
