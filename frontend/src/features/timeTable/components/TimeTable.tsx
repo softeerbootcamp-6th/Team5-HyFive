@@ -14,7 +14,7 @@ import {
   AvailableTimeSlot,
 } from "./index";
 import { TIME_TABLE_CONFIG } from "@/features/timeTable/TimeTable.constants";
-import { isAllSlotsInSelectedWeek } from "@/features/timeTable/TimeTable.util";
+import { isAllSlotsInSelectedWeek } from "@/features/timeTable/utils/TimeTable.util";
 import { useTimeTableDrag } from "@/features/timeTable/hooks/useTimeTableDrag";
 
 const mockWeek: Date[] = Array.from({ length: 7 }, (_, i) => {

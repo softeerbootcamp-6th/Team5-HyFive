@@ -1,6 +1,6 @@
 import { TIME_TABLE_CONFIG } from "@/features/timeTable/TimeTable.constants";
 import { TimeLabel } from "@/features/timeTable/TimeTable.style";
-import { formatHourWithColons } from "@/features/timeTable/TimeTable.util";
+import { formatHourWithColons } from "@/features/timeTable/utils/TimeTable.util";
 import { memo } from "react";
 
 interface TimeLabelsProps {
