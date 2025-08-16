@@ -1,12 +1,15 @@
 package hyfive.gachita.application.rental;
 
 import hyfive.gachita.application.car.Car;
+import hyfive.gachita.application.node.Node;
+import hyfive.gachita.application.path.Path;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Getter
 @Builder
@@ -36,5 +39,8 @@ public class Rental {
     @NotNull
     @Column(name = "rental_end_time", nullable = false, columnDefinition = "TIME")
     private LocalTime rentalEndTime;
+
+    @OneToMany(mappedBy = "rental", fetch = FetchType.LAZY)
+    private List<Path> pathList;
 }
 
