@@ -7,6 +7,7 @@ import hyfive.gachita.client.geocode.dto.LatLng;
 import hyfive.gachita.client.kakao.KakaoNaviService;
 import hyfive.gachita.client.kakao.RouteInfo;
 import hyfive.gachita.dispatch.dto.NewBookDto;
+import hyfive.gachita.dispatch.module.evaluation.dto.DrivingTimeEvaluationResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -26,19 +27,19 @@ public class DrivingTimeEvaluation {
     private final KakaoNaviService kakaoNaviService;
     private final BookService bookService;
 
-    public void evaluate(Book newBook){
-        List<LatLng> nodeList = new ArrayList<>();
-        nodeList.add(new LatLng(newBook.getStartLat(), newBook.getStartLng()));
-        nodeList.add(new LatLng(newBook.getEndLat(), newBook.getEndLng()));
+    public DrivingTimeEvaluationResult evaluate(Book newBook) {
+        List<LatLng> nodeList = List.of(
+                new LatLng(newBook.getStartLat(), newBook.getStartLng()),
+                new LatLng(newBook.getEndLat(), newBook.getEndLng())
+        );
 
-        RouteInfo newBookRouteInfo = kakaoNaviService.geRouteInfo(nodeList);
+        RouteInfo routeInfo = kakaoNaviService.geRouteInfo(nodeList);
 
-        if(newBookRouteInfo.totalDuration() > MAX_TOTAL_DURATION) {
-            // 예약 실패
+        if(routeInfo.totalDuration() > MAX_TOTAL_DURATION) {
             bookService.updateBookStatus(newBook.getId(), BookStatus.FAIL);
-        } else {
-            // TODO : DispatchModeSelector 실행
-            NewBookDto newBookDto = NewBookDto.from(newBook, newBookRouteInfo);
+            return DrivingTimeEvaluationResult.fail("총 운행시간 1시간 초과");
         }
+
+        return DrivingTimeEvaluationResult.success(NewBookDto.from(newBook, routeInfo));
     }
 }
