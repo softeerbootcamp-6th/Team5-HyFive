@@ -8,7 +8,6 @@ interface TimeCellsProps {
   mode: TimeTableMode;
   handleCellMouseDown?: (dayIndex: number, hourIndex: number) => void;
   handleCellMouseEnter?: (dayIndex: number, hourIndex: number) => void;
-  isPreviewCell?: (dayIndex: number, hourIndex: number) => boolean;
 }
 
 const TimeCells = ({
@@ -17,7 +16,6 @@ const TimeCells = ({
   mode,
   handleCellMouseDown,
   handleCellMouseEnter,
-  isPreviewCell,
 }: TimeCellsProps) => {
   // totalHours * selectedWeek.length 만큼의 셀을 생성합니다.
   // 11 * 7 = 77개의 셀이 생성되며, 각 셀은 고유한 key를 가집니다.
@@ -45,7 +43,6 @@ const TimeCells = ({
           dayIndex={dayIndex}
           onMouseDown={() => handleCellMouseDown?.(dayIndex, hourIndex)}
           onMouseEnter={() => handleCellMouseEnter?.(dayIndex, hourIndex)}
-          isPreviewCell={!!isPreviewCell?.(dayIndex, hourIndex)}
         />
       ))}
     </>

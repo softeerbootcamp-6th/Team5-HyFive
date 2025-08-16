@@ -5,16 +5,17 @@ import type {
 } from "@/features/timeTable/TimeTable.type";
 
 import { generateAvailableTimeSlots } from "@/mocks/timeBlockMocks";
-import { useTimeTableDrag } from "@/features/timeTable/useTimeTableDrag";
 import { useEffect, useState } from "react";
 import {
   AvailableTimeSlots,
   TimeTableHeader,
   TimeLabels,
   TimeCells,
+  AvailableTimeSlot,
 } from "./index";
 import { TIME_TABLE_CONFIG } from "@/features/timeTable/TimeTable.constants";
-import { isAllSlotsInSelectedWeek } from "@/features/timeTable/TimeTable.util";
+import { isAllSlotsInSelectedWeek } from "@/features/timeTable/utils/TimeTable.util";
+import { useTimeTableDrag } from "@/features/timeTable/hooks/useTimeTableDrag";
 
 const mockWeek: Date[] = Array.from({ length: 7 }, (_, i) => {
   return new Date(2025, 7, 10 + i);
@@ -30,6 +31,10 @@ const TimeTable = ({
   const [availableTimeSlots, setAvailableTimeSlots] =
     useState<AvailableTimeSlotType[]>(mockTimeSlot);
 
+  const [previewSlot, setPreviewSlot] = useState<AvailableTimeSlotType | null>(
+    null,
+  );
+
   useEffect(() => {
     const TimeSlot = generateAvailableTimeSlots(selectedWeek);
     setAvailableTimeSlots(TimeSlot);
@@ -39,13 +44,16 @@ const TimeTable = ({
     selectedWeek,
   );
 
-  const { handleCellMouseDown, handleCellMouseEnter, isPreviewCell } =
+  const { handleCellMouseDown, handleCellMouseEnter, deleteSlot } =
     useTimeTableDrag({
       mode,
       selectedWeek,
       availableTimeSlots,
       onSlotsUpdate: (slots) => setAvailableTimeSlots(slots),
+      setPreviewSlot: setPreviewSlot,
     });
+
+  const slotsDisabled = Boolean(previewSlot);
 
   return (
     <div css={TableContainer}>
@@ -67,7 +75,6 @@ const TimeTable = ({
           handleCellMouseEnter={
             mode === "edit" ? handleCellMouseEnter : undefined
           }
-          isPreviewCell={mode === "edit" ? isPreviewCell : undefined}
         />
 
         {/* 유휴시간 블록들 - TimeCell 위 블록*/}
@@ -75,6 +82,20 @@ const TimeTable = ({
           <AvailableTimeSlots
             availableTimeData={availableTimeSlots}
             selectedWeek={selectedWeek}
+            mode={mode}
+            onDelete={deleteSlot}
+            disabled={slotsDisabled}
+          />
+        )}
+
+        {previewSlot && (
+          <AvailableTimeSlot
+            key={`preview-${previewSlot.rentalDate}-${previewSlot.rentalStartTime}-${previewSlot.rentalEndTime}`}
+            slot={previewSlot}
+            selectedWeek={selectedWeek}
+            variant="preview"
+            mode={mode}
+            disabled
           />
         )}
       </div>

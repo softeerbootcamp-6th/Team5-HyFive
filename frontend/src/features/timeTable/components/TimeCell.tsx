@@ -7,7 +7,6 @@ interface TimeCellProps {
   mode: TimeTableMode;
   onMouseDown?: () => void;
   onMouseEnter?: () => void;
-  isPreviewCell?: boolean;
 }
 
 const TimeCell = ({
@@ -16,11 +15,10 @@ const TimeCell = ({
   dayIndex,
   onMouseDown,
   onMouseEnter,
-  isPreviewCell = false,
 }: TimeCellProps) => {
   return (
     <div
-      css={getTimeCellStyle(mode, hourIndex, dayIndex, isPreviewCell)}
+      css={getTimeCellStyle(mode, hourIndex, dayIndex)}
       style={{
         gridColumn: dayIndex + 1 + 1, // grid 인덱스 보정 + 시간 축 컬럼
         gridRow: hourIndex + 1, // grid 인덱스 보정

@@ -2,7 +2,7 @@ import {
   formatDateNumber,
   formatDayOfWeek,
   isCurrentDay,
-} from "@/features/timeTable/TimeTable.util";
+} from "@/features/timeTable/utils/TimeTable.util";
 import {
   TableHeader,
   TimeAxisPlaceholder,

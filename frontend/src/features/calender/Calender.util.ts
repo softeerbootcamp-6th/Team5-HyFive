@@ -7,6 +7,8 @@ import {
   isSameMonth,
   isSameDay,
   format,
+  startOfDay,
+  isBefore,
 } from "date-fns";
 
 export const WEEKDAYS_KR = ["일", "월", "화", "수", "목", "금", "토"] as const;
@@ -19,6 +21,35 @@ export const WEEKDAYS_KR = ["일", "월", "화", "수", "목", "금", "토"] as 
  */
 export const getYearMonth = (date: Date): string => {
   return format(date, "yyyy년 M월");
+};
+
+/**
+ * 주어진 날짜를 "yyyy-MM-dd" 형식의 문자열로 변환합니다.
+ * @param {Date} date - 포맷할 날짜 객체
+ * @returns {string} "yyyy-MM-dd" 형식의 날짜 문자열
+ */
+export const formatDateToYYMMDD = (date: Date): string => {
+  return format(date, "yyyy-MM-dd");
+};
+
+/**
+ * 주어진 시각을 "HH:mm" 형식의 문자열로 변환합니다.
+ * @param {number} hour - 포맷팅 할 시각(9 ~ 23)
+ * @returns {string} - "HH:mm" 형식의 시간 문자열
+ */
+export const formatTimeToHHMM = (hour: number): string => {
+  const date = new Date();
+  date.setHours(hour);
+  return format(date, "HH") + ":00";
+};
+
+/**
+ * HH:mm 형식의 시간을 숫자로 변환합니다.
+ * @param {string} time - "HH:mm" 형식의 시간 문자열
+ * @returns {number} - 시간 숫자 (0 ~ 23)
+ */
+export const formatTimeToNumber = (time: string): number => {
+  return parseInt(time.split(":")[0], 10);
 };
 
 /**
@@ -130,6 +161,34 @@ export const getDayIndex = (
   selectedWeek: Date[],
 ): number => {
   return selectedWeek.findIndex(
-    (date) => format(date, "yyyy-MM-dd") === dateString,
+    (date) => formatDateToYYMMDD(date) === dateString,
   );
+};
+
+/**
+ * 주어진 dayIndex에 해당하는 날짜를 "yyyy-MM-dd" 형식으로 반환합니다.
+ * @param dayIndex - 날짜 인덱스
+ * @param selectedWeek - 선택된 주 배열
+ * @returns - 해당 날짜
+ */
+export const getDateFromDayIndex = (
+  dayIndex: number,
+  selectedWeek: Date[],
+): string => {
+  if (dayIndex < 0 || dayIndex >= selectedWeek.length) {
+    throw new Error("Invalid day index");
+  }
+
+  return formatDateToYYMMDD(selectedWeek[dayIndex]);
+};
+
+/**
+ * 문자열 형식의 날짜가 오늘보다 이전인지 확인합니다.
+ * @param dateString - "yyyy-MM-dd" 형식의 날짜 문자열
+ * @returns 이전 날짜이면 true, 아니면 false
+ */
+export const isBeforeToday = (dateString: string): boolean => {
+  const targetDate = new Date(dateString);
+  const today = startOfDay(new Date());
+  return isBefore(targetDate, today);
 };

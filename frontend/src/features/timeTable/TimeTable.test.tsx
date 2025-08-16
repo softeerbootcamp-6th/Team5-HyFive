@@ -5,7 +5,7 @@ import { getWeekRange } from "@/features/calender/Calender.util";
 import type { TimeTableProps } from "@/features/timeTable/TimeTable.type";
 import { format } from "date-fns";
 import type { AvailableTimeSlot } from "@/mocks/timeBlockMocks";
-import { isAllSlotsInSelectedWeek } from "@/features/timeTable/TimeTable.util";
+import { isAllSlotsInSelectedWeek } from "@/features/timeTable/utils/TimeTable.util";
 
 const testData: TimeTableProps = {
   selectedCarId: 1,

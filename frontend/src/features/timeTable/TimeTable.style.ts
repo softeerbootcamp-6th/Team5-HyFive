@@ -1,6 +1,9 @@
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
-import { getDayIndex } from "@/features/calender/Calender.util";
+import {
+  formatTimeToNumber,
+  getDayIndex,
+} from "@/features/calender/Calender.util";
 import type { AvailableTimeSlotType, TimeTableMode } from "./TimeTable.type";
 import { TIME_TABLE_CONFIG } from "@/features/timeTable/TimeTable.constants";
 
@@ -94,7 +97,6 @@ export const getTimeCellStyle = (
   mode: TimeTableMode,
   hourIndex: number,
   dayIndex: number,
-  isPreviewCell: boolean,
 ) => {
   const isLastColumn = dayIndex === 6; // 토요일
   const isLastRow = hourIndex === 10; // 19시
@@ -108,11 +110,6 @@ export const getTimeCellStyle = (
         background-color: ${color.GrayScale.gray2};
       }
     `}
-    ${isPreviewCell &&
-    css`
-      border-left: 4px solid ${color.Maincolor.primary};
-      background-color: ${color.SemanticScale.orange[100]} !important;
-    `}
     ${isLastColumn &&
     css`
       border-right: none;
@@ -124,13 +121,13 @@ export const getTimeCellStyle = (
   `;
 };
 
-export const getTimeBlockGridStyle = (
-  block: AvailableTimeSlotType,
+export const getTimeSlotGridStyle = (
+  slot: AvailableTimeSlotType,
   selectedWeek: Date[],
 ) => {
-  const startHour = parseInt(block.rentalStartTime.split(":")[0]);
-  const endHour = parseInt(block.rentalEndTime.split(":")[0]);
-  const dayIndex = getDayIndex(block.rentalDate, selectedWeek);
+  const startHour = formatTimeToNumber(slot.rentalStartTime);
+  const endHour = formatTimeToNumber(slot.rentalEndTime);
+  const dayIndex = getDayIndex(slot.rentalDate, selectedWeek);
 
   if (dayIndex === -1) return css``;
 
