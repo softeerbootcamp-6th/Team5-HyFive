@@ -14,7 +14,7 @@ import {
   NotFoundPage,
   TestPage,
 } from "@/pages";
-import { BrowserRouter, Route, Routes } from "react-router";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 
 const Router = () => {
   return (
@@ -22,6 +22,7 @@ const Router = () => {
       <Routes>
         {/* Admin 영역 */}
         <Route path="/admin/*" element={<AdminLayout />}>
+          <Route index element={<Navigate to="book" replace />} />
           <Route path="book" element={<BookLayout />}>
             <Route index element={<BookPage />} />
             <Route path="schedule" element={<SchedulePage />} />
