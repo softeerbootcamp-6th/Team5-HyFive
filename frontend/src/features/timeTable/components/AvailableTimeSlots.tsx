@@ -17,6 +17,7 @@ const AvailableTimeSlots = ({
           key={`${block.rentalDate}-${block.rentalStartTime}-${block.rentalEndTime}`}
           block={block}
           selectedWeek={selectedWeek}
+          variant="default"
         />
       ))}
     </>

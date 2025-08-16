@@ -10,9 +10,14 @@ const { color, typography } = theme;
 interface AvailableTimeSlotProps {
   block: AvailableTimeSlotType;
   selectedWeek: Date[];
+  variant?: "default" | "preview";
 }
 
-const AvailableTimeSlot = ({ block, selectedWeek }: AvailableTimeSlotProps) => {
+const AvailableTimeSlot = ({
+  block,
+  selectedWeek,
+  variant = "default",
+}: AvailableTimeSlotProps) => {
   // 블록 날짜가 오늘보다 이전인지 확인
   const blockDate = new Date(block.rentalDate);
   const today = startOfDay(new Date());
@@ -22,13 +27,17 @@ const AvailableTimeSlot = ({ block, selectedWeek }: AvailableTimeSlotProps) => {
     <div
       css={[
         getTimeBlockGridStyle(block, selectedWeek),
-        getSlotContainerStyle(isPastDate),
+        getSlotContainerStyle(isPastDate, variant),
       ]}
     >
-      <header>유휴 시간</header>
-      <time dateTime={`${block.rentalStartTime}/${block.rentalEndTime}`}>
-        {block.rentalStartTime} ~ {block.rentalEndTime}
-      </time>
+      {variant === "default" && (
+        <>
+          <header>유휴 시간</header>
+          <time dateTime={`${block.rentalStartTime}/${block.rentalEndTime}`}>
+            {block.rentalStartTime} ~ {block.rentalEndTime}
+          </time>
+        </>
+      )}
     </div>
   );
 };
@@ -36,15 +45,16 @@ const AvailableTimeSlot = ({ block, selectedWeek }: AvailableTimeSlotProps) => {
 export default AvailableTimeSlot;
 
 // 기본 슬롯 스타일
-const BaseSlotStyle = css`
+const BaseSlotStyle = (variant: "default" | "preview") => css`
+  height: calc(100% - 16px); // 상하 margin 제외
   border-radius: 0 10px 10px 0;
   margin: 8px;
-  padding: 20px;
+  padding: ${variant === "preview" ? "8px 12px" : "20px"};
   font: ${typography.Label.l4_semi};
-
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  pointer-events: ${variant === "preview" ? "none" : "auto"};
 `;
 
 // 현재/미래 날짜 스타일
@@ -62,8 +72,11 @@ const PastSlotStyle = css`
 `;
 
 // 스타일 조합 함수
-const getSlotContainerStyle = (isPastDate: boolean) => {
-  const styles = [BaseSlotStyle];
+const getSlotContainerStyle = (
+  isPastDate: boolean,
+  variant: "default" | "preview",
+) => {
+  const styles = [BaseSlotStyle(variant)];
 
   if (isPastDate) {
     styles.push(PastSlotStyle);

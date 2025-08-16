@@ -12,6 +12,7 @@ import {
   TimeTableHeader,
   TimeLabels,
   TimeCells,
+  AvailableTimeSlot,
 } from "./index";
 import { TIME_TABLE_CONFIG } from "@/features/timeTable/TimeTable.constants";
 import { isAllSlotsInSelectedWeek } from "@/features/timeTable/TimeTable.util";
@@ -30,6 +31,10 @@ const TimeTable = ({
   const [availableTimeSlots, setAvailableTimeSlots] =
     useState<AvailableTimeSlotType[]>(mockTimeSlot);
 
+  const [previewSlot, setPreviewSlot] = useState<AvailableTimeSlotType | null>(
+    null,
+  );
+
   useEffect(() => {
     const TimeSlot = generateAvailableTimeSlots(selectedWeek);
     setAvailableTimeSlots(TimeSlot);
@@ -39,13 +44,13 @@ const TimeTable = ({
     selectedWeek,
   );
 
-  const { handleCellMouseDown, handleCellMouseEnter, isPreviewCell } =
-    useTimeTableDrag({
-      mode,
-      selectedWeek,
-      availableTimeSlots,
-      onSlotsUpdate: (slots) => setAvailableTimeSlots(slots),
-    });
+  const { handleCellMouseDown, handleCellMouseEnter } = useTimeTableDrag({
+    mode,
+    selectedWeek,
+    availableTimeSlots,
+    onSlotsUpdate: (slots) => setAvailableTimeSlots(slots),
+    setPreviewSlot: setPreviewSlot,
+  });
 
   return (
     <div css={TableContainer}>
@@ -67,7 +72,6 @@ const TimeTable = ({
           handleCellMouseEnter={
             mode === "edit" ? handleCellMouseEnter : undefined
           }
-          isPreviewCell={mode === "edit" ? isPreviewCell : undefined}
         />
 
         {/* 유휴시간 블록들 - TimeCell 위 블록*/}
@@ -75,6 +79,15 @@ const TimeTable = ({
           <AvailableTimeSlots
             availableTimeData={availableTimeSlots}
             selectedWeek={selectedWeek}
+          />
+        )}
+
+        {previewSlot && (
+          <AvailableTimeSlot
+            key={`preview-${previewSlot.rentalDate}-${previewSlot.rentalStartTime}-${previewSlot.rentalEndTime}`}
+            block={previewSlot}
+            selectedWeek={selectedWeek}
+            variant="preview"
           />
         )}
       </div>
