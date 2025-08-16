@@ -16,4 +16,4 @@ public record NodeDispatchLocationDto (
         NodeType type,
 
         Pair<LocalTime, LocalTime> deadline // 도착 보장 시간 <시작, 끝>
-) implements Condition {}
+) {}

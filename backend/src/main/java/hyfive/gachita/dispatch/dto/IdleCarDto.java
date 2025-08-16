@@ -5,5 +5,4 @@ public record IdleCarDto(
         Long centerLat,
         Long centerLng,
         Long carId
-) {
-}
+) {}

@@ -10,4 +10,4 @@ public record CenterCondition (
         LocalTime maybeOnTime,
         LocalTime deadline,
         boolean walker
-) implements Condition {}
+) {}
