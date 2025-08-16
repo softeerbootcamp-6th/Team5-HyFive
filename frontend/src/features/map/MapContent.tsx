@@ -3,6 +3,7 @@ import useVisualizeMarker from "@/features/map/useVisualizeMarker";
 import useVisualizeRoute from "@/features/map/useVisualizeRoute";
 import useZoomLevel from "@/features/map/useZoomLevel";
 import ZoomButton from "@/features/map/ZoomButton";
+import RoutePicker from "@/features/routePicker/RoutePicker";
 import { path } from "@/mocks/pathMocks";
 import { css } from "@emotion/react";
 import { useRef } from "react";
@@ -20,8 +21,9 @@ const MapContent = () => {
 
   return (
     <div css={MapContentContainer}>
-      <div id="map" ref={mapRef} css={MapWrapper} />
+      {/* <div id="map" ref={mapRef} css={MapWrapper} /> */}
       <ZoomButton setZoomLevel={setZoomLevel} />
+      <RoutePicker />
     </div>
   );
 };
