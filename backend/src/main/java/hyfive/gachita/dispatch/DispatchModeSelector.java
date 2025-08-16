@@ -1,6 +1,8 @@
 package hyfive.gachita.dispatch;
 
 import hyfive.gachita.application.book.Book;
+import hyfive.gachita.application.book.BookService;
+import hyfive.gachita.application.book.BookStatus;
 import hyfive.gachita.dispatch.dto.NewBookDto;
 import hyfive.gachita.dispatch.module.evaluation.DrivingTimeEvaluation;
 import hyfive.gachita.dispatch.module.evaluation.dto.DrivingTimeEvaluationResult;
@@ -19,15 +21,19 @@ import org.springframework.stereotype.Component;
 public class DispatchModeSelector {
 
     private final DrivingTimeEvaluation drivingTimeEvaluation;
+    private final BookService bookService;
 
     public void execute(Book newBook){
         DrivingTimeEvaluationResult result = drivingTimeEvaluation.evaluate(newBook);
 
-        if(result.success()) {
-            NewBookDto dto = result.bookDto();
-            // 다음 단계 진행
-        } else {
+        if(!result.success()){
+            bookService.updateBookStatus(newBook.getId(), BookStatus.FAIL);
             log.info("예약 실패 : {}", result.failReason());
+            // TODO : 비즈니스 예외는 아니어서 어떻게 처리하면 좋을지.
+            return;
         }
+
+        NewBookDto newBookDto = result.bookDto();
+
     };
 }
