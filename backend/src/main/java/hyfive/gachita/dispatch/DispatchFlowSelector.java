@@ -1,6 +1,5 @@
 package hyfive.gachita.dispatch;
 
-import hyfive.gachita.application.book.Book;
 import hyfive.gachita.application.book.BookService;
 import hyfive.gachita.application.book.BookStatus;
 import hyfive.gachita.dispatch.dto.NewBookDto;
@@ -32,22 +31,11 @@ import java.util.stream.Stream;
 public class DispatchFlowSelector {
 
     private final int RADIUS_METERS = 500;
-    private final DrivingTimeEvaluation drivingTimeEvaluation;
-    private final BookService bookService;
     private final PathCandidateProvider pathCandidateProvider;
     private final BoundingBoxFilter boundingBoxFilter;
     private final HaversineFilter haversineFilter;
 
-    public void execute(Book newBook){
-        DrivingTimeEvaluationResult result = drivingTimeEvaluation.evaluate(newBook);
-
-        if(!result.success()){
-            bookService.updateBookStatus(newBook.getId(), BookStatus.FAIL);
-            log.info("예약 실패 : {}", result.failReason());
-            return;
-        }
-
-        NewBookDto newBookDto = result.bookDto();
+    public void execute(NewBookDto newBookDto){
         List<PathCandidateDto> candidates = pathCandidateProvider.getByCondition(newBookDto.hospitalDate());
 
         BoundingBoxCondition bbConditionStart = BoundingBoxCondition.from(newBookDto.startLat(), newBookDto.startLng(), RADIUS_METERS);

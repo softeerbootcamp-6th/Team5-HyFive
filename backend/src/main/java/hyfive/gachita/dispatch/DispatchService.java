@@ -1,0 +1,51 @@
+package hyfive.gachita.dispatch;
+
+import hyfive.gachita.application.book.Book;
+import hyfive.gachita.application.book.BookService;
+import hyfive.gachita.application.book.BookStatus;
+import hyfive.gachita.application.path.PathService;
+import hyfive.gachita.dispatch.dto.NewBookDto;
+import hyfive.gachita.dispatch.excepion.DispatchExpectedException;
+import hyfive.gachita.dispatch.excepion.DispatchUnexpectedException;
+import hyfive.gachita.dispatch.module.evaluation.DrivingTimeEvaluation;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+@Slf4j
+public class DispatchService {
+    private final DispatchFlowSelector dispatchFlowSelector;
+    private final NewPathDispatchFlow newPathDispatchFlow;
+    private final OldPathDispatchFlow oldPathDispatchFlow;
+    private final BookService bookService;
+    private final PathService pathService;
+
+    // evaluation
+    private final DrivingTimeEvaluation drivingTimeEvaluation;
+
+    public void execute(Book newBook) {
+        BookStatus bookStatus = BookStatus.NEW;
+        try {
+            // 1. 예약 추가 정보 로드
+            NewBookDto newBookDto = drivingTimeEvaluation.evaluate(newBook);
+
+            // 2. DispatchFlowSelector 실행
+            dispatchFlowSelector.execute(newBookDto);
+
+            // 3. 배차 결과 반영
+            bookStatus = BookStatus.SUCCESS;
+
+        } catch (DispatchExpectedException e) {
+            bookStatus = BookStatus.FAIL;
+            log.info("예약 실패 {}", e.getMessage());
+        } catch (DispatchUnexpectedException e) {
+            bookStatus = BookStatus.FAIL;
+            log.info("비정상 예약 실패 {}", e.getMessage());
+        } finally {
+            // BookStatus 변환 - 성공, 실패
+            bookService.updateBookStatus(newBook.getId(), bookStatus);
+        }
+    }
+}
