@@ -15,7 +15,10 @@ import {
   AvailableTimeSlot,
 } from "./index";
 import { TIME_TABLE_CONFIG } from "@/features/timeTable/TimeTable.constants";
-import { isAllSlotsInSelectedWeek } from "@/features/timeTable/TimeTable.util";
+import {
+  isAllSlotsInSelectedWeek,
+  isSameSlot,
+} from "@/features/timeTable/TimeTable.util";
 
 const mockWeek: Date[] = Array.from({ length: 7 }, (_, i) => {
   return new Date(2025, 7, 10 + i);
@@ -52,6 +55,14 @@ const TimeTable = ({
     setPreviewSlot: setPreviewSlot,
   });
 
+  const handleSlotDelete = (block: AvailableTimeSlotType) => {
+    setAvailableTimeSlots((prevSlots) =>
+      prevSlots.filter((slot) => !isSameSlot(slot, block)),
+    );
+  };
+
+  const slotsDisabled = Boolean(previewSlot);
+
   return (
     <div css={TableContainer}>
       {/* 헤더 - 최상단 날짜 */}
@@ -79,6 +90,9 @@ const TimeTable = ({
           <AvailableTimeSlots
             availableTimeData={availableTimeSlots}
             selectedWeek={selectedWeek}
+            mode={mode}
+            onDelete={handleSlotDelete}
+            disabled={slotsDisabled}
           />
         )}
 
@@ -88,6 +102,8 @@ const TimeTable = ({
             block={previewSlot}
             selectedWeek={selectedWeek}
             variant="preview"
+            mode={mode}
+            disabled
           />
         )}
       </div>
