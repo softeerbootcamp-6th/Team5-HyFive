@@ -2,6 +2,7 @@ package hyfive.gachita.application.path;
 
 import hyfive.gachita.application.car.Car;
 import hyfive.gachita.application.node.Node;
+import hyfive.gachita.application.rental.Rental;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -25,6 +26,11 @@ public class Path {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "car_id", nullable = false)
     private Car car;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "rental_id", nullable = false)
+    private Rental rental;
 
     @NotNull
     @Column(name = "maybe_start_time", nullable = false, columnDefinition = "TIME")
