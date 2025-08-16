@@ -25,7 +25,7 @@ public class S3Service {
     private final S3Client s3Client;
 
     private final String BASE_PATH = "images/";
-    private final long MAX_FILE_SIZE = 50 * 1024 * 1024;
+    private final long MAX_FILE_SIZE = 20 * 1024 * 1024;
 
     public String uploadImage(MultipartFile file) {
         try {
