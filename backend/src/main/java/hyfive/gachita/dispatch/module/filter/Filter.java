@@ -13,5 +13,5 @@ import java.util.List;
  *  - (예시 구현체) HarversineFilter.java
  */
 public interface Filter<C extends Condition> {
-    List<FilterDto> filter(List<FilterDto> candidates, C condition);
+    <T extends FilterDto> List<T> filter(List<T> candidates, C condition);
 }

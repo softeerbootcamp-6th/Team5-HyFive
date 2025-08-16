@@ -12,6 +12,7 @@ import hyfive.gachita.application.common.enums.SearchPeriod;
 import hyfive.gachita.global.BusinessException;
 import hyfive.gachita.global.ErrorCode;
 import hyfive.gachita.application.common.util.DateRangeUtil;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -102,6 +103,14 @@ public class BookService {
                 .hasNext(hasNext)
                 .cursor(lastCursor)
                 .build();
+    }
+
+    @Transactional
+    public void updateBookStatus(Long id, BookStatus bookStatus) {
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NO_EXIST_VALUE, "DB에 예약 데이터가 존재하지 않습니다."));
+
+        book.update(bookStatus);
     }
 }
 

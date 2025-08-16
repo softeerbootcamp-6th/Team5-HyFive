@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UnDispatchService {
+public class NewPathDispatchFlow {
 
     private final BoundingBoxFilter boundingBoxFilter;
     private final HaversineFilter haversineFilter;

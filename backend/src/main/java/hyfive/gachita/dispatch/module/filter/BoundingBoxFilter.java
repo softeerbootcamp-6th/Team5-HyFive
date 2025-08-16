@@ -10,14 +10,14 @@ import java.util.stream.Collectors;
 public class BoundingBoxFilter implements Filter<BoundingBoxCondition> {
 
     @Override
-    public List<FilterDto> filter(List<FilterDto> candidates, BoundingBoxCondition condition) {
+    public <T extends FilterDto> List<T> filter(List<T> candidates, BoundingBoxCondition condition) {
         return candidates.stream()
                 .filter(c ->
                         c.lat() >= condition.minLat() &&
-                        c.lat() <= condition.maxLat() &&
-                        c.lng() >= condition.minLng() &&
-                        c.lng() <= condition.maxLng()
+                                c.lat() <= condition.maxLat() &&
+                                c.lng() >= condition.minLng() &&
+                                c.lng() <= condition.maxLng()
                 )
-                .collect(Collectors.toList());
+                .toList();
     }
 }
