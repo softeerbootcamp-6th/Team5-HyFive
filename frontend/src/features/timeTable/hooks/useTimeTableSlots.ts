@@ -6,6 +6,7 @@ import { dragHandlers } from "@/features/timeTable/services/dragHandlers";
 import { slotValidator } from "@/features/timeTable/services/slotValidator";
 import { slotMerger } from "@/features/timeTable/services/slotMerger";
 import { useCallback } from "react";
+import { slotUtils } from "@/features/timeTable/utils/slotUtils";
 
 interface DragState {
   isDragging: boolean;
@@ -84,12 +85,7 @@ export const useTimeTableSlots = ({
       if (mode !== "edit") return;
 
       const updatedSlots = availableTimeSlots.filter(
-        (slot) =>
-          !(
-            slot.rentalDate === targetSlot.rentalDate &&
-            slot.rentalStartTime === targetSlot.rentalStartTime &&
-            slot.rentalEndTime === targetSlot.rentalEndTime
-          ),
+        (slot) => slotUtils.isSameSlot(slot, targetSlot) === false,
       );
 
       onSlotsUpdate?.(updatedSlots);

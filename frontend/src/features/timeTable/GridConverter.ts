@@ -1,6 +1,7 @@
 import {
   formatDateToYYMMDD,
   formatTimeToHHMM,
+  formatTimeToNumber,
   getDayIndex,
 } from "@/features/calender/Calender.util";
 import { TIME_TABLE_CONFIG } from "@/features/timeTable/TimeTable.constants";
@@ -26,8 +27,8 @@ export const changeSlotFormatForGrid = (
 
   const dayIndex = getDayIndex(rentalDate, selectedWeek);
 
-  const startHour = parseInt(rentalStartTime.split(":")[0], 10);
-  const endHour = parseInt(rentalEndTime.split(":")[0], 10);
+  const startHour = formatTimeToNumber(rentalStartTime);
+  const endHour = formatTimeToNumber(rentalEndTime);
 
   const startHourIndex = startHour - TIME_TABLE_CONFIG.START_HOUR;
   const endHourIndex = endHour - TIME_TABLE_CONFIG.START_HOUR;
