@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-interface useDocumentEventListenerProps {
+interface useDocumentMouseEventListenerProps {
   finalizeDrag: () => void;
 }
 
@@ -8,9 +8,9 @@ interface useDocumentEventListenerProps {
  * 문서 레벨 이벤트 리스너를 관리하는 훅
  * 드래그 종료를 위한 mouseup 이벤트 리스너 등록
  */
-export const useDocumentEventListener = ({
+export const useDocumentMouseEventListener = ({
   finalizeDrag,
-}: useDocumentEventListenerProps) => {
+}: useDocumentMouseEventListenerProps) => {
   useEffect(() => {
     const onMouseUp = () => finalizeDrag();
 

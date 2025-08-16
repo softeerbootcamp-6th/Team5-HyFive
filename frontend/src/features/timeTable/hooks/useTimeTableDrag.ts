@@ -5,7 +5,7 @@ import type {
 import { dragHandlers } from "@/features/timeTable/services/dragHandlers";
 import { useTimeTableDragState } from "./useTimeTableDragState";
 import { useTimeTableSlots } from "./useTimeTableSlots";
-import { useDocumentEventListener } from "./useDocumentEventListener";
+import { useDocumentMouseEventListener } from "@/features/timeTable/hooks/useDocumentMouseEvent";
 
 interface useTimeTableDragProps {
   mode: TimeTableMode;
@@ -41,7 +41,7 @@ export const useTimeTableDrag = ({
   });
 
   // 문서 레벨 이벤트 리스너
-  useDocumentEventListener({ finalizeDrag });
+  useDocumentMouseEventListener({ finalizeDrag });
 
   // 셀 위에 마우스가 클릭되었을 때
   const handleCellMouseDown = (dayIndex: number, hourIndex: number) => {
