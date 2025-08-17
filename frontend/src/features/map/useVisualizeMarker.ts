@@ -9,8 +9,7 @@ type MarkerType = "start" | "end" | "middle" | "enter" | "out";
 
 const useVisualizeMarker = ({ map, markerPath }: UseVisualizeMarkerProps) => {
   const markersRef = useRef<MarkerInstance[]>([]);
-  const kakaoMaps = window.kakao.maps;
-  const imageSize = new kakaoMaps.Size(32, 32);
+  const kakaoMaps = window.kakao?.maps;
   const imageSrc = {
     start: "/src/assets/icons/marker-start.svg",
     middle: "/src/assets/icons/marker-default.svg",
@@ -40,6 +39,7 @@ const useVisualizeMarker = ({ map, markerPath }: UseVisualizeMarkerProps) => {
     markerType: MarkerType;
     point: LatLng;
   }) => {
+    const imageSize = new kakaoMaps.Size(32, 32);
     const markerImage = new kakaoMaps.MarkerImage(
       imageSrc[markerType],
       imageSize,
