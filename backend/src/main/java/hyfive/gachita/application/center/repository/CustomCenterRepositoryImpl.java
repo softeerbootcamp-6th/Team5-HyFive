@@ -7,7 +7,7 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hyfive.gachita.application.car.DelYn;
 import hyfive.gachita.application.center.dto.CenterListRes;
-import hyfive.gachita.dispatch.dto.NewPathDto;
+import hyfive.gachita.dispatch.dto.CarScheduleDto;
 import hyfive.gachita.dispatch.module.condition.CenterCondition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -54,9 +54,9 @@ public class CustomCenterRepositoryImpl implements CustomCenterRepository{
         return new PageImpl<>(centerList, pageable, total == null ? 0L : total);
     }
 
-    public List<NewPathDto> searchCarListWithCenter(CenterCondition condition) {
+    public List<CarScheduleDto> searchCarListWithCenter(CenterCondition condition) {
         return queryFactory
-                .select(Projections.constructor(NewPathDto.class,
+                .select(Projections.constructor(CarScheduleDto.class,
                             center.id,
                             center.lat,
                             center.lng,
