@@ -34,18 +34,8 @@ public class NewPathDispatchFlow {
                 .filter(center -> haversineFilter.test(center, radiusCondition))
                 .toList();
 
-
-        CenterCondition centerCondition = CenterCondition.builder()
-                .centerIdList(filteredCenterList)
-                .deadline(newBookDto.deadline())
-                .hospitalDate(newBookDto.hospitalDate())
-                .maybeOnTime(newBookDto.maybeOnTime())
-                .walker(newBookDto.walker())
-                .build();
-
-        List<NewPathDto> newPathCandidates = idleCarListProvider.getByCondition(centerCondition).stream()
-                .collect(Collectors.groupingBy(NewPathDto::centerId))
-                .values().stream()
+        List<NewPathDto> newPathCandidates = idleCarListProvider.getByCondition(filteredCenterList, newBookDto).stream()
+                .collect(Collectors.groupingBy(NewPathDto::centerId)).values().stream()
                 .flatMap(cars -> carSelector.selectBestCarForSingleCenter(cars).stream())
                 .toList();
     }
