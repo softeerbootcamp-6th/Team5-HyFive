@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -42,7 +43,10 @@ public class NewPathDispatchFlow {
                 .walker(newBookDto.walker())
                 .build();
 
-        List<NewPathDto> NewPathCandidates = idleCarListProvider.getByCondition(centerCondition);
-        NewPathCandidates = carSelector.selectBestCarPerCenter(NewPathCandidates);
+        List<NewPathDto> newPathCandidates = idleCarListProvider.getByCondition(centerCondition).stream()
+                .collect(Collectors.groupingBy(NewPathDto::centerId))
+                .values().stream()
+                .flatMap(cars -> carSelector.selectBestCarForSingleCenter(cars).stream())
+                .toList();
     }
 }
