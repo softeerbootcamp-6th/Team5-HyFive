@@ -1,22 +1,23 @@
-import DateFilter from "@/features/dateFilter/DateFilter";
+// 타입
+import type { DateFilterValue } from "@/features/dateFilter/DateFilter.constants";
+import type { UserFilterValue } from "@/features/statusFilter/StatusFilter.constants";
+
+// 스타일
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
-import { useState } from "react";
-import {
-  type DateFilterValue,
-  DATE_FILTER_OPTIONS,
-} from "@/features/dateFilter/DateFilter.constants";
-import SearchInput from "@/components/SearchInput";
 
-import {
-  USER_STATUS_FILTER_OPTIONS,
-  type UserFilterValue,
-} from "@/features/statusFilter/StatusFilter.constants";
+// 컴포넌트
+import DateFilter from "@/features/dateFilter/DateFilter";
+import SearchInput from "@/components/SearchInput";
 import ToolTip from "@/components/ToolTip";
 import TableWithIndex from "@/components/table/TableWithIndex";
-import { UsersPageRowsMockData } from "@/mocks/tableMocks";
 import StatusFilter from "@/features/statusFilter/StatusFilter";
 import Pagination from "@/components/Pagination";
+
+// 상수
+import { DATE_FILTER_OPTIONS } from "@/features/dateFilter/DateFilter.constants";
+import { USER_STATUS_FILTER_OPTIONS } from "@/features/statusFilter/StatusFilter.constants";
+import { UsersPageRowsMockData } from "@/mocks/tableMocks";
 
 const { color, typography } = theme;
 
