@@ -1,14 +1,21 @@
 import Chip from "@/components/Chip";
-import type { UserFilterValue } from "@/features/statusFilter/StatusFilter.constants";
+import type {
+  RouteFilterValue,
+  UserFilterValue,
+} from "@/features/statusFilter/StatusFilter.constants";
 import { css } from "@emotion/react";
 
-interface StatusFilterProps {
-  value: UserFilterValue;
-  options: { value: UserFilterValue; label: string }[];
-  setValue: (value: UserFilterValue) => void;
+interface StatusFilterProps<T> {
+  value: T;
+  options: { value: T; label: string }[];
+  setValue: (value: T) => void;
 }
 
-const StatusFilter = ({ value, options, setValue }: StatusFilterProps) => {
+const StatusFilter = <T extends UserFilterValue | RouteFilterValue>({
+  value,
+  options,
+  setValue,
+}: StatusFilterProps<T>) => {
   return (
     <div css={RadioGroupStyle}>
       {options.map((option) => (
