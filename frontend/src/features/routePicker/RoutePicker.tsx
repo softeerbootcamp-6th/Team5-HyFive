@@ -22,6 +22,7 @@ const RoutePicker = ({ handleHighlight, handleReset }: RoutePickerProps) => {
     { id: 3, name: "홍길동", status: "탑승" },
     { id: 4, name: "홍길동", status: "대기" },
     { id: 5, name: "홍길동", status: "대기" },
+    { id: 6, name: "홍길동", status: "대기" },
   ];
 
   const handleSelectPassenger = (passenger: PassengerRoute) => {
