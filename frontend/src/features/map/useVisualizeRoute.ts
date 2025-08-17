@@ -38,8 +38,9 @@ const useVisualizeRoute = ({ map, polylinePath }: UseVisualizeRouteProps) => {
 
     //requestAnimationFrame 기반 순차 렌더링
     const accumulatedPath: LatLngInstance[] = [];
+    const polylinePathLatLngList = polylinePath.map((path) => path.pointList);
     animateRouteSegments({
-      polylinePath,
+      segments: polylinePathLatLngList,
       renderSegment: (segment) => {
         const kakaoPath = segment.map(
           (point) => new kakaoMaps.LatLng(point.lat, point.lng),
@@ -57,7 +58,7 @@ const useVisualizeRoute = ({ map, polylinePath }: UseVisualizeRouteProps) => {
     );
     highlightPolylineRef.current.setPath(kakaoPath);
     basePolylineRef.current.setOptions({
-      strokeColor: theme.color.GrayScale.gray5,
+      strokeColor: theme.color.GrayScale.gray4,
     });
   };
 
