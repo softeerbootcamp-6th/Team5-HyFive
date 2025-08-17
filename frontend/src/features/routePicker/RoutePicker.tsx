@@ -25,7 +25,7 @@ const RoutePicker = ({ handleHighlight, handleReset }: RoutePickerProps) => {
   ];
 
   const handleSelectPassenger = (passenger: PassengerRoute) => {
-    handleHighlight(1);
+    handleHighlight(passenger.id);
     setSelectedPassenger(passenger);
     setIsOpen(false);
   };
