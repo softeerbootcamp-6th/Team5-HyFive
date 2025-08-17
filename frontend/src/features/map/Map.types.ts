@@ -101,3 +101,10 @@ export interface MarkerPath {
   time: string;
   type: string;
 }
+
+export interface HightlightPath {
+  bookId: number;
+  start: LatLng;
+  end: LatLng;
+  segmentList: number[];
+}

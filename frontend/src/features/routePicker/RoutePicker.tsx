@@ -7,7 +7,11 @@ import RouteButton from "@/features/routePicker/RouteButton";
 
 const { color, typography } = theme;
 
-const RoutePicker = () => {
+interface RoutePickerProps {
+  handleHighlight: (id: number) => void;
+  handleReset: () => void;
+}
+const RoutePicker = ({ handleHighlight, handleReset }: RoutePickerProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedPassenger, setSelectedPassenger] =
     useState<PassengerRoute | null>(null);
@@ -21,12 +25,14 @@ const RoutePicker = () => {
   ];
 
   const handleSelectPassenger = (passenger: PassengerRoute) => {
+    handleHighlight(1);
     setSelectedPassenger(passenger);
     setIsOpen(false);
   };
 
   const handleResetPassenger = (e: MouseEvent) => {
     e.stopPropagation();
+    handleReset();
     setIsOpen(false);
     setSelectedPassenger(null);
   };

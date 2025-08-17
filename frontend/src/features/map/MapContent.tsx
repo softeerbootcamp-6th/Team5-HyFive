@@ -1,10 +1,11 @@
+import getRouteMidPoint from "@/features/map/getRouteMidPoint.util";
 import useInitializeMap from "@/features/map/useInitializeMap";
 import useVisualizeMarker from "@/features/map/useVisualizeMarker";
 import useVisualizeRoute from "@/features/map/useVisualizeRoute";
 import useZoomLevel from "@/features/map/useZoomLevel";
 import ZoomButton from "@/features/map/ZoomButton";
 import RoutePicker from "@/features/routePicker/RoutePicker";
-import { path } from "@/mocks/pathMocks";
+import { highlightPath, markerPath, polylinePath } from "@/mocks/pathMocks";
 import { css } from "@emotion/react";
 import { useRef } from "react";
 
@@ -12,18 +13,39 @@ const MapContent = () => {
   const mapRef = useRef<HTMLDivElement>(null);
   const { map } = useInitializeMap({
     mapRef,
-    centerLat: path[(path.length - 1) / 2].lat,
-    centerLng: path[(path.length - 1) / 2].lng,
+    centerLat: getRouteMidPoint(markerPath).lat || markerPath[0].point.lat,
+    centerLng: getRouteMidPoint(markerPath).lng || markerPath[0].point.lng,
   });
-  useVisualizeMarker({ map, path });
-  useVisualizeRoute({ map, path });
+  useVisualizeMarker({ map, markerPath });
+  const { highlightRoute, resetRoute } = useVisualizeRoute({
+    map,
+    polylinePath,
+  });
   const { setZoomLevel } = useZoomLevel({ map });
+
+  const handleHighlight = (id: number) => {
+    const highlight = highlightPath.find((value) => value.bookId === id);
+    if (!highlight) return;
+    const { start, end, segmentList } = highlight;
+    const slicedPolylineList = polylinePath
+      .filter((segment) => segmentList.includes(segment.segmentId))
+      .flatMap((segment) => segment.pointList);
+    highlightRoute(slicedPolylineList);
+    //highlightMarekr
+  };
+  const handleReset = () => {
+    resetRoute();
+    //resetMarker
+  };
 
   return (
     <div css={MapContentContainer}>
-      {/* <div id="map" ref={mapRef} css={MapWrapper} /> */}
+      <div id="map" ref={mapRef} css={MapWrapper} />
       <ZoomButton setZoomLevel={setZoomLevel} />
-      <RoutePicker />
+      <RoutePicker
+        handleHighlight={handleHighlight}
+        handleReset={handleReset}
+      />
     </div>
   );
 };
