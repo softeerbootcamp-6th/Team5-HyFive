@@ -1,7 +1,5 @@
+// 예약자 상태 필터링 타입
 export type UserFilterValue = "ALL" | "NEW" | "SUCCESS" | "FAIL" | "FIXED";
-
-// TODO 재민 - API 명세와 key 맞추기
-export type RouteFilterValue = "ALL" | "WAITING" | "INPROGRESS" | "COMPLETED";
 
 export const USER_STATUS_FILTER_OPTIONS: {
   value: UserFilterValue;
@@ -13,6 +11,22 @@ export const USER_STATUS_FILTER_OPTIONS: {
   { value: "FAIL", label: "예약 실패" },
   { value: "FIXED", label: "경로 확정" },
 ];
+
+// 표 내부 상태에 따른 Tag 색상을 위한 메타데이터
+export const USER_STATUS_META: Record<
+  Exclude<UserFilterValue, "ALL">,
+  { label: string; tagType: "orange" | "blue" | "red" | "green" }
+> = {
+  NEW: { label: "신규 예약", tagType: "orange" },
+  SUCCESS: { label: "예약 성공", tagType: "blue" },
+  FAIL: { label: "예약 실패", tagType: "red" },
+  FIXED: { label: "경로 확정", tagType: "green" },
+};
+
+// 경로 상태 필터링 타입
+
+// TODO 재민 - API 명세와 key 맞추기
+export type RouteFilterValue = "ALL" | "WAITING" | "INPROGRESS" | "COMPLETED";
 
 // TODO 재민 - API 명세와 key 맞추기
 export const ROUTE_STATUS_FILTER_OPTIONS: {
