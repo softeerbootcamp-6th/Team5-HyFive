@@ -3,15 +3,35 @@ import Chip from "@/components/Chip";
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
 import { CalenderIcon } from "@/assets/icons";
+import { useMemo } from "react";
+import {
+  formatDateForDisplay,
+  getFilterDate,
+} from "@/features/dateFilter/DateFilter.util";
 
 const { color, typography } = theme;
 interface DateFilterProps {
   value: DateFilterValue;
   options: { value: DateFilterValue; label: string }[];
   setValue: (value: DateFilterValue) => void;
+  now?: Date;
 }
 
-const DateFilter = ({ value, options, setValue }: DateFilterProps) => {
+const DateFilter = ({
+  value,
+  options,
+  setValue,
+  now = new Date(),
+}: DateFilterProps) => {
+  const displayText = useMemo(() => {
+    const refDay = getFilterDate(value, now);
+    return formatDateForDisplay(value, refDay);
+  }, [value, now]);
+
+  const handleButtonClick = (value: DateFilterValue) => {
+    setValue(value);
+  };
+
   return (
     <div css={ContainerStyle}>
       <div css={RadioGroupStyle}>
@@ -21,13 +41,13 @@ const DateFilter = ({ value, options, setValue }: DateFilterProps) => {
             chipType="fill"
             isActive={value === option.value}
             content={option.label}
-            onClick={() => setValue(option.value)}
+            onClick={() => handleButtonClick(option.value)}
           />
         ))}
       </div>
       <div css={DateDisplayStyle}>
         <CalenderIcon fill={color.GrayScale.gray4} />
-        <p css={DateTextStyle}>2025.08.17</p>
+        <p css={DateTextStyle}>{displayText}</p>
       </div>
     </div>
   );
@@ -53,6 +73,7 @@ const DateDisplayStyle = css`
 `;
 
 const DateTextStyle = css`
+  min-width: 108px;
   font: ${typography.Body.b2_medi};
   color: ${color.GrayScale.gray4};
 `;
