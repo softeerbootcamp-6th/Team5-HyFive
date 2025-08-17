@@ -1,11 +1,11 @@
-import type { LatLng } from "@/features/map/Map.types";
+import type { MarkerPath } from "@/features/map/Map.types";
 import { useEffect } from "react";
 
 interface UseVisualizeMarkerProps {
   map: MapInstance | null;
-  path: LatLng[];
+  markerPath: MarkerPath[];
 }
-const useVisualizeMarker = ({ map, path }: UseVisualizeMarkerProps) => {
+const useVisualizeMarker = ({ map, markerPath }: UseVisualizeMarkerProps) => {
   useEffect(() => {
     const kakaoMaps = window.kakao.maps;
     if (!kakaoMaps || !map) return;
@@ -25,8 +25,8 @@ const useVisualizeMarker = ({ map, path }: UseVisualizeMarkerProps) => {
       end: "/src/assets/icons/marker-end.svg",
     };
 
-    for (let i = 0; i < path.length; i++) {
-      const markerType = getMarkerType(i, path.length);
+    for (let i = 0; i < markerPath.length; i++) {
+      const markerType = getMarkerType(i, markerPath.length);
       const imageSize = new kakaoMaps.Size(32, 32);
       const markerImage = new kakaoMaps.MarkerImage(
         imageSrc[markerType],
@@ -35,12 +35,15 @@ const useVisualizeMarker = ({ map, path }: UseVisualizeMarkerProps) => {
 
       new kakaoMaps.Marker({
         map,
-        position: new kakaoMaps.LatLng(path[i].lat, path[i].lng),
+        position: new kakaoMaps.LatLng(
+          markerPath[i].point.lat,
+          markerPath[i].point.lng,
+        ),
         title: "User Marker",
         image: markerImage,
       });
     }
-  }, [map, path]);
+  }, [map, markerPath]);
 
   const highlightMarker = () => {};
 
