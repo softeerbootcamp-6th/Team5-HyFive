@@ -1,5 +1,6 @@
 import animateRouteSegments from "@/features/map/animateRouteSegments.util";
 import type { LatLng, PolylinePath } from "@/features/map/Map.types";
+import { theme } from "@/styles/themes.style";
 import { useEffect, useRef } from "react";
 
 interface UseVisualizeRouteProps {
@@ -41,7 +42,7 @@ const useVisualizeRoute = ({ map, polylinePath }: UseVisualizeRouteProps) => {
       polylinePath,
       renderSegment: (segment) => {
         const kakaoPath = segment.map(
-          (p) => new kakaoMaps.LatLng(p.lat, p.lng),
+          (point) => new kakaoMaps.LatLng(point.lat, point.lng),
         );
         accumulatedPath.push(...kakaoPath);
         basePolyline.setPath(accumulatedPath);
@@ -50,18 +51,18 @@ const useVisualizeRoute = ({ map, polylinePath }: UseVisualizeRouteProps) => {
   }, [map, polylinePath]);
 
   const highlightRoute = (highlightPath: LatLng[]) => {
-    if (!kakaoMaps || !basePolylineRef.current || !highlightPolylineRef.current)
-      return;
+    if (!basePolylineRef.current || !highlightPolylineRef.current) return;
     const kakaoPath = highlightPath.map(
-      (p) => new kakaoMaps.LatLng(p.lat, p.lng),
+      (point) => new kakaoMaps.LatLng(point.lat, point.lng),
     );
     highlightPolylineRef.current.setPath(kakaoPath);
-    basePolylineRef.current.setOptions({ strokeColor: "#ccc" });
+    basePolylineRef.current.setOptions({
+      strokeColor: theme.color.GrayScale.gray5,
+    });
   };
 
   const resetRoute = () => {
-    if (!kakaoMaps || !basePolylineRef.current || !highlightPolylineRef.current)
-      return;
+    if (!basePolylineRef.current || !highlightPolylineRef.current) return;
     highlightPolylineRef.current.setPath([]);
     basePolylineRef.current.setOptions({ strokeColor: "#F70" });
   };

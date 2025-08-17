@@ -11,10 +11,13 @@ import { useRef } from "react";
 
 const MapContent = () => {
   const mapRef = useRef<HTMLDivElement>(null);
+  const markerPathLatLng = markerPath.flatMap((path) => path.point);
   const { map } = useInitializeMap({
     mapRef,
-    centerLat: getRouteMidPoint(markerPath).lat || markerPath[0].point.lat,
-    centerLng: getRouteMidPoint(markerPath).lng || markerPath[0].point.lng,
+    centerLat:
+      getRouteMidPoint(markerPathLatLng).lat || markerPath[0].point.lat,
+    centerLng:
+      getRouteMidPoint(markerPathLatLng).lng || markerPath[0].point.lng,
   });
   const { highlightMarker, initMarker } = useVisualizeMarker({
     map,
