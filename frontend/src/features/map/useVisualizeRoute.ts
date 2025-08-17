@@ -1,20 +1,19 @@
 import animateRouteSegments from "@/features/map/animateRouteSegments.util";
-import getRouteSegments from "@/features/map/getRouteSegments.util";
-import type { LatLng } from "@/features/map/Map.types";
+import type { LatLng, PolylinePath } from "@/features/map/Map.types";
 import { useEffect, useRef } from "react";
 
 interface UseVisualizeRouteProps {
   map: MapInstance | null;
-  path: LatLng[];
+  polylinePath: PolylinePath[];
 }
 
-const useVisualizeRoute = ({ map, path }: UseVisualizeRouteProps) => {
+const useVisualizeRoute = ({ map, polylinePath }: UseVisualizeRouteProps) => {
   const kakaoMaps = window.kakao?.maps;
   const basePolylineRef = useRef<PolylineInstance | null>(null);
   const highlightPolylineRef = useRef<PolylineInstance | null>(null);
 
   useEffect(() => {
-    if (!kakaoMaps || !map || path.length === 0) return;
+    if (!kakaoMaps || !map || polylinePath.length === 0) return;
 
     const basePolyline = new kakaoMaps.Polyline({
       path: [],
@@ -37,12 +36,9 @@ const useVisualizeRoute = ({ map, path }: UseVisualizeRouteProps) => {
     highlightPolylineRef.current = highlightPolyline;
 
     //requestAnimationFrame 기반 순차 렌더링
-    const SEGMENT_SIZE = 2;
-    const segments = getRouteSegments({ path, size: SEGMENT_SIZE });
-
     const accumulatedPath: LatLngInstance[] = [];
     animateRouteSegments({
-      segments,
+      polylinePath,
       renderSegment: (segment) => {
         const kakaoPath = segment.map(
           (p) => new kakaoMaps.LatLng(p.lat, p.lng),
@@ -51,7 +47,7 @@ const useVisualizeRoute = ({ map, path }: UseVisualizeRouteProps) => {
         basePolyline.setPath(accumulatedPath);
       },
     });
-  }, [map, path]);
+  }, [map, polylinePath]);
 
   const highlightRoute = (highlightPath: LatLng[]) => {
     if (!kakaoMaps || !basePolylineRef.current || !highlightPolylineRef.current)
