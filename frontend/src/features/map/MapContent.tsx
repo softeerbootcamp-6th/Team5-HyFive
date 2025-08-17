@@ -16,7 +16,7 @@ const MapContent = () => {
     centerLat: getRouteMidPoint(markerPath).lat || markerPath[0].point.lat,
     centerLng: getRouteMidPoint(markerPath).lng || markerPath[0].point.lng,
   });
-  const { highlightMarker, resetMarker } = useVisualizeMarker({
+  const { highlightMarker, initMarker } = useVisualizeMarker({
     map,
     markerPath,
   });
@@ -29,16 +29,18 @@ const MapContent = () => {
   const handleHighlight = (id: number) => {
     const highlight = highlightPath.find((value) => value.bookId === id);
     if (!highlight) return;
+
     const { start, end, segmentList } = highlight;
     const slicedPolylineList = polylinePath
       .filter((segment) => segmentList.includes(segment.segmentId))
       .flatMap((segment) => segment.pointList);
+
     highlightRoute(slicedPolylineList);
     highlightMarker({ start, end });
   };
   const handleReset = () => {
     resetRoute();
-    resetMarker();
+    initMarker();
   };
 
   return (
