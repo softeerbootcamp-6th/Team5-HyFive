@@ -26,10 +26,13 @@ public class InsertCandidateProvider {
 
             if (node.time().isAfter(newStartNode) &&
                     node.time().isBefore(newEndNode)) {
-                candidates.add(i);
-                candidates.add(i + 1);
+                candidates.add(i);     // (i) slot: 노드 i 앞
+                candidates.add(i + 1); // (i+1) slot: 노드 i 뒤
             }
         }
+
+        // slot index 는 [0..size] 범위까지만 유효해야 함
+        candidates.removeIf(idx -> idx < 0 || idx > originalNodes.size());
 
         return new ArrayList<>(candidates);
     }

@@ -38,8 +38,8 @@ public class OldPathDispatchFlow {
             for (Integer ei : endCandidates) {
                 if (si < ei) {
                     List<NodeDispatchLocationDto> candidatePath = new ArrayList<>(originalNodes);
+                    candidatePath.add(ei, newBookEndNode);
                     candidatePath.add(si, newBookStartNode);
-                    candidatePath.add(ei + 1, newBookEndNode);
 
                     InsertPathEvaluationResult result = insertPathInfoCalculator.calculate(candidatePath);
                     if (result != null) candidates.add(result);
