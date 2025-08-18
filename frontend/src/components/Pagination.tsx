@@ -25,16 +25,17 @@ const Pagination = ({
     Math.max(1, safeTotal),
   );
 
-  // 현재 속한 페이지 범위 계산
-  const ranges = useMemo(() => {
-    if (safeTotal === 0) return [];
-    const start = Math.floor((safeCurrent - 1) / windowSize) * windowSize + 1;
-    const end = Math.min(start + windowSize - 1, safeTotal);
+  // 현재 속한 페이지 시작 / 끝 / 범위 계산
+  const { start, end, ranges } = useMemo(() => {
+    if (safeTotal === 0) return { start: 0, end: 0, ranges: [] as number[] };
+    const startNum =
+      Math.floor((safeCurrent - 1) / windowSize) * windowSize + 1;
+    const endNum = Math.min(startNum + windowSize - 1, safeTotal);
     const tmpRanges = Array.from(
-      { length: end - start + 1 },
-      (_, i) => start + i,
+      { length: endNum - startNum + 1 },
+      (_, i) => startNum + i,
     );
-    return tmpRanges;
+    return { start: startNum, end: endNum, ranges: tmpRanges };
   }, [safeTotal, safeCurrent, windowSize]);
 
   const handlePageChange = (clickedPage: number) => {
@@ -51,7 +52,7 @@ const Pagination = ({
     <div css={PaginationContainer}>
       <button
         css={PageButtonStyle}
-        onClick={() => handlePageChange(safeCurrent - 1)}
+        onClick={() => handlePageChange(start - 1)}
         disabled={safeCurrent === 1}
       >
         <ChevronLeftIcon className="chevron-icon" />
@@ -68,7 +69,7 @@ const Pagination = ({
       ))}
       <button
         css={PageButtonStyle}
-        onClick={() => handlePageChange(safeCurrent + 1)}
+        onClick={() => handlePageChange(end + 1)}
         disabled={safeCurrent === safeTotal}
       >
         <ChevronRightIcon className="chevron-icon" />
