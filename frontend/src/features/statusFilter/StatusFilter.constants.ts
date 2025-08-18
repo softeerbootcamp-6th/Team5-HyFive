@@ -24,17 +24,23 @@ export const USER_STATUS_META: Record<
 };
 
 // 경로 상태 필터링 타입
+export type RouteFilterValue = "ALL" | "WAITING" | "RUNNING" | "FINISHED";
 
-// TODO 재민 - API 명세와 key 맞추기
-export type RouteFilterValue = "ALL" | "WAITING" | "INPROGRESS" | "COMPLETED";
-
-// TODO 재민 - API 명세와 key 맞추기
 export const ROUTE_STATUS_FILTER_OPTIONS: {
   value: RouteFilterValue;
   label: string;
 }[] = [
   { value: "ALL", label: "전체" },
   { value: "WAITING", label: "운행 대기" },
-  { value: "INPROGRESS", label: "운행 중" },
-  { value: "COMPLETED", label: "운행 완료" },
+  { value: "RUNNING", label: "운행 중" },
+  { value: "FINISHED", label: "운행 완료" },
 ];
+
+export const ROUTE_STATUS_META: Record<
+  Exclude<RouteFilterValue, "ALL">,
+  { label: string; tagType: "green" | "blue" | "gray" }
+> = {
+  WAITING: { label: "운행 대기", tagType: "gray" },
+  RUNNING: { label: "운행 중", tagType: "blue" },
+  FINISHED: { label: "운행 완료", tagType: "green" },
+};
