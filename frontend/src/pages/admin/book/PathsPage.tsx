@@ -37,6 +37,8 @@ const PathsPage = () => {
   const [selectedStatusFilter, setSelectedStatusFilter] =
     useState<RouteFilterValue>("ALL");
 
+  const [selectedPage, setSelectedPage] = useState(1);
+
   return (
     <div css={PageContainerStyle}>
       <header css={HeaderStyle}>
@@ -62,7 +64,11 @@ const PathsPage = () => {
       </section>
 
       <TableWithIndex rows={RoutePageRowsMockData} />
-      <Pagination currentPage={1} totalPages={5} onPageChange={() => {}} />
+      <Pagination
+        currentPage={selectedPage}
+        totalPages={10}
+        onPageChange={setSelectedPage}
+      />
     </div>
   );
 };
