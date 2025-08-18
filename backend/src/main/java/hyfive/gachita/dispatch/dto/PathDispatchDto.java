@@ -7,7 +7,7 @@ import java.util.List;
 @Builder
 public record PathDispatchDto (
         Long pathId,
-        List<NodeDispatchLocationDto> nodes,
+        List<NodeDto> nodes,
         int duration,                        // 단위 : sec : 총 이동 시간
         int distance                         // 단위 : meters
 ) {}

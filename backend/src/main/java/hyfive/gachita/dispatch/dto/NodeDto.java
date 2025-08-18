@@ -8,7 +8,7 @@ import java.time.LocalTime;
 import java.time.Duration;
 
 @Builder
-public record NodeDispatchLocationDto(
+public record NodeDto(
         Long nodeId, // (기존 노드는 : 값 있음), (신규 노드 : null)
         double lat,
         double lng,
@@ -22,12 +22,12 @@ public record NodeDispatchLocationDto(
      * 시작(탑승) 노드
      * deadline = ( (deadline - 30분 - totalDuration) - 2시간, deadline - 30분 - totalDuration )
      */
-    public static NodeDispatchLocationDto newBookStartNodeFrom(NewBookDto newBook) {
+    public static NodeDto newBookStartNodeFrom(NewBookDto newBook) {
         Duration totalDurationToTime = Duration.ofSeconds(newBook.totalDuration());
         LocalTime endDeadline = newBook.deadline().minusMinutes(30).minus(totalDurationToTime);
         LocalTime startDeadline = endDeadline.minusHours(2);
 
-        return NodeDispatchLocationDto.builder()
+        return NodeDto.builder()
                 .nodeId(null) // 신규 노드
                 .lat(newBook.startLat())
                 .lng(newBook.startLng())
@@ -41,8 +41,8 @@ public record NodeDispatchLocationDto(
      * 끝(하차) 노드
      * deadline = ( deadline - 30분, deadline )
      */
-    public static NodeDispatchLocationDto newBookEndNodeFrom(NewBookDto newBook) {
-        return NodeDispatchLocationDto.builder()
+    public static NodeDto newBookEndNodeFrom(NewBookDto newBook) {
+        return NodeDto.builder()
                 .nodeId(null) // 신규 노드
                 .lat(newBook.endLat())
                 .lng(newBook.endLng())

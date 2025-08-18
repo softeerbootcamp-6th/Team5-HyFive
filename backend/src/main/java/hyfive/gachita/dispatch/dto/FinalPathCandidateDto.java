@@ -5,8 +5,8 @@ import java.util.List;
 public record FinalPathCandidateDto(
         Long pathId,
         Long carId,
-        List<NodeDispatchLocationDto> newNodes,
-        List<NodeDispatchLocationDto> pathNodes,
+        List<NodeDto> newNodes,
+        List<NodeDto> pathNodes,
         int totalDuration,
         int totalDistance
 ) {

@@ -2,7 +2,7 @@ package hyfive.gachita.application.path.respository;
 
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import hyfive.gachita.dispatch.dto.NodeDispatchLocationDto;
+import hyfive.gachita.dispatch.dto.NodeDto;
 import hyfive.gachita.dispatch.dto.PathDispatchDto;
 import hyfive.gachita.dispatch.module.condition.PathCondition;
 import hyfive.gachita.application.node.Node;
@@ -61,7 +61,7 @@ public class CustomPathRepositoryImpl implements CustomPathRepository {
     }
 
     private PathDispatchDto createPathDto(Long pathId, List<Node> nodeList) {
-        List<NodeDispatchLocationDto> nodeDtoList = nodeList.stream()
+        List<NodeDto> nodeDtoList = nodeList.stream()
                 .map(this::createNodeDto)
                 .toList();
 
@@ -71,8 +71,8 @@ public class CustomPathRepositoryImpl implements CustomPathRepository {
                 .build();
     }
 
-    private NodeDispatchLocationDto createNodeDto(Node nodeEntity) {
-        return NodeDispatchLocationDto.builder()
+    private NodeDto createNodeDto(Node nodeEntity) {
+        return NodeDto.builder()
                 .nodeId(nodeEntity.getId())
                 .lat(nodeEntity.getLat())
                 .lng(nodeEntity.getLng())

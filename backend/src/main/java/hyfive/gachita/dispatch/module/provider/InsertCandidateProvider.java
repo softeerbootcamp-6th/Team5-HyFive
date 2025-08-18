@@ -1,6 +1,6 @@
 package hyfive.gachita.dispatch.module.provider;
 
-import hyfive.gachita.dispatch.dto.NodeDispatchLocationDto;
+import hyfive.gachita.dispatch.dto.NodeDto;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalTime;
@@ -13,8 +13,8 @@ import java.util.Set;
 public class InsertCandidateProvider {
 
     public List<Integer> findInsertCandidates(
-            List<NodeDispatchLocationDto> originalNodes,
-            NodeDispatchLocationDto newNode
+            List<NodeDto> originalNodes,
+            NodeDto newNode
     ) {
         Set<Integer> candidates = new LinkedHashSet<>();
 
@@ -22,7 +22,7 @@ public class InsertCandidateProvider {
         LocalTime newEndNode = newNode.deadline().getSecond();
 
         for (int i = 0; i < originalNodes.size(); i++) {
-            NodeDispatchLocationDto node = originalNodes.get(i);
+            NodeDto node = originalNodes.get(i);
 
             if (node.time().isAfter(newStartNode) &&
                     node.time().isBefore(newEndNode)) {
