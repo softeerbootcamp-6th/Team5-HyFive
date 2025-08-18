@@ -32,6 +32,7 @@ const getButtonColor = (mode: "black" | "white") => {
       return css`
         background-color: ${color.GrayScale.white};
         color: ${color.GrayScale.black};
+        border: 1px solid ${color.GrayScale.gray3};
       `;
   }
 };
