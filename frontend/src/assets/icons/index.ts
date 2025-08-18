@@ -38,6 +38,7 @@ import MarkerOutIcon from "./marker-out.svg";
 import MarkerStartIcon from "./marker-start.svg";
 import CloseIcon from "./close.svg?react";
 import ToolTipArrowIcon from "./tooltip_arrow.svg?react";
+import WhiteEditIcon from "./edit_white.svg?react";
 
 export {
   AddIcon,
@@ -80,4 +81,5 @@ export {
   MarkerStartIcon,
   CloseIcon,
   ToolTipArrowIcon,
+  WhiteEditIcon,
 };
