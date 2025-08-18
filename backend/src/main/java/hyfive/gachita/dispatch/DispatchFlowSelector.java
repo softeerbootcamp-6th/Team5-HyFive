@@ -1,13 +1,9 @@
 package hyfive.gachita.dispatch;
 
-import hyfive.gachita.application.book.BookService;
-import hyfive.gachita.application.book.BookStatus;
 import hyfive.gachita.dispatch.dto.NewBookDto;
 import hyfive.gachita.dispatch.dto.PathCandidateDto;
 import hyfive.gachita.dispatch.module.condition.BoundingBoxCondition;
 import hyfive.gachita.dispatch.module.condition.RadiusCondition;
-import hyfive.gachita.dispatch.module.evaluation.DrivingTimeEvaluation;
-import hyfive.gachita.dispatch.module.evaluation.DrivingTimeEvaluationResult;
 import hyfive.gachita.dispatch.module.filter.BoundingBoxFilter;
 import hyfive.gachita.dispatch.module.filter.HaversineFilter;
 import hyfive.gachita.dispatch.module.provider.PathCandidateProvider;
@@ -34,6 +30,7 @@ public class DispatchFlowSelector {
     private final PathCandidateProvider pathCandidateProvider;
     private final BoundingBoxFilter boundingBoxFilter;
     private final HaversineFilter haversineFilter;
+    private final NewPathDispatchFlow newPathDispatchFlow;
 
     public void execute(NewBookDto newBookDto){
         List<PathCandidateDto> candidates = pathCandidateProvider.getByCondition(newBookDto.hospitalDate());
@@ -63,7 +60,7 @@ public class DispatchFlowSelector {
 
         if (candidatePathIds.isEmpty()) {
             log.info("신규 경로 배차 실행");
-//            newPathDispatchFlow.execute(newBookDto);
+            newPathDispatchFlow.execute(newBookDto);
         } else {
             log.info("기존 경로 배차 실행");
 //            oldPathDispatchFlow.execute(new ArrayList<>(candidatePathIds), newBookDto);
