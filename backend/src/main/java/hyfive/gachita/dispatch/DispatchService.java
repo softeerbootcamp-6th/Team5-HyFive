@@ -6,8 +6,7 @@ import hyfive.gachita.application.book.BookService;
 import hyfive.gachita.application.book.BookStatus;
 import hyfive.gachita.application.path.PathService;
 import hyfive.gachita.dispatch.dto.NewBookDto;
-import hyfive.gachita.dispatch.excepion.DispatchExpectedException;
-import hyfive.gachita.dispatch.excepion.DispatchUnexpectedException;
+import hyfive.gachita.dispatch.excepion.DispatchException;
 import hyfive.gachita.dispatch.module.evaluation.DrivingTimeEvaluation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,12 +43,13 @@ public class DispatchService {
             // 3. 배차 결과 반영
             bookStatus = BookStatus.SUCCESS;
 
-        } catch (DispatchExpectedException e) {
+        } catch (Exception e) {
             bookStatus = BookStatus.FAIL;
-            log.info("예약 실패 {}", e.getMessage());
-        } catch (DispatchUnexpectedException e) {
-            bookStatus = BookStatus.FAIL;
-            log.info("비정상 예약 실패 {}", e.getMessage());
+            if (e instanceof DispatchException) {
+                log.info("비정상 예약 실패 {}", e.getMessage());
+            } else {
+                log.error("비정상 예약 실패 {}", e.getMessage());
+            }
         } finally {
             // BookStatus 변환 - 성공, 실패
             bookService.updateBookStatus(newBook.getId(), bookStatus);
