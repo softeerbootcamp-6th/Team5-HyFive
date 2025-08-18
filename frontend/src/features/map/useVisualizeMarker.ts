@@ -30,7 +30,7 @@ const useVisualizeMarker = ({ map, markerPath }: UseVisualizeMarkerProps) => {
   useEffect(() => {
     if (!kakaoMaps || !map) return;
     initMarker();
-  }, [map, markerPath]);
+  }, [map, kakaoMaps, markerPath]);
 
   const renderMarker = ({
     markerType,

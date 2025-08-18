@@ -49,7 +49,7 @@ const useVisualizeRoute = ({ map, polylinePath }: UseVisualizeRouteProps) => {
         basePolyline.setPath(accumulatedPath);
       },
     });
-  }, [map, polylinePath]);
+  }, [map, kakaoMaps, polylinePath]);
 
   const highlightRoute = (highlightPath: LatLng[]) => {
     if (!basePolylineRef.current || !highlightPolylineRef.current) return;
