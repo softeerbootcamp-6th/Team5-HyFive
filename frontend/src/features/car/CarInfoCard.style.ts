@@ -12,6 +12,7 @@ const getCardBackgroundColor = (isSelected: boolean, isPressing: boolean) => {
 const CardContainer = (isSelected: boolean, isPressing: boolean) => css`
   display: flex;
   width: 290px;
+  height: 316px;
   padding: 20px;
   flex-direction: column;
   align-items: flex-start;
