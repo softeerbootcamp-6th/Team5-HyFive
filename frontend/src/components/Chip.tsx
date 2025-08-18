@@ -2,21 +2,26 @@ import usePressDetection from "@/hooks/usePressDetection";
 import { theme } from "@/styles/themes.style";
 import { css } from "@emotion/react";
 import { useState } from "react";
-const { color } = theme;
+const { color, typography } = theme;
 
 type ChipType = "stroke" | "fill";
 interface ChipProps {
   chipType: "stroke" | "fill";
   isActive: boolean;
   content: string;
+  onClick?: () => void;
 }
-const Chip = ({ chipType, isActive, content }: ChipProps) => {
+const Chip = ({ chipType, isActive, content, onClick }: ChipProps) => {
   const [isPressing, setIsPressing] = useState(false);
   const handlers = usePressDetection({
     setIsPressing,
   });
   return (
-    <div {...handlers} css={ChipContainer(chipType, isActive, isPressing)}>
+    <div
+      {...handlers}
+      css={ChipContainer(chipType, isActive, isPressing)}
+      onClick={onClick}
+    >
       {content}
     </div>
   );
@@ -85,7 +90,7 @@ const ChipContainer = (
     color: ${font};
     cursor: pointer;
     transition: all 0.2s ease;
-
+    font: ${typography.Label.l4_semi};
     ${!isActive &&
     !isPressing &&
     css`

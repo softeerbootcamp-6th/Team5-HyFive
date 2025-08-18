@@ -1,3 +1,8 @@
+import Tag from "@/components/Tag";
+import {
+  USER_STATUS_META,
+  type UserFilterValue,
+} from "@/features/statusFilter/StatusFilter.constants";
 import { theme } from "@/styles/themes.style";
 import type { TableObject } from "@/utils/TableMatcher";
 import TableMatcher from "@/utils/TableMatcher";
@@ -21,9 +26,19 @@ const TableWithIndex = ({ rows }: TableProps) => {
       case "isExistWalkingDevice":
         return value === true ? "o" : "-";
       case "routeId":
-        return value ? "#" + value : "-";
+        return value ? <p css={RouteIDStyle}>#{value}</p> : "-";
       case "totalUserCount":
         return value + "명";
+      case "status": {
+        if (!value) return " ";
+        const valueForTagType = String(value) as Exclude<
+          UserFilterValue,
+          "ALL"
+        >;
+        const dataForTag = USER_STATUS_META[valueForTagType];
+        if (!dataForTag) return String(value);
+        return <Tag type={dataForTag.tagType} label={dataForTag.label} />;
+      }
       default:
         return value;
     }
@@ -86,4 +101,11 @@ const TableContentElement = css`
   &:last-child {
     border-right: none;
   }
+`;
+
+const RouteIDStyle = css`
+  font: ${theme.typography.Body.b4_medi};
+  color: ${theme.color.GrayScale.gray4};
+  cursor: pointer;
+  text-decoration-line: underline;
 `;
