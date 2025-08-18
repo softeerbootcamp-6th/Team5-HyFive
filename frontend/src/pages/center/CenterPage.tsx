@@ -1,48 +1,53 @@
-import { useNavigate } from "react-router";
-import { useReducer, useState } from "react";
-import { mockCarData, mockCenterData } from "@/mocks/centerDetailMocks";
+// React & Hooks
+import { useMemo, useReducer, useState } from "react";
+
+// 스타일
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
+
+// 컴포넌트
+import CenterOverview from "@/features/centerOverview/CenterOverview";
+import CarInfoCard from "@/features/car/CarInfoCard";
+import CarAddCard from "@/features/car/CarAddCard";
+import { TimeTable } from "@/features/timeTable/components";
+import Calender from "@/features/calender/Calender";
+import ToolTip from "@/components/ToolTip";
+import MonoButton from "@/components/MonoButton";
+
+// 아이콘
+import { WhiteEditIcon } from "@/assets/icons";
+
+// 데이터 & 유틸
+import { mockCarData, mockCenterData } from "@/mocks/centerDetailMocks";
 import {
   calenderReducer,
   initialState,
 } from "@/features/calender/CalenderReducer";
-import CenterOverview from "@/features/centerOverview/CenterOverview";
-import CarInfoCard from "@/features/car/CarInfoCard";
-import { TimeTable } from "@/features/timeTable/components";
-import Calender from "@/features/calender/Calender";
-import CarAddCard from "@/features/car/CarAddCard";
+import { isFutureWeek } from "@/features/calender/Calender.util";
+import { useCarNavigation } from "@/hooks/useCenterNavigation";
 
 const { color, typography } = theme;
+const TOOLTIP_DATA = {
+  label: "일정 등록 기준",
+  content: "최소 2시간 이상 등록 가능합니다.",
+};
 
 const CenterPage = () => {
-  const navigate = useNavigate();
-
-  const handleAddCar = () => {
-    void navigate("/center/register");
-  };
-
-  const handleEditCar = () => {
-    const selectedCar = mockCarData.find((car) => car.carId === selectedCarId);
-    if (!selectedCar) return;
-
-    void navigate("/center/edit", {
-      state: {
-        carImage: selectedCar.carImgURL,
-        carModel: selectedCar.carName,
-        carNumber: selectedCar.carNum,
-        maxPassenger: selectedCar.capacity,
-        isLowFloor: selectedCar.isLowFloor,
-      },
-    });
-  };
-
+  // 상태
   const [selectedCarId, setSelectedCarId] = useState<number>(
-    mockCarData[0].carId,
+    mockCarData[0]?.carId ?? null,
   );
   const [state, dispatch] = useReducer(calenderReducer, initialState);
+  const [isEditMode, setIsEditMode] = useState<boolean>(false);
 
-  // Calender - 헤더용 핸들러
+  const isEditableWeek = useMemo(
+    () => isFutureWeek(state.selectedWeek),
+    [state.selectedWeek],
+  );
+
+  // 이벤트 핸들러
+  const { navigateToRegisterCar, navigateToEditCar } = useCarNavigation();
+
   const handleMonthChange = (direction: "next" | "prev") => {
     dispatch({
       type: "CHANGE_MONTH",
@@ -51,7 +56,6 @@ const CenterPage = () => {
     });
   };
 
-  // Calender - 컨텐츠용 핸들러
   const handleDateClick = (date: Date) => {
     dispatch({ type: "SET_SELECTED_WEEK", payload: date });
     dispatch({ type: "SELECT_DATE", payload: date });
@@ -66,8 +70,11 @@ const CenterPage = () => {
       <div css={SectionWrapper}>
         <div css={CarSectionHeader}>
           <h4 css={SectionLabel}>등록된 차량</h4>
-          <div css={CarEditButtonContainer}>
-            <button css={CarEditTextStyle} onClick={() => handleEditCar()}>
+          <div css={ActionButtonGroup}>
+            <button
+              css={CarEditTextStyle}
+              onClick={() => navigateToEditCar(selectedCarId)}
+            >
               수정하기
             </button>
             <div css={DividerStyle} />
@@ -83,16 +90,57 @@ const CenterPage = () => {
               setIsSelected={setSelectedCarId}
             />
           ))}
-          {mockCarData.length < 6 && <CarAddCard onClick={handleAddCar} />}
+          {mockCarData.length < 6 && (
+            <CarAddCard onClick={() => navigateToRegisterCar()} />
+          )}
         </div>
       </div>
 
       {/* 타임 테이블 */}
       <div css={SectionWrapper}>
-        <h4 css={SectionLabel}>차량 시간표</h4>
+        <div css={TimeTableSectionHeader}>
+          <div css={HeaderLeftGroup}>
+            <h4 css={SectionLabel}>차량 시간표</h4>
+            <ToolTip
+              label={TOOLTIP_DATA.label}
+              content={TOOLTIP_DATA.content}
+            />
+          </div>
+          <div css={HeaderRightGroup}>
+            {isEditableWeek &&
+              (isEditMode ? (
+                <div css={ActionButtonGroup}>
+                  <MonoButton
+                    mode="white"
+                    label="취소"
+                    onClick={() => {
+                      setIsEditMode(false);
+                    }}
+                  />
+                  <MonoButton
+                    mode="black"
+                    label="저장"
+                    onClick={() => {
+                      setIsEditMode(false);
+                    }}
+                  />
+                </div>
+              ) : (
+                <MonoButton
+                  mode="black"
+                  label="유휴시간 편집"
+                  icon={<WhiteEditIcon />}
+                  onClick={() => {
+                    setIsEditMode(true);
+                  }}
+                />
+              ))}
+          </div>
+        </div>
+
         <div css={TableSection}>
           <TimeTable
-            mode="view"
+            mode={isEditMode ? "edit" : "view"}
             selectedCarId={selectedCarId}
             selectedWeek={state.selectedWeek}
           />
@@ -112,6 +160,7 @@ const CenterPage = () => {
 
 export default CenterPage;
 
+// TODO 재민 - 하드코딩 값 제거 + 반응형 고려
 const PageContainer = css`
   width: 100vw;
   display: flex;
@@ -157,7 +206,7 @@ const TableSection = css`
   height: 600px;
 `;
 
-const CarEditButtonContainer = css`
+const ActionButtonGroup = css`
   display: flex;
   align-items: stretch;
   justify-content: center;
@@ -175,4 +224,26 @@ const CarEditTextStyle = css`
   flex: 1;
   font: ${typography.Body.b4_medi};
   color: ${color.GrayScale.gray5};
+`;
+
+const TimeTableSectionHeader = css`
+  display: flex;
+  width: 100%;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+`;
+
+const HeaderLeftGroup = css`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-right: auto;
+`;
+
+const HeaderRightGroup = css`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-right: 466px;
 `;
