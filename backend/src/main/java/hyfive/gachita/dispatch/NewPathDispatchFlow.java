@@ -1,10 +1,12 @@
 package hyfive.gachita.dispatch;
 
+import hyfive.gachita.dispatch.dto.CarScheduleDto;
 import hyfive.gachita.dispatch.dto.CenterDto;
 import hyfive.gachita.dispatch.dto.NewBookDto;
-import hyfive.gachita.dispatch.dto.CarScheduleDto;
 import hyfive.gachita.dispatch.dto.NewPathDto;
 import hyfive.gachita.dispatch.excepion.DispatchExpectedException;
+import hyfive.gachita.dispatch.module.condition.BoundingBoxCondition;
+import hyfive.gachita.dispatch.module.condition.RadiusCondition;
 import hyfive.gachita.dispatch.module.filter.BoundingBoxFilter;
 import hyfive.gachita.dispatch.module.filter.CarSelector;
 import hyfive.gachita.dispatch.module.filter.HaversineFilter;
@@ -21,19 +23,21 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 public class NewPathDispatchFlow {
-
     private final CenterListProvider centerListProvider;
-    private final BoundingBoxFilter boundingBoxFilter;
-    private final HaversineFilter haversineFilter;
     private final IdleCarListProvider idleCarListProvider;
     private final CarSelector carSelector;
     private final RouteInfoProvider routeInfoProvider;
+    private final BoundingBoxFilter boundingBoxFilter;
+    private final HaversineFilter haversineFilter;
+
+    private final static int RADIUS_METERS = 500;
 
     public void execute(NewBookDto newBookDto) {
-        // TODO : test 메서드 구현
-        // 센터 정보
+        // center 정보
+        BoundingBoxCondition boundingBoxCondition = BoundingBoxCondition.from(newBookDto.startLat(), newBookDto.startLng(), RADIUS_METERS);
+        RadiusCondition radiusCondition = RadiusCondition.from(newBookDto.startLat(), newBookDto.startLng(), RADIUS_METERS);
         List<CenterDto> centerCandidates = centerListProvider.getAll().stream()
-                .filter(center -> boundingBoxFilter.test(center, bboxCondition))
+                .filter(center -> boundingBoxFilter.test(center, boundingBoxCondition))
                 .filter(center -> haversineFilter.test(center, radiusCondition))
                 .toList();
 
