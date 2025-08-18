@@ -5,7 +5,7 @@ import hyfive.gachita.client.geocode.dto.LatLng;
 import hyfive.gachita.client.kakao.KakaoNaviService;
 import hyfive.gachita.client.kakao.RouteInfo;
 import hyfive.gachita.dispatch.dto.NewBookDto;
-import hyfive.gachita.dispatch.excepion.DispatchExpectedException;
+import hyfive.gachita.dispatch.excepion.DispatchException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -31,7 +31,7 @@ public class DrivingTimeEvaluation {
         RouteInfo routeInfo = kakaoNaviService.geRouteInfo(nodeList);
 
         if(routeInfo.totalDuration() > MAX_TOTAL_DURATION) {
-            throw new DispatchExpectedException("총 운행시간 1시간 초과");
+            throw new DispatchException("총 운행시간 1시간 초과");
         }
 
         return NewBookDto.from(newBook, routeInfo);

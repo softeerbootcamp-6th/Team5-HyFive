@@ -4,10 +4,10 @@ import java.time.LocalTime;
 
 public record CarScheduleDto(
         Long centerId,
-        Long centerLat, // 제거?
-        Long centerLng, // 제거?
+        double centerLat,
+        double centerLng,
         Long carId,
-        Long carCapacity,
+        int carCapacity,
         Long rentalId,
         LocalTime rentalStartTime,
         LocalTime rentalEndTime
