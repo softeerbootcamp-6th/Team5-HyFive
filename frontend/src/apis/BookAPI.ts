@@ -1,13 +1,16 @@
-import type { BookAPIResponse } from "@/types/bookType.types";
+import type { BookAPIResponse } from "@/features/book/Book.types";
 import { clientInstance } from "@/utils/AxiosInstance";
+import TabMatcher from "@/utils/TabMatcher";
 import { useQuery } from "@tanstack/react-query";
 
-export const useGetBook = () => {
+export const useGetBook = (activeTab: string) => {
+  const engBookStatus = TabMatcher.matchBookTypeKRToENG(activeTab);
+  const bookStatus = TabMatcher.matchBookTypeClientToServer(engBookStatus);
   const { data, error, refetch } = useQuery<BookAPIResponse>({
-    queryKey: ["book"],
+    queryKey: ["book", bookStatus],
     queryFn: () =>
       clientInstance.get(
-        "/book/scroll?status=SUCCESS&lastId=&lastCreatedAt=&size=10",
+        `/book/scroll?status=${bookStatus}&lastId=&lastCreatedAt=&size=100`,
       ),
     throwOnError: true,
   });
