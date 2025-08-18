@@ -4,40 +4,72 @@ import { theme } from "@/styles/themes.style";
 const { color, typography } = theme;
 
 import { ChevronLeftIcon, ChevronRightIcon } from "@/assets/icons";
+import { useMemo } from "react";
 
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
+  windowSize?: number;
 }
 
-// 기능X, UI만 구현된 상태
-// TODO 재민 - 페이지네이션 기능 구현
 const Pagination = ({
   currentPage,
   totalPages,
   onPageChange,
+  windowSize = 5,
 }: PaginationProps) => {
-  const tmpRange = [1, 2, 3, 4, 5];
+  const safeTotal = Math.max(0, totalPages);
+  const safeCurrent = Math.min(
+    Math.max(1, currentPage),
+    Math.max(1, safeTotal),
+  );
+
+  // 현재 속한 페이지 범위 계산
+  const ranges = useMemo(() => {
+    if (safeTotal === 0) return [];
+    const start = Math.floor((safeCurrent - 1) / windowSize) * windowSize + 1;
+    const end = Math.min(start + windowSize - 1, safeTotal);
+    const tmpRanges = Array.from(
+      { length: end - start + 1 },
+      (_, i) => start + i,
+    );
+    return tmpRanges;
+  }, [safeTotal, safeCurrent, windowSize]);
+
+  const handlePageChange = (clickedPage: number) => {
+    if (
+      clickedPage < 1 ||
+      clickedPage > safeTotal ||
+      clickedPage === safeCurrent
+    )
+      return;
+    onPageChange(clickedPage);
+  };
 
   return (
     <div css={PaginationContainer}>
       <button
         css={PageButtonStyle}
-        onClick={() => onPageChange(currentPage - 1)}
-        disabled={currentPage === 1}
+        onClick={() => handlePageChange(safeCurrent - 1)}
+        disabled={safeCurrent === 1}
       >
         <ChevronLeftIcon className="chevron-icon" />
       </button>
-      {tmpRange.map((page) => (
-        <p key={page} css={PageNumberStyle(currentPage === page)}>
+      {ranges.map((page) => (
+        <button
+          key={page}
+          css={PageNumberStyle(safeCurrent === page)}
+          onClick={() => handlePageChange(page)}
+          disabled={safeCurrent === page}
+        >
           {page}
-        </p>
+        </button>
       ))}
       <button
         css={PageButtonStyle}
-        onClick={() => onPageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
+        onClick={() => handlePageChange(safeCurrent + 1)}
+        disabled={safeCurrent === safeTotal}
       >
         <ChevronRightIcon className="chevron-icon" />
       </button>
@@ -63,8 +95,18 @@ const PageButtonStyle = css`
     stroke: ${color.GrayScale.gray4};
     transition: stroke 0.2s ease;
   }
+
   &:hover .chevron-icon {
     stroke: ${color.GrayScale.gray5};
+  }
+
+  /* disabled는 맨 마지막에 둬서 hover를 무력화 */
+  &:disabled {
+    cursor: not-allowed;
+  }
+  &:disabled .chevron-icon {
+    stroke: ${color.GrayScale.gray3};
+    transition: none;
   }
 `;
 
@@ -81,7 +123,10 @@ const PageNumberStyle = (isCurrentPage: boolean) => css`
   border-radius: 999px;
   cursor: pointer;
   &:hover {
-    background-color: ${color.GrayScale.gray2};
-    color: ${color.GrayScale.gray4};
+    ${!isCurrentPage &&
+    `
+      background-color: ${color.GrayScale.gray2};
+      color: ${color.GrayScale.gray4};
+    `}
   }
 `;
