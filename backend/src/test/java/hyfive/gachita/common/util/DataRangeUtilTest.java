@@ -1,6 +1,7 @@
 package hyfive.gachita.common.util;
 
-import hyfive.gachita.common.enums.SearchPeriod;
+import hyfive.gachita.application.common.enums.SearchPeriod;
+import hyfive.gachita.application.common.util.DateRangeUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.util.Pair;

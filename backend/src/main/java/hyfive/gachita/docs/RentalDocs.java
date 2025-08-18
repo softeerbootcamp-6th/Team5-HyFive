@@ -1,8 +1,8 @@
 package hyfive.gachita.docs;
 
-import hyfive.gachita.common.response.BaseResponse;
-import hyfive.gachita.rental.dto.ReplaceRental;
-import hyfive.gachita.rental.dto.RentalRes;
+import hyfive.gachita.global.BaseResponse;
+import hyfive.gachita.application.rental.dto.ReplaceRental;
+import hyfive.gachita.application.rental.dto.RentalRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
@@ -17,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import java.time.LocalDate;
 import java.util.List;
 
+@Tag(name = "rental", description = "유휴 시간 관련 API")
 public interface RentalDocs {
 
     @Operation(
