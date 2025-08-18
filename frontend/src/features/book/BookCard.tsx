@@ -11,7 +11,7 @@ import {
   UserWrapper,
 } from "@/features/book/BookCard.style";
 import { theme } from "@/styles/themes.style";
-import type { BookDataType } from "@/types/bookType";
+import type { BookDataType } from "@/types/bookType.types";
 const { color } = theme;
 
 interface BookCardProps {

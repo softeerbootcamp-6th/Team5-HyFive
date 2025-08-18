@@ -1,4 +1,5 @@
 import type { BookAPIResponse } from "@/features/book/Book.types";
+import { APIMatcher } from "@/utils/APIMatcher";
 import { clientInstance } from "@/utils/AxiosInstance";
 import TabMatcher from "@/utils/TabMatcher";
 import { useQuery } from "@tanstack/react-query";
@@ -14,7 +15,9 @@ export const useGetBook = (activeTab: string) => {
       ),
     throwOnError: true,
   });
-  const bookData = data?.data.items;
+  const bookData = data?.data.items.map((partData) =>
+    APIMatcher.matchBookAPI(partData),
+  );
   return {
     data: bookData,
     error,

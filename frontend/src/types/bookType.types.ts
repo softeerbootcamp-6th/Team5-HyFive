@@ -1,4 +1,6 @@
 export interface BookDataType {
+  id: number;
+  bookStatus: string;
   name: string;
   phone: string;
   isExistWalkingDevice: boolean;

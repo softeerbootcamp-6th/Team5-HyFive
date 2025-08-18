@@ -3,17 +3,20 @@ import Tabs from "@/components/Tabs";
 import BookCard from "@/features/book/BookCard";
 import { bookDataList } from "@/mocks/bookMocks";
 import { theme } from "@/styles/themes.style";
+import type { BookDataType } from "@/types/bookType.types";
 import TabMatcher from "@/utils/TabMatcher";
 import { css } from "@emotion/react";
 import type { Dispatch, SetStateAction } from "react";
 const { color, typography } = theme;
 
 interface BookListSectionProps {
+  data: BookDataType[];
   TAB_LIST: string[];
   activeTab: string;
   setActiveTab: Dispatch<SetStateAction<string>>;
 }
 const BookListSection = ({
+  data,
   TAB_LIST,
   activeTab,
   setActiveTab,
@@ -32,7 +35,7 @@ const BookListSection = ({
         setSelected={setActiveTab}
       />
       <div css={ContentContainer}>
-        {bookDataList.map((bookData, idx) => (
+        {data.map((bookData, idx) => (
           <div key={bookData.name}>
             <BookCard
               bookType={TabMatcher.matchBookTypeKRToENG(activeTab)}
