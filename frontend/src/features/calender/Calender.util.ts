@@ -9,6 +9,7 @@ import {
   format,
   startOfDay,
   isBefore,
+  isAfter,
 } from "date-fns";
 
 export const WEEKDAYS_KR = ["일", "월", "화", "수", "목", "금", "토"] as const;
@@ -191,4 +192,14 @@ export const isBeforeToday = (dateString: string): boolean => {
   const targetDate = new Date(dateString);
   const today = startOfDay(new Date());
   return isBefore(targetDate, today);
+};
+
+/**
+ * 현재 선택된 주가 다음 주거나 이후인지 확인합니다.
+ * @param week 날짜 배열 (주 단위)
+ * @returns 현재 선택된 주가 다음 주거나 이후이면 true, 아니면 false
+ */
+export const isFutureWeek = (week: Date[]): boolean => {
+  const lastDayOfThisWeek = endOfWeek(new Date(), { weekStartsOn: 0 });
+  return week.some((date) => isAfter(startOfDay(date), lastDayOfThisWeek));
 };
