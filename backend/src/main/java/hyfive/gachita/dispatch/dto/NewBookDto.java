@@ -20,10 +20,7 @@ public record NewBookDto (
         double endLat,
         double endLng,
         boolean walker,
-
-        // TODO : 카카오 API 호출 시 값 설정 필요
         LocalTime maybeOnTime,
-
         int totalDuration,
         int totalDistance
 ) {
@@ -39,6 +36,7 @@ public record NewBookDto (
                 .walker(book.getWalker())
                 .totalDuration(routeInfo.totalDuration())
                 .totalDistance(routeInfo.totalDistance())
+                .maybeOnTime(book.getDeadline().minusSeconds(routeInfo.totalDuration()))
                 .build();
     }
 }
