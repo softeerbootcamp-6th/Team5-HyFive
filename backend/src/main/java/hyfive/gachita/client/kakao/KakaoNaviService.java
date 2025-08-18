@@ -1,0 +1,71 @@
+package hyfive.gachita.client.kakao;
+
+import hyfive.gachita.client.geocode.dto.LatLng;
+import hyfive.gachita.client.kakao.dto.Location;
+import hyfive.gachita.client.kakao.dto.request.DirectionsReq;
+import hyfive.gachita.client.kakao.dto.response.KakaoNaviRes;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class KakaoNaviService {
+    private final KakaoNaviApiClient kakaoNaviApiClient;
+
+    public RouteInfo geRouteInfo(List<LatLng> nodeList) {
+        DirectionsReq request = createDirectionsReq(nodeList);
+
+        // API 호출
+        KakaoNaviRes.Route route = kakaoNaviApiClient.getWaypointsDirections(request);
+
+        KakaoNaviRes.Summary total = route.summary();
+
+        List<List<LatLng>> polylineList = new ArrayList<>();
+        List<Integer> durationList = new ArrayList<>();
+        List<Integer> distanceList = new ArrayList<>();
+
+        // 각 지점 사이의 경로 순회
+        for (KakaoNaviRes.Section section : route.sections()) {
+            List<LatLng> pointList = extractedSectionPoint(section);
+            polylineList.add(pointList);
+            durationList.add(section.duration());
+            distanceList.add(section.distance());
+        }
+        return RouteInfo.builder()
+                .totalDuration(total.duration())
+                .totalDistance(total.distance())
+                .polylineList(polylineList)
+                .distanceList(durationList)
+                .durationList(distanceList)
+                .build();
+    }
+
+    // 경로를 구성하는 좌표를 하나의 리스트로 통합
+    private List<LatLng> extractedSectionPoint(KakaoNaviRes.Section section) {
+        List<LatLng> pointList = new ArrayList<>();
+        for (KakaoNaviRes.Road road : section.roads()) {
+            List<Double> vertexes = road.vertexes();
+            for (int i = 0; i < vertexes.size(); i += 2) {
+                pointList.add(new LatLng(vertexes.get(i), vertexes.get(i + 1)));
+            }
+        }
+        return pointList;
+    }
+
+    private DirectionsReq createDirectionsReq(List<LatLng> nodeList) {
+        LatLng start = nodeList.get(0);
+        LatLng end = nodeList.get(nodeList.size() - 1);
+        List<Location> waypoints = nodeList.subList(1, nodeList.size() - 1).stream()
+                .map(Location::fromLatLng)
+                .toList();
+
+        return DirectionsReq.builder()
+                .origin(Location.fromLatLng(start))
+                .destination(Location.fromLatLng(end))
+                .waypoints(waypoints)
+                .build();
+    }
+}
