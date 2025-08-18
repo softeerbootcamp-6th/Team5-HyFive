@@ -24,6 +24,7 @@ public class CustomPathRepositoryImpl implements CustomPathRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
+    // TODO : path_id list 필터 추가, DelYn 차량 확인 조건 추가
     public List<PathDispatchDto> searchPathList(PathCondition condition) {
         List<Tuple> result = queryFactory
                 .select(path.id, node)
