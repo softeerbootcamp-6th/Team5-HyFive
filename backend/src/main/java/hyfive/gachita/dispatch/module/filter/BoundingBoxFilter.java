@@ -21,7 +21,7 @@ public class BoundingBoxFilter implements Filter<BoundingBoxCondition> {
                 .toList();
     }
 
-    public boolean test(CenterDto center, BoundingBoxCondition boundingBoxCondition) {
+    public boolean test(FilterDto center, BoundingBoxCondition boundingBoxCondition) {
         return center.lat() >= boundingBoxCondition.minLat() &&
                center.lat() <= boundingBoxCondition.maxLat() &&
                center.lng() >= boundingBoxCondition.minLng() &&

@@ -33,7 +33,7 @@ public class HaversineFilter implements Filter<RadiusCondition> {
                 .toList();
     }
 
-    public boolean test(CenterDto center, RadiusCondition radiusCondition) {
+    public boolean test(FilterDto center, RadiusCondition radiusCondition) {
         return haversine(radiusCondition.centerLat(), radiusCondition.centerLng(),
                 center.lat(), center.lng()) <= radiusCondition.radiusMeters();
     }

@@ -43,16 +43,17 @@ public class DispatchFlowSelector {
         RadiusCondition rConditionStart = RadiusCondition.from(newBookDto.startLat(), newBookDto.startLng(), RADIUS_METERS);
         RadiusCondition rConditionEnd = RadiusCondition.from(newBookDto.endLat(), newBookDto.endLng(), RADIUS_METERS);
 
-        // 1차 BoundingBox 필터 후 Haversine 필터 적용
-        List<PathCandidateDto> hFilteredStart = haversineFilter.filter(
-                boundingBoxFilter.filter(candidates, bbConditionStart),
-                rConditionStart
-        );
+        // 출발지 반경 필터링
+        List<PathCandidateDto> hFilteredStart = candidates.stream()
+                .filter(candidate -> boundingBoxFilter.test(candidate, bbConditionStart))
+                .filter(candidate -> haversineFilter.test(candidate, rConditionStart))
+                .toList();
 
-        List<PathCandidateDto> hFilteredEnd = haversineFilter.filter(
-                boundingBoxFilter.filter(candidates, bbConditionEnd),
-                rConditionEnd
-        );
+        // 도착지 반경 필터링
+        List<PathCandidateDto> hFilteredEnd = candidates.stream()
+                .filter(candidate -> boundingBoxFilter.test(candidate, bbConditionEnd))
+                .filter(candidate -> haversineFilter.test(candidate, rConditionEnd))
+                .toList();
 
         // 합집합 PathId 추출
         Set<Long> candidatePathIds = Stream.concat(
