@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class InsertCandidateProvider {
+public class SlotCandidateProvider {
 
-    public List<Integer> findInsertCandidates(
+    public List<Integer> findSlotCandidates(
             List<NodeDto> originalNodes,
             NodeDto newNode
     ) {

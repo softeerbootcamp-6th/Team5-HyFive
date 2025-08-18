@@ -4,7 +4,7 @@ import hyfive.gachita.dispatch.dto.FinalPathCandidateDto;
 import hyfive.gachita.dispatch.dto.NewBookDto;
 import hyfive.gachita.dispatch.dto.NodeDto;
 import hyfive.gachita.dispatch.module.calculator.InsertPathInfoCalculator;
-import hyfive.gachita.dispatch.module.provider.InsertCandidateProvider;
+import hyfive.gachita.dispatch.module.provider.SlotCandidateProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +15,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class OldPathDispatchFlow {
-    private final InsertCandidateProvider insertCandidateProvider;
+    private final SlotCandidateProvider slotCandidateProvider;
     private final InsertPathInfoCalculator insertPathInfoCalculator;
 
     public void execute(List<Long> pathIds, NewBookDto newBook) {
@@ -29,13 +29,13 @@ public class OldPathDispatchFlow {
         NodeDto newBookStartNode = NodeDto.newBookStartNodeFrom(newBook);
         NodeDto newBookEndNode = NodeDto.newBookEndNodeFrom(newBook);
 
-        List<Integer> startCandidates = insertCandidateProvider.findInsertCandidates(originalNodes, newBookStartNode);
-        List<Integer> endCandidates = insertCandidateProvider.findInsertCandidates(originalNodes, newBookEndNode);
+        List<Integer> startSlotCandidates = slotCandidateProvider.findSlotCandidates(originalNodes, newBookStartNode);
+        List<Integer> endSlotCandidates = slotCandidateProvider.findSlotCandidates(originalNodes, newBookEndNode);
 
         List<FinalPathCandidateDto> candidates = new ArrayList<>();
 
-        for (Integer si : startCandidates) {
-            for (Integer ei : endCandidates) {
+        for (Integer si : startSlotCandidates) {
+            for (Integer ei : endSlotCandidates) {
                 if (si <= ei) {
                     List<NodeDto> candidatePath = new ArrayList<>(originalNodes);
                     candidatePath.add(ei, newBookEndNode);
