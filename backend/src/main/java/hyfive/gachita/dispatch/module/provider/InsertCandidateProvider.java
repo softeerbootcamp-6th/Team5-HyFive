@@ -5,7 +5,9 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class InsertCandidateProvider {
@@ -14,18 +16,21 @@ public class InsertCandidateProvider {
             List<NodeDispatchLocationDto> originalNodes,
             NodeDispatchLocationDto newNode
     ) {
-        List<Integer> candidates = new ArrayList<>();
+        Set<Integer> candidates = new LinkedHashSet<>();
+
+        LocalTime newStartNode = newNode.deadline().getFirst();
+        LocalTime newEndNode = newNode.deadline().getSecond();
+
         for (int i = 0; i < originalNodes.size(); i++) {
             NodeDispatchLocationDto node = originalNodes.get(i);
 
-            LocalTime newNodeStart = newNode.deadline().getFirst();
-            LocalTime newNodeEnd = newNode.deadline().getSecond();
-
-            if (node.time().isAfter(newNodeStart) &&
-                    node.time().isBefore(newNodeEnd)) {
+            if (node.time().isAfter(newStartNode) &&
+                    node.time().isBefore(newEndNode)) {
+                candidates.add(i);
                 candidates.add(i + 1);
             }
         }
-        return candidates;
+
+        return new ArrayList<>(candidates);
     }
 }
