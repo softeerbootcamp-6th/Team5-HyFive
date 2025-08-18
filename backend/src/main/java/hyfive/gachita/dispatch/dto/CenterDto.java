@@ -6,7 +6,7 @@ import lombok.Builder;
 import java.time.LocalTime;
 
 @Builder
-public record InitPathDto(
+public record CenterDto(
         Long centerId,
         double centerLat,
         double centerLng,
@@ -18,8 +18,8 @@ public record InitPathDto(
         int distance           // 총 이동 거리 (단위 : meters)
 ) implements FilterDto {
 
-    public static InitPathDto from(Center center) {
-        return InitPathDto.builder()
+    public static CenterDto from(Center center) {
+        return CenterDto.builder()
                 .centerId(center.getId())
                 .centerLat(center.getLat())
                 .centerLng(center.getLng())
