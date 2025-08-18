@@ -14,7 +14,7 @@ const useInitializeMap = ({
   const [map, setMap] = useState<MapInstance | null>(null);
 
   useEffect(() => {
-    const kakaoMaps = window.kakao.maps;
+    const kakaoMaps = window.kakao?.maps;
     if (!mapRef.current || !kakaoMaps) return;
 
     const options = {

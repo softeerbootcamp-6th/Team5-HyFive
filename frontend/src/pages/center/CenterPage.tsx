@@ -5,7 +5,7 @@ const CenterPage = () => {
   const navigate = useNavigate();
 
   const handleNavigate = () => {
-    navigate("/center/edit", {
+    void navigate("/center/edit", {
       state: {
         carImage: OriginalCarImg,
         carModel: "람보르기니",

@@ -9,3 +9,11 @@ export interface RouteType {
   totalUserCount: number;
   status: "waiting" | "inProgress" | "completed";
 }
+
+export type RouteStatus = "탑승" | "하차" | "대기";
+
+export interface PassengerRoute {
+  id: number;
+  name: string;
+  status: RouteStatus;
+}

@@ -1,54 +1,86 @@
-import type { LatLng } from "@/features/map/Map.types";
-import { useEffect } from "react";
+import type { LatLng, MarkerPath } from "@/features/map/Map.types";
+import { useEffect, useRef } from "react";
 
 interface UseVisualizeMarkerProps {
   map: MapInstance | null;
-  path: LatLng[];
+  markerPath: MarkerPath[];
 }
-const useVisualizeMarker = ({ map, path }: UseVisualizeMarkerProps) => {
+type MarkerType = "start" | "end" | "middle" | "enter" | "out";
+
+const useVisualizeMarker = ({ map, markerPath }: UseVisualizeMarkerProps) => {
+  const markersRef = useRef<MarkerInstance[]>([]);
+  const kakaoMaps = window.kakao?.maps;
+  const imageSrc = {
+    start: "/src/assets/icons/marker-start.svg",
+    middle: "/src/assets/icons/marker-default.svg",
+    end: "/src/assets/icons/marker-end.svg",
+    enter: "/src/assets/icons/marker-enter.svg",
+    out: "/src/assets/icons/marker-out.svg",
+  };
+
+  const getMarkerType = (
+    index: number,
+    length: number,
+  ): Partial<MarkerType> => {
+    if (index === 0) return "start";
+    if (index === length - 1) return "end";
+    return "middle";
+  };
+
   useEffect(() => {
-    const kakaoMaps = window.kakao.maps;
     if (!kakaoMaps || !map) return;
+    initMarker();
+  }, [map, kakaoMaps, markerPath]);
 
-    const getMarkerType = (
-      index: number,
-      length: number,
-    ): keyof typeof imageSrc => {
-      if (index === 0) return "start";
-      if (index === length - 1) return "end";
-      return "middle";
-    };
+  const renderMarker = ({
+    markerType,
+    point,
+  }: {
+    markerType: MarkerType;
+    point: LatLng;
+  }) => {
+    const imageSize = new kakaoMaps.Size(32, 32);
+    const markerImage = new kakaoMaps.MarkerImage(
+      imageSrc[markerType],
+      imageSize,
+    );
+    const marker = new kakaoMaps.Marker({
+      map,
+      position: new kakaoMaps.LatLng(point.lat, point.lng),
+      title: "User Marker",
+      image: markerImage,
+    });
+    return marker;
+  };
 
-    const imageSrc = {
-      start: "/src/assets/icons/marker-start.svg",
-      middle: "/src/assets/icons/marker-default.svg",
-      end: "/src/assets/icons/marker-end.svg",
-    };
+  const removeMarker = () => {
+    markersRef.current.forEach((m) => m.setMap(null));
+    markersRef.current = [];
+  };
 
-    for (let i = 0; i < path.length; i++) {
-      const markerType = getMarkerType(i, path.length);
-      const imageSize = new kakaoMaps.Size(32, 32);
-      const markerImage = new kakaoMaps.MarkerImage(
-        imageSrc[markerType],
-        imageSize,
-      );
-
-      new kakaoMaps.Marker({
-        map,
-        position: new kakaoMaps.LatLng(path[i].lat, path[i].lng),
-        title: "User Marker",
-        image: markerImage,
+  const initMarker = () => {
+    removeMarker();
+    for (let i = 0; i < markerPath.length; i++) {
+      const markerType = getMarkerType(i, markerPath.length);
+      const marker = renderMarker({
+        markerType,
+        point: markerPath[i].point,
       });
+      markersRef.current.push(marker);
     }
-  }, [map, path]);
+  };
 
-  const highlightMarker = () => {};
-
-  const resetMarker = () => {};
+  const highlightMarker = ({ start, end }: { start: LatLng; end: LatLng }) => {
+    removeMarker();
+    const startMarker = renderMarker({ markerType: "enter", point: start });
+    const endMarker = renderMarker({ markerType: "out", point: end });
+    markersRef.current.push(startMarker);
+    markersRef.current.push(endMarker);
+  };
 
   return {
+    initMarker,
     highlightMarker,
-    resetMarker,
   };
 };
 
