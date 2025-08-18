@@ -22,6 +22,7 @@ const PassengerRouteList = ({
       <ul css={PassengerWrapper}>
         {passengers.map((passenger) => (
           <li
+            data-testid="passenger-highlight-btn"
             key={passenger.id}
             css={PartPassengerWrapper}
             onClick={() => onSelect(passenger)}

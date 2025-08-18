@@ -18,7 +18,11 @@ const RouteButton = ({
   onReset,
 }: RouteButtonProps) => {
   return (
-    <div css={RouteButtonContainer} onClick={onOpen}>
+    <div
+      css={RouteButtonContainer}
+      onClick={onOpen}
+      data-testid="passenger-btn"
+    >
       <div css={TextButtonWrapper}>
         {selectedPassenger ? (
           <>
