@@ -1,6 +1,6 @@
 package hyfive.gachita.dispatch;
 
-import hyfive.gachita.dispatch.dto.InsertPathEvaluationResult;
+import hyfive.gachita.dispatch.dto.FinalPathCandidateDto;
 import hyfive.gachita.dispatch.dto.NewBookDto;
 import hyfive.gachita.dispatch.dto.NodeDispatchLocationDto;
 import hyfive.gachita.dispatch.module.calculator.InsertPathInfoCalculator;
@@ -32,7 +32,7 @@ public class OldPathDispatchFlow {
         List<Integer> startCandidates = insertCandidateProvider.findInsertCandidates(originalNodes, newBookStartNode);
         List<Integer> endCandidates = insertCandidateProvider.findInsertCandidates(originalNodes, newBookEndNode);
 
-        List<InsertPathEvaluationResult> candidates = new ArrayList<>();
+        List<FinalPathCandidateDto> candidates = new ArrayList<>();
 
         for (Integer si : startCandidates) {
             for (Integer ei : endCandidates) {
@@ -41,15 +41,15 @@ public class OldPathDispatchFlow {
                     candidatePath.add(ei, newBookEndNode);
                     candidatePath.add(si, newBookStartNode);
 
-                    InsertPathEvaluationResult result = insertPathInfoCalculator.calculate(candidatePath);
+                    FinalPathCandidateDto result = insertPathInfoCalculator.calculate(candidatePath);
                     if (result != null) candidates.add(result);
                 }
             }
         }
 
         candidates.stream()
-            .min(Comparator.comparingInt(InsertPathEvaluationResult::totalDuration)
-                    .thenComparingInt(InsertPathEvaluationResult::totalDistance))
+            .min(Comparator.comparingInt(FinalPathCandidateDto::totalDuration)
+                    .thenComparingInt(FinalPathCandidateDto::totalDistance))
             .orElse(null);
 
         // TODO : 3-2. 다중 경로 중 최적 경로 선출

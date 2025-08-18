@@ -3,7 +3,7 @@ package hyfive.gachita.dispatch.module.calculator;
 import hyfive.gachita.client.geocode.dto.LatLng;
 import hyfive.gachita.client.kakao.KakaoNaviService;
 import hyfive.gachita.client.kakao.RouteInfo;
-import hyfive.gachita.dispatch.dto.InsertPathEvaluationResult;
+import hyfive.gachita.dispatch.dto.FinalPathCandidateDto;
 import hyfive.gachita.dispatch.dto.NodeDispatchLocationDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -18,7 +18,7 @@ public class InsertPathInfoCalculator {
     private final int MAX_TOTAL_DURATION = 7200;
     private final KakaoNaviService kakaoNaviService;
 
-    public InsertPathEvaluationResult calculate(List<NodeDispatchLocationDto> candidatePath) {
+    public FinalPathCandidateDto calculate(List<NodeDispatchLocationDto> candidatePath) {
         List<LatLng> latLngList = candidatePath.stream()
                 .map(node -> new LatLng(node.lat(), node.lng()))
                 .toList();
@@ -27,7 +27,7 @@ public class InsertPathInfoCalculator {
 
         if (!isValid(candidatePath, route)) return null;
 
-        return new InsertPathEvaluationResult(
+        return new FinalPathCandidateDto(
                 null,
                 null,
                 List.of(), // 신규 예약 노드

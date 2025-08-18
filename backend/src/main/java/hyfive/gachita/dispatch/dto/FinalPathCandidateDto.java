@@ -2,7 +2,7 @@ package hyfive.gachita.dispatch.dto;
 
 import java.util.List;
 
-public record InsertPathEvaluationResult(
+public record FinalPathCandidateDto(
         Long pathId,
         Long carId,
         List<NodeDispatchLocationDto> newNodes,
