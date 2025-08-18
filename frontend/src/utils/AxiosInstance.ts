@@ -16,6 +16,8 @@ const createInstance = () => {
       throw CustomError(error);
     },
   );
+
+  return instance;
 };
 
 export const clientInstance = createInstance();
