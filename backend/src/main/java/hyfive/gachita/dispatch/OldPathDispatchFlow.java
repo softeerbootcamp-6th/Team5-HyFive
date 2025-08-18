@@ -20,12 +20,18 @@ public class OldPathDispatchFlow {
     private final InsertCandidateProvider insertCandidateProvider;
     private final InsertPathInfoCalculator insertPathInfoCalculator;
 
-    public InsertPathEvaluationResult execute(List<NodeDispatchLocationDto> originalNodes, NewBookDto newBook) {
-        var pickupNode = newNodeProvider.createStartNode(newBook);
-        var dropNode = newNodeProvider.createEndNode(newBook);
+    public void execute(List<NodeDispatchLocationDto> originalNodes, NewBookDto newBook) {
+        // TODO : 1. pathIds List<Long> 기준으로 path 테이블로 부터 아래 조건을 만족하는 path가 있는지 확인
 
-        List<Integer> pickupCandidates = insertCandidateProvider.findInsertCandidates(originalNodes, pickupNode);
-        List<Integer> dropCandidates = insertCandidateProvider.findInsertCandidates(originalNodes, dropNode);
+        // TODO : 2. 위에 걸러진 path ID에 해당하는 Node getAll() NodeDispatchLocationDto
+
+        // TODO : 3. 배차 차량이 존재하는가 확인 (완전 탐색 시작!!)
+        // TODO : 3-1. 단일 경로 내 최적 경로 후보 선출
+        NodeDispatchLocationDto newBookStartNode = newNodeProvider.createStartNode(newBook);
+        NodeDispatchLocationDto newBookEndNode = newNodeProvider.createEndNode(newBook);
+
+        List<Integer> pickupCandidates = insertCandidateProvider.findInsertCandidates(originalNodes, newBookStartNode);
+        List<Integer> dropCandidates = insertCandidateProvider.findInsertCandidates(originalNodes, newBookEndNode);
 
         List<InsertPathEvaluationResult> candidates = new ArrayList<>();
 
@@ -33,8 +39,8 @@ public class OldPathDispatchFlow {
             for (Integer di : dropCandidates) {
                 if (pi < di) {
                     List<NodeDispatchLocationDto> candidatePath = new ArrayList<>(originalNodes);
-                    candidatePath.add(pi, pickupNode);
-                    candidatePath.add(di + 1, dropNode);
+                    candidatePath.add(pi, newBookStartNode);
+                    candidatePath.add(di + 1, newBookEndNode);
 
                     InsertPathEvaluationResult result = insertPathInfoCalculator.calculate(candidatePath);
                     if (result != null) candidates.add(result);
@@ -42,9 +48,11 @@ public class OldPathDispatchFlow {
             }
         }
 
-        return candidates.stream()
-                .min(Comparator.comparingInt(InsertPathEvaluationResult::totalDuration)
-                        .thenComparingInt(InsertPathEvaluationResult::totalDistance))
-                .orElse(null);
+        candidates.stream()
+            .min(Comparator.comparingInt(InsertPathEvaluationResult::totalDuration)
+                    .thenComparingInt(InsertPathEvaluationResult::totalDistance))
+            .orElse(null);
+
+        // TODO : 3-2. 다중 경로 중 최적 경로 선출
     }
 }
