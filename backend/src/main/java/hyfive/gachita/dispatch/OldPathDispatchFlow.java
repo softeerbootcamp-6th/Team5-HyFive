@@ -30,17 +30,17 @@ public class OldPathDispatchFlow {
         NodeDispatchLocationDto newBookStartNode = newNodeProvider.createStartNode(newBook);
         NodeDispatchLocationDto newBookEndNode = newNodeProvider.createEndNode(newBook);
 
-        List<Integer> pickupCandidates = insertCandidateProvider.findInsertCandidates(originalNodes, newBookStartNode);
-        List<Integer> dropCandidates = insertCandidateProvider.findInsertCandidates(originalNodes, newBookEndNode);
+        List<Integer> startCandidates = insertCandidateProvider.findInsertCandidates(originalNodes, newBookStartNode);
+        List<Integer> endCandidates = insertCandidateProvider.findInsertCandidates(originalNodes, newBookEndNode);
 
         List<InsertPathEvaluationResult> candidates = new ArrayList<>();
 
-        for (Integer pi : pickupCandidates) {
-            for (Integer di : dropCandidates) {
-                if (pi < di) {
+        for (Integer si : startCandidates) {
+            for (Integer ei : endCandidates) {
+                if (si < ei) {
                     List<NodeDispatchLocationDto> candidatePath = new ArrayList<>(originalNodes);
-                    candidatePath.add(pi, newBookStartNode);
-                    candidatePath.add(di + 1, newBookEndNode);
+                    candidatePath.add(si, newBookStartNode);
+                    candidatePath.add(ei + 1, newBookEndNode);
 
                     InsertPathEvaluationResult result = insertPathInfoCalculator.calculate(candidatePath);
                     if (result != null) candidates.add(result);
