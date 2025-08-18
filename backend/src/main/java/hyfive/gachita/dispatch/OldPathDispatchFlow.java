@@ -5,7 +5,6 @@ import hyfive.gachita.dispatch.dto.NewBookDto;
 import hyfive.gachita.dispatch.dto.NodeDispatchLocationDto;
 import hyfive.gachita.dispatch.module.calculator.InsertPathInfoCalculator;
 import hyfive.gachita.dispatch.module.provider.InsertCandidateProvider;
-import hyfive.gachita.dispatch.module.provider.NewNodeProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -16,19 +15,19 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class OldPathDispatchFlow {
-    private final NewNodeProvider newNodeProvider;
     private final InsertCandidateProvider insertCandidateProvider;
     private final InsertPathInfoCalculator insertPathInfoCalculator;
 
-    public void execute(List<NodeDispatchLocationDto> originalNodes, NewBookDto newBook) {
+    public void execute(List<Long> pathIds, NewBookDto newBook) {
         // TODO : 1. pathIds List<Long> 기준으로 path 테이블로 부터 아래 조건을 만족하는 path가 있는지 확인
 
         // TODO : 2. 위에 걸러진 path ID에 해당하는 Node getAll() NodeDispatchLocationDto
+        List<NodeDispatchLocationDto> originalNodes = List.of();
 
         // TODO : 3. 배차 차량이 존재하는가 확인 (완전 탐색 시작!!)
         // TODO : 3-1. 단일 경로 내 최적 경로 후보 선출
-        NodeDispatchLocationDto newBookStartNode = newNodeProvider.createStartNode(newBook);
-        NodeDispatchLocationDto newBookEndNode = newNodeProvider.createEndNode(newBook);
+        NodeDispatchLocationDto newBookStartNode = NodeDispatchLocationDto.newBookStartNodeFrom(newBook);
+        NodeDispatchLocationDto newBookEndNode = NodeDispatchLocationDto.newBookEndNodeFrom(newBook);
 
         List<Integer> startCandidates = insertCandidateProvider.findInsertCandidates(originalNodes, newBookStartNode);
         List<Integer> endCandidates = insertCandidateProvider.findInsertCandidates(originalNodes, newBookEndNode);
