@@ -36,6 +36,7 @@ const UsersPage = () => {
     useState<DateFilterValue>("TODAY");
   const [selectedStatusFilter, setSelectedStatusFilter] =
     useState<UserFilterValue>("ALL");
+  const [selectedPage, setSelectedPage] = useState(1);
 
   return (
     <div css={PageContainerStyle}>
@@ -62,7 +63,11 @@ const UsersPage = () => {
       </section>
 
       <TableWithIndex rows={UsersPageRowsMockData} />
-      <Pagination currentPage={1} totalPages={5} onPageChange={() => {}} />
+      <Pagination
+        currentPage={selectedPage}
+        totalPages={10}
+        onPageChange={setSelectedPage}
+      />
     </div>
   );
 };
