@@ -49,6 +49,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
+      - name: Create production env
+        run: echo "VITE_KAKAOMAP_API_KEY=${{ secrets.KAKAOMAP_API_KEY }}" > .env.production
+
       - name: Build Project
         run: pnpm build
 
