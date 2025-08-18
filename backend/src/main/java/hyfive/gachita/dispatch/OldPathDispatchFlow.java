@@ -36,7 +36,7 @@ public class OldPathDispatchFlow {
 
         for (Integer si : startCandidates) {
             for (Integer ei : endCandidates) {
-                if (si < ei) {
+                if (si <= ei) {
                     List<NodeDto> candidatePath = new ArrayList<>(originalNodes);
                     candidatePath.add(ei, newBookEndNode);
                     candidatePath.add(si, newBookStartNode);
@@ -53,5 +53,7 @@ public class OldPathDispatchFlow {
             .orElse(null);
 
         // TODO : 3-2. 다중 경로 중 최적 경로 선출
+
+        // TODO : 최종 경로 time 넣어주기!
     }
 }
