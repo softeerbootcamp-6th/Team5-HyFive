@@ -1,3 +1,10 @@
+import {
+  MarkerDefaultIcon,
+  MarkerEndIcon,
+  MarkerEnterIcon,
+  MarkerOutIcon,
+  MarkerStartIcon,
+} from "@/assets/icons";
 import type { LatLng, MarkerPath } from "@/features/map/Map.types";
 import { useEffect, useRef } from "react";
 
@@ -11,11 +18,11 @@ const useVisualizeMarker = ({ map, markerPath }: UseVisualizeMarkerProps) => {
   const markersRef = useRef<MarkerInstance[]>([]);
   const kakaoMaps = window.kakao?.maps;
   const imageSrc = {
-    start: "/src/assets/icons/marker-start.svg",
-    middle: "/src/assets/icons/marker-default.svg",
-    end: "/src/assets/icons/marker-end.svg",
-    enter: "/src/assets/icons/marker-enter.svg",
-    out: "/src/assets/icons/marker-out.svg",
+    start: MarkerStartIcon,
+    middle: MarkerDefaultIcon,
+    end: MarkerEndIcon,
+    enter: MarkerEnterIcon,
+    out: MarkerOutIcon,
   };
 
   const getMarkerType = (
