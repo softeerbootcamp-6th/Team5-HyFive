@@ -1,6 +1,7 @@
 package hyfive.gachita.dispatch;
 
 import hyfive.gachita.application.book.Book;
+import hyfive.gachita.application.book.BookCompletedEvent;
 import hyfive.gachita.application.book.BookService;
 import hyfive.gachita.application.book.BookStatus;
 import hyfive.gachita.application.path.PathService;
@@ -10,6 +11,8 @@ import hyfive.gachita.dispatch.excepion.DispatchUnexpectedException;
 import hyfive.gachita.dispatch.module.evaluation.DrivingTimeEvaluation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,7 +28,11 @@ public class DispatchService {
     // evaluation
     private final DrivingTimeEvaluation drivingTimeEvaluation;
 
-    public void execute(Book newBook) {
+    @Async
+    @EventListener(BookCompletedEvent.class)
+    public void execute(BookCompletedEvent bookCompletedEvent) {
+        Book newBook = bookCompletedEvent.book();
+        log.info("예약 배차 시작 {}", newBook);
         BookStatus bookStatus = BookStatus.NEW;
         try {
             // 1. 예약 추가 정보 로드

@@ -15,6 +15,7 @@ import hyfive.gachita.application.common.util.DateRangeUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +31,7 @@ import java.util.List;
 public class BookService {
     private final BookRepository bookRepository;
     private final GeoCodeService geoCodeService;
+    private final ApplicationEventPublisher eventPublisher;
 
     public Book createBook(CreateBookReq createBookReq) {
         if (bookRepository.existsBookByBookTelAndHospitalDate(createBookReq.bookTel(), createBookReq.hospitalDate())) {
@@ -57,7 +59,10 @@ public class BookService {
                 .deadline(createBookReq.hospitalTime().minusMinutes(30))
                 .build();
 
-        return bookRepository.save(book);
+        Book savedBook = bookRepository.save(book);
+        eventPublisher.publishEvent(new BookCompletedEvent(savedBook));
+
+        return savedBook;
     }
 
     public PagedListRes<BookRes> getBookList(SearchPeriod period, BookStatus bookStatus, int page, int limit) {
