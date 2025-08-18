@@ -1,6 +1,8 @@
 import Tag from "@/components/Tag";
 import {
+  ROUTE_STATUS_META,
   USER_STATUS_META,
+  type RouteFilterValue,
   type UserFilterValue,
 } from "@/features/statusFilter/StatusFilter.constants";
 import { theme } from "@/styles/themes.style";
@@ -12,6 +14,18 @@ const { color } = theme;
 interface TableProps {
   rows: TableObject[];
 }
+
+const isUserFilterValue = (
+  value: string,
+): value is Exclude<UserFilterValue, "ALL"> => {
+  return value in USER_STATUS_META;
+};
+
+const isRouteFilterValue = (
+  value: string,
+): value is Exclude<RouteFilterValue, "ALL"> => {
+  return value in ROUTE_STATUS_META;
+};
 
 const TableWithIndex = ({ rows }: TableProps) => {
   const { keys, labels } = TableMatcher.matchTableHeader(rows);
@@ -31,13 +45,19 @@ const TableWithIndex = ({ rows }: TableProps) => {
         return value + "명";
       case "status": {
         if (!value) return " ";
-        const valueForTagType = String(value) as Exclude<
-          UserFilterValue,
-          "ALL"
-        >;
-        const dataForTag = USER_STATUS_META[valueForTagType];
-        if (!dataForTag) return String(value);
-        return <Tag type={dataForTag.tagType} label={dataForTag.label} />;
+        const stringValue = String(value);
+
+        if (isUserFilterValue(stringValue)) {
+          const dataForTag = USER_STATUS_META[stringValue];
+          return <Tag type={dataForTag.tagType} label={dataForTag.label} />;
+        }
+
+        if (isRouteFilterValue(stringValue)) {
+          const dataForTag = ROUTE_STATUS_META[stringValue];
+          return <Tag type={dataForTag.tagType} label={dataForTag.label} />;
+        }
+
+        return String(value);
       }
       default:
         return value;
