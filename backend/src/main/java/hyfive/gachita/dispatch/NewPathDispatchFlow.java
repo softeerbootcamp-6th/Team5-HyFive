@@ -43,7 +43,7 @@ public class NewPathDispatchFlow {
 
         // car, rental 정보
         List<CarScheduleDto> carScheduleCandidates = idleCarListProvider.getByCondition(centerCandidates, newBookDto).stream()
-                .collect(Collectors.groupingBy(CarScheduleDto::centerId)).values().stream()
+                .collect(Collectors.groupingBy(CarScheduleDto::centerDto)).values().stream()
                 .flatMap(cars -> carSelector.selectBestCarForSingleCenter(cars).stream())
                 .toList();
 
