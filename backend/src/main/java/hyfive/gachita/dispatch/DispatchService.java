@@ -46,9 +46,9 @@ public class DispatchService {
         } catch (Exception e) {
             bookStatus = BookStatus.FAIL;
             if (e instanceof DispatchException) {
-                log.info("비정상 예약 실패 {}", e.getMessage());
+                log.info("정상 예약 실패 {}", e.getMessage());
             } else {
-                log.error("비정상 예약 실패 {}", e.getMessage());
+                log.error("비정상 예약 실패", e);
             }
         } finally {
             // BookStatus 변환 - 성공, 실패
