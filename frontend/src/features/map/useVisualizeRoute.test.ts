@@ -2,14 +2,26 @@ import { describe, it, beforeEach, beforeAll, expect, vi } from "vitest";
 import { renderHook } from "@testing-library/react";
 import useVisualizeRoute from "@/features/map/useVisualizeRoute";
 import animateRouteSegments from "@/features/map/animateRouteSegments.util";
-import getRouteSegments from "@/features/map/getRouteSegments.util";
 
 //kakaomap api 관련 map, path mock data
 const mapMock = {};
 const pathMock = [
-  { lat: 1, lng: 1 },
-  { lat: 2, lng: 2 },
-  { lat: 3, lng: 3 },
+  {
+    segmentId: 1,
+    pointList: [
+      { lat: 37.65350753605161, lng: 127.05272873217041 }, // 사용자1 탑승
+      { lat: 37.65325505753623, lng: 127.05318184012343 }, // 사용자2 탑승
+      { lat: 37.65311067453145, lng: 127.05368035131548 }, // 사용자1 하차
+    ],
+  },
+  {
+    segmentId: 2,
+    pointList: [
+      { lat: 37.65311036317523, lng: 127.05436027948892 }, // 사용자3 탑승
+      { lat: 37.65311019551619, lng: 127.0547229078438 }, // 사용자2 하차
+      { lat: 37.653362089238804, lng: 127.05553900952052 }, // 사용자4 탑승
+    ],
+  },
 ];
 
 //kakaomap api Polyline 로직 mocking
@@ -31,14 +43,6 @@ beforeAll(() => {
 });
 
 //유틸 함수 mocking
-vi.mock("@/features/map/getRouteSegments.util", () => ({
-  default: vi.fn(({ path, size }) => {
-    return path.map((p: LatLngInstance[]) =>
-      Array.from({ length: size }, () => [p]),
-    );
-  }),
-}));
-
 vi.mock("@/features/map/animateRouteSegments.util", () => {
   return {
     default: vi.fn(({ segments, renderSegment }) => {
@@ -55,23 +59,24 @@ beforeEach(() => {
 describe("지도에 경로를 순차적으로 렌더링할 준비 및 완료 작업을 진행한다.", () => {
   beforeEach(() => {
     renderHook(() =>
-      useVisualizeRoute({ map: mapMock as MapInstance, path: pathMock }),
+      useVisualizeRoute({
+        map: mapMock as MapInstance,
+        polylinePath: pathMock,
+      }),
     );
   });
 
   it("전달된 map prop으로 setMap이 호출된다.", () => {
-    expect(MockPolyline.setMap).toHaveBeenCalledTimes(1);
+    expect(MockPolyline.setMap).toHaveBeenCalled();
     expect(MockPolyline.setMap).toHaveBeenCalledWith(mapMock);
-  });
-
-  it("전달된 path prop으로 경로 분할 함수가 호출된다.", () => {
-    expect(getRouteSegments).toHaveBeenCalledTimes(1);
-    expect(getRouteSegments).toHaveBeenCalledWith({ path: pathMock, size: 2 });
   });
 
   it("경로 하이라이트, 경로 초기화 함수를 반환한다.", () => {
     const { result } = renderHook(() =>
-      useVisualizeRoute({ map: mapMock as MapInstance, path: pathMock }),
+      useVisualizeRoute({
+        map: mapMock as MapInstance,
+        polylinePath: pathMock,
+      }),
     );
     expect(typeof result.current.highlightRoute).toBe("function");
     expect(typeof result.current.resetRoute).toBe("function");
@@ -85,14 +90,17 @@ describe("지도에 경로를 순차적으로 렌더링한다.", () => {
 
   it("애니메이션 시작 함수가 호출된다.", () => {
     renderHook(() =>
-      useVisualizeRoute({ map: mapMock as MapInstance, path: pathMock }),
+      useVisualizeRoute({
+        map: mapMock as MapInstance,
+        polylinePath: pathMock,
+      }),
     );
     expect(animateRouteSegments).toHaveBeenCalledTimes(1);
   });
 
   it("경로가 없을 때 렌더링하지 않는다.", () => {
     renderHook(() =>
-      useVisualizeRoute({ map: mapMock as MapInstance, path: [] }),
+      useVisualizeRoute({ map: mapMock as MapInstance, polylinePath: [] }),
     );
     expect(MockPolyline.setMap).not.toHaveBeenCalled();
     expect(animateRouteSegments).not.toHaveBeenCalled();

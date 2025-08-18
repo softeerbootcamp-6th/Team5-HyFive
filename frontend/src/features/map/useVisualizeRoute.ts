@@ -1,46 +1,72 @@
 import animateRouteSegments from "@/features/map/animateRouteSegments.util";
-import getRouteSegments from "@/features/map/getRouteSegments.util";
-import type { LatLng } from "@/features/map/Map.types";
-import { useEffect } from "react";
+import type { LatLng, PolylinePath } from "@/features/map/Map.types";
+import { theme } from "@/styles/themes.style";
+import { useEffect, useRef } from "react";
 
 interface UseVisualizeRouteProps {
   map: MapInstance | null;
-  path: LatLng[];
+  polylinePath: PolylinePath[];
 }
 
-const useVisualizeRoute = ({ map, path }: UseVisualizeRouteProps) => {
-  useEffect(() => {
-    const kakaoMaps = window.kakao?.maps;
-    if (!kakaoMaps || !map || path.length === 0) return;
+const useVisualizeRoute = ({ map, polylinePath }: UseVisualizeRouteProps) => {
+  const kakaoMaps = window.kakao?.maps;
+  const basePolylineRef = useRef<PolylineInstance | null>(null);
+  const highlightPolylineRef = useRef<PolylineInstance | null>(null);
 
-    const polyline = new kakaoMaps.Polyline({
+  useEffect(() => {
+    if (!kakaoMaps || !map || polylinePath.length === 0) return;
+
+    const basePolyline = new kakaoMaps.Polyline({
       path: [],
       strokeWeight: 16,
       strokeColor: "#F70",
       strokeOpacity: 1,
       strokeStyle: "solid",
     });
-    polyline.setMap(map);
+    basePolyline.setMap(map);
+    basePolylineRef.current = basePolyline;
+
+    const highlightPolyline = new kakaoMaps.Polyline({
+      path: [],
+      strokeWeight: 16,
+      strokeColor: "#F70",
+      strokeOpacity: 1,
+      strokeStyle: "solid",
+    });
+    highlightPolyline.setMap(map);
+    highlightPolylineRef.current = highlightPolyline;
 
     //requestAnimationFrame 기반 순차 렌더링
-    const SEGMENT_SIZE = 2;
-    const segments = getRouteSegments({ path, size: SEGMENT_SIZE });
-
     const accumulatedPath: LatLngInstance[] = [];
+    const polylinePathLatLngList = polylinePath.map((path) => path.pointList);
     animateRouteSegments({
-      segments,
+      segments: polylinePathLatLngList,
       renderSegment: (segment) => {
         const kakaoPath = segment.map(
-          (p) => new kakaoMaps.LatLng(p.lat, p.lng),
+          (point) => new kakaoMaps.LatLng(point.lat, point.lng),
         );
         accumulatedPath.push(...kakaoPath);
-        polyline.setPath(accumulatedPath);
+        basePolyline.setPath(accumulatedPath);
       },
     });
-  }, [map, path]);
+  }, [map, kakaoMaps, polylinePath]);
 
-  const highlightRoute = () => {};
-  const resetRoute = () => {};
+  const highlightRoute = (highlightPath: LatLng[]) => {
+    if (!basePolylineRef.current || !highlightPolylineRef.current) return;
+    const kakaoPath = highlightPath.map(
+      (point) => new kakaoMaps.LatLng(point.lat, point.lng),
+    );
+    highlightPolylineRef.current.setPath(kakaoPath);
+    basePolylineRef.current.setOptions({
+      strokeColor: theme.color.GrayScale.gray4,
+    });
+  };
+
+  const resetRoute = () => {
+    if (!basePolylineRef.current || !highlightPolylineRef.current) return;
+    highlightPolylineRef.current.setPath([]);
+    basePolylineRef.current.setOptions({ strokeColor: "#F70" });
+  };
 
   return {
     highlightRoute,

@@ -88,3 +88,23 @@ export interface LatLng {
   lat: number;
   lng: number;
 }
+
+export interface PolylinePath {
+  segmentId: number;
+  pointList: LatLng[];
+}
+
+export interface MarkerPath {
+  nodeId: number;
+  bookId: number;
+  point: LatLng;
+  time: string;
+  type: string;
+}
+
+export interface HightlightPath {
+  bookId: number;
+  start: LatLng;
+  end: LatLng;
+  segmentList: number[];
+}
