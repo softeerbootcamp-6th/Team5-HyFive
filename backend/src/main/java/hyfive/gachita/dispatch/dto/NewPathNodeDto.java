@@ -25,7 +25,7 @@ public record NewPathNodeDto(
                 lat,
                 lng,
                 time,
-                NodeType.START
+                NodeType.END
         );
     }
 
