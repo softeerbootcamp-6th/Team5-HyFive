@@ -4,7 +4,7 @@ import hyfive.gachita.dispatch.dto.FinalOldPathDto;
 import hyfive.gachita.dispatch.dto.NewBookDto;
 import hyfive.gachita.dispatch.dto.NodeDto;
 import hyfive.gachita.dispatch.dto.UpdatedPathDto;
-import hyfive.gachita.dispatch.excepion.DispatchExpectedException;
+import hyfive.gachita.dispatch.excepion.DispatchException;
 import hyfive.gachita.dispatch.module.calculator.InsertPathInfoCalculator;
 import hyfive.gachita.dispatch.module.provider.SlotCandidateProvider;
 import lombok.RequiredArgsConstructor;
@@ -75,7 +75,7 @@ public class OldPathDispatchFlow {
             candidates.stream()
                     .min(Comparator.comparingInt(FinalOldPathDto::totalDuration)
                             .thenComparingInt(FinalOldPathDto::totalDistance))
-                    .orElseThrow(() -> new DispatchExpectedException("단일 경로 내 총 이동시간"));
+                    .orElseThrow(() -> new DispatchException("단일 경로 내 총 이동시간"));
 
             // 1순위 최종 후보에 올리기
             finalPathCandidates.add(candidates.get(0));
@@ -87,7 +87,7 @@ public class OldPathDispatchFlow {
                         .comparing(FinalOldPathDto::totalDuration)
                         .thenComparing(FinalOldPathDto::totalDistance)
                 )
-                .orElseThrow(() -> new DispatchExpectedException("총 이동시간"));
+                .orElseThrow(() -> new DispatchException("총 이동시간"));
 
         // TODO : 최종 경로 time 넣어주기!
     }

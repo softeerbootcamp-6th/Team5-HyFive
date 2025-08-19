@@ -1,7 +1,7 @@
 package hyfive.gachita.dispatch.module.provider;
 
 import hyfive.gachita.dispatch.dto.NodeDto;
-import hyfive.gachita.dispatch.excepion.DispatchExpectedException;
+import hyfive.gachita.dispatch.excepion.DispatchException;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalTime;
@@ -17,7 +17,7 @@ public class SlotCandidateProvider {
     ) {
         List<Integer> candidates = new ArrayList<>();
         if (originalNodes.isEmpty()) {
-            throw new DispatchExpectedException("슬롯 탐색 중 예외 발생 - 기존 경로 노드 리스트가 비어 있습니다.");
+            throw new DispatchException("슬롯 탐색 중 예외 발생 - 기존 경로 노드 리스트가 비어 있습니다.");
         }
 
         final int size = originalNodes.size();
