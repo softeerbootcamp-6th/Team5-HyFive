@@ -42,10 +42,11 @@ public class NewPathDispatchFlow {
                 .toList();
 
         // car, rental 정보
-        List<CarScheduleDto> carScheduleCandidates = idleCarListProvider.getByCondition(centerCandidates, newBookDto).stream()
-                .collect(Collectors.groupingBy(CarScheduleDto::centerDto)).values().stream()
-                .flatMap(cars -> carSelector.selectBestCarForSingleCenter(cars).stream())
-                .toList();
+        List<CarScheduleDto> carScheduleCandidates = idleCarListProvider.getByCondition(centerCandidates, newBookDto);
+//                .stream()
+//                .collect(Collectors.groupingBy(CarScheduleDto::centerDto)).values().stream()
+//                .flatMap(cars -> carSelector.selectBestCarForSingleCenter(cars).stream())
+//                .toList();
 
         // duration, distance 정보
         NewPathDto bestPath = routeInfoProvider.getAll(carScheduleCandidates, newBookDto).stream()
