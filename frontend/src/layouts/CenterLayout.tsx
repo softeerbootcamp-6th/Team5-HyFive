@@ -4,12 +4,15 @@ import { Outlet } from "react-router";
 
 const CenterLayout = () => {
   return (
-    <div>
-      <Header type="CENTER" hasTab={false} />
-      <div css={ContentContainer}>
-        <Outlet />
+    <>
+      <div>
+        <Header type="CENTER" hasTab={false} />
+        <div css={ContentContainer}>
+          <Outlet />
+        </div>
       </div>
-    </div>
+      <div id="modal-root"></div>
+    </>
   );
 };
 
