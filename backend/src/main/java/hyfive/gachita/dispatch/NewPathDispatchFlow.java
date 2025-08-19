@@ -68,7 +68,9 @@ public class NewPathDispatchFlow {
                         .thenComparing(FinalNewPathDto::totalDuration)
                         .thenComparing(FinalNewPathDto::totalDistance)
                 )
-                .orElseThrow(() -> new DispatchException("총 이동시간"));
+                // TODO: 각 필터에 대한 예외 처리 추가 필요
+                .orElseThrow(()
+                        -> new DispatchException("운행 시간이 한시간 이상이거나, 예약 시간 내에 운행이 불가능한 차량이 없습니다."));
         log.info("Best path found: {}", bestPath);
     }
 }
