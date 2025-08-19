@@ -19,7 +19,7 @@ export const useCarNavigation = () => {
         carImage: selectedCar.carImgURL,
         carModel: selectedCar.carName,
         carNumber: selectedCar.carNum,
-        maxPassenger: selectedCar.capacity,
+        maxPassenger: String(selectedCar.capacity),
         isLowFloor: selectedCar.isLowFloor,
       },
     });
