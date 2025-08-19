@@ -1,5 +1,7 @@
 package hyfive.gachita.dispatch.dto;
 
+import hyfive.gachita.application.car.Car;
+import hyfive.gachita.application.rental.Rental;
 import lombok.Builder;
 
 import java.time.LocalTime;
@@ -8,9 +10,8 @@ import java.util.List;
 @Builder
 public record FinalNewPathDto(
         FilteredCenterDto centerDto,
-        Long carId,
-        int carCapacity,
-        Long rentalId,
+        Car car,
+        Rental rental,
         LocalTime rentalStartTime,
         LocalTime rentalEndTime,
         int totalDuration,
@@ -20,11 +21,10 @@ public record FinalNewPathDto(
     public static FinalNewPathDto from(CarScheduleDto path, int totalDuration, int totalDistance, List<NewPathNodeDto> nodeList) {
         return new FinalNewPathDto(
                 path.centerDto(),
-                path.carId(),
-                path.carCapacity(),
-                path.rentalId(),
-                path.rentalStartTime(),
-                path.rentalEndTime(),
+                path.car(),
+                path.rental(),
+                path.rental().getRentalStartTime(),
+                path.rental().getRentalEndTime(),
                 totalDuration,
                 totalDistance,
                 nodeList

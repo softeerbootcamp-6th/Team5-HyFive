@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,14 +20,11 @@ public class PathService {
     public void createPath(FinalNewPathDto newPathDto, Book book) {
         LocalTime startTime = newPathDto.nodeList().get(0).time();
         LocalTime endTime = newPathDto.nodeList().get(2).time();
-
         LocalTime maybeEndTime = minTime(newPathDto.rentalEndTime(), startTime.plusHours(2));
 
-
         Path path = Path.builder()
-                // TODO: Car, Rental Entity를 넘기도록 수정
-//                .car(newPathDto.carId())
-//                .rental(newPathDto.rentalId())
+                .car(newPathDto.car())
+                .rental(newPathDto.rental())
                 .maybeStartTime(startTime)  // TODO: 고정값, 필요 없다면 제거 고려
                 .maybeEndTime(maybeEndTime)
                 .realStartTime(startTime)

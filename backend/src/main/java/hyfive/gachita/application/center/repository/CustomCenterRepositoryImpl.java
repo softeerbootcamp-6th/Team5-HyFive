@@ -65,11 +65,8 @@ public class CustomCenterRepositoryImpl implements CustomCenterRepository{
                                 center.lat,
                                 center.lng
                         ),
-                        car.id,
-                        car.capacity,
-                        rental.id,
-                        rental.rentalStartTime,
-                        rental.rentalEndTime
+                        car,
+                        rental
                 ))
                 .where(
                         center.id.in(condition.centerIdList())
