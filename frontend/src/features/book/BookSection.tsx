@@ -9,21 +9,9 @@ const BookSection = () => {
   const [activeBookId, setActiveBookId] = useState<number | null>(null);
   const { data } = useGetBook(activeTab);
 
-  //   const [activeBookWithAPIType, setActiveBookWithAPIType] = useState<
-  //     BookDataType | undefined
-  //   >(undefined);
-
-  // useEffect(() => {
-  //   if (!data || data.length === 0) return;
-  //   console.log(data);
-  //   // setActiveBookId(data[0].id);
-  //   // if (data && data.length > 0) {
-  //   //   setActiveBookId(data[0].id);
-  //   // }
-  //   // return () => setActiveBookId(null);
-  // }, [data, activeTab]);
-
-  const activeBookWithAPIType = data?.find((book) => book.id === activeBookId);
+  const activeBookWithAPIType = data?.find(
+    (book) => book.id === (activeBookId ? activeBookId : data[0].id),
+  );
 
   return (
     <div css={BookPageContainer}>
