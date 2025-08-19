@@ -9,6 +9,8 @@ import useCarForm, {
   type CarFormValues,
 } from "@/features/carUploader/useCarForm";
 import { useMemo } from "react";
+import { usePostCar } from "@/apis/CarAPI";
+import { useCenterModal } from "@/hooks/useCenterModal";
 
 type InputMode = "register" | "edit";
 interface InputSectionProps {
@@ -33,7 +35,7 @@ const InputSection = ({ type = "register", initValues }: InputSectionProps) => {
 
   const watchValues = watch();
   const isChanged = useMemo(() => {
-    if (!initValues) return false;
+    if (!initValues) return true; // 등록인 경우 변경 발생함으로 간주
     return Object.keys(initValues).some(
       (key) =>
         watchValues[key as keyof CarFormValues] !==
@@ -41,11 +43,21 @@ const InputSection = ({ type = "register", initValues }: InputSectionProps) => {
     );
   }, [watchValues, initValues]);
 
+  const { mutate } = usePostCar();
+
   return (
     <form
       css={InputSectionContainer}
-      onSubmit={handleSubmit(() => {
-        handleReset();
+      onSubmit={handleSubmit((formValues) => {
+        mutate(formValues, {
+          onSuccess: () => {
+            handleReset();
+            alert("차량 등록에 성공했습니다!");
+          },
+          onError: (response) => {
+            alert(response);
+          },
+        });
       })}
     >
       <Controller

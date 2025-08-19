@@ -11,7 +11,13 @@ const createInstance = () => {
   });
 
   instance.interceptors.response.use(
-    (response) => response.data,
+    (response) => {
+      if (response.data.isSuccess) {
+        return response.data;
+      } else {
+        throw CustomError(response.data.message);
+      }
+    },
     (error: AxiosError) => {
       throw CustomError(error);
     },
