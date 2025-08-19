@@ -3,7 +3,7 @@ package hyfive.gachita.application.path.respository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hyfive.gachita.application.car.DelYn;
-import hyfive.gachita.dispatch.dto.OldPathCandidateDto;
+import hyfive.gachita.dispatch.dto.OldPathDto;
 import hyfive.gachita.dispatch.module.condition.PathCondition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -22,7 +22,7 @@ public class CustomPathRepositoryImpl implements CustomPathRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<OldPathCandidateDto> searchPathList(PathCondition condition) {
+    public List<OldPathDto> searchPathList(PathCondition condition) {
         return queryFactory
                 .from(path)
                 .join(path.car, car)
@@ -40,7 +40,7 @@ public class CustomPathRepositoryImpl implements CustomPathRepository {
                 .transform(
                         groupBy(path.id).list(
                                 Projections.constructor(
-                                        OldPathCandidateDto.class,
+                                        OldPathDto.class,
                                         path.id,
                                         car.id,
                                         list(node)
