@@ -6,7 +6,7 @@ import {
   MarkerStartIcon,
 } from "@/assets/icons";
 import type { LatLng, MarkerPath } from "@/features/map/Map.types";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 
 interface UseVisualizeMarkerProps {
   map: MapInstance | null;
@@ -17,13 +17,16 @@ type MarkerType = "start" | "end" | "middle" | "enter" | "out";
 const useVisualizeMarker = ({ map, markerPath }: UseVisualizeMarkerProps) => {
   const markersRef = useRef<MarkerInstance[]>([]);
   const kakaoMaps = window.kakao?.maps;
-  const imageSrc = {
-    start: MarkerStartIcon,
-    middle: MarkerDefaultIcon,
-    end: MarkerEndIcon,
-    enter: MarkerEnterIcon,
-    out: MarkerOutIcon,
-  };
+  const imageSrc = useMemo(
+    () => ({
+      start: MarkerStartIcon,
+      middle: MarkerDefaultIcon,
+      end: MarkerEndIcon,
+      enter: MarkerEnterIcon,
+      out: MarkerOutIcon,
+    }),
+    [],
+  );
 
   const getMarkerType = (
     index: number,
@@ -34,48 +37,42 @@ const useVisualizeMarker = ({ map, markerPath }: UseVisualizeMarkerProps) => {
     return "middle";
   };
 
-  useEffect(() => {
-    if (!kakaoMaps || !map) return;
-    initMarker();
-  }, [map, kakaoMaps, markerPath]);
-
-  const renderMarker = ({
-    markerType,
-    point,
-  }: {
-    markerType: MarkerType;
-    point: LatLng;
-  }) => {
-    const imageSize = new kakaoMaps.Size(32, 32);
-    const markerImage = new kakaoMaps.MarkerImage(
-      imageSrc[markerType],
-      imageSize,
-    );
-    const marker = new kakaoMaps.Marker({
-      map,
-      position: new kakaoMaps.LatLng(point.lat, point.lng),
-      title: "User Marker",
-      image: markerImage,
-    });
-    return marker;
-  };
+  const renderMarker = useCallback(
+    ({ markerType, point }: { markerType: MarkerType; point: LatLng }) => {
+      const imageSize = new kakaoMaps.Size(32, 32);
+      const markerImage = new kakaoMaps.MarkerImage(
+        imageSrc[markerType],
+        imageSize,
+      );
+      const marker = new kakaoMaps.Marker({
+        map,
+        position: new kakaoMaps.LatLng(point.lat, point.lng),
+        title: "User Marker",
+        image: markerImage,
+      });
+      return marker;
+    },
+    [kakaoMaps, map, imageSrc],
+  );
 
   const removeMarker = () => {
     markersRef.current.forEach((m) => m.setMap(null));
     markersRef.current = [];
   };
 
-  const initMarker = () => {
+  const initMarker = useCallback(() => {
     removeMarker();
-    for (let i = 0; i < markerPath.length; i++) {
+
+    markersRef.current = markerPath.map((partMarkerPath, i) => {
       const markerType = getMarkerType(i, markerPath.length);
-      const marker = renderMarker({
-        markerType,
-        point: markerPath[i].point,
-      });
-      markersRef.current.push(marker);
-    }
-  };
+      return renderMarker({ markerType, point: partMarkerPath.point });
+    });
+  }, [markerPath, renderMarker]);
+
+  useEffect(() => {
+    if (!kakaoMaps || !map) return;
+    initMarker();
+  }, [map, kakaoMaps, initMarker]);
 
   const highlightMarker = ({ start, end }: { start: LatLng; end: LatLng }) => {
     removeMarker();

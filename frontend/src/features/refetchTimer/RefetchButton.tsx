@@ -1,4 +1,5 @@
 import { RefreashIcon } from "@/assets/icons";
+import { rotating } from "@/features/refetchTimer/rotateAnimation.util";
 import { theme } from "@/styles/themes.style";
 import DateFormatter from "@/utils/DateFormatter";
 import { css } from "@emotion/react";
@@ -12,14 +13,22 @@ const RefetchButton = ({ handleClick }: RefetchButtonProps) => {
   const [refetchTime, setRefetchTime] = useState(
     DateFormatter.formatDateToSplitTime(new Date()),
   );
+  const [isRefetchActive, setIsRefetchActive] = useState(false);
+
   const handleRefetch = () => {
+    setIsRefetchActive(true);
     handleClick();
     setRefetchTime(DateFormatter.formatDateToSplitTime(new Date()));
+    setTimeout(() => setIsRefetchActive(false), 1000);
   };
+
   return (
     <div css={RefetchButtonContainer} onClick={handleRefetch}>
       <p css={DateText}>{refetchTime}</p>
-      <RefreashIcon fill={color.GrayScale.gray4} />
+      <RefreashIcon
+        css={isRefetchActive ? rotating : undefined}
+        fill={color.GrayScale.gray4}
+      />
     </div>
   );
 };

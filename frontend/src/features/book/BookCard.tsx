@@ -1,5 +1,5 @@
 import { ArrowRightIcon, DotIcon, PersonIcon } from "@/assets/icons";
-import type { BookType } from "@/features/book/Book.types";
+import type { BookData, BookType } from "@/features/book/Book.types";
 import {
   BookCardContainer,
   CardTypeText,
@@ -11,17 +11,18 @@ import {
   UserWrapper,
 } from "@/features/book/BookCard.style";
 import { theme } from "@/styles/themes.style";
-import type { BookDataType } from "@/types/bookType";
+
 const { color } = theme;
 
 interface BookCardProps {
   bookType: BookType;
-  data: BookDataType;
+  data: BookData;
+  isActive: boolean;
 }
 
-const BookCard = ({ bookType, data }: BookCardProps) => {
+const BookCard = ({ bookType, data, isActive }: BookCardProps) => {
   return (
-    <div css={BookCardContainer}>
+    <div css={BookCardContainer(isActive)}>
       <div>
         <div css={TimeWrapper}>
           <p css={TimeText}>{data.bookTime}</p>
