@@ -24,7 +24,7 @@ public class RouteInfoProvider {
                 .map(candidate -> {
                     List<LatLng> nodeList = List.of(
                             new LatLng(newBookDto.startLat(), newBookDto.startLng()),
-                            new LatLng(candidate.centerDto().lat(), candidate.centerDto().lat()),
+                            new LatLng(candidate.centerDto().lat(), candidate.centerDto().lng()),
                             new LatLng(newBookDto.endLat(), newBookDto.endLng())
                     );
                     RouteInfo routeInfo = kakaoNaviService.geRouteInfo(nodeList);
