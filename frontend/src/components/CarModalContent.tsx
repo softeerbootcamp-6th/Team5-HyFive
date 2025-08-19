@@ -6,7 +6,7 @@ import Button from "@/components/Button";
 
 const { color, typography, borderRadius } = theme;
 
-interface CarModalContent {
+interface CarModalContentProps {
   type: "edit" | "delete";
   onClose?: () => void;
   onConfirm?: () => void;
@@ -23,7 +23,11 @@ const MODAL_TYPE_META = {
   },
 };
 
-const CarModalContent = ({ type, onClose, onConfirm }: CarModalContent) => {
+const CarModalContent = ({
+  type,
+  onClose,
+  onConfirm,
+}: CarModalContentProps) => {
   const { title, content } = MODAL_TYPE_META[type];
   return (
     <div css={CardContainer}>
