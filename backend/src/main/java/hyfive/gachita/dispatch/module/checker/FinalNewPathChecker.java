@@ -1,4 +1,4 @@
-package hyfive.gachita.dispatch.module.filter;
+package hyfive.gachita.dispatch.module.checker;
 
 import hyfive.gachita.dispatch.dto.FinalNewPathDto;
 import org.springframework.stereotype.Component;
@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalTime;
 
 @Component
-public class FinalNewPathValidator {
+public class FinalNewPathChecker {
     // 첫 운행의 최대 운행 시간 (1시간) 을 초과하는지 확인
     public boolean isFirstPathDurationExceed(FinalNewPathDto path) {
         return path.totalDuration() <= 3600; // 1시간 = 3600초
@@ -19,5 +19,12 @@ public class FinalNewPathValidator {
         LocalTime rentalStartTime = path.path().rentalStartTime();
         LocalTime rentalEndTime = path.path().rentalEndTime();
         return rentalStartTime.isBefore(startTime) && endTime.isBefore(rentalEndTime);
+    }
+
+    // 차량 출발 시각과 유휴 시작 시간의 차이를 최소화
+    public int compareStartTimeDifference(FinalNewPathDto path) {
+        LocalTime startTime = path.nodeList().get(0).time();
+        LocalTime rentalStartTime = path.path().rentalStartTime();
+        return startTime.toSecondOfDay() - rentalStartTime.toSecondOfDay();
     }
 }

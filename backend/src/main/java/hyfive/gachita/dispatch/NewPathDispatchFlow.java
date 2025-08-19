@@ -8,7 +8,7 @@ import hyfive.gachita.dispatch.excepion.DispatchException;
 import hyfive.gachita.dispatch.module.condition.BoundingBoxCondition;
 import hyfive.gachita.dispatch.module.condition.RadiusCondition;
 import hyfive.gachita.dispatch.module.filter.BoundingBoxFilter;
-import hyfive.gachita.dispatch.module.filter.FinalNewPathValidator;
+import hyfive.gachita.dispatch.module.checker.FinalNewPathChecker;
 import hyfive.gachita.dispatch.module.filter.HaversineFilter;
 import hyfive.gachita.dispatch.module.provider.CenterListProvider;
 import hyfive.gachita.dispatch.module.provider.IdleCarListProvider;
@@ -29,8 +29,7 @@ public class NewPathDispatchFlow {
     private final RouteInfoProvider routeInfoProvider;
     private final BoundingBoxFilter boundingBoxFilter;
     private final HaversineFilter haversineFilter;
-    private final FinalNewPathValidator finalNewPathValidator;
-    private final FinalNewPathSelector finalNewPathSelector;
+    private final FinalNewPathChecker finalNewPathChecker;
 
     private final static int RADIUS_METERS = 500;
 
@@ -61,10 +60,10 @@ public class NewPathDispatchFlow {
         // duration, distance 정보
         // TODO: 동일한 센터에 대한 유휴시간인 경우 API 호출을 최소화하도록 구현 필요
         FinalNewPathDto bestPath = routeInfoProvider.getAll(filteredScheduleList, newBookDto).stream()
-                .filter(finalNewPathValidator::isFirstPathDurationExceed)
-                .filter(finalNewPathValidator::isScheduleWithinRentalWindow)
+                .filter(finalNewPathChecker::isFirstPathDurationExceed)
+                .filter(finalNewPathChecker::isScheduleWithinRentalWindow)
                 .min(Comparator
-                        .comparing(finalNewPathSelector::compareStartTimeDifference)
+                        .comparing(finalNewPathChecker::compareStartTimeDifference)
                         .thenComparing(FinalNewPathDto::totalDuration)
                         .thenComparing(FinalNewPathDto::totalDistance)
                 )
