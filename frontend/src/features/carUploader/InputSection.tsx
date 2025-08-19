@@ -9,13 +9,12 @@ import useCarForm, {
   type CarFormValues,
 } from "@/features/carUploader/useCarForm";
 import { useMemo } from "react";
-import { usePostCar } from "@/apis/CarAPI";
-import { useCenterModal } from "@/hooks/useCenterModal";
+import { usePatchCar, usePostCar } from "@/apis/CarAPI";
 
 type InputMode = "register" | "edit";
 interface InputSectionProps {
   type?: InputMode;
-  initValues?: CarFormValues;
+  initValues?: CarFormValues & { carId: number };
 }
 const InputSection = ({ type = "register", initValues }: InputSectionProps) => {
   const MAX_PASSENGER = 25;
@@ -43,21 +42,37 @@ const InputSection = ({ type = "register", initValues }: InputSectionProps) => {
     );
   }, [watchValues, initValues]);
 
-  const { mutate } = usePostCar();
+  const { mutate: postMutate } = usePostCar();
+  const { mutate: patchMutate } = usePatchCar();
 
   return (
     <form
       css={InputSectionContainer}
       onSubmit={handleSubmit((formValues) => {
-        mutate(formValues, {
-          onSuccess: () => {
-            handleReset();
-            alert("차량 등록에 성공했습니다!");
-          },
-          onError: (response) => {
-            alert(response);
-          },
-        });
+        if (type === "register") {
+          postMutate(formValues, {
+            onSuccess: () => {
+              handleReset();
+              alert("차량 등록에 성공했습니다!");
+            },
+            onError: (response) => {
+              alert(response);
+            },
+          });
+        } else if (initValues?.carId != null) {
+          patchMutate(
+            { id: initValues.carId, values: formValues },
+            {
+              onSuccess: () => {
+                handleReset();
+                alert("차량 수정에 성공했습니다!");
+              },
+              onError: (response) => {
+                alert(response);
+              },
+            },
+          );
+        }
       })}
     >
       <Controller
