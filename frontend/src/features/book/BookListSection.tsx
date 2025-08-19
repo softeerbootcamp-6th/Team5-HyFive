@@ -43,7 +43,7 @@ const BookListSection = ({
         {data && data?.length !== 0 ? (
           data.map((bookData, idx) => (
             <div
-              key={bookData.name}
+              key={`${activeTab}-${bookData.id}`}
               onClick={() => setActiveBookId(bookData.id)}
             >
               <BookCard
