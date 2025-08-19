@@ -4,7 +4,7 @@ import hyfive.gachita.dispatch.dto.CarScheduleDto;
 import hyfive.gachita.dispatch.dto.CenterDto;
 import hyfive.gachita.dispatch.dto.NewBookDto;
 import hyfive.gachita.dispatch.dto.NewPathDto;
-import hyfive.gachita.dispatch.excepion.DispatchExpectedException;
+import hyfive.gachita.dispatch.excepion.DispatchException;
 import hyfive.gachita.dispatch.module.condition.BoundingBoxCondition;
 import hyfive.gachita.dispatch.module.condition.RadiusCondition;
 import hyfive.gachita.dispatch.module.filter.BoundingBoxFilter;
@@ -54,6 +54,6 @@ public class NewPathDispatchFlow {
                         .comparing((NewPathDto p) -> p.routeInfo().totalDuration())
                         .thenComparing(p -> p.routeInfo().totalDistance())
                 )
-                .orElseThrow(() -> new DispatchExpectedException("총 이동시간"));
+                .orElseThrow(() -> new DispatchException("총 이동시간"));
     }
 }

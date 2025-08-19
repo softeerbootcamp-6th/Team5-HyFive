@@ -19,7 +19,7 @@ public record Location(
         double y
 ) {
     public static Location fromLatLng(LatLng latLng) {
-        return new Location(null, latLng.lat(), latLng.lng());
+        return new Location(null, latLng.lng(), latLng.lat());
     }
 
     @Override

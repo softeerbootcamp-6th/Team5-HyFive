@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
@@ -17,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import java.time.LocalDate;
 import java.util.List;
 
+@Tag(name = "rental", description = "유휴 시간 관련 API")
 public interface RentalDocs {
 
     @Operation(
