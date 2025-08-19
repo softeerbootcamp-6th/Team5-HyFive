@@ -8,8 +8,11 @@ import { Controller } from "react-hook-form";
 import useCarForm, {
   type CarFormValues,
 } from "@/features/carUploader/useCarForm";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { usePatchCar, usePostCar } from "@/apis/CarAPI";
+import { useNavigate } from "react-router";
+import Modal from "@/components/Modal";
+import ModalContent from "@/components/ModalContent";
 
 type InputMode = "register" | "edit";
 interface InputSectionProps {
@@ -22,6 +25,7 @@ const InputSection = ({ type = "register", initValues }: InputSectionProps) => {
     String(index + 1),
   );
 
+  // form 관련 로직
   const {
     register,
     control,
@@ -42,8 +46,28 @@ const InputSection = ({ type = "register", initValues }: InputSectionProps) => {
     );
   }, [watchValues, initValues]);
 
+  // 서버 통신 관련 로직
   const { mutate: postMutate } = usePostCar();
   const { mutate: patchMutate } = usePatchCar();
+  const messageType = type === "register" ? "등록" : "수정";
+  const navigate = useNavigate();
+  const handleMutateSuccess = () => {
+    handleReset();
+    setIsModalOpen(true);
+    setModalContent(`차량 ${messageType}에 성공했습니다!`);
+  };
+  const handleMutateError = () => {
+    setIsModalOpen(true);
+    setModalContent(`차량 ${messageType}에 실패했습니다 :(`);
+  };
+
+  // modal 관련 로직
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState<string>("");
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    if (modalContent.includes("성공")) navigate("/center");
+  };
 
   return (
     <form
@@ -51,25 +75,15 @@ const InputSection = ({ type = "register", initValues }: InputSectionProps) => {
       onSubmit={handleSubmit((formValues) => {
         if (type === "register") {
           postMutate(formValues, {
-            onSuccess: () => {
-              handleReset();
-              alert("차량 등록에 성공했습니다!");
-            },
-            onError: (response) => {
-              alert(response);
-            },
+            onSuccess: handleMutateSuccess,
+            onError: handleMutateError,
           });
         } else if (initValues?.carId != null) {
           patchMutate(
             { id: initValues.carId, values: formValues },
             {
-              onSuccess: () => {
-                handleReset();
-                alert("차량 수정에 성공했습니다!");
-              },
-              onError: (response) => {
-                alert(response);
-              },
+              onSuccess: handleMutateSuccess,
+              onError: handleMutateError,
             },
           );
         }
@@ -140,6 +154,9 @@ const InputSection = ({ type = "register", initValues }: InputSectionProps) => {
         size="big"
         disabled={!isChanged}
       />
+      <Modal isOpen={isModalOpen} onClose={handleModalClose}>
+        <ModalContent content={modalContent} onClose={handleModalClose} />
+      </Modal>
     </form>
   );
 };
