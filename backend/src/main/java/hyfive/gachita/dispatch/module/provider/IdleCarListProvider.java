@@ -18,7 +18,7 @@ public class IdleCarListProvider {
     public List<CarScheduleDto> getByCondition(List<CenterDto> filteredCenterList, NewBookDto newBookDto) {
         CenterCondition condition = CenterCondition.builder()
                 .centerIdList(filteredCenterList)
-                .deadline(newBookDto.deadline().getFirst())
+                .deadline(newBookDto.deadline().getSecond())
                 .hospitalDate(newBookDto.hospitalDate())
                 .maybeOnTime(newBookDto.maybeOnTime())
                 .walker(newBookDto.walker())
