@@ -25,35 +25,32 @@ public class OldPathDispatchFlow {
 
     public void execute(List<Long> pathIds, NewBookDto newBook) {
         // TODO : 1. pathIds List<Long> 기준으로 path 테이블로 부터 아래 조건을 만족하는 path가 있는지 확인
+        // TODO : 2. 위에 걸러진 path ID에 해당하는 Node getAll() NodeDto
         PathCondition condition = PathCondition.builder()
                 .maybeOnTime(newBook.maybeOnTime())
                 .deadline(newBook.deadline())
                 .walker(newBook.walker())
                 .pathIds(pathIds)
                 .build();
-        List<OldPathDto> oldPathDtoList = oldPathListProvider.getByCondition(condition);
-
-        // TODO : 2. 위에 걸러진 path ID에 해당하는 Node getAll() NodeDispatchLocationDto
-        List<List<NodeDto>> pathCandidates = List.of();
+        List<OldPathDto> pathCandidates = oldPathListProvider.getByCondition(condition);
 
         // TODO : 3. 배차 차량이 존재하는가 확인 (완전 탐색 시작!!)
         // TODO : 3-1. 단일 경로 내 최적 경로 후보 선출
-
-        for(int i = 0; i < pathCandidates.size(); i++){
-            List<NodeDto> originalNodes = pathCandidates.get(i);
+        for (OldPathDto pathCandidate : pathCandidates) {
+            List<NodeDto> oldNodes = pathCandidate.nodes();
 
             NodeDto newBookStartNode = NodeDto.newBookStartNodeFrom(newBook);
             NodeDto newBookEndNode = NodeDto.newBookEndNodeFrom(newBook);
 
-            List<Integer> startSlotCandidates = slotCandidateProvider.findSlotCandidates(originalNodes, newBookStartNode);
-            List<Integer> endSlotCandidates = slotCandidateProvider.findSlotCandidates(originalNodes, newBookEndNode);
+            List<Integer> startSlotCandidates = slotCandidateProvider.findSlotCandidates(oldNodes, newBookStartNode);
+            List<Integer> endSlotCandidates = slotCandidateProvider.findSlotCandidates(oldNodes, newBookEndNode);
 
             List<FinalOldPathDto> candidates = new ArrayList<>();
 
             for (Integer si : startSlotCandidates) {
                 for (Integer ei : endSlotCandidates) {
                     if (si <= ei) {
-                        List<NodeDto> candidatePath = new ArrayList<>(originalNodes);
+                        List<NodeDto> candidatePath = new ArrayList<>(oldNodes);
                         candidatePath.add(ei, newBookEndNode);
                         candidatePath.add(si, newBookStartNode);
 
@@ -68,7 +65,7 @@ public class OldPathDispatchFlow {
                                     .pathId(null) // TODO : 값 불러오기 필요
                                     .carId(null) // TODO : 값 불러오기 필요
                                     .newNodes(newNodes)
-                                    .oldNodes(new ArrayList<>(originalNodes))
+                                    .oldNodes(new ArrayList<>(oldNodes))
                                     .totalDuration(updatedPath.routeInfo().totalDuration())
                                     .totalDistance(updatedPath.routeInfo().totalDistance())
                                     .build();

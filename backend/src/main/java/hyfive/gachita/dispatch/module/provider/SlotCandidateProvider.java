@@ -12,22 +12,22 @@ import java.util.List;
 public class SlotCandidateProvider {
 
     public List<Integer> findSlotCandidates(
-            List<NodeDto> originalNodes,
+            List<NodeDto> oldNodes,
             NodeDto newNode
     ) {
         List<Integer> candidates = new ArrayList<>();
-        if (originalNodes.isEmpty()) {
+        if (oldNodes.isEmpty()) {
             throw new DispatchException("슬롯 탐색 중 예외 발생 - 기존 경로 노드 리스트가 비어 있습니다.");
         }
 
-        final int size = originalNodes.size();
+        final int size = oldNodes.size();
         LocalTime startDeadline = newNode.deadline().getFirst();
         LocalTime endDeadline = newNode.deadline().getSecond();
 
         // 역순 탐색
         int rightBoundSlot = -1;
         for (int i = size - 1; i >= 0; i--) {
-            LocalTime t = originalNodes.get(i).time();
+            LocalTime t = oldNodes.get(i).time();
             if (!(t.isAfter(endDeadline) || t.equals(endDeadline))) {
                 rightBoundSlot = i + 1;
                 break;
@@ -37,7 +37,7 @@ public class SlotCandidateProvider {
         // 순방향 탐색
         int leftBoundSlot = -1;
         for (int i = 0; i < size; i++) {
-            LocalTime t = originalNodes.get(i).time();
+            LocalTime t = oldNodes.get(i).time();
             if (!(t.isBefore(startDeadline) || t.equals(startDeadline))) {
                 leftBoundSlot = i;
                 break;
