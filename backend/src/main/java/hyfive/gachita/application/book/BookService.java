@@ -85,7 +85,8 @@ public class BookService {
     }
 
     public ScrollRes<BookWithPathRes, BookCursor> getBookListScroll(BookStatus bookStatus, BookCursor cursor, int size) {
-        List<Book> bookList = bookRepository.findBooksForScrollWithPath(bookStatus, cursor, size);
+        Pair<LocalDateTime, LocalDateTime> dateRange = DateRangeUtil.getDateRange(LocalDateTime.now(), SearchPeriod.TODAY);
+        List<Book> bookList = bookRepository.findBooksForScrollWithPath(dateRange, bookStatus, cursor, size);
 
         boolean hasNext = bookList.size() > size;
 

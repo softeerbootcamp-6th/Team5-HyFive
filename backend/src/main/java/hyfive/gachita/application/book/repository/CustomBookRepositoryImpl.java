@@ -85,13 +85,16 @@ public class CustomBookRepositoryImpl implements CustomBookRepository {
     }
 
     @Override
-    public List<Book> findBooksForScrollWithPath(BookStatus status, BookCursor cursor, int size) {
+    public List<Book> findBooksForScrollWithPath(Pair<LocalDateTime, LocalDateTime> dateRange, BookStatus status, BookCursor cursor, int size) {
         return queryFactory
                 .select(book)
                 .from(book)
-                .join(book.path, path)
-                .join(path.car, car)
-                .where(book.bookStatus.eq(status))
+                .leftJoin(book.path, path)
+                .leftJoin(path.car, car)
+                .where(
+                        book.bookStatus.eq(status),
+                        betweenCreatedDate(book, dateRange)
+                )
                 .orderBy(book.createdAt.desc(), book.id.desc())
                 .limit(size + 1)
                 .fetch();
