@@ -80,7 +80,7 @@ public class CustomCenterRepositoryImpl implements CustomCenterRepository{
                         car.lowFloor.eq(condition.walker()),
                         car.delYn.eq(DelYn.N)
                 )
-                .leftJoin(rental)
+                .join(rental)
                 .on(
                         rental.car.id.eq(car.id)
                                 .and(
