@@ -10,7 +10,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class PathNodeListProvider  {
+public class OldPathListProvider {
     private final PathRepository pathRepository;
 
     public List<OldPathDto> getByCondition(PathCondition condition) {
