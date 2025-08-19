@@ -1,8 +1,7 @@
-import type { BookAPIItem } from "@/features/book/Book.types";
-import type { BookDataType } from "@/types/bookType.types";
+import type { BookAPIData, BookData } from "@/features/book/Book.types";
 
 export const APIMatcher = {
-  matchBookAPI: (apiItem: BookAPIItem): BookDataType => {
+  matchBookAPI: (apiItem: BookAPIData): BookData => {
     return {
       id: apiItem.id,
       bookStatus: apiItem.bookStatus,

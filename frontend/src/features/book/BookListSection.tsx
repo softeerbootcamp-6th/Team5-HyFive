@@ -4,14 +4,14 @@ import Tabs from "@/components/Tabs";
 import BookCard from "@/features/book/BookCard";
 import { bookDataList } from "@/mocks/bookMocks";
 import { theme } from "@/styles/themes.style";
-import type { BookDataType } from "@/types/bookType.types";
 import TabMatcher from "@/utils/TabMatcher";
 import { css } from "@emotion/react";
 import { type Dispatch, type SetStateAction } from "react";
+import type { BookData } from "@/features/book/Book.types";
 const { color, typography } = theme;
 
 interface BookListSectionProps {
-  data: BookDataType[] | undefined;
+  data: BookData[] | undefined;
   activeTab: string;
   setActiveTab: Dispatch<SetStateAction<string>>;
   setActiveBookId: Dispatch<SetStateAction<number | null>>;

@@ -1,5 +1,5 @@
 import { ArrowRightIcon, DotIcon, PersonIcon } from "@/assets/icons";
-import type { BookType } from "@/features/book/Book.types";
+import type { BookData, BookType } from "@/features/book/Book.types";
 import {
   BookCardContainer,
   CardTypeText,
@@ -11,12 +11,12 @@ import {
   UserWrapper,
 } from "@/features/book/BookCard.style";
 import { theme } from "@/styles/themes.style";
-import type { BookDataType } from "@/types/bookType.types";
+
 const { color } = theme;
 
 interface BookCardProps {
   bookType: BookType;
-  data: BookDataType;
+  data: BookData;
 }
 
 const BookCard = ({ bookType, data }: BookCardProps) => {

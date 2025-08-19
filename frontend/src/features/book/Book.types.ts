@@ -2,16 +2,35 @@ export type BookType = "pending" | "success" | "fail";
 
 export type BookStatus = "NEW" | "SUCCESS" | "FAIL";
 
+export interface BookData {
+  id: number;
+  bookStatus: string;
+  name: string;
+  phone: string;
+  isExistWalkingDevice: boolean;
+  bookTime: string;
+  bookDate: string;
+  userStartLocation: string;
+  userEndLocation: string;
+  hospitalTime: string;
+  routeId: string;
+  carNumber: string;
+  routeStartTime: string;
+  routeEndTime: string;
+  routeStartLocation: string;
+  routeEndLocation: string;
+}
+
 export interface BookAPIResponse {
   isSuccess: boolean;
   code: number;
   message: string;
   data: {
-    items: BookAPIItem[];
+    items: BookAPIData[];
   };
 }
 
-export interface BookAPIItem {
+export interface BookAPIData {
   id: number;
   bookName: string;
   bookTel: string;

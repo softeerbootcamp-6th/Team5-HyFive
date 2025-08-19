@@ -1,20 +1,24 @@
 import EmptyUI from "@/components/EmptyUI";
 import Table from "@/components/table/Table";
+import type { BookData } from "@/features/book/Book.types";
 import RouteCard from "@/features/book/RouteCard";
 import { theme } from "@/styles/themes.style";
-import type { BookDataType } from "@/types/bookType.types";
 import TableMatcher from "@/utils/TableMatcher";
 import TabMatcher from "@/utils/TabMatcher";
 import { css } from "@emotion/react";
 const { typography } = theme;
 
 interface BookDetailSectionProps {
-  data: BookDataType | undefined;
+  data: BookData | undefined;
   activeTab: string;
 }
 
 const BookDetailSection = ({ data, activeTab }: BookDetailSectionProps) => {
-  const { id, bookStatus, ...activeBook } = data ?? {};
+  // tab 로직
+  const parsedActiveTab = TabMatcher.matchBookTypeKRToENG(activeTab);
+
+  // table 로직
+  const { id, bookStatus, ...activeBook } = data ?? {}; //id, bookStatus 제외
   const { userRows, bookingRows, routeRows } = TableMatcher.matchBookTableType(
     data ? [activeBook] : [],
   );
@@ -23,7 +27,6 @@ const BookDetailSection = ({ data, activeTab }: BookDetailSectionProps) => {
     { title: "예약 정보", data: bookingRows },
     { title: "이용 경로 정보", data: routeRows },
   ];
-  const parsedActiveTab = TabMatcher.matchBookTypeKRToENG(activeTab);
 
   if (!data) return <EmptyUI />;
 
