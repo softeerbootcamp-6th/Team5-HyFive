@@ -16,5 +16,6 @@ public interface CustomBookRepository {
                                          BookStatus status,
                                          Pageable pageable);
     List<Book> findBooksForScroll(BookStatus status, BookCursor cursorId, int size);
+    List<Book> findBooksForScrollWithPath(BookStatus status, BookCursor cursor, int size);
     List<Book> searchCandidates(LocalDate hospitalTime);
 }

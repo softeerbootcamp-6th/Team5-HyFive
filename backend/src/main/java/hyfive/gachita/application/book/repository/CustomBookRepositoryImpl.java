@@ -5,7 +5,6 @@ import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hyfive.gachita.application.book.Book;
 import hyfive.gachita.application.book.BookStatus;
-
 import hyfive.gachita.application.book.QBook;
 import hyfive.gachita.application.book.dto.BookCursor;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +19,8 @@ import java.time.LocalTime;
 import java.util.List;
 
 import static hyfive.gachita.application.book.QBook.book;
+import static hyfive.gachita.application.car.QCar.car;
+import static hyfive.gachita.application.path.QPath.path;
 
 
 @RequiredArgsConstructor
@@ -78,6 +79,19 @@ public class CustomBookRepositoryImpl implements CustomBookRepository {
                         book.createdAt.between(startOfToday, endOfToday),
                         cursorCondition
                 )
+                .orderBy(book.createdAt.desc(), book.id.desc())
+                .limit(size + 1)
+                .fetch();
+    }
+
+    @Override
+    public List<Book> findBooksForScrollWithPath(BookStatus status, BookCursor cursor, int size) {
+        return queryFactory
+                .select(book)
+                .from(book)
+                .join(book.path, path)
+                .join(path.car, car)
+                .where(book.bookStatus.eq(status))
                 .orderBy(book.createdAt.desc(), book.id.desc())
                 .limit(size + 1)
                 .fetch();

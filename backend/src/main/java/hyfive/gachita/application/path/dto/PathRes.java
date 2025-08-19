@@ -1,6 +1,7 @@
 package hyfive.gachita.application.path.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
+import hyfive.gachita.application.path.Path;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
@@ -35,5 +36,16 @@ public record PathRes(
                 this.endTime = endTime;
                 this.startAddr = startAddr;
                 this.endAddr = endAddr;
+        }
+
+        public static PathRes from(Path path) {
+                return new PathRes(
+                        path.getId(),
+                        path.getCar().getCarNumber(),
+                        path.getRealStartTime(),
+                        path.getRealEndTime(),
+                        path.getStartAddr(),
+                        path.getEndAddr()
+                );
         }
 }

@@ -2,6 +2,7 @@ package hyfive.gachita.docs;
 
 import hyfive.gachita.application.book.BookStatus;
 import hyfive.gachita.application.book.dto.BookCursor;
+import hyfive.gachita.application.book.dto.BookWithPathRes;
 import hyfive.gachita.application.common.dto.ScrollRes;
 import hyfive.gachita.application.common.enums.SearchPeriod;
 import hyfive.gachita.application.book.dto.BookRes;
@@ -123,7 +124,7 @@ public interface BookDocs {
                     content = @Content()
             )
     })
-    BaseResponse<ScrollRes<BookRes, BookCursor>> getBookListScroll(
+    BaseResponse<ScrollRes<BookWithPathRes, BookCursor>> getBookListScroll(
             @Parameter(
                     name = "status",
                     description = "예약 상태",
