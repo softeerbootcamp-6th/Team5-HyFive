@@ -6,7 +6,7 @@ import hyfive.gachita.dispatch.module.condition.BoundingBoxCondition;
 import hyfive.gachita.dispatch.module.condition.RadiusCondition;
 import hyfive.gachita.dispatch.module.filter.BoundingBoxFilter;
 import hyfive.gachita.dispatch.module.filter.HaversineFilter;
-import hyfive.gachita.dispatch.module.provider.PathCandidateProvider;
+import hyfive.gachita.dispatch.module.provider.FilteredPathProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -27,13 +27,13 @@ import java.util.stream.Stream;
 public class DispatchFlowSelector {
 
     private final int RADIUS_METERS = 500;
-    private final PathCandidateProvider pathCandidateProvider;
+    private final FilteredPathProvider filteredPathProvider;
     private final BoundingBoxFilter boundingBoxFilter;
     private final HaversineFilter haversineFilter;
     private final NewPathDispatchFlow newPathDispatchFlow;
 
     public void execute(NewBookDto newBookDto){
-        List<FilteredPathDto> candidates = pathCandidateProvider.getByCondition(newBookDto.hospitalDate());
+        List<FilteredPathDto> candidates = filteredPathProvider.getByCondition(newBookDto.hospitalDate());
 
         BoundingBoxCondition bbConditionStart = BoundingBoxCondition.from(newBookDto.startLat(), newBookDto.startLng(), RADIUS_METERS);
         BoundingBoxCondition bbConditionEnd = BoundingBoxCondition.from(newBookDto.endLat(), newBookDto.endLng(), RADIUS_METERS);

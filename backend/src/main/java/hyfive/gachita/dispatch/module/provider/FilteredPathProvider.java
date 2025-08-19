@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 @Component
 @RequiredArgsConstructor
-public class PathCandidateProvider{
+public class FilteredPathProvider {
     private final BookRepository bookRepository;
 
     public List<FilteredPathDto> getByCondition(LocalDate hospitalTime) {
