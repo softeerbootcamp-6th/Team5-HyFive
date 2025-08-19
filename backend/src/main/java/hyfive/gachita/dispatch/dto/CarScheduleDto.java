@@ -3,7 +3,7 @@ package hyfive.gachita.dispatch.dto;
 import java.time.LocalTime;
 
 public record CarScheduleDto(
-        CenterDto centerDto,
+        FilteredCenterDto centerDto,
         Long carId,
         int carCapacity,
         Long rentalId,

@@ -1,11 +1,13 @@
 package hyfive.gachita.dispatch.dto;
 
-import hyfive.gachita.client.kakao.RouteInfo;
+import lombok.Builder;
 
 import java.util.List;
 
-public record NewPathDto(
+@Builder
+public record FinalNewPathDto(
         CarScheduleDto path,
-        RouteInfo routeInfo,
+        int totalDuration,
+        int totalDistance,
         List<NewPathNodeDto> nodeList
 ) {}

@@ -5,7 +5,7 @@ import hyfive.gachita.client.kakao.KakaoNaviService;
 import hyfive.gachita.client.kakao.RouteInfo;
 import hyfive.gachita.dispatch.dto.NewBookDto;
 import hyfive.gachita.dispatch.dto.CarScheduleDto;
-import hyfive.gachita.dispatch.dto.NewPathDto;
+import hyfive.gachita.dispatch.dto.FinalNewPathDto;
 import hyfive.gachita.dispatch.dto.NewPathNodeDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -19,7 +19,7 @@ import java.util.List;
 public class RouteInfoProvider {
     private final KakaoNaviService kakaoNaviService;
 
-    public List<NewPathDto> getAll(List<CarScheduleDto> candidates, NewBookDto newBookDto) {
+    public List<FinalNewPathDto> getAll(List<CarScheduleDto> candidates, NewBookDto newBookDto) {
         return candidates.stream()
                 .map(candidate -> {
                     List<LatLng> nodeList = List.of(
@@ -43,7 +43,12 @@ public class RouteInfoProvider {
                     nodeDtoList.add(NewPathNodeDto.createCenterNode(
                             candidate.centerDto().lat(), candidate.centerDto().lng(), centerTime));
 
-                    return new NewPathDto(candidate, routeInfo, nodeDtoList);
+                    return FinalNewPathDto.builder()
+                            .totalDuration(routeInfo.totalDuration())
+                            .totalDistance(routeInfo.totalDistance())
+                            .path(candidate)
+                            .nodeList(nodeDtoList)
+                            .build();
                 })
                 .toList();
     }

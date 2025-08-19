@@ -8,7 +8,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import hyfive.gachita.application.car.DelYn;
 import hyfive.gachita.application.center.dto.CenterListRes;
 import hyfive.gachita.dispatch.dto.CarScheduleDto;
-import hyfive.gachita.dispatch.dto.CenterDto;
+import hyfive.gachita.dispatch.dto.FilteredCenterDto;
 import hyfive.gachita.dispatch.module.condition.CenterCondition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -60,7 +60,7 @@ public class CustomCenterRepositoryImpl implements CustomCenterRepository{
                 .select(Projections.constructor(
                         CarScheduleDto.class,
                         Projections.constructor(
-                                CenterDto.class,
+                                FilteredCenterDto.class,
                                 center.id,
                                 center.lat,
                                 center.lng

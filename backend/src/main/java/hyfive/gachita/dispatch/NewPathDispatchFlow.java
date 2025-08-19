@@ -1,9 +1,9 @@
 package hyfive.gachita.dispatch;
 
 import hyfive.gachita.dispatch.dto.CarScheduleDto;
-import hyfive.gachita.dispatch.dto.CenterDto;
+import hyfive.gachita.dispatch.dto.FilteredCenterDto;
 import hyfive.gachita.dispatch.dto.NewBookDto;
-import hyfive.gachita.dispatch.dto.NewPathDto;
+import hyfive.gachita.dispatch.dto.FinalNewPathDto;
 import hyfive.gachita.dispatch.excepion.DispatchException;
 import hyfive.gachita.dispatch.module.condition.BoundingBoxCondition;
 import hyfive.gachita.dispatch.module.condition.RadiusCondition;
@@ -30,23 +30,23 @@ public class NewPathDispatchFlow {
 
     private final static int RADIUS_METERS = 500;
 
-    // TODO: DTO 네이밍 컨벤션에 맞게 수정 FilteredCenterDto, NewPathCandidateDto, FinalNewPathDto
     public void execute(NewBookDto newBookDto) {
         // center 정보
         BoundingBoxCondition boundingBoxCondition = BoundingBoxCondition.from(newBookDto.startLat(), newBookDto.startLng(), RADIUS_METERS);
         RadiusCondition radiusCondition = RadiusCondition.from(newBookDto.startLat(), newBookDto.startLng(), RADIUS_METERS);
-        List<CenterDto> centerCandidates = centerListProvider.getAll().stream()
+
+        List<FilteredCenterDto> filteredCenterList = centerListProvider.getAll().stream()
                 .filter(center -> boundingBoxFilter.test(center, boundingBoxCondition))
                 .filter(center -> haversineFilter.test(center, radiusCondition))
                 .toList();
 
         // car, rental 정보
-        List<CarScheduleDto> carScheduleCandidates = idleCarListProvider.getByCondition(centerCandidates, newBookDto);
+        List<CarScheduleDto> filteredScheduleList = idleCarListProvider.getByCondition(filteredCenterList, newBookDto);
 
         // duration, distance 정보
         // TODO: 모듈로 분리
-        NewPathDto bestPath = routeInfoProvider.getAll(carScheduleCandidates, newBookDto).stream()
-                .filter(p -> p.routeInfo().totalDuration() < 3600)
+        FinalNewPathDto bestPath = routeInfoProvider.getAll(filteredScheduleList, newBookDto).stream()
+                .filter(p -> p.totalDuration() < 3600)
                 // 센터 ~ 하차 시간이 모두 유휴시간에 포함되는지
                 .filter(p -> {
                     LocalTime startTime = p.nodeList().get(0).time();
@@ -57,13 +57,13 @@ public class NewPathDispatchFlow {
                 })
                 .min(Comparator
                         // 차량 출발 시각과 유휴 시작 시간의 차이를 최소화
-                        .comparing((NewPathDto p) -> {
+                        .comparing((FinalNewPathDto p) -> {
                             LocalTime startTime = p.nodeList().get(0).time();
                             LocalTime rentalStartTime = p.path().rentalStartTime();
                             return startTime.toSecondOfDay() - rentalStartTime.toSecondOfDay();
                         })
-                        .thenComparing(p -> p.routeInfo().totalDuration())
-                        .thenComparing(p -> p.routeInfo().totalDistance())
+                        .thenComparing(FinalNewPathDto::totalDuration)
+                        .thenComparing(FinalNewPathDto::totalDistance)
                 )
                 .orElseThrow(() -> new DispatchException("총 이동시간"));
     }
