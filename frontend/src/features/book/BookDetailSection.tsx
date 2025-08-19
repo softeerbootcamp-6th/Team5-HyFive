@@ -18,7 +18,7 @@ const BookDetailSection = ({ data, activeTab }: BookDetailSectionProps) => {
   const parsedActiveTab = TabMatcher.matchBookTypeKRToENG(activeTab);
 
   // table 로직
-  const { id, bookStatus, ...activeBook } = data ?? {}; //id, bookStatus 제외
+  const { id: _id, bookStatus: _bookStatus, ...activeBook } = data ?? {}; //id, bookStatus 제외
   const { userRows, bookingRows, routeRows } = TableMatcher.matchBookTableType(
     data ? [activeBook] : [],
   );
