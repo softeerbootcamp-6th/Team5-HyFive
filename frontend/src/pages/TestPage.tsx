@@ -27,6 +27,8 @@ import CarInfoCard from "@/features/car/CarInfoCard";
 import type { CarType } from "@/features/car/Car.type";
 
 import CarImage from "@/assets/images/OriginalCarImg.png";
+import TimePicker from "@/features/timePicker/TimePicker";
+import AddressInput from "@/features/addressInput/AddressInput";
 
 const TestPage = () => {
   const { userRows, bookingRows, routeRows } =
@@ -300,6 +302,18 @@ const TestPage = () => {
               setIsSelected={setSelectedCarId}
             />
           ))}
+        </div>
+      ),
+    },
+    {
+      label: "타임 피커 컴포넌트",
+      component: <TimePicker onCancel={() => {}} onConfirm={() => {}} />,
+    },
+    {
+      label: "장소 입력 컴포넌트",
+      component: (
+        <div css={{ width: "600px" }}>
+          <AddressInput />
         </div>
       ),
     },
