@@ -4,8 +4,7 @@ import hyfive.gachita.application.path.Path;
 import hyfive.gachita.application.book.Book;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalTime;
 
@@ -13,6 +12,9 @@ import java.time.LocalTime;
 @Setter
 @Entity
 @Table(name = "node")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Node {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

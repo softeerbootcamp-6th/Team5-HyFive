@@ -5,8 +5,7 @@ import hyfive.gachita.application.node.Node;
 import hyfive.gachita.application.rental.Rental;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -16,6 +15,9 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "path")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Path {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -69,6 +71,10 @@ public class Path {
     @Column(name = "drive_status", nullable = false, columnDefinition = "VARCHAR(50)")
     private DriveStatus driveStatus = DriveStatus.WAITING;
 
-    @OneToMany(mappedBy = "path", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "path", fetch = FetchType.LAZY, cascade=CascadeType.ALL)
     private List<Node> nodeList;
+
+    public void setNodes(List<Node> nodeList) {
+        this.nodeList = nodeList;
+    }
 }
