@@ -2,6 +2,8 @@ package hyfive.gachita.application.path.respository;
 
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import hyfive.gachita.application.path.dto.PathRes;
+import hyfive.gachita.application.path.dto.QPathRes;
 import hyfive.gachita.dispatch.dto.NodeDispatchLocationDto;
 import hyfive.gachita.dispatch.dto.PathDispatchDto;
 import hyfive.gachita.dispatch.module.condition.PathCondition;
@@ -11,10 +13,12 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static hyfive.gachita.application.car.QCar.car;
 import static hyfive.gachita.application.node.QNode.node;
 import static hyfive.gachita.application.path.QPath.path;
+import static hyfive.gachita.application.book.QBook.book;
 
 import static java.util.stream.Collectors.*;
 
@@ -50,6 +54,25 @@ public class CustomPathRepositoryImpl implements CustomPathRepository {
                     return createPathDto(pathId, nodeList);
                 })
                 .toList();
+    }
+
+    @Override
+    public Optional<PathRes> findPathResByBookId(Long bookId) {
+        return Optional.ofNullable(queryFactory
+                .select(new QPathRes(
+                        path.id,
+                        car.carNumber,
+                        path.realStartTime,
+                        path.realEndTime,
+                        path.startAddr,
+                        path.endAddr
+                ))
+                .from(book)
+                .join(book.path, path)
+                .join(path.car, car)
+                .where(book.id.eq(bookId))
+                .fetchOne()
+        );
     }
 
     private Map<Long, List<Node>> converToMap(List<Tuple> result) {
