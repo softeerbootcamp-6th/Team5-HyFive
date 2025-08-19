@@ -9,13 +9,7 @@ import java.time.LocalTime;
 public record FilteredCenterDto(
         Long centerId,
         double centerLat,
-        double centerLng,
-        Long carId,
-
-        LocalTime maybeOnTime, // 예상 탑승 시간 (deadline - bookDuration)
-        LocalTime deadline,    // 마지노선 하차 시간
-        int duration,          // 총 이동 시간 (단위 : sec)
-        int distance           // 총 이동 거리 (단위 : meters)
+        double centerLng
 ) implements FilterDto {
 
     public static FilteredCenterDto from(Center center) {
