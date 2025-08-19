@@ -1,5 +1,6 @@
 package hyfive.gachita.dispatch.dto;
 
+import hyfive.gachita.application.node.Node;
 import hyfive.gachita.application.node.NodeType;
 import lombok.Builder;
 import org.springframework.data.util.Pair;
@@ -17,6 +18,18 @@ public record NodeDto(
 
         Pair<LocalTime, LocalTime> deadline
 ) {
+    /**
+     * 기존 경로의 node
+     */
+    public static NodeDto from(Node node) {
+        return NodeDto.builder()
+                .nodeId(node.getId())
+                .lat(node.getLat())
+                .lng(node.getLng())
+                .time(node.getTime())
+                .type(node.getType())
+                .build();
+    }
 
     /**
      * 시작(탑승) 노드
