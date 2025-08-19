@@ -1,9 +1,9 @@
 package hyfive.gachita.dispatch;
 
-import hyfive.gachita.client.kakao.RouteInfo;
 import hyfive.gachita.dispatch.dto.FinalOldPathDto;
 import hyfive.gachita.dispatch.dto.NewBookDto;
 import hyfive.gachita.dispatch.dto.NodeDto;
+import hyfive.gachita.dispatch.dto.UpdatedPathDto;
 import hyfive.gachita.dispatch.excepion.DispatchExpectedException;
 import hyfive.gachita.dispatch.module.calculator.InsertPathInfoCalculator;
 import hyfive.gachita.dispatch.module.provider.SlotCandidateProvider;
@@ -49,19 +49,23 @@ public class OldPathDispatchFlow {
                         candidatePath.add(ei, newBookEndNode);
                         candidatePath.add(si, newBookStartNode);
 
-                        RouteInfo candidatePathRouteInfo = insertPathInfoCalculator.calculate(candidatePath);
-                        if (candidatePathRouteInfo != null) {
+                        UpdatedPathDto updatedPath = insertPathInfoCalculator.calculate(candidatePath);
+                        if (updatedPath != null) {
+                            List<NodeDto> newNodes = List.of(
+                                    updatedPath.updatedNodes().remove(ei.intValue()),
+                                    updatedPath.updatedNodes().remove(si.intValue())
+                            );
 
-                            FinalOldPathDto result = FinalOldPathDto.builder()
+                            FinalOldPathDto finalOldPathDto = FinalOldPathDto.builder()
                                     .pathId(null) // TODO : 값 불러오기 필요
                                     .carId(null) // TODO : 값 불러오기 필요
-                                    .newNodes(List.of(newBookStartNode, newBookEndNode))
+                                    .newNodes(newNodes)
                                     .oldNodes(new ArrayList<>(originalNodes))
-                                    .totalDuration(candidatePathRouteInfo.totalDuration())
-                                    .totalDistance(candidatePathRouteInfo.totalDistance())
+                                    .totalDuration(updatedPath.routeInfo().totalDuration())
+                                    .totalDistance(updatedPath.routeInfo().totalDistance())
                                     .build();
 
-                            candidates.add(result);
+                            candidates.add(finalOldPathDto);
                         }
                     }
                 }

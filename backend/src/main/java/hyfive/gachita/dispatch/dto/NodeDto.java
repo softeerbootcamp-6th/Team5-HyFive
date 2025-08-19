@@ -64,4 +64,18 @@ public record NodeDto(
                 .deadline(Pair.of(newBook.deadline().minusMinutes(30), newBook.deadline()))
                 .build();
     }
+
+    /**
+     * 기존 NodeDto에서 newTime으로 대체
+     */
+    public static NodeDto updateTime(NodeDto nodeDto, LocalTime newTime) {
+        return NodeDto.builder()
+                .nodeId(nodeDto.nodeId())
+                .lat(nodeDto.lat())
+                .lng(nodeDto.lng())
+                .time(newTime)
+                .type(nodeDto.type())
+                .deadline(nodeDto.deadline())
+                .build();
+    }
 }
