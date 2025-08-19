@@ -24,8 +24,8 @@ public class OldPathDispatchFlow {
     private final List<FinalOldPathDto> finalPathCandidates = new  ArrayList<>();
 
     public void execute(List<Long> pathIds, NewBookDto newBook) {
-        // TODO : 1. pathIds List<Long> 기준으로 path 테이블로 부터 아래 조건을 만족하는 path가 있는지 확인
-        // TODO : 2. 위에 걸러진 path ID에 해당하는 Node getAll() NodeDto
+        // 1. pathIds List<Long> 기준으로 path 테이블로 부터 아래 조건을 만족하는 path가 있는지 확인
+        // 2. 위에 걸러진 path ID에 해당하는 Node getAll() NodeDto
         PathCondition condition = PathCondition.builder()
                 .maybeOnTime(newBook.maybeOnTime())
                 .deadline(newBook.deadline())
@@ -34,9 +34,11 @@ public class OldPathDispatchFlow {
                 .build();
         List<OldPathDto> pathCandidates = oldPathListProvider.getByCondition(condition);
 
-        // TODO : 3. 배차 차량이 존재하는가 확인 (완전 탐색 시작!!)
-        // TODO : 3-1. 단일 경로 내 최적 경로 후보 선출
+        // 3. 배차 차량이 존재하는 지 확인
+        // 3-1. 단일 경로 내 최적 경로 후보 선출
         for (OldPathDto pathCandidate : pathCandidates) {
+            Long pathId = pathCandidate.pathId();
+            Long carId = pathCandidate.carId();
             List<NodeDto> oldNodes = pathCandidate.nodes();
 
             NodeDto newBookStartNode = NodeDto.newBookStartNodeFrom(newBook);
@@ -62,8 +64,8 @@ public class OldPathDispatchFlow {
                             );
 
                             FinalOldPathDto finalOldPathDto = FinalOldPathDto.builder()
-                                    .pathId(null) // TODO : 값 불러오기 필요
-                                    .carId(null) // TODO : 값 불러오기 필요
+                                    .pathId(pathId)
+                                    .carId(carId)
                                     .newNodes(newNodes)
                                     .oldNodes(new ArrayList<>(oldNodes))
                                     .totalDuration(updatedPath.routeInfo().totalDuration())
@@ -86,14 +88,12 @@ public class OldPathDispatchFlow {
             finalPathCandidates.add(candidates.get(0));
         }
 
-        // TODO : 3-2. 다중 경로 중 최적 경로 선출
+        // 3-2. 다중 경로 중 최적 경로 선출
         FinalOldPathDto bestPath = finalPathCandidates.stream()
                 .min(Comparator
                         .comparing(FinalOldPathDto::totalDuration)
                         .thenComparing(FinalOldPathDto::totalDistance)
                 )
                 .orElseThrow(() -> new DispatchException("총 이동시간"));
-
-        // TODO : 최종 경로 time 넣어주기!
     }
 }
