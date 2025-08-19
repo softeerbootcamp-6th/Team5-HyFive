@@ -69,7 +69,7 @@ const InputSection = ({ type = "register", initValues }: InputSectionProps) => {
   const [modalContent, setModalContent] = useState<string>("");
   const handleModalClose = () => {
     setIsModalOpen(false);
-    if (modalContent.includes("성공")) navigate("/center");
+    if (modalContent.includes("성공")) void navigate("/center");
   };
 
   return (
@@ -81,7 +81,7 @@ const InputSection = ({ type = "register", initValues }: InputSectionProps) => {
             onSuccess: handleMutateSuccess,
             onError: (response) => handleMutateError(response),
           });
-        } else if (initValues?.carId != null) {
+        } else if (initValues) {
           patchMutate(
             { id: initValues.carId, values: formValues },
             {
