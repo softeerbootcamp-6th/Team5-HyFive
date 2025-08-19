@@ -46,12 +46,12 @@ public class RouteInfoProvider {
                             candidate.centerDto().lat(), candidate.centerDto().lng(), centerTime));
 
                     log.info("NodeList Info : {}", nodeDtoList);
-                    return FinalNewPathDto.builder()
-                            .totalDuration(routeInfo.totalDuration())
-                            .totalDistance(routeInfo.totalDistance())
-                            .path(candidate)
-                            .nodeList(nodeDtoList)
-                            .build();
+                    return FinalNewPathDto.from(
+                            candidate,
+                            routeInfo.totalDuration(),
+                            routeInfo.totalDistance(),
+                            nodeDtoList
+                    );
                 })
                 .toList();
     }
