@@ -158,7 +158,11 @@ const InputSection = ({ type = "register", initValues }: InputSectionProps) => {
         disabled={!isChanged}
       />
       <Modal isOpen={isModalOpen} onClose={handleModalClose}>
-        <ModalContent content={modalContent} onClose={handleModalClose} />
+        <ModalContent
+          type="alert"
+          content={modalContent}
+          onClose={handleModalClose}
+        />
       </Modal>
     </form>
   );
