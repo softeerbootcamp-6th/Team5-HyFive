@@ -19,7 +19,7 @@ public class PathService {
     private final PathRepository pathRepository;
 
     @Transactional
-    public void createPathWithNodes(FinalNewPathDto finalPathDto, Book book) {
+    public Path createPathWithNodes(FinalNewPathDto finalPathDto, Book book) {
         LocalTime startTime = finalPathDto.nodeList().get(0).time();
         LocalTime endTime = finalPathDto.nodeList().get(2).time();
         LocalTime maybeEndTime = minTime(finalPathDto.rentalEndTime(), startTime.plusHours(2));
@@ -49,7 +49,7 @@ public class PathService {
                         .build()
                 ).toList();
         path.setNodes(nodeList);
-        pathRepository.save(path);
+        return pathRepository.save(path);
     }
 
     public PathRes getPathByBook(Long bookId) {

@@ -1,6 +1,7 @@
 package hyfive.gachita.application.book;
 
 import hyfive.gachita.application.book.dto.BookWithPathRes;
+import hyfive.gachita.application.path.Path;
 import hyfive.gachita.client.geocode.GeoCodeService;
 import hyfive.gachita.client.geocode.dto.LatLng;
 import hyfive.gachita.application.book.dto.BookCursor;
@@ -118,6 +119,13 @@ public class BookService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.NO_EXIST_VALUE, "DB에 예약 데이터가 존재하지 않습니다."));
 
         book.update(bookStatus);
+    }
+
+    @Transactional
+    public void updatePath(Long id, Path path) {
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NO_EXIST_VALUE, "DB에 예약 데이터가 존재하지 않습니다."));
+        book.setPath(path);
     }
 }
 
