@@ -1,5 +1,6 @@
 package hyfive.gachita.dispatch;
 
+import hyfive.gachita.client.kakao.RouteInfo;
 import hyfive.gachita.dispatch.dto.FinalPathCandidateDto;
 import hyfive.gachita.dispatch.dto.NewBookDto;
 import hyfive.gachita.dispatch.dto.NodeDto;
@@ -41,8 +42,20 @@ public class OldPathDispatchFlow {
                     candidatePath.add(ei, newBookEndNode);
                     candidatePath.add(si, newBookStartNode);
 
-                    FinalPathCandidateDto result = insertPathInfoCalculator.calculate(candidatePath);
-                    if (result != null) candidates.add(result);
+                    RouteInfo candidatePathRouteInfo = insertPathInfoCalculator.calculate(candidatePath);
+                    if (candidatePathRouteInfo != null) {
+
+                        FinalPathCandidateDto result = FinalPathCandidateDto.builder()
+                            .pathId(null) // TODO : 값 불러오기 필요
+                            .carId(null) // TODO : 값 불러오기 필요
+                            .newNodes(List.of(newBookStartNode, newBookEndNode))
+                            .oldNodes(new ArrayList<>(originalNodes))
+                            .totalDuration(candidatePathRouteInfo.totalDuration())
+                            .totalDistance(candidatePathRouteInfo.totalDistance())
+                            .build();
+
+                        candidates.add(result);
+                    }
                 }
             }
         }
