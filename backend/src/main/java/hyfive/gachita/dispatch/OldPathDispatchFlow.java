@@ -1,11 +1,10 @@
 package hyfive.gachita.dispatch;
 
-import hyfive.gachita.dispatch.dto.FinalOldPathDto;
-import hyfive.gachita.dispatch.dto.NewBookDto;
-import hyfive.gachita.dispatch.dto.NodeDto;
-import hyfive.gachita.dispatch.dto.UpdatedPathDto;
+import hyfive.gachita.dispatch.dto.*;
 import hyfive.gachita.dispatch.excepion.DispatchException;
 import hyfive.gachita.dispatch.module.calculator.InsertPathInfoCalculator;
+import hyfive.gachita.dispatch.module.condition.PathCondition;
+import hyfive.gachita.dispatch.module.provider.OldPathListProvider;
 import hyfive.gachita.dispatch.module.provider.SlotCandidateProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -17,13 +16,22 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class OldPathDispatchFlow {
+
     private final SlotCandidateProvider slotCandidateProvider;
     private final InsertPathInfoCalculator insertPathInfoCalculator;
+    private final OldPathListProvider oldPathListProvider;
 
     private final List<FinalOldPathDto> finalPathCandidates = new  ArrayList<>();
 
     public void execute(List<Long> pathIds, NewBookDto newBook) {
         // TODO : 1. pathIds List<Long> 기준으로 path 테이블로 부터 아래 조건을 만족하는 path가 있는지 확인
+        PathCondition condition = PathCondition.builder()
+                .maybeOnTime(newBook.maybeOnTime())
+                .deadline(newBook.deadline())
+                .walker(newBook.walker())
+                .pathIds(pathIds)
+                .build();
+        List<OldPathDto> oldPathDtoList = oldPathListProvider.getByCondition(condition);
 
         // TODO : 2. 위에 걸러진 path ID에 해당하는 Node getAll() NodeDispatchLocationDto
         List<List<NodeDto>> pathCandidates = List.of();
