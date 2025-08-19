@@ -1,5 +1,5 @@
 import { CustomError } from "@/utils/CustomError";
-import axios, { AxiosError } from "axios";
+import axios, { type AxiosError } from "axios";
 
 const createInstance = () => {
   const instance = axios.create({
