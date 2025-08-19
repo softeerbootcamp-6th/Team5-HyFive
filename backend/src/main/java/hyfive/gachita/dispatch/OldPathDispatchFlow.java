@@ -1,9 +1,8 @@
 package hyfive.gachita.dispatch;
 
 import hyfive.gachita.client.kakao.RouteInfo;
-import hyfive.gachita.dispatch.dto.FinalPathCandidateDto;
+import hyfive.gachita.dispatch.dto.FinalOldPathDto;
 import hyfive.gachita.dispatch.dto.NewBookDto;
-import hyfive.gachita.dispatch.dto.NewPathDto;
 import hyfive.gachita.dispatch.dto.NodeDto;
 import hyfive.gachita.dispatch.excepion.DispatchExpectedException;
 import hyfive.gachita.dispatch.module.calculator.InsertPathInfoCalculator;
@@ -21,7 +20,7 @@ public class OldPathDispatchFlow {
     private final SlotCandidateProvider slotCandidateProvider;
     private final InsertPathInfoCalculator insertPathInfoCalculator;
 
-    private final List<FinalPathCandidateDto> finalPathCandidates = new  ArrayList<>();
+    private final List<FinalOldPathDto> finalPathCandidates = new  ArrayList<>();
 
     public void execute(List<Long> pathIds, NewBookDto newBook) {
         // TODO : 1. pathIds List<Long> 기준으로 path 테이블로 부터 아래 조건을 만족하는 path가 있는지 확인
@@ -41,7 +40,7 @@ public class OldPathDispatchFlow {
             List<Integer> startSlotCandidates = slotCandidateProvider.findSlotCandidates(originalNodes, newBookStartNode);
             List<Integer> endSlotCandidates = slotCandidateProvider.findSlotCandidates(originalNodes, newBookEndNode);
 
-            List<FinalPathCandidateDto> candidates = new ArrayList<>();
+            List<FinalOldPathDto> candidates = new ArrayList<>();
 
             for (Integer si : startSlotCandidates) {
                 for (Integer ei : endSlotCandidates) {
@@ -53,7 +52,7 @@ public class OldPathDispatchFlow {
                         RouteInfo candidatePathRouteInfo = insertPathInfoCalculator.calculate(candidatePath);
                         if (candidatePathRouteInfo != null) {
 
-                            FinalPathCandidateDto result = FinalPathCandidateDto.builder()
+                            FinalOldPathDto result = FinalOldPathDto.builder()
                                     .pathId(null) // TODO : 값 불러오기 필요
                                     .carId(null) // TODO : 값 불러오기 필요
                                     .newNodes(List.of(newBookStartNode, newBookEndNode))
@@ -70,8 +69,8 @@ public class OldPathDispatchFlow {
 
             // 후보 들을 totalDuration이 작은 것이 앞에오는 순서대로, totalDuration이 같다면 totalDistance가 작은 것이 앞에 오는 순서대로 정렬.
             candidates.stream()
-                    .min(Comparator.comparingInt(FinalPathCandidateDto::totalDuration)
-                            .thenComparingInt(FinalPathCandidateDto::totalDistance))
+                    .min(Comparator.comparingInt(FinalOldPathDto::totalDuration)
+                            .thenComparingInt(FinalOldPathDto::totalDistance))
                     .orElseThrow(() -> new DispatchExpectedException("단일 경로 내 총 이동시간"));
 
             // 1순위 최종 후보에 올리기
@@ -79,10 +78,10 @@ public class OldPathDispatchFlow {
         }
 
         // TODO : 3-2. 다중 경로 중 최적 경로 선출
-        FinalPathCandidateDto bestPath = finalPathCandidates.stream()
+        FinalOldPathDto bestPath = finalPathCandidates.stream()
                 .min(Comparator
-                        .comparing(FinalPathCandidateDto::totalDuration)
-                        .thenComparing(FinalPathCandidateDto::totalDistance)
+                        .comparing(FinalOldPathDto::totalDuration)
+                        .thenComparing(FinalOldPathDto::totalDistance)
                 )
                 .orElseThrow(() -> new DispatchExpectedException("총 이동시간"));
 

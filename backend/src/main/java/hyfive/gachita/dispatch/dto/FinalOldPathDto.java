@@ -5,7 +5,7 @@ import lombok.Builder;
 import java.util.List;
 
 @Builder
-public record FinalPathCandidateDto(
+public record FinalOldPathDto(
         Long pathId,
         Long carId,
         List<NodeDto> newNodes,
