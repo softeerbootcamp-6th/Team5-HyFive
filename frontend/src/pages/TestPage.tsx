@@ -23,7 +23,10 @@ import Tag from "@/components/Tag";
 import Input from "@/components/Input";
 import ToggleButton from "@/components/ToggleButton";
 import DropdownInput from "@/components/DropdownInput";
-import Calander from "@/features/calander/Calander";
+import CarInfoCard from "@/features/car/CarInfoCard";
+import type { CarType } from "@/features/car/Car.type";
+
+import CarImage from "@/assets/images/OriginalCarImg.png";
 
 const TestPage = () => {
   const { userRows, bookingRows, routeRows } =
@@ -43,6 +46,48 @@ const TestPage = () => {
   // 드롭다운 상태
   const [maxPassenger, setMaxPassenger] = useState<string>("");
   const dropdownOptions = ["1", "2", "3", "4", "5", "6", "7"];
+
+  // 차량 정보
+
+  const carData: CarType[] = [
+    {
+      carId: 1,
+      carName: "기아 레이",
+      carNum: "12가 1234",
+      capacity: 5,
+      isLowFloor: true,
+      carImgURL: CarImage,
+      isDriving: true,
+    },
+    {
+      carId: 2,
+      carName: "스타리아",
+      carNum: "429누 4136",
+      capacity: 8,
+      isLowFloor: true,
+      carImgURL: CarImage,
+      isDriving: true,
+    },
+    {
+      carId: 3,
+      carName: "스타리아",
+      carNum: "32거 9327",
+      capacity: 8,
+      isLowFloor: true,
+      carImgURL: CarImage,
+      isDriving: true,
+    },
+    {
+      carId: 4,
+      carName: "스타렉스",
+      carNum: "192우 4943",
+      capacity: 8,
+      isLowFloor: false,
+      carImgURL: CarImage,
+      isDriving: false,
+    },
+  ];
+  const [selectedCarId, setSelectedCarId] = useState<number>(carData[0].carId);
   const components = [
     {
       label: "📋 Table 컴포넌트",
@@ -109,10 +154,10 @@ const TestPage = () => {
       label: "🔘 버튼 컴포넌트",
       component: (
         <div css={buttonStyle}>
-          <Button bgColor="gray" size="small" />
-          <Button bgColor="orange" size="small" />
-          <Button bgColor="gray" size="big" />
-          <Button bgColor="orange" size="big" />
+          <Button bgColor="gray" size="small" label="button" />
+          <Button bgColor="orange" size="small" label="button" />
+          <Button bgColor="gray" size="big" label="button" />
+          <Button bgColor="orange" size="big" label="button" />
         </div>
       ),
     },
@@ -235,6 +280,7 @@ const TestPage = () => {
         <DropdownInput
           label="최대탑승 인원"
           required={true}
+          requiredLabel="운전자 제외"
           placeholder="인원"
           options={dropdownOptions}
           value={maxPassenger}
@@ -243,11 +289,17 @@ const TestPage = () => {
       ),
     },
     {
-      label: "달력 컴포넌트",
+      label: "차량 카드 컴포넌트",
       component: (
         <div css={{ display: "flex", gap: "30px", justifyContent: "center" }}>
-          <Calander highlightType="day"></Calander>
-          <Calander highlightType="week"></Calander>,
+          {carData.map((car) => (
+            <CarInfoCard
+              key={car.carId}
+              carData={car}
+              isSelected={selectedCarId === car.carId}
+              setIsSelected={setSelectedCarId}
+            />
+          ))}
         </div>
       ),
     },

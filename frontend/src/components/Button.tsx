@@ -5,21 +5,41 @@ import { useState } from "react";
 const { color, typography } = theme;
 
 type Color = "gray" | "orange";
+type textColor = "black" | "white";
 type Size = "small" | "big";
 interface ButtonProps {
-  bgColor: Color;
-  size: Size;
+  label: string;
+  bgColor?: Color;
+  size?: Size;
+  type?: "submit" | "button" | "reset";
+  disabled?: boolean;
+  textColor?: textColor;
+  onClick?: () => void;
 }
 
-const Button = ({ bgColor, size }: ButtonProps) => {
+const Button = ({
+  label,
+  bgColor = "orange",
+  size = "small",
+  type = "button",
+  disabled = false,
+  textColor = "white",
+  onClick = () => {},
+}: ButtonProps) => {
   const [isPressing, setIsPressing] = useState(false);
   const handlers = usePressDetection({
     setIsPressing,
   });
   return (
-    <div {...handlers} css={ButtonContainer(bgColor, size, isPressing)}>
-      Button
-    </div>
+    <button
+      type={type}
+      {...handlers}
+      css={ButtonContainer(bgColor, textColor, size, isPressing)}
+      disabled={disabled}
+      onClick={() => onClick()}
+    >
+      {label}
+    </button>
   );
 };
 
@@ -40,6 +60,7 @@ const BASE_COLOR_MAP = {
 
 const ButtonContainer = (
   bgColor: Color,
+  textColor: textColor,
   size: Size,
   isPressing: boolean,
 ) => css`
@@ -56,7 +77,9 @@ const ButtonContainer = (
   font: ${size === "small"
     ? typography.Label.l4_semi
     : typography.Body.b2_semi};
-  color: ${color.GrayScale.white};
+  color: ${textColor === "white"
+    ? color.GrayScale.white
+    : color.GrayScale.black};
   cursor: pointer;
   transition: all 0.2s ease;
 

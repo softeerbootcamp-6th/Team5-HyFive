@@ -1,36 +1,17 @@
-import BookDetailSection from "@/features/book/BookDetailSection";
-import BookListSection from "@/features/book/BookListSection";
-import { rowsUser } from "@/mocks/tableMocks";
-import TableMatcher from "@/utils/TableMatcher";
-import { css } from "@emotion/react";
-import { useState } from "react";
+import FallbackUI from "@/components/FallbackUI";
+import BookSection from "@/features/book/BookSection";
+import { ErrorBoundary } from "react-error-boundary";
 
 const BookPage = () => {
-  const { userRows, bookingRows, routeRows } =
-    TableMatcher.matchBookTableType(rowsUser);
-
-  const TAB_LIST = ["신규 예약", "예약 성공", "예약 실패"];
-  const [activeTab, setActiveTab] = useState<string>(TAB_LIST[0]);
   return (
-    <div css={BookPageContainer}>
-      <BookListSection
-        TAB_LIST={TAB_LIST}
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-      />
-      <BookDetailSection
-        activeTab={activeTab}
-        userRows={userRows}
-        bookingRows={bookingRows}
-        routeRows={routeRows}
-      />
-    </div>
+    <ErrorBoundary
+      fallbackRender={({ error, resetErrorBoundary }) => (
+        <FallbackUI error={error} handleRetry={resetErrorBoundary} />
+      )}
+    >
+      <BookSection />
+    </ErrorBoundary>
   );
 };
 
 export default BookPage;
-
-const BookPageContainer = css`
-  display: flex;
-  flex-direction: row;
-`;

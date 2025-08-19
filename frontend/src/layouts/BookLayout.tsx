@@ -4,7 +4,7 @@ import { Outlet } from "react-router";
 
 const BookLayout = () => {
   return (
-    <div css={BookContainer}>
+    <div>
       <div css={SidebarContainer}>
         <Sidebar />
       </div>
@@ -16,8 +16,6 @@ const BookLayout = () => {
 };
 
 export default BookLayout;
-
-const BookContainer = css``;
 
 const SidebarContainer = css`
   position: fixed;
@@ -32,5 +30,5 @@ const ContentContainer = css`
   width: calc(100dvw - 330px);
   height: calc(100dvh - 72px);
   left: 330px;
-  top: 72px;
+  top: 0;
 `;

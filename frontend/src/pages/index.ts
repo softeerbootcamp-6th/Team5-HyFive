@@ -13,7 +13,8 @@ export { default as CenterDetailPage } from "@/pages/admin/centers/CenterDetailP
 
 // Center
 export { default as CenterPage } from "@/pages/center/CenterPage";
-export { default as VehicleRegisterPage } from "@/pages/center/CenterRegisterPage";
+export { default as CenterRegisterPage } from "@/pages/center/CenterRegisterPage";
+export { default as CenterEditPage } from "@/pages/center/CenterEditPage";
 
 // NotFound
 export { default as NotFoundPage } from "@/pages/NotFoundPage";

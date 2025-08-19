@@ -43,7 +43,11 @@ export type TableObject = Partial<Record<TableKey, string | number | boolean>>;
 const TableMatcher = {
   //전체 행의 key값을 MAPPING_TABEL과 매칭
   matchTableHeader: (rows: TableObject[]) => {
-    const keys = Object.keys(rows[0] ?? {}) as TableKey[];
+    const allKeys = Object.keys(rows[0] ?? {});
+
+    const keys = allKeys.filter(
+      (key): key is TableKey => key in MAPPING_TABLE,
+    ) as TableKey[];
     const labels = keys.map((key) => MAPPING_TABLE[key]["label"]);
     return { keys, labels };
   },

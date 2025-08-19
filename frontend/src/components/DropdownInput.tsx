@@ -9,19 +9,23 @@ const { color, typography, borderRadius } = theme;
 interface DropdownInputProps {
   label: string;
   required?: boolean;
+  requiredLabel?: string;
   placeholder?: string;
   options: string[];
   value: string;
   onSelect?: (value: string) => void;
+  errorMessage?: string;
 }
 
 const DropdownInput = ({
   label,
   required = false,
+  requiredLabel = "",
   placeholder,
   options,
   value,
   onSelect,
+  errorMessage,
 }: DropdownInputProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -56,11 +60,13 @@ const DropdownInput = ({
       <Input
         label={label}
         required={required}
+        requiredLabel={requiredLabel}
         placeholder={placeholder}
         readOnly
         onClick={() => setIsOpen((prev) => !prev)}
         icon={isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
         value={value}
+        errorMessage={errorMessage}
       />
       {isOpen && (
         <ul css={DropdownList}>

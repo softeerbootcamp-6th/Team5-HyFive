@@ -1,4 +1,4 @@
-import MapSection from "@/features/schedule/MapSection";
+import ScheduleDetailSection from "@/features/schedule/ScheduleDetailSection";
 import ScheduleListSection from "@/features/schedule/ScheduleListSection";
 import TabMatcher from "@/utils/TabMatcher";
 import { css } from "@emotion/react";
@@ -21,7 +21,7 @@ const SchedulePage = () => {
         setActiveTab={setActiveTab}
         parsedActiveTab={parsedActiveTab}
       />
-      <MapSection scheduleType={parsedActiveTab} data={sampleData} />
+      <ScheduleDetailSection scheduleType={parsedActiveTab} data={sampleData} />
     </div>
   );
 };

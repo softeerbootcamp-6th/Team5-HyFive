@@ -18,6 +18,7 @@ import PayIcon from "./pay_default.svg?react";
 import PersonIcon from "./person_default.svg?react";
 import RefreashIcon from "./refreash_default.svg?react";
 import RemoveIcon from "./remove_default.svg?react";
+import RemoveCircleIcon from "./remove-circle.svg?react";
 import RouteIcon from "./route_default.svg?react";
 import SearchIcon from "./search_default.svg?react";
 import TimeIcon from "./time_default.svg?react";
@@ -28,6 +29,17 @@ import NoRouteIcon from "./no-route.svg?react";
 import WaitingIcon from "./waiting.svg?react";
 import InProgressIcon from "./inProgress.svg?react";
 import CompletedIcon from "./completed.svg?react";
+import MarkerDefaultIcon from "./marker-default.svg";
+import MarkerEndIcon from "./marker-end.svg";
+import MarkerEnterNumIcon from "./marker-enter-num.svg";
+import MarkerEnterIcon from "./marker-enter.svg";
+import MarkerOutNumIcon from "./marker-out-num.svg";
+import MarkerOutIcon from "./marker-out.svg";
+import MarkerStartIcon from "./marker-start.svg";
+import CloseIcon from "./close.svg?react";
+import ToolTipArrowIcon from "./tooltip_arrow.svg?react";
+import WhiteEditIcon from "./edit_white.svg?react";
+import GrayInfoIcon from "./Info-gray.svg?react";
 
 export {
   AddIcon,
@@ -49,6 +61,7 @@ export {
   PersonIcon,
   RefreashIcon,
   RemoveIcon,
+  RemoveCircleIcon,
   RouteIcon,
   SearchIcon,
   TimeIcon,
@@ -60,4 +73,15 @@ export {
   WaitingIcon,
   InProgressIcon,
   CompletedIcon,
+  MarkerDefaultIcon,
+  MarkerEndIcon,
+  MarkerEnterNumIcon,
+  MarkerEnterIcon,
+  MarkerOutNumIcon,
+  MarkerOutIcon,
+  MarkerStartIcon,
+  CloseIcon,
+  ToolTipArrowIcon,
+  WhiteEditIcon,
+  GrayInfoIcon,
 };

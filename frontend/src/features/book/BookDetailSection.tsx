@@ -1,30 +1,34 @@
+import EmptyUI from "@/components/EmptyUI";
 import Table from "@/components/table/Table";
+import type { BookData } from "@/features/book/Book.types";
 import RouteCard from "@/features/book/RouteCard";
 import { theme } from "@/styles/themes.style";
-import type { TableObject } from "@/utils/TableMatcher";
+import TableMatcher from "@/utils/TableMatcher";
 import TabMatcher from "@/utils/TabMatcher";
 import { css } from "@emotion/react";
 const { typography } = theme;
 
 interface BookDetailSectionProps {
+  data: BookData | undefined;
   activeTab: string;
-  userRows: TableObject[];
-  bookingRows: TableObject[];
-  routeRows: TableObject[];
 }
 
-const BookDetailSection = ({
-  activeTab,
-  userRows,
-  bookingRows,
-  routeRows,
-}: BookDetailSectionProps) => {
+const BookDetailSection = ({ data, activeTab }: BookDetailSectionProps) => {
+  // tab 로직
+  const parsedActiveTab = TabMatcher.matchBookTypeKRToENG(activeTab);
+
+  // table 로직
+  const { id: _id, bookStatus: _bookStatus, ...activeBook } = data ?? {}; //id, bookStatus 제외
+  const { userRows, bookingRows, routeRows } = TableMatcher.matchBookTableType(
+    data ? [activeBook] : [],
+  );
   const TABLE_SECTIONS = [
     { title: "예약자 정보", data: userRows },
     { title: "예약 정보", data: bookingRows },
     { title: "이용 경로 정보", data: routeRows },
   ];
-  const parsedActiveTab = TabMatcher.matchBookTypeKRToENG(activeTab);
+
+  if (!data) return <EmptyUI type="dynamic" />;
 
   return (
     <div css={BookDetailSectionContainer}>

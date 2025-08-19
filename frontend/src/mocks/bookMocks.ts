@@ -1,6 +1,6 @@
-import type { BookDataType } from "@/types/bookType";
+import type { BookData } from "@/features/book/Book.types";
 
-export const bookDataList: BookDataType[] = [
+export const bookDataList: Partial<BookData>[] = [
   {
     name: "김민정",
     phone: "010-1234-5678",

@@ -18,7 +18,7 @@ const COLOR_MAP = {
   },
 };
 
-const BookCardContainer = css`
+const BookCardContainer = (isActive: boolean) => css`
   width: 100%;
   padding: 20px;
   display: flex;
@@ -29,6 +29,11 @@ const BookCardContainer = css`
   &:hover {
     background-color: ${color.GrayScale.gray1};
   }
+
+  ${isActive &&
+  css`
+    background-color: ${color.GrayScale.gray1};
+  `}
 `;
 
 const TimeWrapper = css`

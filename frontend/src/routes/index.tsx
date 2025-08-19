@@ -10,11 +10,12 @@ import {
   CentersPage,
   CenterDetailPage,
   CenterPage,
-  VehicleRegisterPage,
+  CenterRegisterPage,
   NotFoundPage,
   TestPage,
+  CenterEditPage,
 } from "@/pages";
-import { BrowserRouter, Route, Routes } from "react-router";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 
 const Router = () => {
   return (
@@ -22,6 +23,7 @@ const Router = () => {
       <Routes>
         {/* Admin 영역 */}
         <Route path="/admin/*" element={<AdminLayout />}>
+          <Route index element={<Navigate to="book" replace />} />
           <Route path="book" element={<BookLayout />}>
             <Route index element={<BookPage />} />
             <Route path="schedule" element={<SchedulePage />} />
@@ -39,7 +41,8 @@ const Router = () => {
         {/* Center 영역 */}
         <Route path="/center/*" element={<CenterLayout />}>
           <Route index element={<CenterPage />} />
-          <Route path="register" element={<VehicleRegisterPage />} />
+          <Route path="register" element={<CenterRegisterPage />} />
+          <Route path="edit" element={<CenterEditPage />} />
         </Route>
 
         {/* 초기 진입 시 리디렉션 */}
