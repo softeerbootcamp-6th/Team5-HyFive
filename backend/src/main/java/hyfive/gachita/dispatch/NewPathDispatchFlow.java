@@ -8,7 +8,6 @@ import hyfive.gachita.dispatch.excepion.DispatchException;
 import hyfive.gachita.dispatch.module.condition.BoundingBoxCondition;
 import hyfive.gachita.dispatch.module.condition.RadiusCondition;
 import hyfive.gachita.dispatch.module.filter.BoundingBoxFilter;
-import hyfive.gachita.dispatch.module.filter.CarSelector;
 import hyfive.gachita.dispatch.module.filter.HaversineFilter;
 import hyfive.gachita.dispatch.module.provider.CenterListProvider;
 import hyfive.gachita.dispatch.module.provider.IdleCarListProvider;
@@ -16,16 +15,15 @@ import hyfive.gachita.dispatch.module.provider.RouteInfoProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalTime;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 public class NewPathDispatchFlow {
     private final CenterListProvider centerListProvider;
     private final IdleCarListProvider idleCarListProvider;
-    private final CarSelector carSelector;
     private final RouteInfoProvider routeInfoProvider;
     private final BoundingBoxFilter boundingBoxFilter;
     private final HaversineFilter haversineFilter;
@@ -46,14 +44,25 @@ public class NewPathDispatchFlow {
         List<CarScheduleDto> carScheduleCandidates = idleCarListProvider.getByCondition(centerCandidates, newBookDto);
 
         // duration, distance 정보
+        // TODO: 모듈로 분리
         NewPathDto bestPath = routeInfoProvider.getAll(carScheduleCandidates, newBookDto).stream()
                 .filter(p -> p.routeInfo().totalDuration() < 3600)
-                // TODO: 센터 ~ 하차 시간이 모두 유휴시간에 포함되는지
-                //  .filter()
+                // 센터 ~ 하차 시간이 모두 유휴시간에 포함되는지
+                .filter(p -> {
+                    LocalTime startTime = p.nodeList().get(0).time();
+                    LocalTime endTime = p.nodeList().get(p.nodeList().size() - 1).time();
+                    LocalTime rentalStartTime = p.path().rentalStartTime();
+                    LocalTime rentalEndTime = p.path().rentalEndTime();
+                    return rentalStartTime.isBefore(startTime) && endTime.isBefore(rentalEndTime);
+                })
                 .min(Comparator
-                        // TODO: 센터노드.time - rentalStartTime 이 가장 작은가
-                        // TODO: rentalEndTime - 센터노드.time 이 가장 큰가
-                        .comparing((NewPathDto p) -> p.routeInfo().totalDuration())
+                        // 차량 출발 시각과 유휴 시작 시간의 차이를 최소화
+                        .comparing((NewPathDto p) -> {
+                            LocalTime startTime = p.nodeList().get(0).time();
+                            LocalTime rentalStartTime = p.path().rentalStartTime();
+                            return startTime.toSecondOfDay() - rentalStartTime.toSecondOfDay();
+                        })
+                        .thenComparing(p -> p.routeInfo().totalDuration())
                         .thenComparing(p -> p.routeInfo().totalDistance())
                 )
                 .orElseThrow(() -> new DispatchException("총 이동시간"));
