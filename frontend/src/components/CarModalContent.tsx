@@ -8,7 +8,6 @@ const { color, typography, borderRadius } = theme;
 
 interface CarModalContent {
   type: "edit" | "delete";
-  content: string;
   onClose?: () => void;
   onConfirm?: () => void;
 }
