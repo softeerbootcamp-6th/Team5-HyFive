@@ -19,6 +19,7 @@ const BookSection = () => {
         data={data}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
+        activeBookId={activeBookId}
         setActiveBookId={setActiveBookId}
         refetch={refetch}
       />

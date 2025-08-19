@@ -13,6 +13,7 @@ const { color, typography } = theme;
 interface BookListSectionProps {
   data: BookData[] | undefined;
   activeTab: string;
+  activeBookId: number | null;
   setActiveTab: Dispatch<SetStateAction<string>>;
   setActiveBookId: Dispatch<SetStateAction<number | null>>;
   refetch: () => void;
@@ -20,6 +21,7 @@ interface BookListSectionProps {
 const BookListSection = ({
   data,
   activeTab,
+  activeBookId,
   setActiveTab,
   setActiveBookId,
   refetch,
@@ -49,6 +51,7 @@ const BookListSection = ({
               <BookCard
                 bookType={TabMatcher.matchBookTypeKRToENG(activeTab)}
                 data={bookData}
+                isActive={bookData.id === activeBookId}
               />
               {idx !== bookDataList.length - 1 && <div css={LineWrapper} />}
             </div>

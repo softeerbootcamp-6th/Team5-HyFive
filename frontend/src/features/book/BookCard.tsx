@@ -17,11 +17,12 @@ const { color } = theme;
 interface BookCardProps {
   bookType: BookType;
   data: BookData;
+  isActive: boolean;
 }
 
-const BookCard = ({ bookType, data }: BookCardProps) => {
+const BookCard = ({ bookType, data, isActive }: BookCardProps) => {
   return (
-    <div css={BookCardContainer}>
+    <div css={BookCardContainer(isActive)}>
       <div>
         <div css={TimeWrapper}>
           <p css={TimeText}>{data.bookTime}</p>
