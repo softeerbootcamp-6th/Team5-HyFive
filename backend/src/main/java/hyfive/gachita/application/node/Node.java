@@ -26,9 +26,8 @@ public class Node {
     @JoinColumn(name = "path_id", nullable = false)
     private Path path;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_id", nullable = false)
+    @JoinColumn(name = "book_id")
     private Book book;
 
     @NotNull

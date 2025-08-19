@@ -2,6 +2,7 @@ package hyfive.gachita.application.path;
 
 import hyfive.gachita.application.book.Book;
 import hyfive.gachita.application.node.Node;
+import hyfive.gachita.application.node.NodeType;
 import hyfive.gachita.application.path.respository.PathRepository;
 import hyfive.gachita.dispatch.dto.FinalNewPathDto;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +40,7 @@ public class PathService {
         List<Node> nodeList = finalPathDto.nodeList().stream()
                 .map(nodeDto -> Node.builder()
                         .path(path)
-                        .book(book) // TODO: type이 CENTER인 경우 book이 null,,,
+                        .book(nodeDto.type() == NodeType.CENTER ? null : book)
                         .lat(nodeDto.lat())
                         .lng(nodeDto.lng())
                         .time(nodeDto.time())
