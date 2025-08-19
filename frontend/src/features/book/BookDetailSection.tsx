@@ -1,3 +1,4 @@
+import EmptyUI from "@/components/EmptyUI";
 import Table from "@/components/table/Table";
 import RouteCard from "@/features/book/RouteCard";
 import { theme } from "@/styles/themes.style";
@@ -23,6 +24,8 @@ const BookDetailSection = ({ data, activeTab }: BookDetailSectionProps) => {
     { title: "이용 경로 정보", data: routeRows },
   ];
   const parsedActiveTab = TabMatcher.matchBookTypeKRToENG(activeTab);
+
+  if (!data) return <EmptyUI />;
 
   return (
     <div css={BookDetailSectionContainer}>

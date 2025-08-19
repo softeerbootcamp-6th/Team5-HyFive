@@ -1,3 +1,4 @@
+import EmptyUI from "@/components/EmptyUI";
 import RefetchButton from "@/components/RefetchButton";
 import Tabs from "@/components/Tabs";
 import BookCard from "@/features/book/BookCard";
@@ -6,7 +7,7 @@ import { theme } from "@/styles/themes.style";
 import type { BookDataType } from "@/types/bookType.types";
 import TabMatcher from "@/utils/TabMatcher";
 import { css } from "@emotion/react";
-import type { Dispatch, SetStateAction } from "react";
+import { useEffect, type Dispatch, type SetStateAction } from "react";
 const { color, typography } = theme;
 
 interface BookListSectionProps {
@@ -21,7 +22,6 @@ const BookListSection = ({
   setActiveTab,
   setActiveBookId,
 }: BookListSectionProps) => {
-  const bookList = data ?? [];
   const TAB_LIST = ["신규 예약", "예약 성공", "예약 실패"];
   const LOCATION_SECTION = "운정 1구역";
 
@@ -38,15 +38,22 @@ const BookListSection = ({
         setSelected={setActiveTab}
       />
       <div css={ContentContainer}>
-        {bookList.map((bookData, idx) => (
-          <div key={bookData.name} onClick={() => setActiveBookId(bookData.id)}>
-            <BookCard
-              bookType={TabMatcher.matchBookTypeKRToENG(activeTab)}
-              data={bookData}
-            />
-            {idx !== bookDataList.length - 1 && <div css={LineWrapper} />}
-          </div>
-        ))}
+        {data && data?.length !== 0 ? (
+          data.map((bookData, idx) => (
+            <div
+              key={bookData.name}
+              onClick={() => setActiveBookId(bookData.id)}
+            >
+              <BookCard
+                bookType={TabMatcher.matchBookTypeKRToENG(activeTab)}
+                data={bookData}
+              />
+              {idx !== bookDataList.length - 1 && <div css={LineWrapper} />}
+            </div>
+          ))
+        ) : (
+          <EmptyUI />
+        )}
       </div>
     </div>
   );
