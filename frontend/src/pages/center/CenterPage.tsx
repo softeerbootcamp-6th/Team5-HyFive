@@ -25,6 +25,8 @@ import {
 } from "@/features/calender/CalenderReducer";
 import { isFutureWeek } from "@/features/calender/Calender.util";
 import { useCarNavigation } from "@/hooks/useCenterNavigation";
+import Modal from "@/components/Modal";
+import { useCenterModal } from "@/hooks/useCenterModal";
 
 const { color, typography } = theme;
 const TOOLTIP_DATA = {
@@ -38,7 +40,7 @@ const CenterPage = () => {
     mockCarData[0]?.carId ?? null,
   );
   const [state, dispatch] = useReducer(calenderReducer, initialState);
-  const [isEditMode, setIsEditMode] = useState<boolean>(false);
+  const [isEditMode, setIsEditMode] = useState(false);
 
   const isEditableWeek = useMemo(
     () => isFutureWeek(state.selectedWeek),
@@ -47,6 +49,28 @@ const CenterPage = () => {
 
   // 이벤트 핸들러
   const { navigateToRegisterCar, navigateToEditCar } = useCarNavigation();
+  const {
+    modalState,
+    openEditModal,
+    openDeleteModal,
+    openDoneModal,
+    closeModal,
+    createModalContent,
+  } = useCenterModal();
+
+  const handleEditConfirm = () => {
+    navigateToEditCar(selectedCarId);
+    closeModal();
+  };
+
+  const handleDeleteConfirm = () => {
+    // TODO 재민 - 삭제 로직 구현
+    closeModal();
+    // TODO - 삭제 완료 후 확인 모달 열기
+    setTimeout(() => {
+      openDoneModal();
+    }, 1000);
+  };
 
   const handleMonthChange = (direction: "next" | "prev") => {
     dispatch({
@@ -71,14 +95,13 @@ const CenterPage = () => {
         <div css={CarSectionHeader}>
           <h4 css={SectionLabel}>등록된 차량</h4>
           <div css={ActionButtonGroup}>
-            <button
-              css={CarEditTextStyle}
-              onClick={() => navigateToEditCar(selectedCarId)}
-            >
+            <button css={CarEditTextStyle} onClick={openEditModal}>
               수정하기
             </button>
             <div css={DividerStyle} />
-            <button css={CarEditTextStyle}>삭제하기</button>
+            <button css={CarEditTextStyle} onClick={openDeleteModal}>
+              삭제하기
+            </button>
           </div>
         </div>
         <div css={ContentSection}>
@@ -154,6 +177,13 @@ const CenterPage = () => {
           />
         </div>
       </div>
+      <Modal isOpen={!!modalState} onClose={closeModal}>
+        {createModalContent({
+          close: closeModal,
+          handleEditConfirm,
+          handleDeleteConfirm,
+        })}
+      </Modal>
     </div>
   );
 };
