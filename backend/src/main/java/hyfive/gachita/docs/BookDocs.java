@@ -11,6 +11,7 @@ import hyfive.gachita.application.common.dto.PagedListRes;
 import hyfive.gachita.global.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -116,7 +117,46 @@ public interface BookDocs {
             @ApiResponse(
                     responseCode = "1000",
                     description = "조회 성공 시, items에 예약 리스트가 포함되며 다음 페이지 여부와 커서 정보도 포함됩니다.",
-                    content = @Content(schema = @Schema(implementation = ScrollRes.class))
+                    content = @Content(
+                            array = @ArraySchema(schema =
+                            @Schema(implementation = BookWithPathRes.class,
+                                    example = "{\n" +
+                                            "  \"isSuccess\": true,\n" +
+                                            "  \"code\": 1000,\n" +
+                                            "  \"message\": \"요청에 성공했습니다.\",\n" +
+                                            "  \"data\": {\n" +
+                                            "    \"items\": [\n" +
+                                            "      {\n" +
+                                            "        \"id\": 11,\n" +
+                                            "        \"bookName\": \"홍길동\",\n" +
+                                            "        \"bookTel\": \"010-1111-0010\",\n" +
+                                            "        \"bookDate\": \"2025.08.20\",\n" +
+                                            "        \"bookTime\": \"03:28\",\n" +
+                                            "        \"hospitalDate\": \"2025.08.26\",\n" +
+                                            "        \"hospitalTime\": \"10:30\",\n" +
+                                            "        \"startAddr\": \"노원로16길 15\",\n" +
+                                            "        \"endAddr\": \"한글비석로 68\",\n" +
+                                            "        \"walker\": true,\n" +
+                                            "        \"bookStatus\": \"SUCCESS\",\n" +
+                                            "        \"path\": {\n" +
+                                            "          \"pathId\": 1,\n" +
+                                            "          \"carNumber\": \"56다1234\",\n" +
+                                            "          \"startTime\": \"08:59:10\",\n" +
+                                            "          \"endTime\": \"09:30:00\",\n" +
+                                            "          \"startAddr\": \"노원로16길 15\",\n" +
+                                            "          \"endAddr\": \"한글비석로 68\"\n" +
+                                            "        }\n" +
+                                            "      }\n" +
+                                            "    ],\n" +
+                                            "    \"hasNext\": false,\n" +
+                                            "    \"cursor\": {\n" +
+                                            "      \"lastId\": 11,\n" +
+                                            "      \"lastCreatedAt\": \"2025-08-20T03:28:32\"\n" +
+                                            "    }\n" +
+                                            "  }\n" +
+                                            "}"
+                            ))
+                    )
             ),
             @ApiResponse(
                     responseCode = "2000",
