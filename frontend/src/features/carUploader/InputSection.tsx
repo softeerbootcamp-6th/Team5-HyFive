@@ -13,6 +13,7 @@ import { usePatchCar, usePostCar } from "@/apis/CarAPI";
 import { useNavigate } from "react-router";
 import Modal from "@/components/Modal";
 import ModalContent from "@/components/ModalContent";
+import type { CustomError } from "@/utils/CustomError";
 
 type InputMode = "register" | "edit";
 interface InputSectionProps {
@@ -56,9 +57,11 @@ const InputSection = ({ type = "register", initValues }: InputSectionProps) => {
     setIsModalOpen(true);
     setModalContent(`차량 ${messageType}에 성공했습니다!`);
   };
-  const handleMutateError = () => {
+  const handleMutateError = (response: CustomError) => {
     setIsModalOpen(true);
-    setModalContent(`차량 ${messageType}에 실패했습니다 :(`);
+    setModalContent(
+      response.message ?? `차량 ${messageType}에 실패했습니다 :(`,
+    );
   };
 
   // modal 관련 로직
@@ -76,14 +79,14 @@ const InputSection = ({ type = "register", initValues }: InputSectionProps) => {
         if (type === "register") {
           postMutate(formValues, {
             onSuccess: handleMutateSuccess,
-            onError: handleMutateError,
+            onError: (response) => handleMutateError(response),
           });
         } else if (initValues?.carId != null) {
           patchMutate(
             { id: initValues.carId, values: formValues },
             {
               onSuccess: handleMutateSuccess,
-              onError: handleMutateError,
+              onError: (response) => handleMutateError(response),
             },
           );
         }

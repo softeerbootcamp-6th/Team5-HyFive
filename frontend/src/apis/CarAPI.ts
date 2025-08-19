@@ -1,12 +1,13 @@
 import type { CarFormValues } from "@/features/carUploader/useCarForm";
 import { clientInstance } from "@/utils/AxiosInstance";
+import type { CustomError } from "@/utils/CustomError";
 import { useMutation } from "@tanstack/react-query";
 
 export const usePostCar = () => {
-  const mutation = useMutation({
-    mutationFn: (carData: CarFormValues) => {
+  const mutation = useMutation<unknown, CustomError, CarFormValues>({
+    mutationFn: (carData) => {
       const formData = new FormData();
-      formData.append("centerId", "2");
+      formData.append("centerId", "1");
       formData.append("modelName", carData.carModel);
       formData.append("carNumber", carData.carNumber);
       formData.append("capacity", carData.maxPassenger);
@@ -25,14 +26,15 @@ export const usePostCar = () => {
 };
 
 export const usePatchCar = () => {
-  const mutation = useMutation({
-    mutationFn: ({
-      id,
-      values: carData,
-    }: {
+  const mutation = useMutation<
+    unknown,
+    CustomError,
+    {
       id: number;
       values: CarFormValues;
-    }) => {
+    }
+  >({
+    mutationFn: ({ id, values: carData }) => {
       const formData = new FormData();
       formData.append("modelName", carData.carModel);
       formData.append("carNumber", carData.carNumber);

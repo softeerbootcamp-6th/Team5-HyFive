@@ -1,5 +1,6 @@
-import type { AxiosError } from "axios";
-
-export const CustomError = (error: AxiosError) => {
-  return error;
-};
+export class CustomError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "CustomError";
+  }
+}

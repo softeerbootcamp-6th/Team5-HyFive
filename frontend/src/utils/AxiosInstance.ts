@@ -15,11 +15,11 @@ const createInstance = () => {
       if (response.data.isSuccess) {
         return response.data;
       } else {
-        throw CustomError(response.data.message);
+        throw new CustomError(response.data.message);
       }
     },
     (error: AxiosError) => {
-      throw CustomError(error);
+      throw new CustomError(error.message);
     },
   );
 
