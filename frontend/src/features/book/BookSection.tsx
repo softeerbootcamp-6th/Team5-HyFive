@@ -10,7 +10,7 @@ const BookSection = () => {
 
   const { data, refetch } = useGetBook(activeTab);
   const activeBookData = data?.find(
-    (book) => book.id === (activeBookId ? activeBookId : data[0].id),
+    (book) => book.id === (activeBookId ?? data[0].id),
   );
 
   return (

@@ -42,7 +42,7 @@ const BookListSection = ({
         setSelected={setActiveTab}
       />
       <div css={ContentContainer}>
-        {data && data?.length !== 0 ? (
+        {data && data?.length > 0 ? (
           data.map((bookData, idx) => (
             <div
               key={`${activeTab}-${bookData.id}`}
