@@ -28,7 +28,7 @@ const BookDetailSection = ({ data, activeTab }: BookDetailSectionProps) => {
     { title: "이용 경로 정보", data: routeRows },
   ];
 
-  if (!data) return <EmptyUI />;
+  if (!data) return <EmptyUI type="dynamic" />;
 
   return (
     <div css={BookDetailSectionContainer}>

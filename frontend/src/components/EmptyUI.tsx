@@ -1,13 +1,27 @@
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
+import { NoRouteIcon } from "@/assets/icons";
 const { color, typography } = theme;
+import MovingCarGif from "@/assets/gif/moving_car.gif";
 
-const EmptyUI = () => {
+const EmptyUI = ({ type = "static" }: { type?: "static" | "dynamic" }) => {
   return (
     <div css={EmptyUIContainer}>
-      <div css={TextWrapper}>
-        <p>요청값이 없습니다 :-(</p>
+      <div css={ImageWrapper}>
+        {type === "static" && <NoRouteIcon />}
+        {type === "dynamic" && (
+          <img
+            src={MovingCarGif}
+            css={css`
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            `}
+            alt="moving car gif"
+          />
+        )}
       </div>
+      <p css={TextWrapper}>요청값이 없습니다 :-(</p>
     </div>
   );
 };
@@ -27,12 +41,14 @@ const EmptyUIContainer = css`
 `;
 
 const TextWrapper = css`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   padding: 10px;
   color: ${color.GrayScale.gray4};
   font: ${typography.Heading.h5_semi};
+  z-index: 1;
+`;
+
+const ImageWrapper = css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
