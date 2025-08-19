@@ -43,8 +43,13 @@ const TextStyle = css`
 `;
 
 const AlertTextStyle = css`
+  text-align: center;
   font: ${typography.Heading.h4_semi};
   color: ${color.GrayScale.black};
-  word-break: keep-all; // 단어 단위로 줄바꿈
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; // 최대 줄 수 제한
+  -webkit-box-orient: vertical;
+  word-break: break-word; // 단어 단위로 줄바꿈
   overflow-wrap: break-word; // 긴 단어가 영역을 넘으면 줄바꿈
 `;
