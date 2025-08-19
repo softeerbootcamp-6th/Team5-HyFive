@@ -25,6 +25,10 @@ import {
 } from "@/features/calender/CalenderReducer";
 import { isFutureWeek } from "@/features/calender/Calender.util";
 import { useCarNavigation } from "@/hooks/useCenterNavigation";
+import Modal from "@/components/Modal";
+import CarModalContent from "@/components/CarModalContent";
+import ModalContent from "@/components/ModalContent";
+import { useCenterModal } from "@/hooks/useCenterModal";
 
 const { color, typography } = theme;
 const TOOLTIP_DATA = {
@@ -38,7 +42,7 @@ const CenterPage = () => {
     mockCarData[0]?.carId ?? null,
   );
   const [state, dispatch] = useReducer(calenderReducer, initialState);
-  const [isEditMode, setIsEditMode] = useState<boolean>(false);
+  const [isEditMode, setIsEditMode] = useState(false);
 
   const isEditableWeek = useMemo(
     () => isFutureWeek(state.selectedWeek),
@@ -47,6 +51,22 @@ const CenterPage = () => {
 
   // 이벤트 핸들러
   const { navigateToRegisterCar, navigateToEditCar } = useCarNavigation();
+  const { modalState, openEdit, openDelete, openDone, close, is } =
+    useCenterModal();
+
+  const handleEditConfirm = () => {
+    navigateToEditCar(selectedCarId);
+    close();
+  };
+
+  const handleDeleteConfirm = () => {
+    // TODO 재민 - 삭제 로직 구현
+    close();
+    // TODO - 삭제 완료 후 확인 모달 열기
+    setTimeout(() => {
+      openDone();
+    }, 1000);
+  };
 
   const handleMonthChange = (direction: "next" | "prev") => {
     dispatch({
@@ -71,14 +91,13 @@ const CenterPage = () => {
         <div css={CarSectionHeader}>
           <h4 css={SectionLabel}>등록된 차량</h4>
           <div css={ActionButtonGroup}>
-            <button
-              css={CarEditTextStyle}
-              onClick={() => navigateToEditCar(selectedCarId)}
-            >
+            <button css={CarEditTextStyle} onClick={openEdit}>
               수정하기
             </button>
             <div css={DividerStyle} />
-            <button css={CarEditTextStyle}>삭제하기</button>
+            <button css={CarEditTextStyle} onClick={openDelete}>
+              삭제하기
+            </button>
           </div>
         </div>
         <div css={ContentSection}>
@@ -154,6 +173,25 @@ const CenterPage = () => {
           />
         </div>
       </div>
+      <Modal isOpen={!!modalState} onClose={close}>
+        {is("edit") && (
+          <CarModalContent
+            type="edit"
+            onClose={close}
+            onConfirm={handleEditConfirm}
+          />
+        )}
+        {is("delete") && (
+          <CarModalContent
+            type="delete"
+            onClose={close}
+            onConfirm={handleDeleteConfirm}
+          />
+        )}
+        {is("done") && (
+          <ModalContent onClose={close} content="삭제되었습니다." />
+        )}
+      </Modal>
     </div>
   );
 };
