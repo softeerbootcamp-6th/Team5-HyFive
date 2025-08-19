@@ -16,8 +16,12 @@ public class IdleCarListProvider {
     private final CenterRepository centerRepository;
 
     public List<CarScheduleDto> getByCondition(List<FilteredCenterDto> filteredCenterList, NewBookDto newBookDto) {
+        List<Long> centerIdList = filteredCenterList.stream()
+                .map(FilteredCenterDto::centerId)
+                .toList();
+
         CenterCondition condition = CenterCondition.builder()
-                .centerIdList(filteredCenterList)
+                .centerIdList(centerIdList)
                 .deadline(newBookDto.deadline().getSecond())
                 .hospitalDate(newBookDto.hospitalDate())
                 .maybeOnTime(newBookDto.maybeOnTime())

@@ -71,6 +71,9 @@ public class CustomCenterRepositoryImpl implements CustomCenterRepository{
                         rental.rentalStartTime,
                         rental.rentalEndTime
                 ))
+                .where(
+                        center.id.in(condition.centerIdList())
+                )
                 .from(center)
                 .join(center.carList, car)
                 .where(

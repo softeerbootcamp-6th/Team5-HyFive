@@ -1,6 +1,5 @@
 package hyfive.gachita.dispatch.module.condition;
 
-import hyfive.gachita.dispatch.dto.FilteredCenterDto;
 import lombok.Builder;
 
 import java.time.LocalDate;
@@ -9,7 +8,7 @@ import java.util.List;
 
 @Builder
 public record CenterCondition (
-        List<FilteredCenterDto> centerIdList,
+        List<Long> centerIdList,
         LocalDate hospitalDate,
         LocalTime maybeOnTime,
         LocalTime deadline,
