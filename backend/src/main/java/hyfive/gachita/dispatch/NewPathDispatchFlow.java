@@ -48,6 +48,7 @@ public class NewPathDispatchFlow {
         List<CarScheduleDto> filteredScheduleList = idleCarListProvider.getByCondition(filteredCenterList, newBookDto);
 
         // duration, distance 정보
+        // TODO: 동일한 센터에 대한 유휴시간인 경우 API 호출을 최소화하도록 구현 필요
         FinalNewPathDto bestPath = routeInfoProvider.getAll(filteredScheduleList, newBookDto).stream()
                 .filter(finalNewPathValidator::isFirstPathDurationExceed)
                 .filter(finalNewPathValidator::isScheduleWithinRentalWindow)
