@@ -30,6 +30,7 @@ public class NewPathDispatchFlow {
     private final BoundingBoxFilter boundingBoxFilter;
     private final HaversineFilter haversineFilter;
     private final FinalNewPathValidator finalNewPathValidator;
+    private final FinalNewPathSelector finalNewPathSelector;
 
     private final static int RADIUS_METERS = 500;
 
@@ -47,17 +48,11 @@ public class NewPathDispatchFlow {
         List<CarScheduleDto> filteredScheduleList = idleCarListProvider.getByCondition(filteredCenterList, newBookDto);
 
         // duration, distance 정보
-        // TODO: 모듈로 분리
         FinalNewPathDto bestPath = routeInfoProvider.getAll(filteredScheduleList, newBookDto).stream()
                 .filter(finalNewPathValidator::isFirstPathDurationExceed)
                 .filter(finalNewPathValidator::isScheduleWithinRentalWindow)
                 .min(Comparator
-                        // 차량 출발 시각과 유휴 시작 시간의 차이를 최소화
-                        .comparing((FinalNewPathDto p) -> {
-                            LocalTime startTime = p.nodeList().get(0).time();
-                            LocalTime rentalStartTime = p.path().rentalStartTime();
-                            return startTime.toSecondOfDay() - rentalStartTime.toSecondOfDay();
-                        })
+                        .comparing(finalNewPathSelector::compareStartTimeDifference)
                         .thenComparing(FinalNewPathDto::totalDuration)
                         .thenComparing(FinalNewPathDto::totalDistance)
                 )
