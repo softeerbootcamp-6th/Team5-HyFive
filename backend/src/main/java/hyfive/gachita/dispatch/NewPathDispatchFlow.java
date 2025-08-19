@@ -32,6 +32,7 @@ public class NewPathDispatchFlow {
 
     private final static int RADIUS_METERS = 500;
 
+    // TODO: DTO 네이밍 컨벤션에 맞게 수정 FilteredCenterDto, NewPathCandidateDto, FinalNewPathDto
     public void execute(NewBookDto newBookDto) {
         // center 정보
         BoundingBoxCondition boundingBoxCondition = BoundingBoxCondition.from(newBookDto.startLat(), newBookDto.startLng(), RADIUS_METERS);
@@ -43,15 +44,15 @@ public class NewPathDispatchFlow {
 
         // car, rental 정보
         List<CarScheduleDto> carScheduleCandidates = idleCarListProvider.getByCondition(centerCandidates, newBookDto);
-//                .stream()
-//                .collect(Collectors.groupingBy(CarScheduleDto::centerDto)).values().stream()
-//                .flatMap(cars -> carSelector.selectBestCarForSingleCenter(cars).stream())
-//                .toList();
 
         // duration, distance 정보
         NewPathDto bestPath = routeInfoProvider.getAll(carScheduleCandidates, newBookDto).stream()
                 .filter(p -> p.routeInfo().totalDuration() < 3600)
+                // TODO: 센터 ~ 하차 시간이 모두 유휴시간에 포함되는지
+                //  .filter()
                 .min(Comparator
+                        // TODO: 센터노드.time - rentalStartTime 이 가장 작은가
+                        // TODO: rentalEndTime - 센터노드.time 이 가장 큰가
                         .comparing((NewPathDto p) -> p.routeInfo().totalDuration())
                         .thenComparing(p -> p.routeInfo().totalDistance())
                 )
