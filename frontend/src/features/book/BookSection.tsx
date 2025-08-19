@@ -1,36 +1,39 @@
 import { useGetBook } from "@/apis/BookAPI";
 import BookDetailSection from "@/features/book/BookDetailSection";
 import BookListSection from "@/features/book/BookListSection";
-import { rowsUser } from "@/mocks/tableMocks";
-import TableMatcher from "@/utils/TableMatcher";
 import { css } from "@emotion/react";
 import { useState } from "react";
 
 const BookSection = () => {
-  const TAB_LIST = ["신규 예약", "예약 성공", "예약 실패"];
-  const [activeTab, setActiveTab] = useState<string>(TAB_LIST[0]);
-
+  const [activeTab, setActiveTab] = useState<string>("신규 예약");
+  const [activeBookId, setActiveBookId] = useState<number | null>(null);
   const { data } = useGetBook(activeTab);
-  if (!data) return;
-  const [activeBookId, setActiveBookId] = useState(data[0].id);
-  const { userRows, bookingRows, routeRows } =
-    TableMatcher.matchBookTableType(rowsUser);
+
+  //   const [activeBookWithAPIType, setActiveBookWithAPIType] = useState<
+  //     BookDataType | undefined
+  //   >(undefined);
+
+  // useEffect(() => {
+  //   if (!data || data.length === 0) return;
+  //   console.log(data);
+  //   // setActiveBookId(data[0].id);
+  //   // if (data && data.length > 0) {
+  //   //   setActiveBookId(data[0].id);
+  //   // }
+  //   // return () => setActiveBookId(null);
+  // }, [data, activeTab]);
+
+  const activeBookWithAPIType = data?.find((book) => book.id === activeBookId);
 
   return (
     <div css={BookPageContainer}>
       <BookListSection
         data={data}
-        TAB_LIST={TAB_LIST}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
+        setActiveBookId={setActiveBookId}
       />
-      <BookDetailSection
-        data={data[activeBookId]}
-        activeTab={activeTab}
-        userRows={userRows}
-        bookingRows={bookingRows}
-        routeRows={routeRows}
-      />
+      <BookDetailSection data={activeBookWithAPIType} activeTab={activeTab} />
     </div>
   );
 };

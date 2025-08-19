@@ -10,18 +10,21 @@ import type { Dispatch, SetStateAction } from "react";
 const { color, typography } = theme;
 
 interface BookListSectionProps {
-  data: BookDataType[];
-  TAB_LIST: string[];
+  data: BookDataType[] | undefined;
   activeTab: string;
   setActiveTab: Dispatch<SetStateAction<string>>;
+  setActiveBookId: Dispatch<SetStateAction<number | null>>;
 }
 const BookListSection = ({
   data,
-  TAB_LIST,
   activeTab,
   setActiveTab,
+  setActiveBookId,
 }: BookListSectionProps) => {
+  const bookList = data ?? [];
+  const TAB_LIST = ["신규 예약", "예약 성공", "예약 실패"];
   const LOCATION_SECTION = "운정 1구역";
+
   return (
     <div css={BookListSectionContainer}>
       <div css={HeaderContainer}>
@@ -35,8 +38,8 @@ const BookListSection = ({
         setSelected={setActiveTab}
       />
       <div css={ContentContainer}>
-        {data.map((bookData, idx) => (
-          <div key={bookData.name}>
+        {bookList.map((bookData, idx) => (
+          <div key={bookData.name} onClick={() => setActiveBookId(bookData.id)}>
             <BookCard
               bookType={TabMatcher.matchBookTypeKRToENG(activeTab)}
               data={bookData}
