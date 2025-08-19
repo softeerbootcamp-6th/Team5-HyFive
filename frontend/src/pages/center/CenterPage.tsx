@@ -26,8 +26,6 @@ import {
 import { isFutureWeek } from "@/features/calender/Calender.util";
 import { useCarNavigation } from "@/hooks/useCenterNavigation";
 import Modal from "@/components/Modal";
-import CarModalContent from "@/components/CarModalContent";
-import ModalContent from "@/components/ModalContent";
 import { useCenterModal } from "@/hooks/useCenterModal";
 
 const { color, typography } = theme;
@@ -51,20 +49,26 @@ const CenterPage = () => {
 
   // 이벤트 핸들러
   const { navigateToRegisterCar, navigateToEditCar } = useCarNavigation();
-  const { modalState, openEdit, openDelete, openDone, close, is } =
-    useCenterModal();
+  const {
+    modalState,
+    openEditModal,
+    openDeleteModal,
+    openDoneModal,
+    closeModal,
+    createModalContent,
+  } = useCenterModal();
 
   const handleEditConfirm = () => {
     navigateToEditCar(selectedCarId);
-    close();
+    closeModal();
   };
 
   const handleDeleteConfirm = () => {
     // TODO 재민 - 삭제 로직 구현
-    close();
+    closeModal();
     // TODO - 삭제 완료 후 확인 모달 열기
     setTimeout(() => {
-      openDone();
+      openDoneModal();
     }, 1000);
   };
 
@@ -91,11 +95,11 @@ const CenterPage = () => {
         <div css={CarSectionHeader}>
           <h4 css={SectionLabel}>등록된 차량</h4>
           <div css={ActionButtonGroup}>
-            <button css={CarEditTextStyle} onClick={openEdit}>
+            <button css={CarEditTextStyle} onClick={openEditModal}>
               수정하기
             </button>
             <div css={DividerStyle} />
-            <button css={CarEditTextStyle} onClick={openDelete}>
+            <button css={CarEditTextStyle} onClick={openDeleteModal}>
               삭제하기
             </button>
           </div>
@@ -173,24 +177,12 @@ const CenterPage = () => {
           />
         </div>
       </div>
-      <Modal isOpen={!!modalState} onClose={close}>
-        {is("edit") && (
-          <CarModalContent
-            type="edit"
-            onClose={close}
-            onConfirm={handleEditConfirm}
-          />
-        )}
-        {is("delete") && (
-          <CarModalContent
-            type="delete"
-            onClose={close}
-            onConfirm={handleDeleteConfirm}
-          />
-        )}
-        {is("done") && (
-          <ModalContent onClose={close} content="삭제되었습니다." />
-        )}
+      <Modal isOpen={!!modalState} onClose={closeModal}>
+        {createModalContent({
+          close: closeModal,
+          handleEditConfirm,
+          handleDeleteConfirm,
+        })}
       </Modal>
     </div>
   );
