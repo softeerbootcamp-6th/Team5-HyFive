@@ -17,14 +17,14 @@ public class PathService {
     private final PathRepository pathRepository;
 
     @Transactional
-    public void createPath(FinalNewPathDto newPathDto, Book book) {
-        LocalTime startTime = newPathDto.nodeList().get(0).time();
-        LocalTime endTime = newPathDto.nodeList().get(2).time();
-        LocalTime maybeEndTime = minTime(newPathDto.rentalEndTime(), startTime.plusHours(2));
+    public void createPathWithNodes(FinalNewPathDto finalPathDto, Book book) {
+        LocalTime startTime = finalPathDto.nodeList().get(0).time();
+        LocalTime endTime = finalPathDto.nodeList().get(2).time();
+        LocalTime maybeEndTime = minTime(finalPathDto.rentalEndTime(), startTime.plusHours(2));
 
         Path path = Path.builder()
-                .car(newPathDto.car())
-                .rental(newPathDto.rental())
+                .car(finalPathDto.car())
+                .rental(finalPathDto.rental())
                 .maybeStartTime(startTime)  // TODO: 고정값, 필요 없다면 제거 고려
                 .maybeEndTime(maybeEndTime)
                 .realStartTime(startTime)
@@ -36,7 +36,7 @@ public class PathService {
                 .driveStatus(DriveStatus.WAITING)
                 .build();
 
-        List<Node> nodeList = newPathDto.nodeList().stream()
+        List<Node> nodeList = finalPathDto.nodeList().stream()
                 .map(nodeDto -> Node.builder()
                         .path(path)
                         .book(book) // TODO: type이 CENTER인 경우 book이 null,,,

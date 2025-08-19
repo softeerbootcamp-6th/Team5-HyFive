@@ -5,6 +5,7 @@ import hyfive.gachita.application.book.BookCompletedEvent;
 import hyfive.gachita.application.book.BookService;
 import hyfive.gachita.application.book.BookStatus;
 import hyfive.gachita.application.path.PathService;
+import hyfive.gachita.dispatch.dto.FinalNewPathDto;
 import hyfive.gachita.dispatch.dto.NewBookDto;
 import hyfive.gachita.dispatch.excepion.DispatchException;
 import hyfive.gachita.dispatch.module.evaluation.DrivingTimeEvaluation;
@@ -37,10 +38,14 @@ public class DispatchService {
             // 1. 예약 추가 정보 로드
             NewBookDto newBookDto = drivingTimeEvaluation.evaluate(newBook);
 
+            // TODO : FinalNewPathDto, FinalOldPathDto 를 추상화하여 처리 필요
             // 2. DispatchFlowSelector 실행
-            dispatchFlowSelector.execute(newBookDto);
+            FinalNewPathDto finalPathDto = dispatchFlowSelector.execute(newBookDto);
 
-            // 3. 배차 결과 반영
+            // 3. 경로 및 노드 정보 반영
+            pathService.createPathWithNodes(finalPathDto, newBook);
+
+            // 4. 배차 결과 반영
             bookStatus = BookStatus.SUCCESS;
 
         } catch (Exception e) {

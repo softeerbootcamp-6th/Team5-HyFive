@@ -1,5 +1,6 @@
 package hyfive.gachita.dispatch;
 
+import hyfive.gachita.dispatch.dto.FinalNewPathDto;
 import hyfive.gachita.dispatch.dto.NewBookDto;
 import hyfive.gachita.dispatch.dto.PathCandidateDto;
 import hyfive.gachita.dispatch.module.condition.BoundingBoxCondition;
@@ -32,7 +33,7 @@ public class DispatchFlowSelector {
     private final HaversineFilter haversineFilter;
     private final NewPathDispatchFlow newPathDispatchFlow;
 
-    public void execute(NewBookDto newBookDto){
+    public FinalNewPathDto execute(NewBookDto newBookDto){
         List<PathCandidateDto> candidates = pathCandidateProvider.getByCondition(newBookDto.hospitalDate());
 
         BoundingBoxCondition bbConditionStart = BoundingBoxCondition.from(newBookDto.startLat(), newBookDto.startLng(), RADIUS_METERS);
@@ -60,11 +61,11 @@ public class DispatchFlowSelector {
 
         if (candidatePathIds.isEmpty()) {
             log.info("신규 경로 배차 실행");
-            newPathDispatchFlow.execute(newBookDto);
+            return newPathDispatchFlow.execute(newBookDto);
         } else {
             log.info("기존 경로 배차 실행");
 //            oldPathDispatchFlow.execute(new ArrayList<>(candidatePathIds), newBookDto);
+            return null;
         }
     }
-
 }
