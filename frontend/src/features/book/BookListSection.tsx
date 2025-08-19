@@ -1,5 +1,5 @@
 import EmptyUI from "@/components/EmptyUI";
-import RefetchButton from "@/components/RefetchButton";
+import RefetchButton from "@/features/refetchTimer/RefetchButton";
 import Tabs from "@/components/Tabs";
 import BookCard from "@/features/book/BookCard";
 import { bookDataList } from "@/mocks/bookMocks";
@@ -7,7 +7,7 @@ import { theme } from "@/styles/themes.style";
 import type { BookDataType } from "@/types/bookType.types";
 import TabMatcher from "@/utils/TabMatcher";
 import { css } from "@emotion/react";
-import { useEffect, type Dispatch, type SetStateAction } from "react";
+import { type Dispatch, type SetStateAction } from "react";
 const { color, typography } = theme;
 
 interface BookListSectionProps {
@@ -15,12 +15,14 @@ interface BookListSectionProps {
   activeTab: string;
   setActiveTab: Dispatch<SetStateAction<string>>;
   setActiveBookId: Dispatch<SetStateAction<number | null>>;
+  refetch: () => void;
 }
 const BookListSection = ({
   data,
   activeTab,
   setActiveTab,
   setActiveBookId,
+  refetch,
 }: BookListSectionProps) => {
   const TAB_LIST = ["신규 예약", "예약 성공", "예약 실패"];
   const LOCATION_SECTION = "운정 1구역";
@@ -29,7 +31,7 @@ const BookListSection = ({
     <div css={BookListSectionContainer}>
       <div css={HeaderContainer}>
         <p css={LocationSectionText}>{LOCATION_SECTION}</p>
-        <RefetchButton handleClick={() => {}} />
+        <RefetchButton handleClick={refetch} />
       </div>
       <Tabs
         type="bar_true"

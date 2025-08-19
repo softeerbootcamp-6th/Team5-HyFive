@@ -7,7 +7,7 @@ import { useState } from "react";
 const BookSection = () => {
   const [activeTab, setActiveTab] = useState<string>("신규 예약");
   const [activeBookId, setActiveBookId] = useState<number | null>(null);
-  const { data } = useGetBook(activeTab);
+  const { data, refetch } = useGetBook(activeTab);
 
   const activeBookWithAPIType = data?.find(
     (book) => book.id === (activeBookId ? activeBookId : data[0].id),
@@ -20,6 +20,7 @@ const BookSection = () => {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         setActiveBookId={setActiveBookId}
+        refetch={refetch}
       />
       <BookDetailSection data={activeBookWithAPIType} activeTab={activeTab} />
     </div>
