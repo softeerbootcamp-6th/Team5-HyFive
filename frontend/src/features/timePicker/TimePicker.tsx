@@ -111,6 +111,7 @@ const ButtonSection = css`
 const ButtonStyle = (type: "cancel" | "confirm") => css`
   padding: 24px 32px;
   background-color: transparent;
+  cursor: pointer;
   font: ${typography.Label.l2_semi};
   color: ${type === "cancel" ? color.GrayScale.gray4 : color.Semantic.success};
 `;

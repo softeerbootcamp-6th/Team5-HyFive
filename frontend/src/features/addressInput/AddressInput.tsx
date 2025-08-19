@@ -59,6 +59,7 @@ const AddressInput = () => {
         <div onClick={() => handleInputFocus("departure")}>
           <Input
             label="출발지"
+            required
             icon={<SearchIcon fill={color.GrayScale.gray4} />}
             placeholder="탑승 위치 입력"
             value={values.departure}
@@ -69,6 +70,7 @@ const AddressInput = () => {
         <div onClick={() => handleInputFocus("destination")}>
           <Input
             label="도착지"
+            required
             icon={<SearchIcon fill={color.GrayScale.gray4} />}
             placeholder="병원 위치 입력"
             value={values.destination}
