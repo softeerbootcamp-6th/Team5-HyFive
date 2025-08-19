@@ -4,6 +4,7 @@ import hyfive.gachita.application.book.Book;
 import hyfive.gachita.application.book.BookCompletedEvent;
 import hyfive.gachita.application.book.BookService;
 import hyfive.gachita.application.book.BookStatus;
+import hyfive.gachita.application.path.Path;
 import hyfive.gachita.application.path.PathService;
 import hyfive.gachita.dispatch.dto.FinalNewPathDto;
 import hyfive.gachita.dispatch.dto.NewBookDto;
@@ -43,10 +44,11 @@ public class DispatchService {
             FinalNewPathDto finalPathDto = dispatchFlowSelector.execute(newBookDto);
 
             // 3. 경로 및 노드 정보 반영
-            pathService.createPathWithNodes(finalPathDto, newBook);
+            Path savedPath = pathService.createPathWithNodes(finalPathDto, newBook);
 
             // 4. 배차 결과 반영
             bookStatus = BookStatus.SUCCESS;
+            bookService.updatePath(newBook.getId(), savedPath);
 
         } catch (Exception e) {
             bookStatus = BookStatus.FAIL;

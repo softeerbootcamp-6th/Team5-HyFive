@@ -88,5 +88,9 @@ public class Book {
     public void update(BookStatus bookStatus) {
         this.bookStatus = bookStatus;
     }
+
+    public void setPath(Path path) {
+        this.path = path;
+    }
 }
 
