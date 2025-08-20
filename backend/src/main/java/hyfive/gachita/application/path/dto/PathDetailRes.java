@@ -34,10 +34,7 @@ public record PathDetailRes(
         DriveStatus driveStatus,
 
         @Schema(description = "탑승자 수", example = "3")
-        int userCount,
-
-        @Schema(description = "차량 정원", example = "4")
-        int capacity
+        int userCount
 ) {
         public static PathDetailRes from(Path path) {
                 return new PathDetailRes(
@@ -49,8 +46,7 @@ public record PathDetailRes(
                         path.getEndAddr(),
                         path.getCar().getCenter().getCenterName(),
                         path.getDriveStatus(),
-                        path.getUserCount(),
-                        path.getCar().getCapacity()
+                        path.getUserCount()
                 );
         }
 }
