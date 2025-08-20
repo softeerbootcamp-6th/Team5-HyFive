@@ -1,8 +1,11 @@
 package hyfive.gachita.application.path;
 
 import hyfive.gachita.application.book.Book;
+import hyfive.gachita.application.common.dto.ScrollRes;
 import hyfive.gachita.application.node.Node;
 import hyfive.gachita.application.node.NodeType;
+import hyfive.gachita.application.path.dto.PathCursor;
+import hyfive.gachita.application.path.dto.PathDetailRes;
 import hyfive.gachita.application.path.dto.PathRes;
 import hyfive.gachita.application.path.respository.PathRepository;
 import hyfive.gachita.dispatch.dto.FinalNewPathDto;
@@ -10,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -57,11 +61,36 @@ public class PathService {
                 .orElseThrow(() -> new RuntimeException("경로 없음"));
     }
 
+    public ScrollRes<PathDetailRes, PathCursor> getPathListScroll(DriveStatus status, PathCursor cursor, int size) {
+        List<Path> pathList = pathRepository.findPathsForScroll(LocalDate.now(), status, cursor, size);
+
+        boolean hasNext = pathList.size() > size;
+
+        List<Path> actualList = hasNext ? pathList.subList(0, size) : pathList;
+
+        List<PathDetailRes> pathResList = actualList.stream()
+                .map(PathDetailRes::from)
+                .toList();
+
+        PathCursor lastCursor = null;
+        if (!actualList.isEmpty()) {
+            Path lastPath = actualList.get(actualList.size() - 1);
+            lastCursor = PathCursor.builder()
+                    .lastId(lastPath.getId())
+                    .lastStartTime(lastPath.getRealStartTime())
+                    .lastEndTime(lastPath.getRealEndTime()
+                    )
+                    .build();
+        }
+
+        return ScrollRes.<PathDetailRes, PathCursor>builder()
+                .items(pathResList)
+                .hasNext(hasNext)
+                .cursor(lastCursor)
+                .build();
+    }
 
     private LocalTime minTime(LocalTime timeA, LocalTime timeB) {
         return timeA.isBefore(timeB) ? timeA : timeB;
     }
 }
-
-
-

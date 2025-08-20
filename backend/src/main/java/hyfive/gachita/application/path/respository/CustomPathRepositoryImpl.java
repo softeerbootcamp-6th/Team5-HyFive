@@ -1,14 +1,19 @@
 package hyfive.gachita.application.path.respository;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hyfive.gachita.application.car.DelYn;
+import hyfive.gachita.application.path.DriveStatus;
+import hyfive.gachita.application.path.Path;
+import hyfive.gachita.application.path.dto.PathCursor;
 import hyfive.gachita.application.path.dto.PathRes;
 import hyfive.gachita.dispatch.dto.OldPathDto;
 import hyfive.gachita.dispatch.module.condition.PathCondition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +21,7 @@ import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.types.Projections.list;
 import static hyfive.gachita.application.book.QBook.book;
 import static hyfive.gachita.application.car.QCar.car;
+import static hyfive.gachita.application.center.QCenter.center;
 import static hyfive.gachita.application.node.QNode.node;
 import static hyfive.gachita.application.path.QPath.path;
 
@@ -69,6 +75,49 @@ public class CustomPathRepositoryImpl implements CustomPathRepository {
                 .where(book.id.eq(bookId))
                 .fetchOne()
         );
+    }
+
+    @Override
+    public List<Path> findPathsForScroll(LocalDate date, DriveStatus status, PathCursor cursor, int size) {
+
+        BooleanBuilder cursorCondition = new BooleanBuilder();
+        if (cursor != null && cursor.lastId() != null && cursor.lastStartTime() != null && cursor.lastEndTime() != null) {
+            // startTime 비교
+            cursorCondition.or(path.realStartTime.gt(cursor.lastStartTime()));
+
+            // startTime 같을 때 endTime 비교
+            cursorCondition.or(
+                    path.realStartTime.eq(cursor.lastStartTime())
+                            .and(path.realEndTime.gt(cursor.lastEndTime()))
+            );
+
+            // startTime, endTime 모두 같을 때 id 비교
+            cursorCondition.or(
+                    path.realStartTime.eq(cursor.lastStartTime())
+                            .and(path.realEndTime.eq(cursor.lastEndTime()))
+                            .and(path.id.lt(cursor.lastId()))
+            );
+        }
+
+
+
+
+        return queryFactory.select(path)
+                .from(path)
+                .join(path.car, car)
+                .join(car.center, center)
+                .where(
+                        path.driveStatus.eq(status),
+                        path.driveDate.eq(date),
+                        cursorCondition
+                )
+                .orderBy(
+                        path.realStartTime.asc(),
+                        path.realEndTime.asc(),
+                        path.id.desc()
+                )
+                .limit(size + 1)
+                .fetch();
     }
 }
 
