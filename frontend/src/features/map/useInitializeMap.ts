@@ -24,8 +24,10 @@ const useInitializeMap = ({
       center: new kakaoMaps.LatLng(centerLat, centerLng),
       level: INITIAL_ZOOM_LEVEL,
     };
+
     const initializedMap = new kakaoMaps.Map(mapRef.current, options);
     initializedMap.setMaxLevel(MAX_ZOOM_LEVEL);
+
     setMap(initializedMap);
   }, [mapRef, centerLat, centerLng]);
 

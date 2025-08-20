@@ -28,6 +28,19 @@ declare global {
     MarkerImage: {
       new (url: string, size?: SizeInstance): MarkerImageInstance;
     };
+    event: {
+      addListener<T extends object>(
+        target: T,
+        type: string,
+        handler: (...args: any[]) => void,
+      ): void;
+      removeListener<T extends object>(
+        target: T,
+        type: string,
+        handler: (...args: any[]) => void,
+      ): void;
+      trigger(target: object, type: string): void;
+    };
   }
 
   interface LatLngInstance {

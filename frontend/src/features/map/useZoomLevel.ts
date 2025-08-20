@@ -5,10 +5,18 @@ interface UseZoomLevelProps {
 }
 
 export const INITIAL_ZOOM_LEVEL = 4;
-export const MAX_ZOOM_LEVEL = 6;
+export const MAX_ZOOM_LEVEL = 5;
 
 const useZoomLevel = ({ map }: UseZoomLevelProps) => {
   const [zoomLevel, setZoomLevel] = useState(INITIAL_ZOOM_LEVEL);
+  const kakaoMaps = window.kakao?.maps;
+
+  useEffect(() => {
+    if (!kakaoMaps || !map) return;
+    kakaoMaps.event.addListener(map, "zoom_changed", function () {
+      setZoomLevel(map.getLevel());
+    });
+  }, [map]);
 
   useEffect(() => {
     if (!map) return;
