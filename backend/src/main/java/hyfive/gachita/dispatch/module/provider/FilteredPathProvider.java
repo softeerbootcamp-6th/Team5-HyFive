@@ -1,7 +1,7 @@
 package hyfive.gachita.dispatch.module.provider;
 
 import hyfive.gachita.application.book.repository.BookRepository;
-import hyfive.gachita.dispatch.dto.PathCandidateDto;
+import hyfive.gachita.dispatch.dto.FilteredPathDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -11,14 +11,14 @@ import java.util.stream.Stream;
 
 @Component
 @RequiredArgsConstructor
-public class PathCandidateProvider{
+public class FilteredPathProvider {
     private final BookRepository bookRepository;
 
-    public List<PathCandidateDto> getByCondition(LocalDate hospitalTime) {
+    public List<FilteredPathDto> getByCondition(LocalDate hospitalTime) {
         return bookRepository.searchCandidates(hospitalTime).stream()
                 .flatMap(book -> Stream.of(
-                        PathCandidateDto.fromStart(book),
-                        PathCandidateDto.fromEnd(book)
+                        FilteredPathDto.fromStart(book),
+                        FilteredPathDto.fromEnd(book)
                 ))
                 .toList();
     }

@@ -4,22 +4,22 @@ import hyfive.gachita.application.book.Book;
 import lombok.Builder;
 
 @Builder
-public record PathCandidateDto(
+public record FilteredPathDto(
         Long pathId,
         double lat,
         double lng
 ) implements FilterDto {
 
-    public static PathCandidateDto fromStart(Book book) {
-        return PathCandidateDto.builder()
+    public static FilteredPathDto fromStart(Book book) {
+        return FilteredPathDto.builder()
                 .pathId(book.getPath().getId())
                 .lat(book.getStartLat())
                 .lng(book.getStartLng())
                 .build();
     }
 
-    public static PathCandidateDto fromEnd(Book book) {
-        return PathCandidateDto.builder()
+    public static FilteredPathDto fromEnd(Book book) {
+        return FilteredPathDto.builder()
                 .pathId(book.getPath().getId())
                 .lat(book.getEndLat())
                 .lng(book.getEndLng())

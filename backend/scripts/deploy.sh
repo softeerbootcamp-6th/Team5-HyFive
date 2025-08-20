@@ -1,8 +1,13 @@
 #!/bin/bash
 set -e
 
+LOG_FILE="$LOG_DIR/app_$(date '+%Y%m%d_%H%M%S').log"
 APP_DIR="/home/ubuntu/app"
 DEPLOY_DIR="/home/ubuntu/deploy"
+LOG_DIR="$APP_DIR/log"
+mkdir -p "$LOG_DIR"
+
+LOG_FILE="$LOG_DIR/app_$(date '+%Y%m%d_%H%M%S').log"
 
 if [ -f "$DEPLOY_DIR/.env" ]; then
   export $(grep -v '^#' "$DEPLOY_DIR/.env" | xargs)
@@ -22,7 +27,7 @@ echo "📦 새 JAR 복사..."
 cp -f "$DEPLOY_DIR/app.jar" "$APP_DIR/app.jar"
 
 echo "🚀 애플리케이션 실행..."
-nohup java -Dspring.profiles.active=init -Dfile.encoding=UTF-8 -Duser.timezone=Asia/Seoul -jar "$APP_DIR/app.jar" > "$APP_DIR/app.log" 2>&1 &
+nohup java -Dspring.profiles.active=init -Dfile.encoding=UTF-8 -Duser.timezone=Asia/Seoul -jar "$APP_DIR/app.jar" > "$LOG_FILE" 2>&1 &
 
 echo $! > "$APP_DIR/app.pid"
 echo "✅ 배포 완료. PID: $(cat $APP_DIR/app.pid)"
