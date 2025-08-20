@@ -3,8 +3,24 @@ import { clientInstance } from "@/utils/AxiosInstance";
 import type { CustomError } from "@/utils/CustomError";
 import { useMutation } from "@tanstack/react-query";
 
+interface CarAPIResponse {
+  isSuccess: boolean;
+  code: number;
+  message: string;
+  data: {
+    id: number;
+    centerId: number;
+    centerName: string;
+    modelName: string;
+    carNumber: string;
+    capacity: number;
+    lowFloor: boolean;
+    carImage: string;
+  };
+}
+
 export const usePostCar = () => {
-  const mutation = useMutation<unknown, CustomError, CarFormValues>({
+  const mutation = useMutation<CarAPIResponse, CustomError, CarFormValues>({
     mutationFn: (carData) => {
       const formData = new FormData();
       formData.append("centerId", "1"); //centerId는 고정되어 있음
@@ -27,7 +43,7 @@ export const usePostCar = () => {
 
 export const usePatchCar = () => {
   const mutation = useMutation<
-    unknown,
+    CarAPIResponse,
     CustomError,
     {
       id: number;
