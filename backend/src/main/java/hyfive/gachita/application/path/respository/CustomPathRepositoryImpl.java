@@ -2,6 +2,7 @@ package hyfive.gachita.application.path.respository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hyfive.gachita.application.car.DelYn;
 import hyfive.gachita.application.path.Path;
@@ -11,9 +12,14 @@ import hyfive.gachita.application.path.dto.PathRes;
 import hyfive.gachita.dispatch.dto.OldPathDto;
 import hyfive.gachita.dispatch.module.condition.PathCondition;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -128,5 +134,37 @@ public class CustomPathRepositoryImpl implements CustomPathRepository {
                 .leftJoin(book.nodeList, node)
                 .where(path.id.eq(pathId))
                 .fetchOne();
+    }
+
+    @Override
+    public Page<Path> searchPathPageByCondition(Pair<LocalDate, LocalDate> dateRange,
+                                                DriveStatus status,
+                                                Pageable pageable) {
+        List<Path> pathList = queryFactory
+                .select(path)
+                .from(path)
+                .where(
+                        path.driveDate.between(dateRange.getFirst(), dateRange.getSecond()),
+                        path.driveStatus.eq(status)
+                )
+                .orderBy(
+                    path.realStartTime.asc(),
+                    path.realEndTime.asc(),
+                    path.id.desc()
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        Long totalCount = queryFactory
+                .select(Wildcard.count)
+                .from(path)
+                .where(
+                        path.driveDate.between(dateRange.getFirst(), dateRange.getSecond()),
+                        path.driveStatus.eq(status)
+                )
+                .fetchOne();
+
+        return new PageImpl<>(pathList, pageable, totalCount == null ? 0L : totalCount);
     }
 }

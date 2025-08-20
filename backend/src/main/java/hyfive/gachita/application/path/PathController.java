@@ -1,6 +1,8 @@
 package hyfive.gachita.application.path;
 
+import hyfive.gachita.application.common.dto.PagedListRes;
 import hyfive.gachita.application.common.dto.ScrollRes;
+import hyfive.gachita.application.common.enums.SearchPeriod;
 import hyfive.gachita.application.path.dto.PassengerRes;
 import hyfive.gachita.application.path.dto.PathCursor;
 import hyfive.gachita.application.path.dto.PathDetailRes;
@@ -29,5 +31,15 @@ public class PathController implements PathDocs {
             @RequestParam(name = "size", defaultValue = "10") int size
     ) {
         return BaseResponse.success(pathService.getPathListScroll(status, cursor, size));
+    }
+
+    @GetMapping("/list")
+    public BaseResponse<PagedListRes<PathDetailRes>> getPathList(
+            @RequestParam(name = "period", required = false, defaultValue = "TODAY") SearchPeriod period,
+            @RequestParam(name = "status") DriveStatus status,
+            @RequestParam(name = "page", required = false, defaultValue = "1") int page,
+            @RequestParam(name = "limit", required = false, defaultValue = "12") int limit
+    ) {
+        return BaseResponse.success(pathService.getPathList(period, status, page, limit));
     }
 }
