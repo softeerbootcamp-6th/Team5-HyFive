@@ -7,7 +7,7 @@ export const usePostCar = () => {
   const mutation = useMutation<unknown, CustomError, CarFormValues>({
     mutationFn: (carData) => {
       const formData = new FormData();
-      formData.append("centerId", "1");
+      formData.append("centerId", "1"); //centerId는 고정되어 있음
       formData.append("modelName", carData.carModel);
       formData.append("carNumber", carData.carNumber);
       formData.append("capacity", carData.maxPassenger);
