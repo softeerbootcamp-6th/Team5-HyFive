@@ -2,7 +2,7 @@ package hyfive.gachita.application.path;
 
 import hyfive.gachita.application.book.Book;
 import hyfive.gachita.application.node.Node;
-import hyfive.gachita.application.node.NodeRepository;
+import hyfive.gachita.application.node.repository.NodeRepository;
 import hyfive.gachita.application.node.NodeType;
 import hyfive.gachita.application.path.dto.MapDrawRes;
 import hyfive.gachita.application.path.dto.MarkerDto;
@@ -68,6 +68,7 @@ public class PathService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.NO_EXIST_VALUE, "DB에 경로 데이터가 존재하지 않습니다."));
 
         // marker list
+        List<MarkerDto> markerList = nodeRepository.findByAllPathId(id);
 
         // segment list
 
