@@ -1,13 +1,11 @@
 import { AdminLayout, BookLayout, CenterLayout } from "@/layouts";
 import {
   LandingPage,
-  DriversPage,
   AdminRegisterPage,
   BookPage,
   PathsPage,
   SchedulePage,
   UsersPage,
-  CentersPage,
   CenterDetailPage,
   CenterPage,
   CenterRegisterPage,
@@ -32,10 +30,8 @@ const Router = () => {
             <Route path="register" element={<AdminRegisterPage />} />
           </Route>
           <Route path="centers">
-            <Route index element={<CentersPage />} />
-            <Route path=":id" element={<CenterDetailPage />} />
+            <Route index element={<CenterDetailPage />} />
           </Route>
-          <Route path="drivers" element={<DriversPage />} />
         </Route>
 
         {/* Center 영역 */}
