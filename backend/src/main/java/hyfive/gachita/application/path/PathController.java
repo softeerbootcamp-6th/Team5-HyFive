@@ -8,6 +8,8 @@ import hyfive.gachita.application.path.dto.PathCursor;
 import hyfive.gachita.application.path.dto.PathDetailRes;
 import hyfive.gachita.docs.PathDocs;
 import hyfive.gachita.global.BaseResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,10 +35,14 @@ public class PathController implements PathDocs {
         return BaseResponse.success(pathService.getPathListScroll(status, cursor, size));
     }
 
+    @Operation(summary = "경로 리스트 조회 API", description = """
+            기간(period), 상태(status)를 조건으로 경로 리스트를 조회합니다. 
+            페이지네이션(page, limit) 방식으로 결과를 제공합니다.
+            """)
     @GetMapping("/list")
     public BaseResponse<PagedListRes<PathDetailRes>> getPathList(
             @RequestParam(name = "period", required = false, defaultValue = "TODAY") SearchPeriod period,
-            @RequestParam(name = "status") DriveStatus status,
+            @RequestParam(name = "status", required = false) DriveStatus status,
             @RequestParam(name = "page", required = false, defaultValue = "1") int page,
             @RequestParam(name = "limit", required = false, defaultValue = "12") int limit
     ) {
