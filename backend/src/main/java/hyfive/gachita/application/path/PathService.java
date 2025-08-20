@@ -3,7 +3,7 @@ package hyfive.gachita.application.path;
 import hyfive.gachita.application.book.Book;
 import hyfive.gachita.application.node.Node;
 import hyfive.gachita.application.node.NodeType;
-import hyfive.gachita.application.path.dto.PassengerDto;
+import hyfive.gachita.application.path.dto.PassengerRes;
 import hyfive.gachita.application.path.dto.PathRes;
 import hyfive.gachita.application.path.respository.PathRepository;
 import hyfive.gachita.dispatch.dto.FinalNewPathDto;
@@ -61,19 +61,19 @@ public class PathService {
                 .orElseThrow(() -> new RuntimeException("경로 없음"));
     }
 
-    public List<PassengerDto> getPathPassengers(Long pathId) {
+    public List<PassengerRes> getPathPassengers(Long pathId) {
         Path pathWithInfo = pathRepository.findPassengersByPathId(pathId);
         return pathWithInfo.getBookList().stream()
                 .map(this::createPassengerDto)
-                .sorted(Comparator.comparing(PassengerDto::onTime)) // 스트림 내에서 정렬
+                .sorted(Comparator.comparing(PassengerRes::onTime)) // 스트림 내에서 정렬
                 .toList();
     }
 
-    private PassengerDto createPassengerDto(Book book) {
+    private PassengerRes createPassengerDto(Book book) {
         LocalTime startTime = findNodeTimeByType(book, NodeType.START);
         LocalTime endTime = findNodeTimeByType(book, NodeType.END);
 
-        return PassengerDto.builder()
+        return PassengerRes.builder()
                 .name(book.getBookName())
                 .phoneNumber(book.getBookTel())
                 .walker(book.getWalker())

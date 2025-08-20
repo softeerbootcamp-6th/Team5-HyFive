@@ -1,6 +1,6 @@
 package hyfive.gachita.application.path;
 
-import hyfive.gachita.application.path.dto.PassengerDto;
+import hyfive.gachita.application.path.dto.PassengerRes;
 import hyfive.gachita.global.BaseResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +17,7 @@ public class PathController {
     private final PathService pathService;
 
     @GetMapping("/{pathId}/passenger")
-    public BaseResponse<List<PassengerDto>> getPathPassengers(@PathVariable Long pathId) {
+    public BaseResponse<List<PassengerRes>> getPathPassengers(@PathVariable Long pathId) {
         return BaseResponse.success(pathService.getPathPassengers(pathId));
     }
 }
