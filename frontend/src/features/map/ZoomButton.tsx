@@ -19,7 +19,7 @@ const ZoomButton = ({ zoomLevel, safeSetZoomLevel }: ZoomButtonProps) => {
       <AddIcon
         onClick={() => safeSetZoomLevel("add")}
         fill={
-          isActiveZoomLevel("max")
+          isActiveZoomLevel("min")
             ? color.GrayScale.gray3
             : color.GrayScale.gray5
         }
@@ -28,7 +28,7 @@ const ZoomButton = ({ zoomLevel, safeSetZoomLevel }: ZoomButtonProps) => {
       <RemoveIcon
         onClick={() => safeSetZoomLevel("remove")}
         fill={
-          isActiveZoomLevel("min")
+          isActiveZoomLevel("max")
             ? color.GrayScale.gray3
             : color.GrayScale.gray5
         }

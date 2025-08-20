@@ -26,13 +26,13 @@ const useZoomLevel = ({ map }: UseZoomLevelProps) => {
   const safeSetZoomLevel = (mode: "add" | "remove") => {
     if (mode === "add") {
       setZoomLevel((prev) => {
-        if (prev < MAX_ZOOM_LEVEL) return prev + 1;
+        if (prev > 1) return prev - 1;
         return prev;
       });
     }
     if (mode === "remove") {
       setZoomLevel((prev) => {
-        if (prev > 1) return prev - 1;
+        if (prev < MAX_ZOOM_LEVEL) return prev + 1;
         return prev;
       });
     }
