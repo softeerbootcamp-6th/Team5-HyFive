@@ -30,6 +30,9 @@ public class Segment {
     @Column(name = "duration", nullable = false, columnDefinition = "INT")
     private int duration;
 
+    @Column(name = "sequence", nullable = false, columnDefinition = "INT")
+    private int sequence;
+
     @OneToMany(mappedBy = "segment", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Point> points = new ArrayList<>();
 }
