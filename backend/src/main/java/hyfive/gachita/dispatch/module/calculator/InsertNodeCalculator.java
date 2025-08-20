@@ -17,12 +17,12 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class InsertPathInfoCalculator {
+public class InsertNodeCalculator {
 
     private final int MAX_TOTAL_DURATION = 7200;
     private final KakaoNaviService kakaoNaviService;
 
-    public UpdatedPathDto calculate(List<NodeDto> candidatePath) {
+    public UpdatedPathDto getUpdatedPath(List<NodeDto> candidatePath) {
         List<LatLng> latLngList = candidatePath.stream()
                 .map(node -> new LatLng(node.lat(), node.lng()))
                 .toList();
@@ -30,7 +30,7 @@ public class InsertPathInfoCalculator {
         RouteInfo routeInfo = kakaoNaviService.geRouteInfo(latLngList);
         List<NodeDto> updatedTimeCandidatePath = updateNodeTime(candidatePath, routeInfo.durationList());
 
-        if (!isValidDeadline(updatedTimeCandidatePath, routeInfo)) return null;
+        if (!isDeadlineValid(updatedTimeCandidatePath, routeInfo)) return null;
 
         return UpdatedPathDto.builder()
                 .routeInfo(routeInfo)
@@ -59,8 +59,8 @@ public class InsertPathInfoCalculator {
     }
 
     // node time의 deadline 확인
-    private boolean isValidDeadline(List<NodeDto> nodeList, RouteInfo route) {
-        if (route.totalDuration() > MAX_TOTAL_DURATION) return false;
+    private boolean isDeadlineValid(List<NodeDto> nodeList, RouteInfo routeInfo) {
+        if (routeInfo.totalDuration() > MAX_TOTAL_DURATION) return false;
 
         for (int i = 1; i < nodeList.size(); i++) {
             NodeDto node = nodeList.get(i);

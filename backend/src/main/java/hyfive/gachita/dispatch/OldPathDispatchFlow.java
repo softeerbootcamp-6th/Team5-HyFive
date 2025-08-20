@@ -2,7 +2,7 @@ package hyfive.gachita.dispatch;
 
 import hyfive.gachita.dispatch.dto.*;
 import hyfive.gachita.dispatch.excepion.DispatchException;
-import hyfive.gachita.dispatch.module.calculator.InsertPathInfoCalculator;
+import hyfive.gachita.dispatch.module.calculator.InsertNodeCalculator;
 import hyfive.gachita.dispatch.module.condition.PathCondition;
 import hyfive.gachita.dispatch.module.provider.OldPathListProvider;
 import hyfive.gachita.dispatch.module.provider.SlotCandidateProvider;
@@ -18,36 +18,34 @@ import java.util.List;
 public class OldPathDispatchFlow {
 
     private final SlotCandidateProvider slotCandidateProvider;
-    private final InsertPathInfoCalculator insertPathInfoCalculator;
+    private final InsertNodeCalculator insertNodeCalculator;
     private final OldPathListProvider oldPathListProvider;
 
-    private final List<FinalOldPathDto> finalPathCandidates = new  ArrayList<>();
-
     public void execute(List<Long> pathIds, NewBookDto newBook) {
-        // 1. pathIds List<Long> 기준으로 path 테이블로 부터 아래 조건을 만족하는 path가 있는지 확인
-        // 2. 위에 걸러진 path ID에 해당하는 Node getAll() NodeDto
-        PathCondition condition = PathCondition.builder()
-                .maybeOnTime(newBook.maybeOnTime())
-                .deadline(newBook.deadline())
-                .walker(newBook.walker())
-                .pathIds(pathIds)
-                .build();
+        // path - 최종 후보 리스트
+        List<FinalOldPathDto> finalPathCandidates = new ArrayList<>();
+
+        // path - 후보 리스트
+        PathCondition condition = PathCondition.from(pathIds, newBook);
         List<OldPathDto> pathCandidates = oldPathListProvider.getByCondition(condition);
 
-        // 3. 배차 차량이 존재하는 지 확인
-        // 3-1. 단일 경로 내 최적 경로 후보 선출
+        // single path - new book node 삽입 후 bestPath 선출
         for (OldPathDto pathCandidate : pathCandidates) {
+            // old path 정보
             Long pathId = pathCandidate.pathId();
             Long carId = pathCandidate.carId();
             List<NodeDto> oldNodes = pathCandidate.nodes();
 
+            // new book node 정보
             NodeDto newBookStartNode = NodeDto.newBookStartNodeFrom(newBook);
             NodeDto newBookEndNode = NodeDto.newBookEndNodeFrom(newBook);
 
+            // slot - new book node 삽입 위치 후보 선출
             List<Integer> startSlotCandidates = slotCandidateProvider.findSlotCandidates(oldNodes, newBookStartNode);
             List<Integer> endSlotCandidates = slotCandidateProvider.findSlotCandidates(oldNodes, newBookEndNode);
 
-            List<FinalOldPathDto> candidates = new ArrayList<>();
+            // new book node 삽입 - 완전 탐색
+            List<FinalOldPathDto> singlePathCandidates = new ArrayList<>();
 
             for (Integer si : startSlotCandidates) {
                 for (Integer ei : endSlotCandidates) {
@@ -56,44 +54,44 @@ public class OldPathDispatchFlow {
                         candidatePath.add(ei, newBookEndNode);
                         candidatePath.add(si, newBookStartNode);
 
-                        UpdatedPathDto updatedPath = insertPathInfoCalculator.calculate(candidatePath);
+                        UpdatedPathDto updatedPath = insertNodeCalculator.getUpdatedPath(candidatePath);
                         if (updatedPath != null) {
                             List<NodeDto> newNodes = List.of(
                                     updatedPath.updatedNodes().remove(ei.intValue()),
                                     updatedPath.updatedNodes().remove(si.intValue())
                             );
 
-                            FinalOldPathDto finalOldPathDto = FinalOldPathDto.builder()
+                            FinalOldPathDto finalOldPath = FinalOldPathDto.builder()
                                     .pathId(pathId)
                                     .carId(carId)
                                     .newNodes(newNodes)
-                                    .oldNodes(new ArrayList<>(oldNodes))
+                                    .oldNodes(updatedPath.updatedNodes())
                                     .totalDuration(updatedPath.routeInfo().totalDuration())
                                     .totalDistance(updatedPath.routeInfo().totalDistance())
                                     .build();
 
-                            candidates.add(finalOldPathDto);
+                            singlePathCandidates.add(finalOldPath);
                         }
                     }
                 }
             }
 
-            // 후보 들을 totalDuration이 작은 것이 앞에오는 순서대로, totalDuration이 같다면 totalDistance가 작은 것이 앞에 오는 순서대로 정렬.
-            candidates.stream()
-                    .min(Comparator.comparingInt(FinalOldPathDto::totalDuration)
+            // bestPath 선출
+            singlePathCandidates.stream()
+                    .min(Comparator
+                            .comparingInt(FinalOldPathDto::totalDuration)
                             .thenComparingInt(FinalOldPathDto::totalDistance))
-                    .orElseThrow(() -> new DispatchException("단일 경로 내 총 이동시간"));
+                    .orElseThrow(() -> new DispatchException("단일 경로 내에서 최종 경로 후보를 선정하던 중 오류가 발생했습니다."));
 
-            // 1순위 최종 후보에 올리기
-            finalPathCandidates.add(candidates.get(0));
+            finalPathCandidates.add(singlePathCandidates.get(0));
         }
 
-        // 3-2. 다중 경로 중 최적 경로 선출
+        // multi path - 최종 bestPath 선출
         FinalOldPathDto bestPath = finalPathCandidates.stream()
                 .min(Comparator
-                        .comparing(FinalOldPathDto::totalDuration)
-                        .thenComparing(FinalOldPathDto::totalDistance)
+                        .comparingInt(FinalOldPathDto::totalDuration)
+                        .thenComparingInt(FinalOldPathDto::totalDistance)
                 )
-                .orElseThrow(() -> new DispatchException("총 이동시간"));
+                .orElseThrow(() -> new DispatchException("최종 경로 후보에서 최종 경로를 선정하던 중 오류가 발생했습니다."));
     }
 }

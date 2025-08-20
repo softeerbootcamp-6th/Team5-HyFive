@@ -11,11 +11,9 @@ import java.util.List;
 @Component
 public class SlotCandidateProvider {
 
-    public List<Integer> findSlotCandidates(
-            List<NodeDto> oldNodes,
-            NodeDto newNode
-    ) {
-        List<Integer> candidates = new ArrayList<>();
+    public List<Integer> findSlotCandidates(List<NodeDto> oldNodes, NodeDto newNode) {
+        List<Integer> slotCandidates = new ArrayList<>();
+
         if (oldNodes.isEmpty()) {
             throw new DispatchException("슬롯 탐색 중 예외 발생 - 기존 경로 노드 리스트가 비어 있습니다.");
         }
@@ -48,9 +46,9 @@ public class SlotCandidateProvider {
         int to   = Math.min(size, rightBoundSlot);
 
         for (int slot = from; slot <= to; slot++) {
-            candidates.add(slot);
+            slotCandidates.add(slot);
         }
 
-        return candidates;
+        return slotCandidates;
     }
 }

@@ -1,5 +1,6 @@
 package hyfive.gachita.dispatch.module.condition;
 
+import hyfive.gachita.dispatch.dto.NewBookDto;
 import lombok.Builder;
 
 import java.time.LocalTime;
@@ -11,4 +12,13 @@ public record PathCondition (
         LocalTime deadline,
         boolean walker,
         List<Long> pathIds
-) {}
+) {
+    public static PathCondition from(List<Long> pathIds, NewBookDto newBook) {
+        return PathCondition.builder()
+                .maybeOnTime(newBook.maybeOnTime())
+                .deadline(newBook.deadline())
+                .walker(newBook.walker())
+                .pathIds(pathIds)
+                .build();
+    }
+}
