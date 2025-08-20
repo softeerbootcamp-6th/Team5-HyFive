@@ -5,10 +5,7 @@ import hyfive.gachita.application.node.Node;
 import hyfive.gachita.application.node.dto.SegmentDto;
 import hyfive.gachita.application.node.repository.NodeRepository;
 import hyfive.gachita.application.node.NodeType;
-import hyfive.gachita.application.path.dto.MapDrawRes;
-import hyfive.gachita.application.path.dto.MarkerRes;
-import hyfive.gachita.application.path.dto.PathRes;
-import hyfive.gachita.application.path.dto.SegmentRes;
+import hyfive.gachita.application.path.dto.*;
 import hyfive.gachita.application.path.respository.PathRepository;
 import hyfive.gachita.dispatch.dto.FinalNewPathDto;
 import hyfive.gachita.global.BusinessException;
@@ -18,7 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalTime;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -79,8 +76,13 @@ public class PathService {
                 .toList();
 
         // highlight list
+        List<HighlightRes> highlightList = nodeRepository.getHighlightsByPath(id);
 
-        return MapDrawRes.builder().build();
+        return MapDrawRes.builder()
+                .polyline(segmentResList)
+                .marker(markerList)
+                .highlight(highlightList)
+                .build();
     }
 
 
