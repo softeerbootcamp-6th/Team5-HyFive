@@ -1,4 +1,4 @@
-import CenterButton from "@/features/map/CenterButton";
+import MidPointButton from "@/features/map/MidPointButton";
 import getRouteMidPoint from "@/features/map/getRouteMidPoint.util";
 import useInitializeMap from "@/features/map/useInitializeMap";
 import useVisualizeMarker from "@/features/map/useVisualizeMarker";
@@ -55,7 +55,7 @@ const MapContent = () => {
   return (
     <div css={MapContentContainer}>
       <div id="map" ref={mapRef} css={MapWrapper} />
-      <CenterButton handleInitMidPoint={handleInitMidPoint} />
+      <MidPointButton onClick={handleInitMidPoint} />
       <ZoomButton zoomLevel={zoomLevel} handleZoomLevel={handleZoomLevel} />
       <RoutePicker
         handleHighlight={handleHighlight}

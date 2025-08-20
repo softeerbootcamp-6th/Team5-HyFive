@@ -1,4 +1,4 @@
-import RefetchButton from "@/features/refetchTimer/RefetchButton";
+import RefetchButton from "@/components/RefetchButton";
 import Tabs from "@/components/Tabs";
 import type { ScheduleType } from "@/features/schedule/Schedule.types";
 import ScheduleCard from "@/features/schedule/ScheduleCard";

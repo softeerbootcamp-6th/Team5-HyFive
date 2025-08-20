@@ -1,5 +1,5 @@
 import { RefreashIcon } from "@/assets/icons";
-import { rotating } from "@/features/refetchTimer/rotateAnimation.util";
+import { rotating } from "@/utils/RotateAnimation";
 import { theme } from "@/styles/themes.style";
 import DateFormatter from "@/utils/DateFormatter";
 import { css } from "@emotion/react";
