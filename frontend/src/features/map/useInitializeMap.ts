@@ -1,4 +1,7 @@
-import { INITIAL_ZOOM_LEVEL } from "@/features/map/useZoomLevel";
+import {
+  INITIAL_ZOOM_LEVEL,
+  MAX_ZOOM_LEVEL,
+} from "@/features/map/useZoomLevel";
 import { useEffect, useState, type RefObject } from "react";
 
 interface UseInitializeMapProps {
@@ -22,6 +25,7 @@ const useInitializeMap = ({
       level: INITIAL_ZOOM_LEVEL,
     };
     const initializedMap = new kakaoMaps.Map(mapRef.current, options);
+    initializedMap.setMaxLevel(MAX_ZOOM_LEVEL);
     setMap(initializedMap);
   }, [mapRef, centerLat, centerLng]);
 

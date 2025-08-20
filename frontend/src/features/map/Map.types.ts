@@ -42,6 +42,7 @@ declare global {
 
   interface MapInstance {
     setLevel(level: number): void;
+    setMaxLevel(level: number): void;
     getLevel(): number;
     setCenter(latlng: LatLngInstance): void;
   }

@@ -1,21 +1,23 @@
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
 import { AddIcon, RemoveIcon } from "@/assets/icons";
-import type { SetStateAction } from "react";
+import type { Dispatch, SetStateAction } from "react";
 const { color } = theme;
 
 interface ZoomButtonProps {
-  setZoomLevel: React.Dispatch<SetStateAction<number>>;
+  setZoomLevel: Dispatch<SetStateAction<number>>;
 }
 const ZoomButton = ({ setZoomLevel }: ZoomButtonProps) => {
-  const handleZoomLevel = (size: number) => {
-    setZoomLevel((prev) => prev + size);
-  };
   return (
     <div css={ZoomButtonContainer}>
-      <AddIcon onClick={() => handleZoomLevel(-1)} />
+      <AddIcon
+        onClick={() => {
+          console.log("hi");
+          setZoomLevel((prev) => prev - 1);
+        }}
+      />
       <div css={LineWrapper} />
-      <RemoveIcon onClick={() => handleZoomLevel(+1)} />
+      <RemoveIcon onClick={() => setZoomLevel((prev) => prev + 1)} />
     </div>
   );
 };
