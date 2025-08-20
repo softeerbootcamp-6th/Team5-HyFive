@@ -8,9 +8,9 @@ const { color } = theme;
 
 interface ZoomButtonProps {
   zoomLevel: number;
-  safeSetZoomLevel: (mode: "add" | "remove") => void;
+  handleZoomLevel: (mode: "add" | "remove") => void;
 }
-const ZoomButton = ({ zoomLevel, safeSetZoomLevel }: ZoomButtonProps) => {
+const ZoomButton = ({ zoomLevel, handleZoomLevel }: ZoomButtonProps) => {
   const isActiveZoomLevel = (type: "min" | "max") => {
     const activeZoomLevel = type === "min" ? 1 : MAX_ZOOM_LEVEL;
     return zoomLevel === activeZoomLevel ? true : false;
@@ -27,7 +27,7 @@ const ZoomButton = ({ zoomLevel, safeSetZoomLevel }: ZoomButtonProps) => {
     <div css={ZoomButtonContainer}>
       <div {...addHandlers} css={ButtonWrapper(isAddPressing)}>
         <AddIcon
-          onClick={() => safeSetZoomLevel("add")}
+          onClick={() => handleZoomLevel("add")}
           fill={
             isActiveZoomLevel("min")
               ? color.GrayScale.gray3
@@ -38,7 +38,7 @@ const ZoomButton = ({ zoomLevel, safeSetZoomLevel }: ZoomButtonProps) => {
       <div css={LineWrapper} />
       <div {...removeHandlers} css={ButtonWrapper(isRemovePressing)}>
         <RemoveIcon
-          onClick={() => safeSetZoomLevel("remove")}
+          onClick={() => handleZoomLevel("remove")}
           fill={
             isActiveZoomLevel("max")
               ? color.GrayScale.gray3

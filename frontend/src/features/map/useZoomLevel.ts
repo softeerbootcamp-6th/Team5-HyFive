@@ -23,7 +23,7 @@ const useZoomLevel = ({ map }: UseZoomLevelProps) => {
     map.setLevel(zoomLevel);
   }, [zoomLevel, map]);
 
-  const safeSetZoomLevel = (mode: "add" | "remove") => {
+  const handleZoomLevel = (mode: "add" | "remove") => {
     if (mode === "add") {
       setZoomLevel((prev) => {
         if (prev > 1) return prev - 1;
@@ -40,7 +40,7 @@ const useZoomLevel = ({ map }: UseZoomLevelProps) => {
 
   return {
     zoomLevel,
-    safeSetZoomLevel,
+    handleZoomLevel,
   };
 };
 

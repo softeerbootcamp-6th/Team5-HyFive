@@ -15,9 +15,10 @@ const useInitializeMap = ({
   centerLng,
 }: UseInitializeMapProps) => {
   const [map, setMap] = useState<MapInstance | null>(null);
+  const midPoint = { lat: centerLat, lng: centerLng };
+  const kakaoMaps = window.kakao?.maps;
 
   useEffect(() => {
-    const kakaoMaps = window.kakao?.maps;
     if (!mapRef.current || !kakaoMaps) return;
 
     const options = {
@@ -31,7 +32,12 @@ const useInitializeMap = ({
     setMap(initializedMap);
   }, [mapRef, centerLat, centerLng]);
 
-  return { map };
+  const handleInitMidPoint = () => {
+    if (!map || !kakaoMaps) return;
+    map?.setCenter(new kakaoMaps.LatLng(midPoint.lat, midPoint.lng));
+  };
+
+  return { map, handleInitMidPoint };
 };
 
 export default useInitializeMap;
