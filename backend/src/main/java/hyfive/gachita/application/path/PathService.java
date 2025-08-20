@@ -2,10 +2,15 @@ package hyfive.gachita.application.path;
 
 import hyfive.gachita.application.book.Book;
 import hyfive.gachita.application.node.Node;
+import hyfive.gachita.application.node.NodeRepository;
 import hyfive.gachita.application.node.NodeType;
+import hyfive.gachita.application.path.dto.MapDrawRes;
+import hyfive.gachita.application.path.dto.MarkerDto;
 import hyfive.gachita.application.path.dto.PathRes;
 import hyfive.gachita.application.path.respository.PathRepository;
 import hyfive.gachita.dispatch.dto.FinalNewPathDto;
+import hyfive.gachita.global.BusinessException;
+import hyfive.gachita.global.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PathService {
     private final PathRepository pathRepository;
+    private final NodeRepository nodeRepository;
 
     @Transactional
     public Path createPathWithNodes(FinalNewPathDto finalPathDto, Book book) {
@@ -55,6 +61,19 @@ public class PathService {
     public PathRes getPathByBook(Long bookId) {
         return pathRepository.findPathResByBookId(bookId)
                 .orElseThrow(() -> new RuntimeException("경로 없음"));
+    }
+
+    public MapDrawRes getMapDraw(Long id) {
+        Path path = pathRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NO_EXIST_VALUE, "DB에 경로 데이터가 존재하지 않습니다."));
+
+        // marker list
+
+        // segment list
+
+        // highlight list
+
+        return MapDrawRes.builder().build();
     }
 
 

@@ -1,9 +1,12 @@
 package hyfive.gachita.application.path.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 
 import java.util.List;
 
+@Builder
+@Schema(description = "지도를 그리기 위한 정보 dto")
 public record MapDrawRes(
         @Schema(description = "지도에 그릴 경로 정보(폴리라인)", implementation = SegmentDto.class)
         List<SegmentDto> polyline,
