@@ -52,6 +52,10 @@ const UserInputSection = () => {
   const handleDateClick = (date: Date) => {
     setSelectedDate(date);
     // TODO 재민 - Input value 업데이트 로직 추가
+  };
+
+  const handleCalendarConfirm = (_date: Date | null) => {
+    // TODO 재민 - Input value 업데이트 로직 추가
     setActivePopup(null);
   };
 
@@ -87,6 +91,9 @@ const UserInputSection = () => {
               onPrevMonth={handlePrevMonth}
               onNextMonth={handleNextMonth}
               onDateClick={handleDateClick}
+              isPopup={true}
+              onCancel={handleClosePopup}
+              onConfirm={handleCalendarConfirm}
             />
           </div>
         )}
