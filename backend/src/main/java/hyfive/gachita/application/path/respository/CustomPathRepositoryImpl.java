@@ -2,11 +2,13 @@ package hyfive.gachita.application.path.respository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hyfive.gachita.application.car.DelYn;
-import hyfive.gachita.application.path.Path;
 import hyfive.gachita.application.path.DriveStatus;
+import hyfive.gachita.application.path.Path;
+import hyfive.gachita.application.path.QPath;
 import hyfive.gachita.application.path.dto.PathCursor;
 import hyfive.gachita.application.path.dto.PathRes;
 import hyfive.gachita.dispatch.dto.OldPathDto;
@@ -19,7 +21,6 @@ import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -145,7 +146,7 @@ public class CustomPathRepositoryImpl implements CustomPathRepository {
                 .from(path)
                 .where(
                         path.driveDate.between(dateRange.getFirst(), dateRange.getSecond()),
-                        path.driveStatus.eq(status)
+                        statusEq(path, status)
                 )
                 .orderBy(
                     path.realStartTime.asc(),
@@ -161,10 +162,14 @@ public class CustomPathRepositoryImpl implements CustomPathRepository {
                 .from(path)
                 .where(
                         path.driveDate.between(dateRange.getFirst(), dateRange.getSecond()),
-                        path.driveStatus.eq(status)
+                        statusEq(path, status)
                 )
                 .fetchOne();
 
         return new PageImpl<>(pathList, pageable, totalCount == null ? 0L : totalCount);
+    }
+
+    private BooleanExpression statusEq(QPath path, DriveStatus status) {
+        return status != null ? path.driveStatus.eq(status) : null;
     }
 }
