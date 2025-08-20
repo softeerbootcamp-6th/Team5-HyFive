@@ -1,22 +1,20 @@
 package hyfive.gachita.application.path.respository;
 
-import com.querydsl.core.Tuple;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import hyfive.gachita.dispatch.dto.NodeDispatchLocationDto;
-import hyfive.gachita.dispatch.dto.PathDispatchDto;
+import hyfive.gachita.application.car.DelYn;
+import hyfive.gachita.dispatch.dto.OldPathDto;
 import hyfive.gachita.dispatch.module.condition.PathCondition;
-import hyfive.gachita.application.node.Node;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 
+import static com.querydsl.core.group.GroupBy.groupBy;
+import static com.querydsl.core.types.Projections.list;
 import static hyfive.gachita.application.car.QCar.car;
 import static hyfive.gachita.application.node.QNode.node;
 import static hyfive.gachita.application.path.QPath.path;
-
-import static java.util.stream.Collectors.*;
 
 @Repository
 @RequiredArgsConstructor
@@ -24,60 +22,30 @@ public class CustomPathRepositoryImpl implements CustomPathRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<PathDispatchDto> searchPathList(PathCondition condition) {
-        List<Tuple> result = queryFactory
-                .select(path.id, node)
+    public List<OldPathDto> searchPathList(PathCondition condition) {
+        return queryFactory
                 .from(path)
-                .where(
-                        path.maybeStartTime.loe(condition.maybeOnTime()),
-                        path.maybeEndTime.goe(condition.deadline())
-                )
                 .join(path.car, car)
-                .where(
+                .on(
                         car.lowFloor.eq(condition.walker()),
-                        car.capacity.gt(path.userCount)
+                        car.capacity.gt(path.userCount),
+                        car.delYn.eq(DelYn.N)
                 )
                 .join(path.nodeList, node)
-                .fetch();
-
-        Map<Long, List<Node>> pathNodeMap = converToMap(result);
-
-        return pathNodeMap.entrySet().stream()
-                .map(entry -> {
-                    Long pathId = entry.getKey();
-                    List<Node> nodeList = entry.getValue();
-
-                    return createPathDto(pathId, nodeList);
-                })
-                .toList();
-    }
-
-    private Map<Long, List<Node>> converToMap(List<Tuple> result) {
-        return result.stream()
-            .collect(groupingBy(
-                    t -> t.get(path.id),
-                    mapping(t -> t.get(node), toList())
-            ));
-    }
-
-    private PathDispatchDto createPathDto(Long pathId, List<Node> nodeList) {
-        List<NodeDispatchLocationDto> nodeDtoList = nodeList.stream()
-                .map(this::createNodeDto)
-                .toList();
-
-        return PathDispatchDto.builder()
-                .pathId(pathId)
-                .nodes(nodeDtoList)
-                .build();
-    }
-
-    private NodeDispatchLocationDto createNodeDto(Node nodeEntity) {
-        return NodeDispatchLocationDto.builder()
-                .nodeId(nodeEntity.getId())
-                .lat(nodeEntity.getLat())
-                .lng(nodeEntity.getLng())
-                .time(nodeEntity.getTime())
-                .type(nodeEntity.getType())
-                .build();
+                .where(
+                        path.maybeStartTime.loe(condition.maybeOnTime()),
+                        path.maybeEndTime.goe(condition.deadline()),
+                        path.id.in(condition.pathIds())
+                )
+                .transform(
+                        groupBy(path.id).list(
+                                Projections.constructor(
+                                        OldPathDto.class,
+                                        path.id,
+                                        car.id,
+                                        list(node)
+                                )
+                        )
+                );
     }
 }
