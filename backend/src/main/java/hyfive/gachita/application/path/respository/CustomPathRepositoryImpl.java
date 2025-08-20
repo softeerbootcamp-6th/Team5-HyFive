@@ -4,8 +4,8 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hyfive.gachita.application.car.DelYn;
-import hyfive.gachita.application.path.DriveStatus;
 import hyfive.gachita.application.path.Path;
+import hyfive.gachita.application.path.DriveStatus;
 import hyfive.gachita.application.path.dto.PathCursor;
 import hyfive.gachita.application.path.dto.PathRes;
 import hyfive.gachita.dispatch.dto.OldPathDto;
@@ -119,5 +119,14 @@ public class CustomPathRepositoryImpl implements CustomPathRepository {
                 .limit(size + 1)
                 .fetch();
     }
-}
 
+    @Override
+    public Path findPassengersByPathId(Long pathId) {
+        return queryFactory.select(path)
+                .from(path)
+                .leftJoin(path.bookList, book)
+                .leftJoin(book.nodeList, node)
+                .where(path.id.eq(pathId))
+                .fetchOne();
+    }
+}

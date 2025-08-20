@@ -1,5 +1,6 @@
 package hyfive.gachita.application.book;
 
+import hyfive.gachita.application.node.Node;
 import hyfive.gachita.application.path.Path;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -9,6 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 
 @Getter
@@ -80,6 +82,9 @@ public class Book {
     @Enumerated(EnumType.STRING)
     @Column(name = "book_status", nullable = false, columnDefinition = "VARCHAR(50)")
     private BookStatus bookStatus;
+
+    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
+    private List<Node> nodeList;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP")
