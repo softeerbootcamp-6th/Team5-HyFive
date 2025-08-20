@@ -30,7 +30,7 @@ public class NewPathDispatchFlow {
 
     private final static int RADIUS_METERS = 500;
 
-    public FinalNewPathDto execute(NewBookDto newBookDto) {
+    public DispatchResult execute(NewBookDto newBookDto) {
         // center 정보
         BoundingBoxCondition boundingBoxCondition = BoundingBoxCondition.from(newBookDto.startLat(), newBookDto.startLng(), RADIUS_METERS);
         RadiusCondition radiusCondition = RadiusCondition.from(newBookDto.startLat(), newBookDto.startLng(), RADIUS_METERS);

@@ -1,8 +1,8 @@
 package hyfive.gachita.dispatch;
 
-import hyfive.gachita.dispatch.dto.FinalNewPathDto;
-import hyfive.gachita.dispatch.dto.NewBookDto;
+import hyfive.gachita.dispatch.dto.DispatchResult;
 import hyfive.gachita.dispatch.dto.FilteredPathDto;
+import hyfive.gachita.dispatch.dto.NewBookDto;
 import hyfive.gachita.dispatch.module.condition.BoundingBoxCondition;
 import hyfive.gachita.dispatch.module.condition.RadiusCondition;
 import hyfive.gachita.dispatch.module.filter.BoundingBoxFilter;
@@ -33,7 +33,7 @@ public class DispatchFlowSelector {
     private final HaversineFilter haversineFilter;
     private final NewPathDispatchFlow newPathDispatchFlow;
 
-    public FinalNewPathDto execute(NewBookDto newBookDto){
+    public DispatchResult execute(NewBookDto newBookDto){
         List<FilteredPathDto> candidates = filteredPathProvider.getByCondition(newBookDto.hospitalDate());
 
         BoundingBoxCondition bbConditionStart = BoundingBoxCondition.from(newBookDto.startLat(), newBookDto.startLng(), RADIUS_METERS);
