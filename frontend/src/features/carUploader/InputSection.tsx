@@ -20,6 +20,11 @@ interface InputSectionProps {
   type?: InputMode;
   initValues?: CarFormValues & { carId: number };
 }
+interface ModalState {
+  isOpen: boolean;
+  isSuccess: boolean | null;
+  content: string;
+}
 const InputSection = ({ type = "register", initValues }: InputSectionProps) => {
   const MAX_PASSENGER = 25;
   const dropdownOptions = Array.from({ length: MAX_PASSENGER }, (_, index) =>
@@ -52,24 +57,35 @@ const InputSection = ({ type = "register", initValues }: InputSectionProps) => {
   const { mutate: patchMutate } = usePatchCar();
   const messageType = type === "register" ? "등록" : "수정";
   const navigate = useNavigate();
-  const handleMutateSuccess = () => {
-    handleReset();
-    setIsModalOpen(true);
-    setModalContent(`차량 ${messageType}에 성공했습니다!`);
-  };
-  const handleMutateError = (response: CustomError) => {
-    setIsModalOpen(true);
-    setModalContent(
-      response.message ?? `차량 ${messageType}에 실패했습니다 :(`,
-    );
-  };
 
   // modal 관련 로직
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalContent, setModalContent] = useState<string>("");
+  const [modalState, setModalState] = useState<ModalState>({
+    isOpen: false,
+    isSuccess: null,
+    content: "",
+  });
+
+  const handleMutateSuccess = () => {
+    handleReset();
+    handleReset();
+    setModalState({
+      isOpen: true,
+      isSuccess: true,
+      content: `차량 ${messageType}에 성공했습니다!`,
+    });
+  };
+
+  const handleMutateError = (response: CustomError) => {
+    setModalState({
+      isOpen: true,
+      isSuccess: false,
+      content: response.message ?? `차량 ${messageType}에 실패했습니다 :(`,
+    });
+  };
+
   const handleModalClose = () => {
-    setIsModalOpen(false);
-    if (modalContent.includes("성공")) void navigate("/center");
+    setModalState((prev) => ({ ...prev, isOpen: false }));
+    if (modalState.isSuccess) void navigate("/center");
   };
 
   return (
@@ -159,10 +175,10 @@ const InputSection = ({ type = "register", initValues }: InputSectionProps) => {
         size="big"
         disabled={!isChanged}
       />
-      <Modal isOpen={isModalOpen} onClose={handleModalClose}>
+      <Modal isOpen={modalState.isOpen} onClose={handleModalClose}>
         <ModalContent
           type="alert"
-          content={modalContent}
+          content={modalState.content}
           onClose={handleModalClose}
         />
       </Modal>
