@@ -1,6 +1,5 @@
-package hyfive.gachita.application.path;
+package hyfive.gachita.application.node;
 
-import hyfive.gachita.application.node.Node;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,10 +12,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "path_segment")
-public class PathSegment {
+@Table(name = "segment")
+public class Segment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "segment_id", nullable = false, columnDefinition = "BIGINT")
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -30,6 +30,6 @@ public class PathSegment {
     @Column(name = "duration", nullable = false, columnDefinition = "INT")
     private int duration;
 
-    @OneToMany(mappedBy = "pathSegment", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "segment", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Point> points = new ArrayList<>();
 }

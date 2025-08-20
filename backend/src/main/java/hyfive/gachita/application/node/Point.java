@@ -1,4 +1,4 @@
-package hyfive.gachita.application.path;
+package hyfive.gachita.application.node;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,11 +13,12 @@ import lombok.NoArgsConstructor;
 public class Point {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "point_id", nullable = false, columnDefinition = "BIGINT")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "path_segment_id")
-    private PathSegment pathSegment;
+    @JoinColumn(name = "segment_id")
+    private Segment segment;
 
     @Column(name = "lat", nullable = false,  columnDefinition = "DECIMAL(18,15)")
     private double lat;
