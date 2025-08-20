@@ -10,7 +10,7 @@ import java.time.LocalTime;
 
 @Builder
 @Schema(description = "마커 dto")
-public record MarkerDto(
+public record MarkerRes(
         @Schema(description = "노드 ID", example = "1")
         Long nodeId,
 

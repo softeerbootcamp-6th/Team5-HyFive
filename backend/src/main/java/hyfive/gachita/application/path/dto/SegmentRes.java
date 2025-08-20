@@ -8,7 +8,7 @@ import java.util.List;
 
 @Builder
 @Schema(description = "polyline을 그리기 위한 dto")
-public record SegmentDto(
+public record SegmentRes(
         @Schema(description = "세그먼트 ID", example = "1")
         Long segmentId,
 

@@ -6,7 +6,7 @@ import lombok.Builder;
 
 @Builder
 @Schema(description = "특정 예약 경로 하이라이트 dto")
-public record HighlightDto(
+public record HighlightRes(
         @Schema(description = "예약 ID", example = "1")
         Long bookId,
 

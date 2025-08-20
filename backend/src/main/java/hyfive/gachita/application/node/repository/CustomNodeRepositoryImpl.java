@@ -2,8 +2,8 @@ package hyfive.gachita.application.node.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import hyfive.gachita.application.path.dto.MarkerDto;
-import hyfive.gachita.application.path.dto.SegmentDto;
+import hyfive.gachita.application.path.dto.MarkerRes;
+import hyfive.gachita.application.path.dto.SegmentRes;
 import hyfive.gachita.client.geocode.dto.LatLng;
 import lombok.RequiredArgsConstructor;
 
@@ -21,11 +21,11 @@ public class CustomNodeRepositoryImpl implements CustomNodeRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<MarkerDto> findByAllPathId(Long pathId) {
+    public List<MarkerRes> findByAllPathId(Long pathId) {
         return queryFactory
                 .select(
                         Projections.constructor(
-                                MarkerDto.class,
+                                MarkerRes.class,
                                 node.id,
                                 node.book.id,
                                 Projections.constructor(
@@ -44,17 +44,17 @@ public class CustomNodeRepositoryImpl implements CustomNodeRepository {
     }
 
     @Override
-    public List<SegmentDto> findSegmentsByMarkers(List<MarkerDto> markers) {
-        List<SegmentDto> result = new ArrayList<>();
+    public List<SegmentRes> findSegmentsByMarkers(List<MarkerRes> markers) {
+        List<SegmentRes> result = new ArrayList<>();
 
         IntStream.range(0, markers.size() - 1).forEach(i -> {
             Long startNodeId = markers.get(i).nodeId();
             Long endNodeId = markers.get(i + 1).nodeId();
 
-            SegmentDto dto = queryFactory
+            SegmentRes dto = queryFactory
                     .select(
                             Projections.constructor(
-                                    SegmentDto.class,
+                                    SegmentRes.class,
                                     segment.sequence,
                                     Projections.list(
                                             Projections.constructor(

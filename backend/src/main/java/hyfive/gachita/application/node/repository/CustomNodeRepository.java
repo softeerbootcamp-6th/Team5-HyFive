@@ -1,11 +1,11 @@
 package hyfive.gachita.application.node.repository;
 
-import hyfive.gachita.application.path.dto.MarkerDto;
-import hyfive.gachita.application.path.dto.SegmentDto;
+import hyfive.gachita.application.path.dto.MarkerRes;
+import hyfive.gachita.application.path.dto.SegmentRes;
 
 import java.util.List;
 
 public interface CustomNodeRepository {
-    List<MarkerDto> findByAllPathId(Long pathId);
-    List<SegmentDto> findSegmentsByMarkers(List<MarkerDto> markers);
+    List<MarkerRes> findByAllPathId(Long pathId);
+    List<SegmentRes> findSegmentsByMarkers(List<MarkerRes> markers);
 }
