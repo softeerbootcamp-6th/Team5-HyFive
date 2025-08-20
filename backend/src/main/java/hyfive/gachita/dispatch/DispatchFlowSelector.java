@@ -34,7 +34,7 @@ public class DispatchFlowSelector {
     private final NewPathDispatchFlow newPathDispatchFlow;
 
     public FinalNewPathDto execute(NewBookDto newBookDto){
-        List<PathCandidateDto> candidates = pathCandidateProvider.getByCondition(newBookDto.hospitalDate());
+        List<FilteredPathDto> candidates = filteredPathProvider.getByCondition(newBookDto.hospitalDate());
 
         BoundingBoxCondition bbConditionStart = BoundingBoxCondition.from(newBookDto.startLat(), newBookDto.startLng(), RADIUS_METERS);
         BoundingBoxCondition bbConditionEnd = BoundingBoxCondition.from(newBookDto.endLat(), newBookDto.endLng(), RADIUS_METERS);

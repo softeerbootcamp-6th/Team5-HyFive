@@ -16,7 +16,7 @@ public record PathCondition (
     public static PathCondition from(List<Long> pathIds, NewBookDto newBook) {
         return PathCondition.builder()
                 .maybeOnTime(newBook.maybeOnTime())
-                .deadline(newBook.deadline())
+                .deadline(newBook.deadline().getSecond())
                 .walker(newBook.walker())
                 .pathIds(pathIds)
                 .build();

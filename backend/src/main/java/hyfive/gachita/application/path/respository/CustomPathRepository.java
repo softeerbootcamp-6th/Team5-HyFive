@@ -8,6 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CustomPathRepository {
-    List<PathDispatchDto> searchPathList(PathCondition condition);
+    List<OldPathDto> searchPathList(PathCondition condition);
     Optional<PathRes> findPathResByBookId(Long bookId);
 }
