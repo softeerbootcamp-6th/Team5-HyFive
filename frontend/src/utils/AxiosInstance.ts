@@ -15,11 +15,17 @@ const createInstance = () => {
       if (response.data.isSuccess) {
         return response.data;
       } else {
-        throw new CustomError(response.data.message);
+        throw new CustomError({
+          message: response.data.message,
+          status: response.data.status,
+        });
       }
     },
     (error: AxiosError) => {
-      throw new CustomError(error.message);
+      throw new CustomError({
+        message: "통신에 문제가 발생했습니다! :(",
+        status: error.status,
+      });
     },
   );
 
