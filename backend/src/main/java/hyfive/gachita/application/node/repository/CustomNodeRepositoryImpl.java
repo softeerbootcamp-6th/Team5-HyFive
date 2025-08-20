@@ -7,9 +7,9 @@ import hyfive.gachita.application.node.NodeType;
 import hyfive.gachita.application.node.QNode;
 import hyfive.gachita.application.node.QSegment;
 import hyfive.gachita.application.node.dto.HighlightDto;
-import hyfive.gachita.application.node.dto.SegmentDto;
 import hyfive.gachita.application.path.dto.HighlightRes;
 import hyfive.gachita.application.path.dto.MarkerRes;
+import hyfive.gachita.application.path.dto.SegmentRes;
 import hyfive.gachita.client.geocode.dto.LatLng;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -52,8 +52,8 @@ public class CustomNodeRepositoryImpl implements CustomNodeRepository {
     }
 
     @Override
-    public List<SegmentDto> findSegmentsByMarkers(List<MarkerRes> markers) {
-        List<SegmentDto> result = new ArrayList<>();
+    public List<SegmentRes> findSegmentsByMarkers(List<MarkerRes> markers) {
+        List<SegmentRes> result = new ArrayList<>();
 
         IntStream.range(0, markers.size() - 1).forEach(i -> {
             Long startNodeId = markers.get(i).nodeId();
@@ -62,8 +62,6 @@ public class CustomNodeRepositoryImpl implements CustomNodeRepository {
             // segment와 point 조인
             List<Tuple> rows = queryFactory
                     .select(
-                            segment.startNode.id,
-                            segment.endNode.id,
                             segment.sequence,
                             point.lat,
                             point.lng
@@ -75,8 +73,6 @@ public class CustomNodeRepositoryImpl implements CustomNodeRepository {
                     .fetch();
 
             if (!rows.isEmpty()) {
-                Long sId = rows.get(0).get(segment.startNode.id);
-                Long eId = rows.get(0).get(segment.endNode.id);
                 int sequence = rows.get(0).get(segment.sequence);
 
                 List<LatLng> points = rows.stream()
@@ -86,7 +82,7 @@ public class CustomNodeRepositoryImpl implements CustomNodeRepository {
                         ))
                         .toList();
 
-                result.add(new SegmentDto(sId, eId, sequence, points));
+                result.add(new SegmentRes(sequence, points));
             }
         });
 
