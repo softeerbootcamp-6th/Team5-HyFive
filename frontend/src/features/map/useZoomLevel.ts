@@ -4,7 +4,7 @@ interface UseZoomLevelProps {
   map: MapInstance | null;
 }
 
-export const INITIAL_ZOOM_LEVEL = 4;
+export const INITIAL_ZOOM_LEVEL = 3;
 export const MAX_ZOOM_LEVEL = 5;
 
 const useZoomLevel = ({ map }: UseZoomLevelProps) => {
