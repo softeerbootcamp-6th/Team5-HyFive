@@ -27,7 +27,7 @@ const MapContent = () => {
     map,
     polylinePath,
   });
-  const { setZoomLevel } = useZoomLevel({ map });
+  const { zoomLevel, safeSetZoomLevel } = useZoomLevel({ map });
 
   const handleHighlight = (id: number) => {
     const highlight = highlightPath.find((value) => value.bookId === id);
@@ -49,7 +49,7 @@ const MapContent = () => {
   return (
     <div css={MapContentContainer}>
       <div id="map" ref={mapRef} css={MapWrapper} />
-      <ZoomButton setZoomLevel={setZoomLevel} />
+      <ZoomButton zoomLevel={zoomLevel} safeSetZoomLevel={safeSetZoomLevel} />
       <RoutePicker
         handleHighlight={handleHighlight}
         handleReset={handleReset}

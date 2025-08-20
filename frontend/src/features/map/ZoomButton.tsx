@@ -1,23 +1,38 @@
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
 import { AddIcon, RemoveIcon } from "@/assets/icons";
-import type { Dispatch, SetStateAction } from "react";
+import { MAX_ZOOM_LEVEL } from "@/features/map/useZoomLevel";
 const { color } = theme;
 
 interface ZoomButtonProps {
-  setZoomLevel: Dispatch<SetStateAction<number>>;
+  zoomLevel: number;
+  safeSetZoomLevel: (mode: "add" | "remove") => void;
 }
-const ZoomButton = ({ setZoomLevel }: ZoomButtonProps) => {
+const ZoomButton = ({ zoomLevel, safeSetZoomLevel }: ZoomButtonProps) => {
+  const isActiveZoomLevel = (type: "min" | "max") => {
+    const activeZoomLevel = type === "min" ? 1 : MAX_ZOOM_LEVEL;
+    return zoomLevel === activeZoomLevel ? true : false;
+  };
+
   return (
     <div css={ZoomButtonContainer}>
       <AddIcon
-        onClick={() => {
-          console.log("hi");
-          setZoomLevel((prev) => prev - 1);
-        }}
+        onClick={() => safeSetZoomLevel("add")}
+        fill={
+          isActiveZoomLevel("max")
+            ? color.GrayScale.gray3
+            : color.GrayScale.gray5
+        }
       />
       <div css={LineWrapper} />
-      <RemoveIcon onClick={() => setZoomLevel((prev) => prev + 1)} />
+      <RemoveIcon
+        onClick={() => safeSetZoomLevel("remove")}
+        fill={
+          isActiveZoomLevel("min")
+            ? color.GrayScale.gray3
+            : color.GrayScale.gray5
+        }
+      />
     </div>
   );
 };
