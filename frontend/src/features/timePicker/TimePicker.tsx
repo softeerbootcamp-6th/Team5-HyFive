@@ -18,7 +18,12 @@ const TimePicker = ({ onCancel, onConfirm }: TimePickerProps) => {
     <div css={TimePickerContainer}>
       <h3 css={TitleStyle}>시간을 입력해주세요.</h3>
       <div css={InputSection}>
-        <input css={InputBoxStyle} placeholder="00" maxLength={2}></input>
+        <input
+          css={InputBoxStyle}
+          placeholder="00"
+          maxLength={2}
+          type="number"
+        ></input>
         <span
           css={{
             font: typography.Heading.h1_semi,
@@ -27,7 +32,12 @@ const TimePicker = ({ onCancel, onConfirm }: TimePickerProps) => {
         >
           :
         </span>
-        <input css={InputBoxStyle} placeholder="00"></input>
+        <input
+          css={InputBoxStyle}
+          placeholder="00"
+          maxLength={2}
+          type="number"
+        ></input>
         <AMPMSelector
           selectedMeridiem={selectedMeridiem}
           onClick={setSelectedMeridiem}
@@ -86,6 +96,12 @@ const InputBoxStyle = css`
   border: 2px solid ${color.GrayScale.gray1};
   background-color: ${color.GrayScale.gray1};
   text-align: right;
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 
   &::placeholder {
     color: ${color.GrayScale.black};
