@@ -122,7 +122,7 @@ public class BookService {
     }
 
     @Transactional
-    public void updatePath(Long id, Path path) {
+    public void setPath(Long id, Path path) {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NO_EXIST_VALUE, "DB에 예약 데이터가 존재하지 않습니다."));
         book.setPath(path);

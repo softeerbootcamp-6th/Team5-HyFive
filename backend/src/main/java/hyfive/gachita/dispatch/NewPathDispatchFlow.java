@@ -60,9 +60,9 @@ public class NewPathDispatchFlow {
                 .filter(finalNewPathChecker::isFirstPathDurationExceed)
                 .filter(finalNewPathChecker::isScheduleWithinRentalWindow)
                 .min(Comparator
-                        .comparing(finalNewPathChecker::compareStartTimeDifference)
-                        .thenComparing(FinalNewPathDto::totalDuration)
-                        .thenComparing(FinalNewPathDto::totalDistance)
+                        .comparingInt(finalNewPathChecker::compareStartTimeDifference)
+                        .thenComparingInt(FinalNewPathDto::totalDuration)
+                        .thenComparingInt(FinalNewPathDto::totalDistance)
                 )
                 // TODO: 각 필터에 대한 예외 처리 추가 필요
                 .orElseThrow(()

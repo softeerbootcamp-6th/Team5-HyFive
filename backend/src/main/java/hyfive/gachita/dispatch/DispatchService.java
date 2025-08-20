@@ -48,7 +48,7 @@ public class DispatchService {
 
             // 4. 배차 결과 반영
             bookStatus = BookStatus.SUCCESS;
-            bookService.updatePath(newBook.getId(), savedPath);
+            bookService.setPath(newBook.getId(), savedPath);
 
         } catch (Exception e) {
             bookStatus = BookStatus.FAIL;
