@@ -1,5 +1,7 @@
 package hyfive.gachita.application.book;
 
+import hyfive.gachita.application.book.dto.BookWithPathRes;
+import hyfive.gachita.application.path.Path;
 import hyfive.gachita.client.geocode.GeoCodeService;
 import hyfive.gachita.client.geocode.dto.LatLng;
 import hyfive.gachita.application.book.dto.BookCursor;
@@ -83,17 +85,18 @@ public class BookService {
                 .build();
     }
 
-    public ScrollRes<BookRes, BookCursor> getBookListScroll(BookStatus bookStatus, BookCursor cursor, int size) {
-        List<Book> bookList = bookRepository.findBooksForScroll(bookStatus, cursor, size);
+    public ScrollRes<BookWithPathRes, BookCursor> getBookListScroll(BookStatus bookStatus, BookCursor cursor, int size) {
+        Pair<LocalDateTime, LocalDateTime> dateRange = DateRangeUtil.getDateRange(LocalDateTime.now(), SearchPeriod.TODAY);
+        List<Book> bookList = bookRepository.findBooksForScrollWithPath(dateRange, bookStatus, cursor, size);
 
         boolean hasNext = bookList.size() > size;
 
         List<Book> actualList = hasNext ? bookList.subList(0, size) : bookList;
 
-        List<BookRes> bookResList = actualList.stream()
-                .map(BookRes::from)
+        List<BookWithPathRes> bookWithPathResList = actualList.stream()
+                .map(BookWithPathRes::from)
                 .toList();
-
+        
         BookCursor lastCursor = null;
         if (!actualList.isEmpty()) {
             Book lastBook = actualList.get(actualList.size() - 1);
@@ -103,8 +106,8 @@ public class BookService {
                     .build();
         }
 
-        return ScrollRes.<BookRes, BookCursor>builder()
-                .items(bookResList)
+        return ScrollRes.<BookWithPathRes, BookCursor>builder()
+                .items(bookWithPathResList)
                 .hasNext(hasNext)
                 .cursor(lastCursor)
                 .build();
@@ -116,6 +119,13 @@ public class BookService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.NO_EXIST_VALUE, "DB에 예약 데이터가 존재하지 않습니다."));
 
         book.update(bookStatus);
+    }
+
+    @Transactional
+    public void setPath(Long id, Path path) {
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NO_EXIST_VALUE, "DB에 예약 데이터가 존재하지 않습니다."));
+        book.setPath(path);
     }
 }
 

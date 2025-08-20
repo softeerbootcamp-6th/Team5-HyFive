@@ -16,15 +16,15 @@ public class FinalNewPathChecker {
     public boolean isScheduleWithinRentalWindow(FinalNewPathDto path) {
         LocalTime startTime = path.nodeList().get(0).time();
         LocalTime endTime = path.nodeList().get(path.nodeList().size() - 1).time();
-        LocalTime rentalStartTime = path.path().rentalStartTime();
-        LocalTime rentalEndTime = path.path().rentalEndTime();
+        LocalTime rentalStartTime = path.rentalStartTime();
+        LocalTime rentalEndTime = path.rentalEndTime();
         return rentalStartTime.isBefore(startTime) && endTime.isBefore(rentalEndTime);
     }
 
     // 차량 출발 시각과 유휴 시작 시간의 차이를 최소화
     public int compareStartTimeDifference(FinalNewPathDto path) {
         LocalTime startTime = path.nodeList().get(0).time();
-        LocalTime rentalStartTime = path.path().rentalStartTime();
+        LocalTime rentalStartTime = path.rentalStartTime();
         return startTime.toSecondOfDay() - rentalStartTime.toSecondOfDay();
     }
 }

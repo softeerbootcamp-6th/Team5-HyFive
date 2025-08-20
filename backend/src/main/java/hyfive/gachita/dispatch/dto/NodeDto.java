@@ -37,7 +37,7 @@ public record NodeDto(
      */
     public static NodeDto newBookStartNodeFrom(NewBookDto newBook) {
         Duration totalDurationToTime = Duration.ofSeconds(newBook.totalDuration());
-        LocalTime endDeadline = newBook.deadline().minusMinutes(30).minus(totalDurationToTime);
+        LocalTime endDeadline = newBook.deadline().getFirst().minus(totalDurationToTime);
         LocalTime startDeadline = endDeadline.minusHours(2);
 
         return NodeDto.builder()
@@ -61,7 +61,7 @@ public record NodeDto(
                 .lng(newBook.endLng())
                 .time(null)
                 .type(NodeType.END)
-                .deadline(Pair.of(newBook.deadline().minusMinutes(30), newBook.deadline()))
+                .deadline(newBook.deadline())
                 .build();
     }
 

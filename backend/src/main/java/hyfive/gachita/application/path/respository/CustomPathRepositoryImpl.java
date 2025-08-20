@@ -3,15 +3,18 @@ package hyfive.gachita.application.path.respository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hyfive.gachita.application.car.DelYn;
+import hyfive.gachita.application.path.dto.PathRes;
 import hyfive.gachita.dispatch.dto.OldPathDto;
 import hyfive.gachita.dispatch.module.condition.PathCondition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.types.Projections.list;
+import static hyfive.gachita.application.book.QBook.book;
 import static hyfive.gachita.application.car.QCar.car;
 import static hyfive.gachita.application.node.QNode.node;
 import static hyfive.gachita.application.path.QPath.path;
@@ -48,4 +51,24 @@ public class CustomPathRepositoryImpl implements CustomPathRepository {
                         )
                 );
     }
+
+    @Override
+    public Optional<PathRes> findPathResByBookId(Long bookId) {
+        return Optional.ofNullable(queryFactory
+                .select(Projections.constructor(PathRes.class,
+                        path.id,
+                        car.carNumber,
+                        path.realStartTime,
+                        path.realEndTime,
+                        path.startAddr,
+                        path.endAddr
+                ))
+                .from(book)
+                .leftJoin(book.path, path)
+                .leftJoin(path.car, car)
+                .where(book.id.eq(bookId))
+                .fetchOne()
+        );
+    }
 }
+

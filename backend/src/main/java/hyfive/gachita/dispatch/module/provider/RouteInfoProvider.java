@@ -32,26 +32,26 @@ public class RouteInfoProvider {
                     RouteInfo routeInfo = kakaoNaviService.geRouteInfo(nodeList);
 
                     // 경로 정보에 따라 노드 정보 추가 (센터, 탑승지, 하차지)의 시간 계산
-                    List<NewPathNodeDto> nodeDtoList = new ArrayList<>();
-
                     LocalTime endTime = newBookDto.deadline().getFirst();
                     LocalTime startTime = endTime.minusSeconds(routeInfo.durationList().get(1));
                     LocalTime centerTime = startTime.minusSeconds(routeInfo.durationList().get(0));
 
-                    nodeDtoList.add(NewPathNodeDto.createEndNode(
-                            newBookDto.endLat(), newBookDto.endLng(), endTime));
-                    nodeDtoList.add(NewPathNodeDto.createStartNode(
-                            newBookDto.startLat(), newBookDto.startLng(), startTime));
-                    nodeDtoList.add(NewPathNodeDto.createCenterNode(
-                            candidate.centerDto().lat(), candidate.centerDto().lng(), centerTime));
+                    List<NewPathNodeDto> nodeDtoList = List.of(
+                            NewPathNodeDto.createCenterNode(
+                                    candidate.centerDto().lat(), candidate.centerDto().lng(), centerTime),
+                            NewPathNodeDto.createStartNode(
+                                    newBookDto.startLat(), newBookDto.startLng(), startTime),
+                            NewPathNodeDto.createEndNode(
+                                    newBookDto.endLat(), newBookDto.endLng(), endTime)
+                    );
 
                     log.info("NodeList Info : {}", nodeDtoList);
-                    return FinalNewPathDto.builder()
-                            .totalDuration(routeInfo.totalDuration())
-                            .totalDistance(routeInfo.totalDistance())
-                            .path(candidate)
-                            .nodeList(nodeDtoList)
-                            .build();
+                    return FinalNewPathDto.from(
+                            candidate,
+                            routeInfo.totalDuration(),
+                            routeInfo.totalDistance(),
+                            nodeDtoList
+                    );
                 })
                 .toList();
     }

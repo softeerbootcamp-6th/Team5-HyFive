@@ -1,12 +1,10 @@
 package hyfive.gachita.dispatch.dto;
 
-import java.time.LocalTime;
+import hyfive.gachita.application.car.Car;
+import hyfive.gachita.application.rental.Rental;
 
 public record CarScheduleDto(
         FilteredCenterDto centerDto,
-        Long carId,
-        int carCapacity,
-        Long rentalId,
-        LocalTime rentalStartTime,
-        LocalTime rentalEndTime
+        Car car,
+        Rental rental
 ) {}
