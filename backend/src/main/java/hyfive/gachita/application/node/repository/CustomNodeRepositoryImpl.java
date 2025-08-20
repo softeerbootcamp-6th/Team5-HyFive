@@ -2,8 +2,8 @@ package hyfive.gachita.application.node.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import hyfive.gachita.application.node.dto.SegmentDto;
 import hyfive.gachita.application.path.dto.MarkerRes;
-import hyfive.gachita.application.path.dto.SegmentRes;
 import hyfive.gachita.client.geocode.dto.LatLng;
 import lombok.RequiredArgsConstructor;
 
@@ -44,21 +44,23 @@ public class CustomNodeRepositoryImpl implements CustomNodeRepository {
     }
 
     @Override
-    public List<SegmentRes> findSegmentsByMarkers(List<MarkerRes> markers) {
-        List<SegmentRes> result = new ArrayList<>();
+    public List<SegmentDto> findSegmentsByMarkers(List<MarkerRes> markers) {
+        List<SegmentDto> result = new ArrayList<>();
 
         IntStream.range(0, markers.size() - 1).forEach(i -> {
             Long startNodeId = markers.get(i).nodeId();
             Long endNodeId = markers.get(i + 1).nodeId();
 
-            SegmentRes dto = queryFactory
+            SegmentDto dto = queryFactory
                     .select(
                             Projections.constructor(
-                                    SegmentRes.class,
+                                    SegmentDto.class,
+                                    segment.startNode.id,
+                                    segment.endNode.id,
                                     segment.sequence,
                                     Projections.list(
                                             Projections.constructor(
-                                                    hyfive.gachita.client.geocode.dto.LatLng.class,
+                                                    LatLng.class,
                                                     point.lat,
                                                     point.lng
                                             )

@@ -1,5 +1,6 @@
 package hyfive.gachita.application.path.dto;
 
+import hyfive.gachita.application.node.dto.SegmentDto;
 import hyfive.gachita.client.geocode.dto.LatLng;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -10,9 +11,15 @@ import java.util.List;
 @Schema(description = "polyline을 그리기 위한 dto")
 public record SegmentRes(
         @Schema(description = "세그먼트 ID", example = "1")
-        Long segmentId,
+        int segmentId,
 
         @Schema(description = "세그먼트에 포함된 좌표 리스트", implementation = LatLng.class)
         List<LatLng> pointList
 ) {
+        public static SegmentRes from(SegmentDto segmentDto) {
+                return SegmentRes.builder()
+                        .segmentId(segmentDto.sequence())
+                        .pointList(segmentDto.points())
+                        .build();
+        }
 }

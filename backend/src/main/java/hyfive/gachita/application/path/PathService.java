@@ -2,6 +2,7 @@ package hyfive.gachita.application.path;
 
 import hyfive.gachita.application.book.Book;
 import hyfive.gachita.application.node.Node;
+import hyfive.gachita.application.node.dto.SegmentDto;
 import hyfive.gachita.application.node.repository.NodeRepository;
 import hyfive.gachita.application.node.NodeType;
 import hyfive.gachita.application.path.dto.MapDrawRes;
@@ -72,7 +73,10 @@ public class PathService {
         List<MarkerRes> markerList = nodeRepository.findByAllPathId(id);
 
         // segment list
-        List<SegmentRes> segmentList = nodeRepository.findSegmentsByMarkers(markerList);
+        List<SegmentDto> segmentList = nodeRepository.findSegmentsByMarkers(markerList);
+        List<SegmentRes> segmentResList = segmentList.stream()
+                .map(SegmentRes::from)
+                .toList();
 
         // highlight list
 
