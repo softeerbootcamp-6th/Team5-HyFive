@@ -17,7 +17,7 @@ public record MarkerDto(
         @Schema(description = "예약 ID", example = "1")
         Long bookId,
 
-        @Schema(description = "노드 좌표 (lat, lng)")
+        @Schema(description = "노드 좌표 (lat, lng)", implementation = LatLng.class)
         LatLng point,
 
         @Schema(description = "해당 노드를 지나는 예상 시간 (HH:mm)", example = "10:00")

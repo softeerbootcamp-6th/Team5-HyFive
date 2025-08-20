@@ -12,7 +12,7 @@ public record SegmentDto(
         @Schema(description = "세그먼트 ID", example = "1")
         Long segmentId,
 
-        @Schema(description = "세그먼트에 포함된 좌표 리스트")
+        @Schema(description = "세그먼트에 포함된 좌표 리스트", implementation = LatLng.class)
         List<LatLng> pointList
 ) {
 }
