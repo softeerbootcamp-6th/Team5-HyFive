@@ -40,6 +40,7 @@ import CloseIcon from "./close.svg?react";
 import ToolTipArrowIcon from "./tooltip_arrow.svg?react";
 import WhiteEditIcon from "./edit_white.svg?react";
 import GrayInfoIcon from "./Info-gray.svg?react";
+import ThreeDotsIcon from "./three-dots.svg?react";
 
 export {
   AddIcon,
@@ -84,4 +85,5 @@ export {
   ToolTipArrowIcon,
   WhiteEditIcon,
   GrayInfoIcon,
+  ThreeDotsIcon,
 };
