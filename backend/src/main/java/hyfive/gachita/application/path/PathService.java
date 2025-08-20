@@ -3,6 +3,7 @@ package hyfive.gachita.application.path;
 import hyfive.gachita.application.book.Book;
 import hyfive.gachita.application.node.Node;
 import hyfive.gachita.application.node.NodeType;
+import hyfive.gachita.application.path.dto.PathRes;
 import hyfive.gachita.application.path.respository.PathRepository;
 import hyfive.gachita.dispatch.dto.FinalNewPathDto;
 import lombok.RequiredArgsConstructor;
@@ -50,6 +51,12 @@ public class PathService {
         path.setNodes(nodeList);
         return pathRepository.save(path);
     }
+
+    public PathRes getPathByBook(Long bookId) {
+        return pathRepository.findPathResByBookId(bookId)
+                .orElseThrow(() -> new RuntimeException("경로 없음"));
+    }
+
 
     private LocalTime minTime(LocalTime timeA, LocalTime timeB) {
         return timeA.isBefore(timeB) ? timeA : timeB;
