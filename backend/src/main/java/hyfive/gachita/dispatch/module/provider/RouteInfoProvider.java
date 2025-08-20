@@ -5,27 +5,53 @@ import hyfive.gachita.client.kakao.KakaoNaviService;
 import hyfive.gachita.client.kakao.RouteInfo;
 import hyfive.gachita.dispatch.dto.NewBookDto;
 import hyfive.gachita.dispatch.dto.CarScheduleDto;
-import hyfive.gachita.dispatch.dto.NewPathDto;
+import hyfive.gachita.dispatch.dto.FinalNewPathDto;
+import hyfive.gachita.dispatch.dto.NewPathNodeDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class RouteInfoProvider {
     private final KakaoNaviService kakaoNaviService;
 
-    public List<NewPathDto> getAll(List<CarScheduleDto> candidates, NewBookDto newBookDto) {
+    public List<FinalNewPathDto> getAll(List<CarScheduleDto> candidates, NewBookDto newBookDto) {
         return candidates.stream()
                 .map(candidate -> {
                     List<LatLng> nodeList = List.of(
                             new LatLng(newBookDto.startLat(), newBookDto.startLng()),
-                            new LatLng(candidate.centerLat(), candidate.centerLng()),
+                            new LatLng(candidate.centerDto().lat(), candidate.centerDto().lng()),
                             new LatLng(newBookDto.endLat(), newBookDto.endLng())
                     );
                     RouteInfo routeInfo = kakaoNaviService.geRouteInfo(nodeList);
-                    return new NewPathDto(candidate, routeInfo);
+
+                    // 경로 정보에 따라 노드 정보 추가 (센터, 탑승지, 하차지)의 시간 계산
+                    List<NewPathNodeDto> nodeDtoList = new ArrayList<>();
+
+                    LocalTime endTime = newBookDto.deadline().getFirst();
+                    LocalTime startTime = endTime.minusSeconds(routeInfo.durationList().get(1));
+                    LocalTime centerTime = startTime.minusSeconds(routeInfo.durationList().get(0));
+
+                    nodeDtoList.add(NewPathNodeDto.createEndNode(
+                            newBookDto.endLat(), newBookDto.endLng(), endTime));
+                    nodeDtoList.add(NewPathNodeDto.createStartNode(
+                            newBookDto.startLat(), newBookDto.startLng(), startTime));
+                    nodeDtoList.add(NewPathNodeDto.createCenterNode(
+                            candidate.centerDto().lat(), candidate.centerDto().lng(), centerTime));
+
+                    log.info("NodeList Info : {}", nodeDtoList);
+                    return FinalNewPathDto.builder()
+                            .totalDuration(routeInfo.totalDuration())
+                            .totalDistance(routeInfo.totalDistance())
+                            .path(candidate)
+                            .nodeList(nodeDtoList)
+                            .build();
                 })
                 .toList();
     }

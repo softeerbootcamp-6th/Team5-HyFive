@@ -3,6 +3,7 @@ package hyfive.gachita.dispatch.dto;
 import hyfive.gachita.application.book.Book;
 import hyfive.gachita.client.kakao.RouteInfo;
 import lombok.Builder;
+import org.springframework.data.util.Pair;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -14,7 +15,7 @@ import java.time.LocalTime;
 public record NewBookDto (
         Long id,
         LocalDate hospitalDate,
-        LocalTime deadline,
+        Pair<LocalTime, LocalTime> deadline,
         double startLat,
         double startLng,
         double endLat,
@@ -28,7 +29,7 @@ public record NewBookDto (
         return NewBookDto.builder()
                 .id(book.getId())
                 .hospitalDate(book.getHospitalDate())
-                .deadline(book.getDeadline())
+                .deadline(Pair.of(book.getDeadline().minusMinutes(30), book.getDeadline()))
                 .startLat(book.getStartLat())
                 .startLng(book.getStartLng())
                 .endLat(book.getEndLat())

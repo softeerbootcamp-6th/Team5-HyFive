@@ -8,6 +8,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import hyfive.gachita.application.car.DelYn;
 import hyfive.gachita.application.center.dto.CenterListRes;
 import hyfive.gachita.dispatch.dto.CarScheduleDto;
+import hyfive.gachita.dispatch.dto.FilteredCenterDto;
 import hyfive.gachita.dispatch.module.condition.CenterCondition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -56,23 +57,30 @@ public class CustomCenterRepositoryImpl implements CustomCenterRepository{
 
     public List<CarScheduleDto> searchCarListWithCenter(CenterCondition condition) {
         return queryFactory
-                .select(Projections.constructor(CarScheduleDto.class,
-                            center.id,
-                            center.lat,
-                            center.lng,
-                            car.id,
-                            car.capacity,
-                            rental.id,
-                            rental.rentalStartTime,
-                            rental.rentalEndTime
+                .select(Projections.constructor(
+                        CarScheduleDto.class,
+                        Projections.constructor(
+                                FilteredCenterDto.class,
+                                center.id,
+                                center.lat,
+                                center.lng
+                        ),
+                        car.id,
+                        car.capacity,
+                        rental.id,
+                        rental.rentalStartTime,
+                        rental.rentalEndTime
                 ))
+                .where(
+                        center.id.in(condition.centerIdList())
+                )
                 .from(center)
                 .join(center.carList, car)
                 .where(
                         car.lowFloor.eq(condition.walker()),
                         car.delYn.eq(DelYn.N)
                 )
-                .leftJoin(rental)
+                .join(rental)
                 .on(
                         rental.car.id.eq(car.id)
                                 .and(
