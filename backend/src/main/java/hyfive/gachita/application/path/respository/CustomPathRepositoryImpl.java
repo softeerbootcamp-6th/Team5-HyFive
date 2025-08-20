@@ -3,6 +3,7 @@ package hyfive.gachita.application.path.respository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hyfive.gachita.application.car.DelYn;
+import hyfive.gachita.application.path.Path;
 import hyfive.gachita.application.path.dto.PathRes;
 import hyfive.gachita.dispatch.dto.OldPathDto;
 import hyfive.gachita.dispatch.module.condition.PathCondition;
@@ -70,5 +71,14 @@ public class CustomPathRepositoryImpl implements CustomPathRepository {
                 .fetchOne()
         );
     }
-}
 
+    @Override
+    public Path findPassengersByPathId(Long pathId) {
+        return queryFactory.select(path)
+                .from(path)
+                .leftJoin(path.bookList, book)
+                .leftJoin(book.nodeList, node)
+                .where(path.id.eq(pathId))
+                .fetchOne();
+    }
+}
