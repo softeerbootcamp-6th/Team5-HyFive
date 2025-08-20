@@ -5,14 +5,19 @@ import Button from "@/components/Button";
 const { color, typography, borderRadius } = theme;
 
 interface ModalContentProps {
+  type?: string;
   content: string;
   onClose: () => void;
 }
 
-const ModalContent = ({ content, onClose }: ModalContentProps) => {
+const ModalContent = ({ type, content, onClose }: ModalContentProps) => {
   return (
     <div css={CardContainer}>
-      <h3 css={TextStyle}>{content}</h3>
+      {type === "alert" ? (
+        <p css={AlertTextStyle}>{content}</p>
+      ) : (
+        <h3 css={TextStyle}>{content}</h3>
+      )}
       <Button label="확인" bgColor="orange" onClick={onClose} />
     </div>
   );
@@ -35,4 +40,16 @@ const CardContainer = css`
 const TextStyle = css`
   font: ${typography.Heading.h3_semi};
   color: ${color.GrayScale.black};
+`;
+
+const AlertTextStyle = css`
+  text-align: center;
+  font: ${typography.Heading.h4_semi};
+  color: ${color.GrayScale.black};
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; // 최대 줄 수 제한
+  -webkit-box-orient: vertical;
+  word-break: break-word; // 단어 단위로 줄바꿈
+  overflow-wrap: break-word; // 긴 단어가 영역을 넘으면 줄바꿈
 `;
