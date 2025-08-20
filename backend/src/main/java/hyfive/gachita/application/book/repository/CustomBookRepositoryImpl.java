@@ -58,34 +58,6 @@ public class CustomBookRepositoryImpl implements CustomBookRepository {
     }
 
     @Override
-    public List<Book> findBooksForScroll(BookStatus status, BookCursor cursor, int size) {
-        LocalDate today = LocalDate.now();
-        LocalDateTime startOfToday = today.atStartOfDay();
-        LocalDateTime endOfToday = today.atTime(LocalTime.MAX);
-
-        BooleanExpression cursorCondition = null;
-
-        if (cursor != null && cursor.lastCreatedAt() != null && cursor.lastId() != null) {
-            cursorCondition = book.createdAt.lt(cursor.lastCreatedAt())
-                    .or(
-                            book.createdAt.eq(cursor.lastCreatedAt())
-                                    .and(book.id.lt(cursor.lastId()))
-                    );
-        }
-
-        return queryFactory
-                .selectFrom(book)
-                .where(
-                        book.bookStatus.eq(status),
-                        book.createdAt.between(startOfToday, endOfToday),
-                        cursorCondition
-                )
-                .orderBy(book.createdAt.desc(), book.id.desc())
-                .limit(size + 1)
-                .fetch();
-    }
-
-    @Override
     public List<Book> findBooksForScrollWithPath(Pair<LocalDateTime, LocalDateTime> dateRange, BookStatus status, BookCursor cursor, int size) {
         BooleanBuilder cursorCondition = new BooleanBuilder();
         if (cursor != null && cursor.lastId() != null && cursor.lastCreatedAt() != null) {
