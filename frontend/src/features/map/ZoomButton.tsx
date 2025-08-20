@@ -2,6 +2,8 @@ import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
 import { AddIcon, RemoveIcon } from "@/assets/icons";
 import { MAX_ZOOM_LEVEL } from "@/features/map/useZoomLevel";
+import usePressDetection from "@/hooks/usePressDetection";
+import { useState } from "react";
 const { color } = theme;
 
 interface ZoomButtonProps {
@@ -14,25 +16,36 @@ const ZoomButton = ({ zoomLevel, safeSetZoomLevel }: ZoomButtonProps) => {
     return zoomLevel === activeZoomLevel ? true : false;
   };
 
+  const [isAddPressing, setIsAddPressing] = useState(false);
+  const [isRemovePressing, setIsRemovePressing] = useState(false);
+
+  const addHandlers = usePressDetection({ setIsPressing: setIsAddPressing });
+  const removeHandlers = usePressDetection({
+    setIsPressing: setIsRemovePressing,
+  });
   return (
     <div css={ZoomButtonContainer}>
-      <AddIcon
-        onClick={() => safeSetZoomLevel("add")}
-        fill={
-          isActiveZoomLevel("min")
-            ? color.GrayScale.gray3
-            : color.GrayScale.gray5
-        }
-      />
+      <div {...addHandlers} css={ButtonWrapper(isAddPressing)}>
+        <AddIcon
+          onClick={() => safeSetZoomLevel("add")}
+          fill={
+            isActiveZoomLevel("min")
+              ? color.GrayScale.gray3
+              : color.GrayScale.gray5
+          }
+        />
+      </div>
       <div css={LineWrapper} />
-      <RemoveIcon
-        onClick={() => safeSetZoomLevel("remove")}
-        fill={
-          isActiveZoomLevel("max")
-            ? color.GrayScale.gray3
-            : color.GrayScale.gray5
-        }
-      />
+      <div {...removeHandlers} css={ButtonWrapper(isRemovePressing)}>
+        <RemoveIcon
+          onClick={() => safeSetZoomLevel("remove")}
+          fill={
+            isActiveZoomLevel("max")
+              ? color.GrayScale.gray3
+              : color.GrayScale.gray5
+          }
+        />
+      </div>
     </div>
   );
 };
@@ -60,4 +73,15 @@ const ZoomButtonContainer = css`
 const LineWrapper = css`
   width: 100%;
   border-bottom: 1px solid ${color.GrayScale.gray3};
+`;
+
+const ButtonWrapper = (isPressing: boolean) => css`
+  border-radius: 2px;
+  background-color: ${isPressing ? color.GrayScale.gray3 : "transparent"};
+  ${!isPressing &&
+  css`
+    &:hover {
+      background-color: ${color.GrayScale.gray1};
+    }
+  `}
 `;
