@@ -68,8 +68,8 @@ public class CustomPathRepositoryImpl implements CustomPathRepository {
                         path.endAddr
                 ))
                 .from(book)
-                .join(book.path, path)
-                .join(path.car, car)
+                .leftjoin(book.path, path)
+                .leftjoin(path.car, car)
                 .where(book.id.eq(bookId))
                 .fetchOne()
         );
