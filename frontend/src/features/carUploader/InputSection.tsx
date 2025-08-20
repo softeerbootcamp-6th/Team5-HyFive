@@ -81,7 +81,9 @@ const InputSection = ({ type = "register", initValues }: InputSectionProps) => {
             onSuccess: handleMutateSuccess,
             onError: (response) => handleMutateError(response),
           });
-        } else if (initValues) {
+        }
+        if (type === "edit") {
+          if (!initValues) return;
           patchMutate(
             { id: initValues.carId, values: formValues },
             {
