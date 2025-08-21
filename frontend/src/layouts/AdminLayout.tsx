@@ -8,6 +8,7 @@ const AdminLayout = () => {
       <div css={ContentContainer}>
         <Outlet />
       </div>
+      <div id="admin-portal" />
     </div>
   );
 };

@@ -36,12 +36,14 @@ export const formatDateToYYMMDD = (date: Date): string => {
 /**
  * 주어진 시각을 "HH:mm" 형식의 문자열로 변환합니다.
  * @param {number} hour - 포맷팅 할 시각(9 ~ 23)
+ * @param {number} minute - 포맷팅 할 분(0 ~ 59) (없으면 00으로 적용)
  * @returns {string} - "HH:mm" 형식의 시간 문자열
  */
-export const formatTimeToHHMM = (hour: number): string => {
+export const formatTimeToHHMM = (hour: number, minute: number = 0): string => {
   const date = new Date();
   date.setHours(hour);
-  return format(date, "HH") + ":00";
+  date.setMinutes(minute);
+  return format(date, "HH:mm");
 };
 
 /**

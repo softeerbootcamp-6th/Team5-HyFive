@@ -3,6 +3,7 @@ import { theme } from "@/styles/themes.style";
 import { useState } from "react";
 import type { Meridiem } from "@/features/timePicker/TimePicker.type";
 import AMPMSelector from "@/features/timePicker/AMPMSelector";
+import { formatTime24Hour, validateTimePicker } from "@/utils/UserValidation";
 
 const { color, typography, borderRadius } = theme;
 
@@ -13,6 +14,42 @@ interface TimePickerProps {
 
 const TimePicker = ({ onCancel, onConfirm }: TimePickerProps) => {
   const [selectedMeridiem, setSelectedMeridiem] = useState<Meridiem>("AM");
+  const [hour, setHour] = useState<string>("");
+  const [minute, setMinute] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
+
+  // 시간 입력 핸들러
+  const handleHourChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // 0-12 범위만 허용
+    if (value === "" || (parseInt(value) >= 0 && parseInt(value) <= 12)) {
+      setHour(value);
+      setErrorMessage("");
+    }
+  };
+
+  // 분 입력 핸들러
+  const handleMinuteChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // 0-59 범위만 허용
+    if (value === "" || (parseInt(value) >= 0 && parseInt(value) <= 59)) {
+      setMinute(value);
+      setErrorMessage("");
+    }
+  };
+
+  const handleConfirm = () => {
+    const validationError = validateTimePicker(hour, minute);
+
+    if (validationError) {
+      setErrorMessage(validationError);
+      return;
+    }
+
+    // 24시간 형식으로 변환하여 전달
+    const time24Hour = formatTime24Hour(hour, minute, selectedMeridiem);
+    onConfirm(time24Hour);
+  };
 
   return (
     <div css={TimePickerContainer}>
@@ -23,7 +60,11 @@ const TimePicker = ({ onCancel, onConfirm }: TimePickerProps) => {
           placeholder="00"
           maxLength={2}
           type="number"
-        ></input>
+          value={hour}
+          onChange={handleHourChange}
+          min="0"
+          max="12"
+        />
         <span
           css={{
             font: typography.Heading.h1_semi,
@@ -37,17 +78,22 @@ const TimePicker = ({ onCancel, onConfirm }: TimePickerProps) => {
           placeholder="00"
           maxLength={2}
           type="number"
-        ></input>
+          value={minute}
+          onChange={handleMinuteChange}
+          min="0"
+          max="59"
+        />
         <AMPMSelector
           selectedMeridiem={selectedMeridiem}
           onClick={setSelectedMeridiem}
         />
       </div>
+      {errorMessage && <div css={ErrorMessageStyle}>{errorMessage}</div>}
       <div css={ButtonSection}>
         <button css={ButtonStyle("cancel")} onClick={onCancel}>
           취소
         </button>
-        <button css={ButtonStyle("confirm")} onClick={() => onConfirm}>
+        <button css={ButtonStyle("confirm")} onClick={handleConfirm}>
           확인
         </button>
       </div>
@@ -130,4 +176,12 @@ const ButtonStyle = (type: "cancel" | "confirm") => css`
   cursor: pointer;
   font: ${typography.Label.l2_semi};
   color: ${type === "cancel" ? color.GrayScale.gray4 : color.Semantic.success};
+`;
+
+const ErrorMessageStyle = css`
+  padding-left: 40px;
+  padding-right: 40px;
+  font: ${typography.Body.b4_regu};
+  color: ${color.Semantic.error};
+  text-align: center;
 `;

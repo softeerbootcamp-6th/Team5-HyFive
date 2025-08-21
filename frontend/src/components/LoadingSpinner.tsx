@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
-import { rotating } from "@/features/refetchTimer/rotateAnimation.util";
+import { rotating } from "@/utils/RotateAnimation";
 
 const { color } = theme;
 
