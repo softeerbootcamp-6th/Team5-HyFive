@@ -1,33 +1,27 @@
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
 import { useState, type MouseEvent } from "react";
-import type { PassengerRoute } from "@/types/routeType.types";
 import PassengerRouteList from "@/features/routePicker/PassengerRouteList";
 import RouteButton from "@/features/routePicker/RouteButton";
-
+import type { HighlightType } from "@/features/map/Map.types";
 const { color, typography } = theme;
 
 interface RoutePickerProps {
+  passengers: Partial<HighlightType>[];
+  selectedPassenger: Partial<HighlightType> | null;
   handleHighlight: (id: number) => void;
   handleReset: () => void;
 }
-const RoutePicker = ({ handleHighlight, handleReset }: RoutePickerProps) => {
+const RoutePicker = ({
+  passengers,
+  selectedPassenger,
+  handleHighlight,
+  handleReset,
+}: RoutePickerProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedPassenger, setSelectedPassenger] =
-    useState<PassengerRoute | null>(null);
 
-  const mockPassengers: PassengerRoute[] = [
-    { id: 1, name: "홍길동", status: "하차" },
-    { id: 2, name: "홍길동", status: "탑승" },
-    { id: 3, name: "홍길동", status: "탑승" },
-    { id: 4, name: "홍길동", status: "대기" },
-    { id: 5, name: "홍길동", status: "대기" },
-    { id: 6, name: "홍길동", status: "대기" },
-  ];
-
-  const handleSelectPassenger = (passenger: PassengerRoute) => {
-    handleHighlight(passenger.id);
-    setSelectedPassenger(passenger);
+  const handleSelectPassenger = (id: number) => {
+    handleHighlight(id);
     setIsOpen(false);
   };
 
@@ -35,14 +29,13 @@ const RoutePicker = ({ handleHighlight, handleReset }: RoutePickerProps) => {
     e.stopPropagation();
     handleReset();
     setIsOpen(false);
-    setSelectedPassenger(null);
   };
 
   return (
     <div css={RoutePickerContainer}>
       {isOpen ? (
         <PassengerRouteList
-          passengers={mockPassengers}
+          passengers={passengers}
           onSelect={handleSelectPassenger}
           onClose={() => setIsOpen(false)}
         />

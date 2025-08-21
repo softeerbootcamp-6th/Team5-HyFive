@@ -1,13 +1,13 @@
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
 import { CloseIcon, RouteIcon } from "@/assets/icons";
-import type { PassengerRoute } from "@/types/routeType.types";
 import type { MouseEvent } from "react";
 import PassengerRouteItem from "@/features/routePicker/PassengerRouteItem";
+import type { HighlightType } from "@/features/map/Map.types";
 const { color } = theme;
 
 interface RouteButtonProps {
-  selectedPassenger: PassengerRoute | null;
+  selectedPassenger: Partial<HighlightType> | null;
   onOpen: () => void;
   onReset: (e: MouseEvent) => void;
 }

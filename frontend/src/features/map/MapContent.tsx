@@ -8,11 +8,17 @@ import ZoomButton from "@/features/map/ZoomButton";
 import RoutePicker from "@/features/routePicker/RoutePicker";
 import { highlightPath, markerPath, polylinePath } from "@/mocks/pathMocks";
 import { css } from "@emotion/react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import type { HighlightType } from "@/features/map/Map.types";
 
 const MapContent = () => {
   const mapRef = useRef<HTMLDivElement>(null);
   const markerPathLatLng = markerPath.flatMap((path) => path.point);
+  const passengers = highlightPath.map((item) => ({
+    bookId: item.bookId,
+    bookName: item.bookName,
+    hospitalTime: item.hospitalTime,
+  }));
 
   // map 초기화
   const { map, handleInitMidPoint } = useInitializeMap({
@@ -28,6 +34,8 @@ const MapContent = () => {
   const { highlightMarker, initMarker } = useVisualizeMarker({
     map,
     markerPath,
+    onClickMarker: handleHighlight,
+    onClickMap: handleReset,
   });
   const { highlightRoute, resetRoute } = useVisualizeRoute({
     map,
@@ -35,22 +43,32 @@ const MapContent = () => {
   });
 
   // 개별 탑승자 경로 하이라이팅
-  const handleHighlight = (id: number) => {
+  const [selectedPassenger, setSelectedPassenger] =
+    useState<Partial<HighlightType> | null>(null);
+
+  function handleHighlight(id: number) {
     const highlight = highlightPath.find((value) => value.bookId === id);
     if (!highlight) return;
 
-    const { start, end, segmentList } = highlight;
+    setSelectedPassenger({
+      bookId: highlight.bookId,
+      bookName: highlight.bookName,
+      hospitalTime: highlight.hospitalTime,
+    });
+    const { segmentList } = highlight;
     const slicedPolylineList = polylinePath
       .filter((segment) => segmentList.includes(segment.segmentId))
       .flatMap((segment) => segment.pointList);
 
     highlightRoute(slicedPolylineList);
-    highlightMarker({ start, end });
-  };
-  const handleReset = () => {
+    highlightMarker({ data: highlight });
+  }
+
+  function handleReset() {
+    setSelectedPassenger(null);
     resetRoute();
     initMarker();
-  };
+  }
 
   return (
     <div css={MapContentContainer}>
@@ -58,6 +76,8 @@ const MapContent = () => {
       <MidPointButton onClick={handleInitMidPoint} />
       <ZoomButton zoomLevel={zoomLevel} handleZoomLevel={handleZoomLevel} />
       <RoutePicker
+        passengers={passengers}
+        selectedPassenger={selectedPassenger}
         handleHighlight={handleHighlight}
         handleReset={handleReset}
       />
