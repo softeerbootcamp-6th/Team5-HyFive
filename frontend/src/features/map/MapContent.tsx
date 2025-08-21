@@ -13,6 +13,11 @@ import { useRef } from "react";
 const MapContent = () => {
   const mapRef = useRef<HTMLDivElement>(null);
   const markerPathLatLng = markerPath.flatMap((path) => path.point);
+  const passengers = highlightPath.map((item) => ({
+    bookId: item.bookId,
+    bookName: item.bookName,
+    hospitalTime: item.hospitalTime,
+  }));
 
   // map 초기화
   const { map, handleInitMidPoint } = useInitializeMap({
@@ -41,30 +46,13 @@ const MapContent = () => {
     const highlight = highlightPath.find((value) => value.bookId === id);
     if (!highlight) return;
 
-    const { start, end, segmentList } = highlight;
+    const { startLoc, endLoc, segmentList } = highlight;
     const slicedPolylineList = polylinePath
       .filter((segment) => segmentList.includes(segment.segmentId))
       .flatMap((segment) => segment.pointList);
 
-    const testHightlight = {
-      bookId: id,
-      bookName: "박영희",
-      startTime: "08:20",
-      endTime: "09:00",
-      startAddr: "공릉로 168-5",
-      endAddr: "동일로 1349 노원의료원",
-      startLoc: {
-        lat: 37.65311036317523,
-        lng: 127.05436027948892,
-      },
-      endLoc: {
-        lat: 37.653361917955415,
-        lng: 127.0559016390923,
-      },
-      segmentList: [5, 6, 7, 8, 9],
-    };
     highlightRoute(slicedPolylineList);
-    highlightMarker({ start, end, data: testHightlight });
+    highlightMarker({ start: startLoc, end: endLoc, data: highlight });
   }
 
   function handleReset() {
@@ -78,6 +66,7 @@ const MapContent = () => {
       <MidPointButton onClick={handleInitMidPoint} />
       <ZoomButton zoomLevel={zoomLevel} handleZoomLevel={handleZoomLevel} />
       <RoutePicker
+        passengers={passengers}
         handleHighlight={handleHighlight}
         handleReset={handleReset}
       />

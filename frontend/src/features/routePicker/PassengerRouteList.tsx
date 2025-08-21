@@ -1,14 +1,14 @@
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
 import { CloseIcon } from "@/assets/icons";
-import type { PassengerRoute } from "@/types/routeType.types";
 import PassengerRouteItem from "@/features/routePicker/PassengerRouteItem";
+import type { HighlightType } from "@/features/map/Map.types";
 
 const { color } = theme;
 
 interface PassengerListProps {
-  passengers: PassengerRoute[];
-  onSelect: (passenger: PassengerRoute) => void;
+  passengers: Partial<HighlightType>[];
+  onSelect: (passenger: Partial<HighlightType>) => void;
   onClose: () => void;
 }
 
@@ -23,7 +23,7 @@ const PassengerRouteList = ({
         {passengers.map((passenger) => (
           <li
             data-testid="passenger-highlight-btn"
-            key={passenger.id}
+            key={passenger.bookId}
             css={PartPassengerWrapper}
             onClick={() => onSelect(passenger)}
           >
@@ -60,6 +60,7 @@ const PassengerWrapper = css`
 const PartPassengerWrapper = css`
   display: flex;
   padding: 6px 10px;
+  justify-content: space-between;
   align-items: center;
   align-self: stretch;
   gap: 8px;

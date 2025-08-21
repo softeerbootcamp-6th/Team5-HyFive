@@ -93,7 +93,7 @@ const useVisualizeMarker = ({
     const customOverlay = new kakaoMaps.CustomOverlay({
       position: new kakaoMaps.LatLng(midPoint.lat, midPoint.lng),
       content: createInfoWindowHTML({
-        name: data.bookId.toString(),
+        name: data.bookName,
         status: "PASSENGER",
         time: { startTime: data.startTime, endTime: data.endTime },
       }),

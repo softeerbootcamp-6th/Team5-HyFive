@@ -164,5 +164,6 @@ export interface HighlightType {
   endAddr: string;
   startLoc: LatLng;
   endLoc: LatLng;
+  hospitalTime: string;
   segmentList: number[];
 }
