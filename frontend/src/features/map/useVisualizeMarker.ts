@@ -59,18 +59,13 @@ const useVisualizeMarker = ({
         title: "User Marker",
         image: markerImage,
       });
+
       return marker;
     },
     [kakaoMaps, map, imageSrc],
   );
 
-  const renderInfoWindow = ({
-    marker,
-    markerData,
-  }: {
-    marker: MarkerInstance;
-    markerData: MarkerPath;
-  }) => {
+  const renderInfoWindow = ({ markerData }: { markerData: MarkerPath }) => {
     // marker click: custom overlay 등장
     const customOverlay = new kakaoMaps.CustomOverlay({
       position: new kakaoMaps.LatLng(
@@ -82,12 +77,6 @@ const useVisualizeMarker = ({
         status: markerData.type,
         time: { startTime: markerData.time, endTime: markerData.time },
       }),
-    });
-    kakaoMaps.event.addListener(marker, "click", function () {
-      currentOverlayRef.current?.setMap(null);
-      customOverlay.setMap(map);
-      currentOverlayRef.current = customOverlay;
-      onClickMarker(markerData.bookId);
     });
   };
 
@@ -102,7 +91,6 @@ const useVisualizeMarker = ({
     markersRef.current = markerPath.map((partMarkerPath, i) => {
       const markerType = getMarkerType(i, markerPath.length);
       const marker = renderMarker({ markerType, point: partMarkerPath.point });
-      renderInfoWindow({ marker, markerData: partMarkerPath });
       return marker;
     });
   }, [markerPath, renderMarker]);
@@ -123,10 +111,23 @@ const useVisualizeMarker = ({
     };
   }, [map, kakaoMaps, initMarker]);
 
-  const highlightMarker = ({ start, end }: { start: LatLng; end: LatLng }) => {
+  const highlightMarker = ({
+    start,
+    end,
+  }: {
+    data?: string;
+    start: LatLng;
+    end: LatLng;
+  }) => {
     removeMarker();
-    const startMarker = renderMarker({ markerType: "enter", point: start });
-    const endMarker = renderMarker({ markerType: "out", point: end });
+    const startMarker = renderMarker({
+      markerType: "enter",
+      point: start,
+    });
+    const endMarker = renderMarker({
+      markerType: "out",
+      point: end,
+    });
     markersRef.current.push(startMarker);
     markersRef.current.push(endMarker);
   };
