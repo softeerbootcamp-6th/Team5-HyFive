@@ -1,17 +1,14 @@
 package hyfive.gachita.application.path;
 
 import hyfive.gachita.application.book.Book;
-import hyfive.gachita.application.book.dto.BookRes;
 import hyfive.gachita.application.common.dto.PagedListRes;
 import hyfive.gachita.application.common.dto.ScrollRes;
 import hyfive.gachita.application.common.enums.SearchPeriod;
 import hyfive.gachita.application.common.util.DateRangeUtil;
 import hyfive.gachita.application.node.Node;
+import hyfive.gachita.application.node.repository.NodeRepository;
 import hyfive.gachita.application.node.NodeType;
-import hyfive.gachita.application.path.dto.PassengerRes;
-import hyfive.gachita.application.path.dto.PathCursor;
-import hyfive.gachita.application.path.dto.PathDetailRes;
-import hyfive.gachita.application.path.dto.PathRes;
+import hyfive.gachita.application.path.dto.*;
 import hyfive.gachita.application.path.respository.PathRepository;
 import hyfive.gachita.dispatch.dto.FinalNewPathDto;
 import hyfive.gachita.global.BusinessException;
@@ -25,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Comparator;
 import java.util.List;
@@ -34,6 +30,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PathService {
     private final PathRepository pathRepository;
+    private final NodeRepository nodeRepository;
 
     @Transactional
     public Path createPathWithNodes(FinalNewPathDto finalPathDto, Book book) {
@@ -152,7 +149,26 @@ public class PathService {
                 .build();
     }
 
+    public MapDrawRes getMapDraw(Long id) {
+        Path path = pathRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NO_EXIST_VALUE, "DB에 경로 데이터가 존재하지 않습니다."));
+
+        List<MarkerRes> markerList = nodeRepository.findByAllPathId(id);
+        List<SegmentRes> segmentList = nodeRepository.findSegmentsByMarkers(markerList);
+        List<HighlightRes> highlightList = nodeRepository.getHighlightsByPath(id);
+
+        return MapDrawRes.builder()
+                .polyline(segmentList)
+                .marker(markerList)
+                .highlight(highlightList)
+                .build();
+    }
+
+
     private LocalTime minTime(LocalTime timeA, LocalTime timeB) {
         return timeA.isBefore(timeB) ? timeA : timeB;
     }
 }
+
+
+

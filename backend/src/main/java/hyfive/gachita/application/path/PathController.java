@@ -6,11 +6,13 @@ import hyfive.gachita.application.common.enums.SearchPeriod;
 import hyfive.gachita.application.path.dto.PassengerRes;
 import hyfive.gachita.application.path.dto.PathCursor;
 import hyfive.gachita.application.path.dto.PathDetailRes;
+import hyfive.gachita.application.path.dto.MapDrawRes;
 import hyfive.gachita.docs.PathDocs;
 import hyfive.gachita.global.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/path")
 @RequiredArgsConstructor
+@Validated
 public class PathController implements PathDocs {
     private final PathService pathService;
 
@@ -47,5 +50,10 @@ public class PathController implements PathDocs {
             @RequestParam(name = "limit", required = false, defaultValue = "12") int limit
     ) {
         return BaseResponse.success(pathService.getPathList(period, status, page, limit));
+    }
+
+    @GetMapping("/{id}/nodes")
+    public BaseResponse<MapDrawRes> getMapDraw(@PathVariable("id") @NotNull Long id){
+        return BaseResponse.success(pathService.getMapDraw(id));
     }
 }

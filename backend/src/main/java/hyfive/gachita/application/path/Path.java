@@ -67,6 +67,7 @@ public class Path {
     @Column(name = "user_count", nullable = false, columnDefinition = "INT")
     private int userCount;
 
+    @Builder.Default
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "drive_status", nullable = false, columnDefinition = "VARCHAR(50)")
