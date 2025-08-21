@@ -1,7 +1,11 @@
 package hyfive.gachita.application.path;
 
 import hyfive.gachita.application.book.Book;
+import hyfive.gachita.application.book.dto.BookRes;
+import hyfive.gachita.application.common.dto.PagedListRes;
 import hyfive.gachita.application.common.dto.ScrollRes;
+import hyfive.gachita.application.common.enums.SearchPeriod;
+import hyfive.gachita.application.common.util.DateRangeUtil;
 import hyfive.gachita.application.node.Node;
 import hyfive.gachita.application.node.NodeType;
 import hyfive.gachita.application.path.dto.PassengerRes;
@@ -13,10 +17,15 @@ import hyfive.gachita.dispatch.dto.FinalNewPathDto;
 import hyfive.gachita.global.BusinessException;
 import hyfive.gachita.global.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Comparator;
 import java.util.List;
@@ -123,6 +132,23 @@ public class PathService {
                 .items(pathResList)
                 .hasNext(hasNext)
                 .cursor(lastCursor)
+                .build();
+    }
+
+    public PagedListRes<PathDetailRes> getPathList(SearchPeriod period, DriveStatus status, int page, int limit) {
+        Pageable pageable = PageRequest.of(
+                page - 1,
+                limit
+        );
+
+        Pair<LocalDate, LocalDate> dateRange = DateRangeUtil.getDateRange(LocalDate.now(), period);
+        Page<Path> pageResult = pathRepository.searchPathPageByCondition(dateRange, status, pageable);
+        List<PathDetailRes> pathResList = pageResult.getContent().stream().map(PathDetailRes::from).toList();
+        return PagedListRes.<PathDetailRes>builder()
+                .items(pathResList)
+                .currentPageNum(pageResult.getNumber() + 1)
+                .totalPageNum(pageResult.getTotalPages())
+                .totalItemNum(pageResult.getTotalElements())
                 .build();
     }
 
