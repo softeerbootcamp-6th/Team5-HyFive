@@ -4,48 +4,54 @@ import { SearchIcon, ThreeDotsIcon } from "@/assets/icons";
 import Input from "@/components/Input";
 import AddressDropdown, { type AddressItem } from "./AddressDropdown";
 import { AddrInputContainer, InputSection } from "./AddressInput.style";
+import { useDebounce } from "@/hooks/useDebounce";
+import { useAddressSearch } from "./useAddressSearch";
 
 const { color } = theme;
 
+type Field = "departure" | "destination";
+type FieldState = { draft: string; value: AddressItem | null };
+
+const DEBOUNCE_DELAY = 300;
+
 const AddressInput = () => {
-  const [focusedInput, setFocusedInput] = useState<
-    "departure" | "destination" | null
-  >(null);
-  const [values, setValues] = useState({
-    departure: "",
-    destination: "",
+  const [focusedInput, setFocusedInput] = useState<Field | null>(null);
+  const [fields, setFields] = useState<Record<Field, FieldState>>({
+    departure: { draft: "", value: null },
+    destination: { draft: "", value: null },
   });
 
-  const tmpList: AddressItem[] = [
-    {
-      id: 1,
-      name: "상계요양원",
-      addr: "서울특별시 노원구 동일로242바길 27",
-    },
-    {
-      id: 2,
-      name: "상계 요양보호사 교육원",
-      addr: "서울특별시 노원구 덕릉로 814 재원빌딩 5f 상계요양보호사 교육원",
-    },
-    {
-      id: 3,
-      name: "상계 요양보호사 교육원",
-      addr: "서울특별시 노원구 덕릉로 814 재원빌딩 5f 상계요양보호사 교육원",
-    },
-    {
-      id: 4,
-      name: "상계 요양보호사 교육원",
-      addr: "서울특별시 노원구 덕릉로 814 재원빌딩 5f 상계요양보호사 교육원",
-    },
-  ];
+  // 현재 포커스된 입력의 draft 값 추출
+  const currentDraft = focusedInput ? fields[focusedInput].draft : "";
+  const debouncedDraft = useDebounce(currentDraft, DEBOUNCE_DELAY);
 
-  const handleInputFocus = (type: "departure" | "destination") => {
+  const { results, isLoading, error } = useAddressSearch({
+    query: debouncedDraft,
+    enabled: focusedInput !== null && debouncedDraft.trim() !== "",
+  });
+
+  const handleInputFocus = (type: Field) => {
     setFocusedInput(type);
+  };
+
+  const handleDraftChange = (
+    type: Field,
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const value = e.target.value;
+    setFields((prev) => ({
+      ...prev,
+      [type]: { ...prev[type], draft: value },
+    }));
   };
 
   const handleItemSelect = (item: AddressItem) => {
     if (!focusedInput) return;
-    setValues((prev) => ({ ...prev, [focusedInput]: item.name }));
+
+    setFields((prev) => ({
+      ...prev,
+      [focusedInput]: { draft: item.name, value: item },
+    }));
     setFocusedInput(null);
   };
 
@@ -56,33 +62,35 @@ const AddressInput = () => {
   return (
     <div css={AddrInputContainer}>
       <div css={InputSection}>
-        <div onClick={() => handleInputFocus("departure")}>
-          <Input
-            label="출발지"
-            required
-            icon={<SearchIcon fill={color.GrayScale.gray4} />}
-            placeholder="탑승 위치 입력"
-            value={values.departure}
-            onClick={() => handleInputFocus("departure")}
-          />
-        </div>
+        <Input
+          label="출발지"
+          required
+          icon={<SearchIcon fill={color.GrayScale.gray4} />}
+          placeholder="탑승 위치 입력"
+          value={fields.departure.draft}
+          onFocus={() => handleInputFocus("departure")}
+          onChange={(e) => handleDraftChange("departure", e)}
+        />
+
         <ThreeDotsIcon style={{ marginTop: "55px" }} />
-        <div onClick={() => handleInputFocus("destination")}>
-          <Input
-            label="도착지"
-            required
-            icon={<SearchIcon fill={color.GrayScale.gray4} />}
-            placeholder="병원 위치 입력"
-            value={values.destination}
-            onClick={() => handleInputFocus("destination")}
-          />
-        </div>
+
+        <Input
+          label="도착지"
+          required
+          icon={<SearchIcon fill={color.GrayScale.gray4} />}
+          placeholder="병원 위치 입력"
+          value={fields.destination.draft}
+          onFocus={() => handleInputFocus("destination")}
+          onChange={(e) => handleDraftChange("destination", e)}
+        />
       </div>
 
       {focusedInput && (
         <AddressDropdown
           type={focusedInput}
-          results={tmpList}
+          results={results}
+          isLoading={isLoading}
+          error={error}
           onItemSelect={handleItemSelect}
           onClose={handleCloseDropdown}
         />
