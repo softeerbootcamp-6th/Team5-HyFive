@@ -4,7 +4,7 @@ import { theme } from "@/styles/themes.style";
 
 const { color, typography } = theme;
 
-import { mockCenterData, mockCarData } from "@/mocks/centerDetailMocks";
+import { mockCarData } from "@/mocks/centerDetailMocks";
 import { useReducer, useState } from "react";
 import CarInfoCard from "@/features/car/CarInfoCard";
 import Calender from "@/features/calender/Calender";
@@ -13,12 +13,25 @@ import {
   calenderReducer,
   initialState,
 } from "@/features/calender/CalenderReducer";
+import { useGetCenterInfo } from "@/apis/CenterAPI";
 
 const CenterDetailPage = () => {
+  const { centerInfoData, isFetching, error } = useGetCenterInfo();
+  const mappedCenterData = centerInfoData && {
+    centerName: centerInfoData.centerName,
+    centerTel: centerInfoData.centerTel,
+    centerAddr: centerInfoData.centerAddr,
+    registeredCars: centerInfoData.carCount,
+    estimatedRevenue: centerInfoData.payAmount,
+  };
+
+  // 초기 선택된 차량 ID - 차량 리스트 가져온 후 첫 차량 ID로 설정
   const [selectedCarId, setSelectedCarId] = useState<number>(
     mockCarData[0].carId,
   );
   const [state, dispatch] = useReducer(calenderReducer, initialState);
+
+  // 차량 리스트까지 가져온 이후 선택된 차량 ID + 선택된 주차 정보 기반으로 유휴시간 요청
 
   // Calender - 헤더용 핸들러
   const handleMonthChange = (direction: "next" | "prev") => {
@@ -38,7 +51,11 @@ const CenterDetailPage = () => {
   return (
     <div css={PageContainer}>
       {/* 센터 정보 */}
-      <CenterOverview {...mockCenterData} />
+      <CenterOverview
+        {...mappedCenterData}
+        isLoading={isFetching}
+        error={error}
+      />
 
       {/* 등록된 차량 */}
       <div css={SectionWrapper}>
