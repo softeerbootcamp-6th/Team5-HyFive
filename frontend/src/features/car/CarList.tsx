@@ -59,14 +59,23 @@ const CarList = ({
 
   return (
     <div css={ListContainer}>
-      {carList.map((car) => (
-        <CarInfoCard
-          key={car.carId}
-          carData={car}
-          isSelected={selectedCarId === car.carId}
-          setIsSelected={setSelectedCarId}
-        />
-      ))}
+      {carList.length > 0 ? (
+        carList.map((car) => (
+          <CarInfoCard
+            key={car.carId}
+            carData={car}
+            isSelected={selectedCarId === car.carId}
+            setIsSelected={setSelectedCarId}
+          />
+        ))
+      ) : (
+        <div css={ErrorContainer}>
+          <InfoIcon />
+          <div css={ErrorContent}>
+            <span css={ErrorTitle}>등록된 차량이 없습니다</span>
+          </div>
+        </div>
+      )}
       {canAddCar && carList.length < maxCars && (
         <CarAddCard onClick={() => onAddCarClick?.()} />
       )}
