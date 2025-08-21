@@ -30,8 +30,15 @@ const UserInputSection = () => {
   const radioGroupItem = ["소유", "미소유"];
   const [state, dispatch] = useReducer(calenderReducer, initialState);
 
-  const { mutate, data, error, isPending, isSuccess, isError, reset } =
-    usePostUserRegister();
+  const {
+    mutate,
+    data,
+    error,
+    isPending,
+    isSuccess,
+    isError,
+    reset: resetMutation,
+  } = usePostUserRegister();
 
   const {
     control,
@@ -96,7 +103,7 @@ const UserInputSection = () => {
     isError,
     data,
     error: error as Error | null,
-    reset,
+    resetMutation,
   });
 
   const onSubmitForm = (formData: UserFormData) => {

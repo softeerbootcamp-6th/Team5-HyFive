@@ -10,7 +10,7 @@ interface UseModalManagerProps {
   isError: boolean;
   data?: { message?: string };
   error?: Error | null;
-  reset: () => void;
+  resetMutation: () => void;
 }
 
 export const useModalManager = ({
@@ -19,7 +19,7 @@ export const useModalManager = ({
   isError,
   data,
   error,
-  reset,
+  resetMutation,
 }: UseModalManagerProps) => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -28,12 +28,12 @@ export const useModalManager = ({
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    reset();
+    resetMutation();
   };
 
   const handleSuccessButton = () => {
     setIsModalOpen(false);
-    reset();
+    resetMutation();
     void navigate("/admin/book");
   };
 
