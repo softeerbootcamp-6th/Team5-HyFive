@@ -12,10 +12,17 @@ import { useCallback, useEffect, useMemo, useRef } from "react";
 interface UseVisualizeMarkerProps {
   map: MapInstance | null;
   markerPath: MarkerPath[];
+  onClickMarker: (id: number) => void;
+  onClickMap: () => void;
 }
 type MarkerType = "start" | "end" | "middle" | "enter" | "out";
 
-const useVisualizeMarker = ({ map, markerPath }: UseVisualizeMarkerProps) => {
+const useVisualizeMarker = ({
+  map,
+  markerPath,
+  onClickMarker,
+  onClickMap,
+}: UseVisualizeMarkerProps) => {
   const kakaoMaps = window.kakao?.maps;
   const markersRef = useRef<MarkerInstance[]>([]);
   const currentOverlayRef = useRef<CustomOverlayInstance | null>(null);
@@ -80,6 +87,7 @@ const useVisualizeMarker = ({ map, markerPath }: UseVisualizeMarkerProps) => {
       currentOverlayRef.current?.setMap(null);
       customOverlay.setMap(map);
       currentOverlayRef.current = customOverlay;
+      onClickMarker(markerData.bookId);
     });
   };
 
@@ -106,6 +114,7 @@ const useVisualizeMarker = ({ map, markerPath }: UseVisualizeMarkerProps) => {
     // map click: custom overlay 삭제
     const handleMapClick = () => {
       currentOverlayRef.current?.setMap(null);
+      onClickMap();
     };
     kakaoMaps.event.addListener(map, "click", handleMapClick);
 

@@ -29,6 +29,7 @@ const createInfoWindowHTML = ({
       box-shadow: 0 4px 8px rgba(0,0,0,0.25);
       font: 400 16px/22px 'Pretendard', sans-serif;
       transform: translateY(-90%);
+      z-index:5;
     ">
       <div style="
         display:flex;

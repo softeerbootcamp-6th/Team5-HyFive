@@ -28,6 +28,8 @@ const MapContent = () => {
   const { highlightMarker, initMarker } = useVisualizeMarker({
     map,
     markerPath,
+    onClickMarker: handleHighlight,
+    onClickMap: handleReset,
   });
   const { highlightRoute, resetRoute } = useVisualizeRoute({
     map,
@@ -35,7 +37,7 @@ const MapContent = () => {
   });
 
   // 개별 탑승자 경로 하이라이팅
-  const handleHighlight = (id: number) => {
+  function handleHighlight(id: number) {
     const highlight = highlightPath.find((value) => value.bookId === id);
     if (!highlight) return;
 
@@ -46,11 +48,11 @@ const MapContent = () => {
 
     highlightRoute(slicedPolylineList);
     highlightMarker({ start, end });
-  };
-  const handleReset = () => {
+  }
+  function handleReset() {
     resetRoute();
     initMarker();
-  };
+  }
 
   return (
     <div css={MapContentContainer}>
