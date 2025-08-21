@@ -2,6 +2,7 @@ package hyfive.gachita.docs;
 
 import hyfive.gachita.application.common.dto.PagedListRes;
 import hyfive.gachita.application.common.enums.SearchPeriod;
+import hyfive.gachita.application.path.dto.MapDrawRes;
 import hyfive.gachita.application.path.dto.PassengerRes;
 import hyfive.gachita.application.common.dto.ScrollRes;
 import hyfive.gachita.application.path.DriveStatus;
@@ -15,6 +16,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -126,5 +128,33 @@ public interface PathDocs {
                     example = "12"
             )
             @RequestParam(name = "limit", required = false, defaultValue = "12") int limit
+    );
+
+    @Operation(
+            summary = "경로별 지도 정보 조회",
+            description = "주어진 경로 ID에 해당하는 노드 및 폴리라인 정보를 조회합니다. " +
+                    "노드별 좌표와 연결된 세그먼트(polyline) 정보, 마커 정보 등을 포함합니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "1000",
+                    description = "성공적으로 지도용 데이터를 반환합니다.",
+                    content = @Content(
+                            schema = @Schema(implementation = MapDrawRes.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "3001",
+                    description = "요청한 경로 ID가 존재하지 않는 경우 발생",
+                    content = @Content()
+            )
+    })
+    BaseResponse<MapDrawRes> getMapDraw(
+            @Parameter(
+                    description = "조회할 경로 ID",
+                    example = "1",
+                    required = true
+            )
+            @PathVariable("id") @NotNull Long id
     );
 }
