@@ -1,4 +1,3 @@
-type TagType = "탑승" | "하차" | "센터";
 interface TimeType {
   startTime: string;
   endTime: string;
@@ -9,7 +8,7 @@ const createInfoWindowHTML = ({
   time,
 }: {
   name: string;
-  status: TagType;
+  status: string;
   time: TimeType;
 }) => {
   const textTag = `<p style="font:400 18px/28px 'Pretendard', sans-serif;">${name}</p>`;
@@ -59,20 +58,20 @@ const createInfoWindowHTML = ({
 };
 export default createInfoWindowHTML;
 
-const createStatusTagHTML = (type: TagType, label: string) => {
+const createStatusTagHTML = (type: string, label: string) => {
   let background = "";
   let color = "";
 
   switch (type) {
-    case "탑승":
+    case "START":
       background = "rgba(255, 119, 0, 0.10)";
       color = "#FF7700"; // theme.Maincolor.primary
       break;
-    case "하차":
+    case "END":
       background = "rgba(51, 111, 250, 0.10)";
       color = "#336FFA"; // theme.Semantic.success
       break;
-    case "센터":
+    case "CENTER":
       background = "rgba(24, 191, 129, 0.10)";
       color = "#18BF81"; // theme.Semantic.information
       break;

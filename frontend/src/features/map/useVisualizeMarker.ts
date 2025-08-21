@@ -52,25 +52,36 @@ const useVisualizeMarker = ({ map, markerPath }: UseVisualizeMarkerProps) => {
         title: "User Marker",
         image: markerImage,
       });
-
-      // marker click: custom overlay 등장
-      const customOverlay = new kakaoMaps.CustomOverlay({
-        position: new kakaoMaps.LatLng(point.lat, point.lng),
-        content: createInfoWindowHTML({
-          name: "김민정",
-          status: "탑승",
-          time: { startTime: "12:00", endTime: "13:00" },
-        }),
-      });
-      kakaoMaps.event.addListener(marker, "click", function () {
-        currentOverlayRef.current?.setMap(null);
-        customOverlay.setMap(map);
-        currentOverlayRef.current = customOverlay;
-      });
       return marker;
     },
     [kakaoMaps, map, imageSrc],
   );
+
+  const renderInfoWindow = ({
+    marker,
+    markerData,
+  }: {
+    marker: MarkerInstance;
+    markerData: MarkerPath;
+  }) => {
+    // marker click: custom overlay 등장
+    const customOverlay = new kakaoMaps.CustomOverlay({
+      position: new kakaoMaps.LatLng(
+        markerData.point.lat,
+        markerData.point.lng,
+      ),
+      content: createInfoWindowHTML({
+        name: markerData.bookId.toString(),
+        status: markerData.type,
+        time: { startTime: markerData.time, endTime: markerData.time },
+      }),
+    });
+    kakaoMaps.event.addListener(marker, "click", function () {
+      currentOverlayRef.current?.setMap(null);
+      customOverlay.setMap(map);
+      currentOverlayRef.current = customOverlay;
+    });
+  };
 
   const removeMarker = () => {
     markersRef.current.forEach((m) => m.setMap(null));
@@ -82,7 +93,9 @@ const useVisualizeMarker = ({ map, markerPath }: UseVisualizeMarkerProps) => {
 
     markersRef.current = markerPath.map((partMarkerPath, i) => {
       const markerType = getMarkerType(i, markerPath.length);
-      return renderMarker({ markerType, point: partMarkerPath.point });
+      const marker = renderMarker({ markerType, point: partMarkerPath.point });
+      renderInfoWindow({ marker, markerData: partMarkerPath });
+      return marker;
     });
   }, [markerPath, renderMarker]);
 
