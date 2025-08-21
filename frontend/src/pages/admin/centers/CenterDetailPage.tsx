@@ -4,9 +4,8 @@ import { theme } from "@/styles/themes.style";
 
 const { color, typography } = theme;
 
-import { mockCarData } from "@/mocks/centerDetailMocks";
 import { useReducer, useState } from "react";
-import CarInfoCard from "@/features/car/CarInfoCard";
+
 import Calender from "@/features/calender/Calender";
 import TimeTable from "@/features/timeTable/components/TimeTable";
 import {
@@ -14,24 +13,32 @@ import {
   initialState,
 } from "@/features/calender/CalenderReducer";
 import { useGetCenterInfo } from "@/apis/CenterAPI";
+import { useGetCarList } from "@/apis/CarAPI";
+import { mapBackendCarListToCarList } from "@/features/car/Car.type";
+import CarList from "@/features/car/CarList";
+import { mapBackendCenterInfoToCenterOverview } from "@/features/centerOverview/CenterOverview.type";
 
 const CenterDetailPage = () => {
-  const { centerInfoData, isFetching, error } = useGetCenterInfo();
-  const mappedCenterData = centerInfoData && {
-    centerName: centerInfoData.centerName,
-    centerTel: centerInfoData.centerTel,
-    centerAddr: centerInfoData.centerAddr,
-    registeredCars: centerInfoData.carCount,
-    estimatedRevenue: centerInfoData.payAmount,
-  };
+  const {
+    centerInfoData,
+    isFetching: isCenterFetching,
+    error: CenterError,
+  } = useGetCenterInfo();
+  const {
+    carList,
+    isFetching: isCarFetching,
+    error: carError,
+  } = useGetCarList();
 
-  // 초기 선택된 차량 ID - 차량 리스트 가져온 후 첫 차량 ID로 설정
-  const [selectedCarId, setSelectedCarId] = useState<number>(
-    mockCarData[0].carId,
-  );
+  const mappedCenterData =
+    centerInfoData && mapBackendCenterInfoToCenterOverview(centerInfoData);
+  const mappedCarList = carList && mapBackendCarListToCarList(carList);
+
+  const [selectedCarId, setSelectedCarId] = useState<number>(0);
+
   const [state, dispatch] = useReducer(calenderReducer, initialState);
 
-  // 차량 리스트까지 가져온 이후 선택된 차량 ID + 선택된 주차 정보 기반으로 유휴시간 요청
+  // TODO 재민 - 차량 리스트까지 가져온 이후 선택된 차량 ID + 선택된 주차 정보 기반으로 유휴시간 요청
 
   // Calender - 헤더용 핸들러
   const handleMonthChange = (direction: "next" | "prev") => {
@@ -53,22 +60,24 @@ const CenterDetailPage = () => {
       {/* 센터 정보 */}
       <CenterOverview
         {...mappedCenterData}
-        isLoading={isFetching}
-        error={error}
+        isLoading={isCenterFetching}
+        error={CenterError}
       />
 
       {/* 등록된 차량 */}
       <div css={SectionWrapper}>
         <h4 css={SectionLabel}>등록된 차량</h4>
         <div css={ContentSection}>
-          {mockCarData.map((car) => (
-            <CarInfoCard
-              key={car.carId}
-              carData={car}
-              isSelected={selectedCarId === car.carId}
-              setIsSelected={setSelectedCarId}
+          <div css={ContentSection}>
+            <CarList
+              canAddCar={false}
+              carList={mappedCarList}
+              selectedCarId={selectedCarId}
+              setSelectedCarId={setSelectedCarId}
+              isLoading={isCarFetching}
+              error={carError}
             />
-          ))}
+          </div>
         </div>
       </div>
 
