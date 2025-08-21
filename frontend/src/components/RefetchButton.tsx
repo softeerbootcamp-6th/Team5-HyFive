@@ -1,5 +1,5 @@
 import { RefreashIcon } from "@/assets/icons";
-import { rotating } from "@/utils/RotateAnimation";
+import { rotating, ROTATING_TIME } from "@/utils/RotateAnimation";
 import { theme } from "@/styles/themes.style";
 import DateFormatter from "@/utils/DateFormatter";
 import { css } from "@emotion/react";
@@ -19,7 +19,7 @@ const RefetchButton = ({ handleClick }: RefetchButtonProps) => {
     setIsRefetchActive(true);
     handleClick();
     setRefetchTime(DateFormatter.formatDateToSplitTime(new Date()));
-    setTimeout(() => setIsRefetchActive(false), 1000);
+    setTimeout(() => setIsRefetchActive(false), ROTATING_TIME * 1000);
   };
 
   return (

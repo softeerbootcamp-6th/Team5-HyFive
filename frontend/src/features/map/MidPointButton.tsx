@@ -1,6 +1,6 @@
 import { RefreashIcon } from "@/assets/icons";
 import { theme } from "@/styles/themes.style";
-import { rotating } from "@/utils/RotateAnimation";
+import { rotating, ROTATING_TIME } from "@/utils/RotateAnimation";
 import { css } from "@emotion/react";
 import { useState } from "react";
 
@@ -9,7 +9,7 @@ const MidPointButton = ({ onClick }: { onClick: () => void }) => {
   const handleMidPoint = () => {
     setIsClickActive(true);
     onClick();
-    setTimeout(() => setIsClickActive(false), 1000);
+    setTimeout(() => setIsClickActive(false), ROTATING_TIME * 1000);
   };
 
   return (
