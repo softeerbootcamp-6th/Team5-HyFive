@@ -1,7 +1,8 @@
+import type { BackendCarType } from "@/features/car/Car.type";
 import type { CarFormValues } from "@/features/carUploader/useCarForm";
 import { clientInstance } from "@/utils/AxiosInstance";
 import type { CustomError } from "@/utils/CustomError";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 interface CarAPIResponse {
   isSuccess: boolean;
@@ -10,7 +11,6 @@ interface CarAPIResponse {
   data: {
     id: number;
     centerId: number;
-    centerName: string;
     modelName: string;
     carNumber: string;
     capacity: number;
@@ -18,6 +18,28 @@ interface CarAPIResponse {
     carImage: string;
   };
 }
+
+interface CarListAPIResponse {
+  isSuccess: boolean;
+  code: number;
+  message: string;
+  data: BackendCarType[];
+}
+
+const CENTER_ID = 1; // MVP 단계에선 고정
+
+export const useGetCarList = (centerId: number = CENTER_ID) => {
+  const { data, isFetching, error } = useQuery<CarListAPIResponse>({
+    queryKey: ["carList", centerId],
+    queryFn: () => clientInstance.get(`/car/list?center_id=${centerId}`),
+    staleTime: 5 * 60 * 1000,
+    placeholderData: (prev) => prev,
+  });
+
+  const carList = data?.data;
+
+  return { carList, isFetching, error };
+};
 
 export const usePostCar = () => {
   const mutation = useMutation<CarAPIResponse, CustomError, CarFormValues>({
