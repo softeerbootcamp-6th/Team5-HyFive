@@ -1,5 +1,6 @@
 package hyfive.gachita.application.path;
 
+import hyfive.gachita.application.book.Book;
 import hyfive.gachita.application.car.Car;
 import hyfive.gachita.application.node.Node;
 import hyfive.gachita.application.rental.Rental;
@@ -74,6 +75,9 @@ public class Path {
 
     @OneToMany(mappedBy = "path", fetch = FetchType.LAZY, cascade=CascadeType.ALL)
     private List<Node> nodeList;
+
+    @OneToMany(mappedBy = "path", fetch = FetchType.LAZY)
+    private List<Book> bookList;
 
     public void setNodes(List<Node> nodeList) {
         this.nodeList = nodeList;

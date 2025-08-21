@@ -1,5 +1,6 @@
 package hyfive.gachita.application.book.repository;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -57,35 +58,19 @@ public class CustomBookRepositoryImpl implements CustomBookRepository {
     }
 
     @Override
-    public List<Book> findBooksForScroll(BookStatus status, BookCursor cursor, int size) {
-        LocalDate today = LocalDate.now();
-        LocalDateTime startOfToday = today.atStartOfDay();
-        LocalDateTime endOfToday = today.atTime(LocalTime.MAX);
+    public List<Book> findBooksForScrollWithPath(Pair<LocalDateTime, LocalDateTime> dateRange, BookStatus status, BookCursor cursor, int size) {
+        BooleanBuilder cursorCondition = new BooleanBuilder();
+        if (cursor != null && cursor.lastId() != null && cursor.lastCreatedAt() != null) {
+            // createdAt 비교
+            cursorCondition.or(book.createdAt.lt(cursor.lastCreatedAt()));
 
-        BooleanExpression cursorCondition = null;
-
-        if (cursor != null && cursor.lastCreatedAt() != null && cursor.lastId() != null) {
-            cursorCondition = book.createdAt.lt(cursor.lastCreatedAt())
-                    .or(
-                            book.createdAt.eq(cursor.lastCreatedAt())
-                                    .and(book.id.lt(cursor.lastId()))
-                    );
+            // createdAt 같을 때 id 비교
+            cursorCondition.or(
+                    book.createdAt.eq(cursor.lastCreatedAt())
+                            .and(book.id.lt(cursor.lastId()))
+            );
         }
 
-        return queryFactory
-                .selectFrom(book)
-                .where(
-                        book.bookStatus.eq(status),
-                        book.createdAt.between(startOfToday, endOfToday),
-                        cursorCondition
-                )
-                .orderBy(book.createdAt.desc(), book.id.desc())
-                .limit(size + 1)
-                .fetch();
-    }
-
-    @Override
-    public List<Book> findBooksForScrollWithPath(Pair<LocalDateTime, LocalDateTime> dateRange, BookStatus status, BookCursor cursor, int size) {
         return queryFactory
                 .select(book)
                 .from(book)
@@ -93,7 +78,8 @@ public class CustomBookRepositoryImpl implements CustomBookRepository {
                 .leftJoin(path.car, car)
                 .where(
                         book.bookStatus.eq(status),
-                        betweenCreatedDate(book, dateRange)
+                        betweenCreatedDate(book, dateRange),
+                        cursorCondition
                 )
                 .orderBy(book.createdAt.desc(), book.id.desc())
                 .limit(size + 1)
