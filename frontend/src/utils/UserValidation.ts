@@ -79,20 +79,6 @@ export const formatPhone = (value: string): string => {
   return `${numbers.slice(0, 3)}-${numbers.slice(3, 7)}-${numbers.slice(7, 11)}`;
 };
 
-export const formatTime = (
-  hour: string,
-  minute: string,
-  meridiem: string,
-): string => {
-  let h = parseInt(hour);
-  const m = parseInt(minute);
-
-  if (meridiem === "PM") h += 12;
-  if (meridiem === "AM") h = 0;
-
-  return formatTimeToHHMM(h, m);
-};
-
 export const formatTime24Hour = (
   hour: string,
   minute: string,
