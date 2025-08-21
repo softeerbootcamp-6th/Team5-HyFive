@@ -19,7 +19,7 @@ const DEFAULT_LOCATION = {
   y: 37.655038011447, // 위도
 };
 // 기준 위치에서 검색 허용 반경
-const DEFAULT_DISTANCE = 20 * 100; // 20km
+const DEFAULT_DISTANCE = 20 * 1000; // 20km
 
 export const useAddressSearch = ({
   query,
