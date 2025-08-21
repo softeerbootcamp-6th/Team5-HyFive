@@ -1,5 +1,7 @@
 package hyfive.gachita.docs;
 
+import hyfive.gachita.application.common.dto.PagedListRes;
+import hyfive.gachita.application.common.enums.SearchPeriod;
 import hyfive.gachita.application.path.dto.PassengerRes;
 import hyfive.gachita.application.common.dto.ScrollRes;
 import hyfive.gachita.application.path.DriveStatus;
@@ -11,7 +13,9 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -75,5 +79,52 @@ public interface PathDocs {
                     example = "10"
             )
             @RequestParam(name = "size", defaultValue = "10") int size
+    );
+
+    @Operation(
+            summary = "경로 리스트 조회 API",
+            description = """
+            기간(period), 상태(status)를 조건으로 경로 리스트를 조회합니다. 
+            페이지네이션(page, limit) 방식으로 결과를 제공합니다.
+            """
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "1000",
+                    description = "조회 성공, items에 PathDetailRes 리스트가 담겨 반환됩니다.",
+                    content = @Content(
+                            schema = @Schema(implementation = PagedListRes.class)
+                    )
+            ),
+    })
+    @GetMapping("/list")
+    BaseResponse<PagedListRes<PathDetailRes>> getPathList(
+            @Parameter(
+                    name = "period",
+                    description = "조회 기간 (TODAY, YESTERDAY, WEEK, MONTH / 기본값: TODAY)",
+                    example = "TODAY"
+            )
+            @RequestParam(name = "period", required = false, defaultValue = "TODAY") SearchPeriod period,
+
+            @Parameter(
+                    name = "status",
+                    description = "운행 상태 (WAITING, RUNNING, FINISHED) / null 또는 비어있는 값으로 요청하면 전체 상태를 조회",
+                    example = "WAITING"
+            )
+            @RequestParam(name = "status", required = false) DriveStatus status,
+
+            @Parameter(
+                    name = "page",
+                    description = "페이지 번호 (기본값: 1)",
+                    example = "1"
+            )
+            @RequestParam(name = "page", required = false, defaultValue = "1") int page,
+
+            @Parameter(
+                    name = "limit",
+                    description = "페이지당 항목 수 (기본값: 12)",
+                    example = "12"
+            )
+            @RequestParam(name = "limit", required = false, defaultValue = "12") int limit
     );
 }

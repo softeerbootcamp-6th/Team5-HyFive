@@ -1,18 +1,23 @@
 package hyfive.gachita.application.path;
 
 import hyfive.gachita.application.book.Book;
+import hyfive.gachita.application.common.dto.PagedListRes;
 import hyfive.gachita.application.common.dto.ScrollRes;
+import hyfive.gachita.application.common.enums.SearchPeriod;
+import hyfive.gachita.application.common.util.DateRangeUtil;
 import hyfive.gachita.application.node.Node;
+import hyfive.gachita.application.node.repository.NodeRepository;
 import hyfive.gachita.application.node.NodeType;
-import hyfive.gachita.application.path.dto.PassengerRes;
-import hyfive.gachita.application.path.dto.PathCursor;
-import hyfive.gachita.application.path.dto.PathDetailRes;
-import hyfive.gachita.application.path.dto.PathRes;
+import hyfive.gachita.application.path.dto.*;
 import hyfive.gachita.application.path.respository.PathRepository;
 import hyfive.gachita.dispatch.dto.FinalNewPathDto;
 import hyfive.gachita.global.BusinessException;
 import hyfive.gachita.global.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +30,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PathService {
     private final PathRepository pathRepository;
+    private final NodeRepository nodeRepository;
 
     @Transactional
     public Path createPathWithNodes(FinalNewPathDto finalPathDto, Book book) {
@@ -126,7 +132,43 @@ public class PathService {
                 .build();
     }
 
+    public PagedListRes<PathDetailRes> getPathList(SearchPeriod period, DriveStatus status, int page, int limit) {
+        Pageable pageable = PageRequest.of(
+                page - 1,
+                limit
+        );
+
+        Pair<LocalDate, LocalDate> dateRange = DateRangeUtil.getDateRange(LocalDate.now(), period);
+        Page<Path> pageResult = pathRepository.searchPathPageByCondition(dateRange, status, pageable);
+        List<PathDetailRes> pathResList = pageResult.getContent().stream().map(PathDetailRes::from).toList();
+        return PagedListRes.<PathDetailRes>builder()
+                .items(pathResList)
+                .currentPageNum(pageResult.getNumber() + 1)
+                .totalPageNum(pageResult.getTotalPages())
+                .totalItemNum(pageResult.getTotalElements())
+                .build();
+    }
+
+    public MapDrawRes getMapDraw(Long id) {
+        pathRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NO_EXIST_VALUE, "DB에 경로 데이터가 존재하지 않습니다."));
+
+        List<MarkerRes> markerList = nodeRepository.findByAllPathId(id);
+        List<SegmentRes> segmentList = nodeRepository.findSegmentsByMarkers(markerList);
+        List<HighlightRes> highlightList = nodeRepository.getHighlightsByPath(id);
+
+        return MapDrawRes.builder()
+                .polyline(segmentList)
+                .marker(markerList)
+                .highlight(highlightList)
+                .build();
+    }
+
+
     private LocalTime minTime(LocalTime timeA, LocalTime timeB) {
         return timeA.isBefore(timeB) ? timeA : timeB;
     }
 }
+
+
+

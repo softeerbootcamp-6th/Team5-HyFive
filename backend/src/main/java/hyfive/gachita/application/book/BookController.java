@@ -29,7 +29,7 @@ public class BookController implements BookDocs {
     @GetMapping("/list")
     public BaseResponse<PagedListRes<BookRes>> getBookList(
             @RequestParam(name = "period", required = false, defaultValue = "TODAY") SearchPeriod period,
-            @RequestParam(name = "status") BookStatus bookStatus,
+            @RequestParam(name = "status", required = false) BookStatus bookStatus,
             @RequestParam(name = "page", required = false, defaultValue = "1") int page,
             @RequestParam(name = "limit", required = false, defaultValue = "12") int limit
     ) {

@@ -6,8 +6,12 @@ import hyfive.gachita.application.path.dto.PathCursor;
 import hyfive.gachita.application.path.dto.PathRes;
 import hyfive.gachita.dispatch.dto.OldPathDto;
 import hyfive.gachita.dispatch.module.condition.PathCondition;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.util.Pair;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,4 +20,7 @@ public interface CustomPathRepository {
     Optional<PathRes> findPathResByBookId(Long bookId);
     Path findPassengersByPathId(Long pathId);
     List<Path> findPathsForScroll(LocalDate date, DriveStatus status, PathCursor cursor, int size);
+    Page<Path> searchPathPageByCondition(Pair<LocalDate, LocalDate> dateRange,
+                                         DriveStatus status,
+                                         Pageable pageable);
 }
