@@ -179,7 +179,7 @@ public class PathService {
 
                     return HighlightRes.from(startNode, endNode, book, selectedSegment);
                 })
-                .sorted(Comparator.comparing(HighlightRes::starTime))
+                .sorted(Comparator.comparing(HighlightRes::startTime))
                 .toList();
     }
 

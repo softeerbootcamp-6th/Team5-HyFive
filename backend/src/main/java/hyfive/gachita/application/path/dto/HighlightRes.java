@@ -21,7 +21,7 @@ public record HighlightRes(
 
         @Schema(description = "승차 시간 (HH:mm)", example = "10:00")
         @JsonFormat(pattern = "HH:mm")
-        LocalTime starTime,
+        LocalTime startTime,
 
         @Schema(description = "하차 시간 (HH:mm)", example = "10:30")
         @JsonFormat(pattern = "HH:mm")
