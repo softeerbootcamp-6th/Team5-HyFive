@@ -11,7 +11,6 @@ const CenterLayout = () => {
           <Outlet />
         </div>
       </div>
-      <div id="modal-root"></div>
     </>
   );
 };
