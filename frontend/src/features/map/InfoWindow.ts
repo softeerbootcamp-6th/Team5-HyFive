@@ -13,7 +13,7 @@ const createInfoWindowHTML = ({
 }) => {
   const textTag = `<p style="font:400 18px/28px 'Pretendard', sans-serif;">${name}</p>`;
   const timeTag = `<p style="font:400 18px/28px 'Pretendard', sans-serif; color:#939393">: ${time.startTime} ~ ${time.endTime}</p>`;
-  const statusTag = createStatusTagHTML(status, status);
+  const statusTag = createStatusTagHTML(status, "탑승자");
 
   return `
     <div style="
@@ -68,11 +68,11 @@ const createStatusTagHTML = (type: string, label: string) => {
       background = "rgba(255, 119, 0, 0.10)";
       color = "#FF7700"; // theme.Maincolor.primary
       break;
-    case "END":
+    case "SUCCESS":
       background = "rgba(51, 111, 250, 0.10)";
       color = "#336FFA"; // theme.Semantic.success
       break;
-    case "CENTER":
+    case "INFO":
       background = "rgba(24, 191, 129, 0.10)";
       color = "#18BF81"; // theme.Semantic.information
       break;
