@@ -32,12 +32,12 @@ declare global {
       addListener<T extends object>(
         target: T,
         type: string,
-        handler: (...args: any[]) => void,
+        handler: (map: MapInstance, mode: string, fn: () => void) => void,
       ): void;
       removeListener<T extends object>(
         target: T,
         type: string,
-        handler: (...args: any[]) => void,
+        handler: (map: MapInstance, mode: string, fn: () => void) => void,
       ): void;
       trigger(target: object, type: string): void;
     };
