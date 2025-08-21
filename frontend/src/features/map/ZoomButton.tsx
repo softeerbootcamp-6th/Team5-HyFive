@@ -12,8 +12,9 @@ interface ZoomButtonProps {
 }
 const ZoomButton = ({ zoomLevel, handleZoomLevel }: ZoomButtonProps) => {
   const isActiveZoomLevel = (type: "min" | "max") => {
-    const activeZoomLevel = type === "min" ? 1 : MAX_ZOOM_LEVEL;
-    return zoomLevel === activeZoomLevel ? true : false;
+    if (type === "min") return zoomLevel === 1;
+    if (type === "max") return zoomLevel === MAX_ZOOM_LEVEL;
+    return true;
   };
 
   const [isAddPressing, setIsAddPressing] = useState(false);
