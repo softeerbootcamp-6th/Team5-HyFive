@@ -155,9 +155,14 @@ export interface MarkerPath {
   type: string;
 }
 
-export interface HighlightPath {
+export interface HighlightType {
   bookId: number;
-  start: LatLng;
-  end: LatLng;
+  bookName: string;
+  startTime: string;
+  endTime: string;
+  startAddr: string;
+  endAddr: string;
+  startLoc: LatLng;
+  endLoc: LatLng;
   segmentList: number[];
 }

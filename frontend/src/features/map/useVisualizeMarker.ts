@@ -5,8 +5,13 @@ import {
   MarkerOutIcon,
   MarkerStartIcon,
 } from "@/assets/icons";
+import getRouteMidPoint from "@/features/map/getRouteMidPoint.util";
 import createInfoWindowHTML from "@/features/map/InfoWindow";
-import type { LatLng, MarkerPath } from "@/features/map/Map.types";
+import type {
+  HighlightType,
+  LatLng,
+  MarkerPath,
+} from "@/features/map/Map.types";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 
 interface UseVisualizeMarkerProps {
@@ -79,19 +84,23 @@ const useVisualizeMarker = ({
     [kakaoMaps, map, imageSrc],
   );
 
-  const renderInfoWindow = ({ markerData }: { markerData: MarkerPath }) => {
-    // marker click: custom overlay 등장
+  const renderInfoWindow = ({ data }: { data: HighlightType }) => {
+    const midPoint = getRouteMidPoint([
+      { lat: data.startLoc.lat, lng: data.startLoc.lng },
+      { lat: data.endLoc.lat, lng: data.endLoc.lng },
+    ]) as LatLng;
+
     const customOverlay = new kakaoMaps.CustomOverlay({
-      position: new kakaoMaps.LatLng(
-        markerData.point.lat,
-        markerData.point.lng,
-      ),
+      position: new kakaoMaps.LatLng(midPoint.lat, midPoint.lng),
       content: createInfoWindowHTML({
-        name: markerData.bookId.toString(),
-        status: markerData.type,
-        time: { startTime: markerData.time, endTime: markerData.time },
+        name: data.bookId.toString(),
+        status: "PASSENGER",
+        time: { startTime: data.startTime, endTime: data.endTime },
       }),
     });
+    currentOverlayRef.current?.setMap(null);
+    currentOverlayRef.current = customOverlay;
+    currentOverlayRef.current.setMap(map);
   };
 
   const removeMarker = () => {
@@ -132,8 +141,9 @@ const useVisualizeMarker = ({
   const highlightMarker = ({
     start,
     end,
+    data,
   }: {
-    data?: string;
+    data: HighlightType;
     start: LatLng;
     end: LatLng;
   }) => {
@@ -151,6 +161,7 @@ const useVisualizeMarker = ({
       bookId: 1,
       mode: "highlight",
     });
+    renderInfoWindow({ data });
     markersRef.current.push(startMarker);
     markersRef.current.push(endMarker);
   };

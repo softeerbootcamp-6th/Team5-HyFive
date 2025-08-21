@@ -46,9 +46,27 @@ const MapContent = () => {
       .filter((segment) => segmentList.includes(segment.segmentId))
       .flatMap((segment) => segment.pointList);
 
+    const testHightlight = {
+      bookId: id,
+      bookName: "박영희",
+      startTime: "08:20",
+      endTime: "09:00",
+      startAddr: "공릉로 168-5",
+      endAddr: "동일로 1349 노원의료원",
+      startLoc: {
+        lat: 37.65311036317523,
+        lng: 127.05436027948892,
+      },
+      endLoc: {
+        lat: 37.653361917955415,
+        lng: 127.0559016390923,
+      },
+      segmentList: [5, 6, 7, 8, 9],
+    };
     highlightRoute(slicedPolylineList);
-    highlightMarker({ start, end });
+    highlightMarker({ start, end, data: testHightlight });
   }
+
   function handleReset() {
     resetRoute();
     initMarker();

@@ -64,7 +64,7 @@ const createStatusTagHTML = (type: string, label: string) => {
   let color = "";
 
   switch (type) {
-    case "START":
+    case "PASSENGER":
       background = "rgba(255, 119, 0, 0.10)";
       color = "#FF7700"; // theme.Maincolor.primary
       break;
