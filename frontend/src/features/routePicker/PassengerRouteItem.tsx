@@ -1,18 +1,16 @@
 import Tag from "@/components/Tag";
-import type { PassengerRoute, RouteStatus } from "@/types/routeType.types";
+import type { HighlightType } from "@/features/map/Map.types";
 
-const matchTag = (value: RouteStatus) => {
-  if (value === "탑승") return "blue";
-  if (value === "하차") return "red";
-  return "gray";
-};
-
-const PassengerRouteItem = ({ passenger }: { passenger: PassengerRoute }) => {
+const PassengerRouteItem = ({
+  passenger,
+}: {
+  passenger: Partial<HighlightType>;
+}) => {
   return (
     <>
-      <p>{passenger.id}</p>
-      <p>{passenger.name}</p>
-      <Tag type={matchTag(passenger.status)} label={passenger.status} />
+      <p>{passenger.bookId}</p>
+      <p>{passenger.bookName}</p>
+      <Tag type="orange" label={`예약 시간 : ${passenger.hospitalTime}`} />
     </>
   );
 };

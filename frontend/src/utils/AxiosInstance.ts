@@ -11,9 +11,21 @@ const createInstance = () => {
   });
 
   instance.interceptors.response.use(
-    (response) => response.data,
+    (response) => {
+      if (response.data.isSuccess) {
+        return response.data;
+      } else {
+        throw new CustomError({
+          message: response.data.message,
+          status: response.data.status,
+        });
+      }
+    },
     (error: AxiosError) => {
-      throw CustomError(error);
+      throw new CustomError({
+        message: "통신에 문제가 발생했습니다! :(",
+        status: error.status,
+      });
     },
   );
 

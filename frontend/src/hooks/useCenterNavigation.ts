@@ -15,10 +15,11 @@ export const useCarNavigation = () => {
 
     void navigate("/center/edit", {
       state: {
+        carId: selectedCar.carId,
         carImage: selectedCar.carImgURL,
         carModel: selectedCar.carName,
         carNumber: selectedCar.carNum,
-        maxPassenger: selectedCar.capacity,
+        maxPassenger: String(selectedCar.capacity),
         isLowFloor: selectedCar.isLowFloor,
       },
     });

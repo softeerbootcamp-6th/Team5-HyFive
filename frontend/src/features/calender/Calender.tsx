@@ -1,6 +1,10 @@
 import CalenderHeader from "@/features/calender/CalenderHeader";
 import CalenderContent from "@/features/calender/CalenderContent";
-import { CalenderContainer } from "@/features/calender/Calender.style";
+import {
+  CalenderContainer,
+  ButtonSection,
+  ButtonStyle,
+} from "@/features/calender/Calender.style";
 
 interface CalenderProps {
   highlightType: "day" | "week";
@@ -9,6 +13,10 @@ interface CalenderProps {
   onPrevMonth: () => void;
   onNextMonth: () => void;
   onDateClick: (date: Date) => void;
+  // popup 모드를 위한 선택적 props
+  isPopup?: boolean;
+  onCancel?: () => void;
+  onConfirm?: (date: Date | null) => void;
 }
 
 const Calender = ({
@@ -18,9 +26,18 @@ const Calender = ({
   onPrevMonth,
   onNextMonth,
   onDateClick,
+  isPopup = false,
+  onCancel,
+  onConfirm,
 }: CalenderProps) => {
+  const handleConfirm = () => {
+    if (onConfirm) {
+      onConfirm(selectedDate);
+    }
+  };
+
   return (
-    <div css={CalenderContainer}>
+    <div css={CalenderContainer(isPopup)}>
       <CalenderHeader
         calendarDate={calendarDate}
         onClickPrev={onPrevMonth}
@@ -32,6 +49,16 @@ const Calender = ({
         selectedDate={selectedDate}
         handleClickDate={onDateClick}
       />
+      {isPopup && (
+        <div css={ButtonSection}>
+          <button css={ButtonStyle("cancel")} onClick={onCancel}>
+            취소
+          </button>
+          <button css={ButtonStyle("confirm")} onClick={handleConfirm}>
+            확인
+          </button>
+        </div>
+      )}
     </div>
   );
 };

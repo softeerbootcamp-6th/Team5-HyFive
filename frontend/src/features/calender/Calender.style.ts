@@ -4,7 +4,7 @@ import { theme } from "@/styles/themes.style";
 const { color, typography, borderRadius } = theme;
 
 // Calender.tsx
-const CalenderContainer = css`
+const CalenderContainer = (isPopup: boolean = false) => css`
   display: flex;
   width: 446px;
   height: 100%;
@@ -12,10 +12,19 @@ const CalenderContainer = css`
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  gap: 52px;
-  flex-shrink: 0;
+  gap: 32px;
+  & > :last-child {
+    align-self: flex-end;
+    margin-right: 0;
+    padding-bottom: 10px;
+  }
   border-radius: ${borderRadius.Large};
   border: 1px solid ${color.GrayScale.gray3};
+  ${isPopup &&
+  css`
+    padding-bottom: 0;
+  `}
+  flex-shrink: 0;
 `;
 
 // CalenderHeader.tsx
@@ -131,6 +140,23 @@ const getDaySectionStyle = (
   return css``;
 };
 
+// Popup 모드 버튼 스타일
+const ButtonSection = css`
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: end;
+`;
+
+const ButtonStyle = (type: "cancel" | "confirm") => css`
+  padding: 24px 32px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font: ${typography.Label.l2_semi};
+  color: ${type === "cancel" ? color.GrayScale.gray4 : color.Semantic.success};
+`;
+
 export {
   CalenderContainer,
   HeaderContainer,
@@ -142,4 +168,6 @@ export {
   DaySection,
   getDaySectionStyle,
   getWeekSectionStyle,
+  ButtonSection,
+  ButtonStyle,
 };
