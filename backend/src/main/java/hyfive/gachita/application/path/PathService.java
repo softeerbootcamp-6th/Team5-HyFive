@@ -156,12 +156,10 @@ public class PathService {
         // 데이터베이스에서 필요한 값 조회
         List<Node> nodeList = pathRepository.findNodeListWithSegmentInfoByPathId(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NO_EXIST_VALUE, "DB에 경로 데이터가 존재하지 않습니다."));
-        Center center = pathRepository.findCenterByPathId(id)
-                .orElseThrow(() -> new BusinessException(ErrorCode.NO_EXIST_VALUE, "경로에 해당하는 센터가 존재하지 않습니다."));
 
         // 응답 형식으로 변환
         List<SegmentRes> segmentResList = getSegmentResList(nodeList);
-        List<MarkerRes> markerResList = getMarkerResList(nodeList, center);
+        List<MarkerRes> markerResList = getMarkerResList(nodeList);
 
         return MapDrawRes.builder()
                 .polyline(segmentResList)
@@ -170,11 +168,9 @@ public class PathService {
                 .build();
     }
 
-    private List<MarkerRes> getMarkerResList(List<Node> nodeList, Center center) {
+    private List<MarkerRes> getMarkerResList(List<Node> nodeList) {
         return nodeList.stream()
-                .map(node -> node.getType() == NodeType.CENTER
-                        ? MarkerRes.from(center, node)
-                        : MarkerRes.from(node))
+                .map(MarkerRes::from)
                 .toList();
     }
 
