@@ -9,16 +9,30 @@ import { useAddressSearch } from "./useAddressSearch";
 
 const { color } = theme;
 
+interface AddressInputProps {
+  onFocus?: () => void;
+  onDepartureChange?: (address: string) => void;
+  onDestinationChange?: (address: string) => void;
+  departureValue?: string;
+  destinationValue?: string;
+}
+
 type Field = "departure" | "destination";
 type FieldState = { draft: string; value: AddressItem | null };
 
 const DEBOUNCE_DELAY = 300;
 
-const AddressInput = () => {
+const AddressInput = ({
+  onFocus,
+  onDepartureChange,
+  onDestinationChange,
+  departureValue = "",
+  destinationValue = "",
+}: AddressInputProps) => {
   const [focusedInput, setFocusedInput] = useState<Field | null>(null);
   const [fields, setFields] = useState<Record<Field, FieldState>>({
-    departure: { draft: "", value: null },
-    destination: { draft: "", value: null },
+    departure: { draft: departureValue, value: null },
+    destination: { draft: destinationValue, value: null },
   });
 
   // 현재 포커스된 입력의 draft 값 추출
@@ -32,6 +46,7 @@ const AddressInput = () => {
 
   const handleInputFocus = (type: Field) => {
     setFocusedInput(type);
+    onFocus?.(); // 외부 onFocus 콜백 호출
   };
 
   const handleDraftChange = (
@@ -52,6 +67,14 @@ const AddressInput = () => {
       ...prev,
       [focusedInput]: { draft: item.name, value: item },
     }));
+
+    // 선택된 주소의 addr 값을 외부로 전달
+    if (focusedInput === "departure" && onDepartureChange) {
+      onDepartureChange(item.addr);
+    } else if (focusedInput === "destination" && onDestinationChange) {
+      onDestinationChange(item.addr);
+    }
+
     setFocusedInput(null);
   };
 
