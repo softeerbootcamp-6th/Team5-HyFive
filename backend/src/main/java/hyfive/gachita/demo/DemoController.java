@@ -18,4 +18,10 @@ public class DemoController {
         pathService.savePolyline(pathId);
         return BaseResponse.success("Polyline saved successfully");
     }
+
+    @RequestMapping("/path/today/save-polyline")
+    public BaseResponse<String> savePathPolyLine() {
+        pathService.saveTodayPathPolyline();
+        return BaseResponse.success("Polyline saved successfully");
+    }
 }

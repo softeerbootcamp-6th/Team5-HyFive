@@ -240,6 +240,15 @@ public class PathService {
         }
     }
 
+    public void saveTodayPathPolyline() {
+        LocalDate today = LocalDate.now();
+        List<Path> pathList = pathRepository.findAllByDriveDate(today);
+
+        for (Path path : pathList) {
+            savePolyline(path.getId());
+        }
+    }
+
     private LocalTime minTime(LocalTime timeA, LocalTime timeB) {
         return timeA.isBefore(timeB) ? timeA : timeB;
     }

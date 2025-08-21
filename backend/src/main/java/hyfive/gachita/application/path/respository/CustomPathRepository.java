@@ -24,4 +24,6 @@ public interface CustomPathRepository {
     Optional<List<Node>> findNodeListWithSegmentInfoByPathId(Long id);
 
     List<Node> findNodeListByPathId(Long id);
+
+    List<Path> findAllByDriveDate(LocalDate today);
 }
