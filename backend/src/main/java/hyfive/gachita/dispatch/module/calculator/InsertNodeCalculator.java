@@ -23,11 +23,29 @@ public class InsertNodeCalculator {
     private final KakaoNaviService kakaoNaviService;
 
     public UpdatedPathDto getUpdatedPath(List<NodeDto> candidatePath) {
+        // [수정] 실제 API를 호출하는 대신, 시뮬레이션 로그를 남깁니다.
+        log.trace("getUpdatedPath 호출됨. (Kakao API 호출 시뮬레이션)");
+
         List<LatLng> latLngList = candidatePath.stream()
                 .map(node -> new LatLng(node.lat(), node.lng()))
                 .toList();
 
         RouteInfo routeInfo = kakaoNaviService.geRouteInfo(latLngList);
+
+//        // ======================= [추가] 테스트를 위한 가짜 데이터 생성 =======================
+//        // 경로 노드 수에 기반하여 그럴듯한 가짜 데이터를 만듭니다.
+//        // 이렇게 하면 이후 로직(isDeadlineValid 등)이 정상적으로 동작하여 NullPointerException 등을 방지할 수 있습니다.
+//        int nodeCount = candidatePath.size();
+//        if (nodeCount < 2) {
+//            return null; // 노드가 2개 미만이면 경로가 성립하지 않음
+//        }
+//        // 각 구간(segment)의 소요시간을 300초(5분)로 가정
+//        List<Integer> dummyDurations = Collections.nCopies(nodeCount - 1, 300);
+//        int totalDuration = dummyDurations.stream().mapToInt(Integer::intValue).sum();
+//        int totalDistance = (nodeCount - 1) * 2000; // 각 구간 거리를 2km로 가정
+//        RouteInfo routeInfo = new RouteInfo(totalDuration, totalDistance, List.of(), List.of(), dummyDurations);
+//        // ==============================================================================
+
         List<NodeDto> updatedTimeCandidatePath = updateNodeTime(candidatePath, routeInfo.durationList());
 
         if (!isDeadlineValid(updatedTimeCandidatePath, routeInfo)) return null;

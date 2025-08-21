@@ -21,8 +21,6 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class DispatchService {
     private final DispatchFlowSelector dispatchFlowSelector;
-    private final NewPathDispatchFlow newPathDispatchFlow;
-    private final OldPathDispatchFlow oldPathDispatchFlow;
     private final BookService bookService;
     private final PathService pathService;
 

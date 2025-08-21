@@ -28,7 +28,7 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class DispatchFlowSelector {
 
-    private final int RADIUS_METERS = 500;
+    private final int RADIUS_METERS = 3000;
     private final FilteredPathProvider filteredPathProvider;
     private final BoundingBoxFilter boundingBoxFilter;
     private final HaversineFilter haversineFilter;
@@ -36,7 +36,9 @@ public class DispatchFlowSelector {
     private final OldPathDispatchFlow oldPathDispatchFlow;
 
     public DispatchResult execute(NewBookDto newBookDto){
+        log.info("========= 배차 필터링 시작 =========");
         List<FilteredPathDto> candidates = filteredPathProvider.getByCondition(newBookDto.hospitalDate());
+        log.info("초기 필터링(날짜 기준)된 후보 경로: {}개", candidates.size());
 
         BoundingBoxCondition bbConditionStart = BoundingBoxCondition.from(newBookDto.startLat(), newBookDto.startLng(), RADIUS_METERS);
         BoundingBoxCondition bbConditionEnd = BoundingBoxCondition.from(newBookDto.endLat(), newBookDto.endLng(), RADIUS_METERS);
@@ -48,12 +50,17 @@ public class DispatchFlowSelector {
                 .filter(candidate -> boundingBoxFilter.test(candidate, bbConditionStart))
                 .filter(candidate -> haversineFilter.test(candidate, rConditionStart))
                 .toList();
+        log.info("[출발지 필터링] 반경 {}m 이내 경로: {}개", RADIUS_METERS, hFilteredStart.size());
+        log.debug(" -> 출발지 필터링 통과 Path IDs: {}", hFilteredStart);
+
 
         // 도착지 반경 필터링
         List<FilteredPathDto> hFilteredEnd = candidates.stream()
                 .filter(candidate -> boundingBoxFilter.test(candidate, bbConditionEnd))
                 .filter(candidate -> haversineFilter.test(candidate, rConditionEnd))
                 .toList();
+        log.info("[도착지 필터링] 반경 {}m 이내 경로: {}개", RADIUS_METERS, hFilteredEnd.size());
+        log.debug(" -> 도착지 필터링 통과 Path IDs: {}", hFilteredEnd);
 
         // 합집합 PathId 추출
         Set<Long> candidatePathIds = Stream.concat(
@@ -61,17 +68,17 @@ public class DispatchFlowSelector {
                 hFilteredEnd.stream().map(FilteredPathDto::pathId)
         ).collect(Collectors.toSet());
 
+        log.info("[최종 합집합] 총 후보 경로: {}개", candidatePathIds.size());
+        log.debug(" -> 최종 후보 Path IDs: {}", candidatePathIds);
+        log.info("========= 배차 필터링 종료 =========");
 
-        // TODO : (1) 실행 테스트
-        return oldPathDispatchFlow.execute(new ArrayList<>(candidatePathIds), newBookDto);
-
-//        if (candidatePathIds.isEmpty()) {
-//            log.info("신규 경로 배차 실행");
-//            return newPathDispatchFlow.execute(newBookDto);
-//        } else {
-//            log.info("기존 경로 배차 실행");
-//            oldPathDispatchFlow.execute(new ArrayList<>(candidatePathIds), newBookDto);
-//            return null;
-//        }
+        if (candidatePathIds.isEmpty()) {
+            log.info("신규 경로 배차 실행");
+            return newPathDispatchFlow.execute(newBookDto);
+        } else {
+            log.info("기존 경로 배차 실행");
+            oldPathDispatchFlow.execute(new ArrayList<>(candidatePathIds), newBookDto);
+            return null;
+        }
     }
 }
