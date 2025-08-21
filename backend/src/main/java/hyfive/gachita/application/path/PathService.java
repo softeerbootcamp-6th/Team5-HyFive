@@ -7,7 +7,6 @@ import hyfive.gachita.application.common.enums.SearchPeriod;
 import hyfive.gachita.application.common.util.DateRangeUtil;
 import hyfive.gachita.application.node.Node;
 import hyfive.gachita.application.node.NodeType;
-import hyfive.gachita.application.node.repository.NodeRepository;
 import hyfive.gachita.application.path.dto.*;
 import hyfive.gachita.application.path.respository.PathRepository;
 import hyfive.gachita.dispatch.dto.FinalNewPathDto;
@@ -33,7 +32,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PathService {
     private final PathRepository pathRepository;
-    private final NodeRepository nodeRepository;
 
     @Transactional
     public Path createPathWithNodes(FinalNewPathDto finalPathDto, Book book) {
@@ -67,11 +65,6 @@ public class PathService {
                 ).toList();
         path.setNodes(nodeList);
         return pathRepository.save(path);
-    }
-
-    public PathRes getPathByBook(Long bookId) {
-        return pathRepository.findPathResByBookId(bookId)
-                .orElseThrow(() -> new RuntimeException("경로 없음"));
     }
 
     public List<PassengerRes> getPathPassengers(Long pathId) {
