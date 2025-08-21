@@ -1,5 +1,5 @@
 import EmptyUI from "@/components/EmptyUI";
-import RefetchButton from "@/features/refetchTimer/RefetchButton";
+import RefetchButton from "@/components/RefetchButton";
 import Tabs from "@/components/Tabs";
 import BookCard from "@/features/book/BookCard";
 import { bookDataList } from "@/mocks/bookMocks";
