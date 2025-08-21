@@ -159,12 +159,21 @@ public class PathService {
         // 응답 형식으로 변환
         List<SegmentRes> segmentResList = getSegmentResList(orderedNodeList);
         List<MarkerRes> markerResList = getMarkerResList(orderedNodeList);
+        List<HighlightRes> highlightResList = getHighlightResList(orderedNodeList, segmentResList);
 
+        return MapDrawRes.builder()
+                .polyline(segmentResList)
+                .marker(markerResList)
+                .highlight(highlightResList)
+                .build();
+    }
+
+    private List<HighlightRes> getHighlightResList(List<Node> orderedNodeList, List<SegmentRes> segmentResList) {
         Map<Book, List<Node>> nodesByBook = orderedNodeList.stream()
                 .filter(node -> node.getBook() != null)
                 .collect(Collectors.groupingBy(Node::getBook));
 
-        List<HighlightRes> highlightResList = nodesByBook.keySet().stream()
+        return nodesByBook.keySet().stream()
                 .map(book -> {
                     Node startNode = findNodeByType(book, NodeType.START);
                     Node endNode = findNodeByType(book, NodeType.END);
@@ -179,12 +188,6 @@ public class PathService {
                 })
                 .sorted(Comparator.comparing(HighlightRes::starTime))
                 .toList();
-
-        return MapDrawRes.builder()
-                .polyline(segmentResList)
-                .marker(markerResList)
-                .highlight(highlightResList)
-                .build();
     }
 
     private List<MarkerRes> getMarkerResList(List<Node> nodeList) {
