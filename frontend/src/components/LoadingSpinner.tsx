@@ -1,5 +1,6 @@
-import { css, keyframes } from "@emotion/react";
+import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
+import { rotating } from "@/features/refetchTimer/rotateAnimation.util";
 
 const { color } = theme;
 
@@ -21,16 +22,6 @@ const LoadingSpinner = ({
 
 export default LoadingSpinner;
 
-// 회전 애니메이션
-const spin = keyframes`
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-`;
-
 // 컨테이너 스타일
 const SpinnerContainer = (size: "small" | "medium" | "large") => css`
   display: flex;
@@ -48,7 +39,7 @@ const Spinner = (
   border-top: ${getSizeStyles(size).borderWidth} solid ${spinnerColor};
   border-radius: 50%;
   ${getSizeStyles(size).spinner}
-  animation: ${spin} 1s linear infinite;
+  ${rotating(true)}
 `;
 
 // 크기별 스타일

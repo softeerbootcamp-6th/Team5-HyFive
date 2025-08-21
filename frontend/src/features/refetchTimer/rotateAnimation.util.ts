@@ -9,6 +9,6 @@ const rotate360 = keyframes`
   }
 `;
 
-export const rotating = css`
-  animation: ${rotate360} 1s linear;
+export const rotating = (isInfinite?: boolean) => css`
+  animation: ${rotate360} 1s linear ${isInfinite ? "infinite" : "1"};
 `;
