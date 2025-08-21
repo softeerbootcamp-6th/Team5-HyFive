@@ -134,11 +134,6 @@ const ErrorContainer = css`
   padding: 20px;
 `;
 
-const ErrorIcon = css`
-  font-size: 24px;
-  flex-shrink: 0;
-`;
-
 const ErrorContent = css`
   display: flex;
   flex-direction: column;
