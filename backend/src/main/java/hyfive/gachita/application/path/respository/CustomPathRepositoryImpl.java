@@ -4,6 +4,7 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hyfive.gachita.application.car.DelYn;
@@ -49,7 +50,7 @@ public class CustomPathRepositoryImpl implements CustomPathRepository {
                 .from(path)
                 .join(path.car, car)
                 .on(
-                        car.lowFloor.eq(condition.walker()),
+                        (condition.walker() ? car.lowFloor.isTrue() : Expressions.TRUE.isTrue()),
                         car.capacity.gt(path.userCount),
                         car.delYn.eq(DelYn.N)
                 )
