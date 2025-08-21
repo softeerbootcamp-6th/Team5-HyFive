@@ -1,7 +1,6 @@
 package hyfive.gachita.application.path;
 
 import hyfive.gachita.application.book.Book;
-import hyfive.gachita.application.center.Center;
 import hyfive.gachita.application.common.dto.PagedListRes;
 import hyfive.gachita.application.common.dto.ScrollRes;
 import hyfive.gachita.application.common.enums.SearchPeriod;
@@ -11,7 +10,6 @@ import hyfive.gachita.application.node.NodeType;
 import hyfive.gachita.application.node.repository.NodeRepository;
 import hyfive.gachita.application.path.dto.*;
 import hyfive.gachita.application.path.respository.PathRepository;
-import hyfive.gachita.client.geocode.dto.LatLng;
 import hyfive.gachita.dispatch.dto.FinalNewPathDto;
 import hyfive.gachita.global.BusinessException;
 import hyfive.gachita.global.ErrorCode;
@@ -27,7 +25,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -83,8 +83,8 @@ public class PathService {
     }
 
     private PassengerRes createPassengerDto(Book book) {
-        LocalTime startTime = findNodeTimeByType(book, NodeType.START);
-        LocalTime endTime = findNodeTimeByType(book, NodeType.END);
+        LocalTime startTime = findNodeByType(book, NodeType.START).getTime();
+        LocalTime endTime = findNodeByType(book, NodeType.END).getTime();
 
         return PassengerRes.builder()
                 .name(book.getBookName())
@@ -95,11 +95,10 @@ public class PathService {
                 .build();
     }
 
-    private LocalTime findNodeTimeByType(Book book, NodeType nodeType) {
+    private Node findNodeByType(Book book, NodeType nodeType) {
         return book.getNodeList().stream()
                 .filter(node -> node.getType() == nodeType) // 파라미터로 받은 nodeType을 사용
                 .findFirst()
-                .map(Node::getTime)
                 .orElseThrow(() -> new BusinessException(
                         ErrorCode.NO_EXIST_VALUE,
                         String.format("경로에 %s 노드가 없습니다. bookId: %d", nodeType, book.getId())
@@ -154,17 +153,37 @@ public class PathService {
 
     public MapDrawRes getMapDraw(Long id) {
         // 데이터베이스에서 필요한 값 조회
-        List<Node> nodeList = pathRepository.findNodeListWithSegmentInfoByPathId(id)
+        List<Node> orderedNodeList = pathRepository.findNodeListWithSegmentInfoByPathId(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NO_EXIST_VALUE, "DB에 경로 데이터가 존재하지 않습니다."));
 
         // 응답 형식으로 변환
-        List<SegmentRes> segmentResList = getSegmentResList(nodeList);
-        List<MarkerRes> markerResList = getMarkerResList(nodeList);
+        List<SegmentRes> segmentResList = getSegmentResList(orderedNodeList);
+        List<MarkerRes> markerResList = getMarkerResList(orderedNodeList);
+
+        Map<Book, List<Node>> nodesByBook = orderedNodeList.stream()
+                .filter(node -> node.getBook() != null)
+                .collect(Collectors.groupingBy(Node::getBook));
+
+        List<HighlightRes> highlightResList = nodesByBook.keySet().stream()
+                .map(book -> {
+                    Node startNode = findNodeByType(book, NodeType.START);
+                    Node endNode = findNodeByType(book, NodeType.END);
+
+                    int startIdx = orderedNodeList.indexOf(startNode);
+                    int endIdx = orderedNodeList.indexOf(endNode);
+                    List<Long> selectedSegment = segmentResList.subList(startIdx, endIdx).stream()
+                            .map(SegmentRes::segmentId)
+                            .toList();
+
+                    return HighlightRes.from(startNode, endNode, book, selectedSegment);
+                })
+                .sorted(Comparator.comparing(HighlightRes::starTime))
+                .toList();
 
         return MapDrawRes.builder()
                 .polyline(segmentResList)
                 .marker(markerResList)
-                .highlight(null)
+                .highlight(highlightResList)
                 .build();
     }
 

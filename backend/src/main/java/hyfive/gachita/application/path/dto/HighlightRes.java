@@ -1,11 +1,14 @@
 package hyfive.gachita.application.path.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import hyfive.gachita.application.book.Book;
+import hyfive.gachita.application.node.Node;
 import hyfive.gachita.client.geocode.dto.LatLng;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
 import java.time.LocalTime;
+import java.util.List;
 
 @Builder
 @Schema(description = "특정 예약 경로 하이라이트 dto")
@@ -37,6 +40,19 @@ public record HighlightRes(
         LatLng endLoc,
 
         @Schema(description = "하이라이트 구간에 포함된 세그먼트 ID 리스트", example = "[2,3,4]")
-        int[] segmentList
+        List<Long> segmentList
 ) {
+    public static HighlightRes from(Node startNode, Node endNode, Book book, List<Long> segmentList) {
+        return new HighlightRes(
+                book.getId(),
+                book.getBookName(),
+                startNode.getTime(),
+                endNode.getTime(),
+                book.getStartAddr(),
+                book.getEndAddr(),
+                new LatLng(startNode.getLat(), startNode.getLng()),
+                new LatLng(endNode.getLat(), endNode.getLng()),
+                segmentList
+        );
+    }
 }
