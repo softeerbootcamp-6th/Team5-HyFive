@@ -28,7 +28,7 @@ export const fetchKakaoSearch = async ({
     throw new Error("Kakao REST API key를 찾지 못했어요");
   }
 
-  const safeRadius = radius ? Math.min(radius, 20000) : undefined;
+  const safeRadius = radius ? Math.min(radius, 20000) : 20000;
 
   url.searchParams.set("query", query);
   url.searchParams.set("page", String(page));
