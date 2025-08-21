@@ -21,7 +21,7 @@ public class OldPathDispatchFlow {
     private final InsertNodeCalculator insertNodeCalculator;
     private final OldPathListProvider oldPathListProvider;
 
-    public void execute(List<Long> pathIds, NewBookDto newBook) {
+    public DispatchResult execute(List<Long> pathIds, NewBookDto newBook) {
         // path - 최종 후보 리스트
         List<FinalOldPathDto> finalPathCandidates = new ArrayList<>();
 
@@ -56,16 +56,10 @@ public class OldPathDispatchFlow {
 
                         UpdatedPathDto updatedPath = insertNodeCalculator.getUpdatedPath(candidatePath);
                         if (updatedPath != null) {
-                            List<NodeDto> newNodes = List.of(
-                                    updatedPath.updatedNodes().remove(ei.intValue()),
-                                    updatedPath.updatedNodes().remove(si.intValue())
-                            );
-
                             FinalOldPathDto finalOldPath = FinalOldPathDto.builder()
                                     .pathId(pathId)
                                     .carId(carId)
-                                    .newNodes(newNodes)
-                                    .oldNodes(updatedPath.updatedNodes())
+                                    .nodeList(updatedPath.updatedNodes())
                                     .totalDuration(updatedPath.routeInfo().totalDuration())
                                     .totalDistance(updatedPath.routeInfo().totalDistance())
                                     .build();
@@ -93,5 +87,7 @@ public class OldPathDispatchFlow {
                         .thenComparingInt(FinalOldPathDto::totalDistance)
                 )
                 .orElseThrow(() -> new DispatchException("최종 경로 후보에서 최종 경로를 선정하던 중 오류가 발생했습니다."));
+
+        return bestPath;
     }
 }

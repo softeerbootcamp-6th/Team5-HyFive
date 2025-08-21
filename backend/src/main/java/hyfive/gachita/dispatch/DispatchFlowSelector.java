@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -32,6 +33,7 @@ public class DispatchFlowSelector {
     private final BoundingBoxFilter boundingBoxFilter;
     private final HaversineFilter haversineFilter;
     private final NewPathDispatchFlow newPathDispatchFlow;
+    private final OldPathDispatchFlow oldPathDispatchFlow;
 
     public DispatchResult execute(NewBookDto newBookDto){
         List<FilteredPathDto> candidates = filteredPathProvider.getByCondition(newBookDto.hospitalDate());
@@ -59,13 +61,17 @@ public class DispatchFlowSelector {
                 hFilteredEnd.stream().map(FilteredPathDto::pathId)
         ).collect(Collectors.toSet());
 
-        if (candidatePathIds.isEmpty()) {
-            log.info("신규 경로 배차 실행");
-            return newPathDispatchFlow.execute(newBookDto);
-        } else {
-            log.info("기존 경로 배차 실행");
+
+        // TODO : (1) 실행 테스트
+        return oldPathDispatchFlow.execute(new ArrayList<>(candidatePathIds), newBookDto);
+
+//        if (candidatePathIds.isEmpty()) {
+//            log.info("신규 경로 배차 실행");
+//            return newPathDispatchFlow.execute(newBookDto);
+//        } else {
+//            log.info("기존 경로 배차 실행");
 //            oldPathDispatchFlow.execute(new ArrayList<>(candidatePathIds), newBookDto);
-            return null;
-        }
+//            return null;
+//        }
     }
 }
