@@ -173,14 +173,14 @@ public class CustomPathRepositoryImpl implements CustomPathRepository {
     }
 
     @Override
-    public List<Node> findNodeListWithSegmentInfoByPathId(Long id) {
-        return queryFactory
+    public Optional<List<Node>> findNodeListWithSegmentInfoByPathId(Long id) {
+        return Optional.ofNullable(queryFactory
                 .selectFrom(node)
                 .leftJoin(node.book, book).fetchJoin()
                 .leftJoin(node.leftSegment, segment).fetchJoin()
                 .where(node.path.id.eq(id))
                 .orderBy(node.time.asc())
-                .fetch();
+                .fetch());
     }
 
     @Override

@@ -24,6 +24,6 @@ public interface CustomPathRepository {
     Page<Path> searchPathPageByCondition(Pair<LocalDate, LocalDate> dateRange,
                                          DriveStatus status,
                                          Pageable pageable);
-    List<Node> findNodeListWithSegmentInfoByPathId(Long id);
+    Optional<List<Node>> findNodeListWithSegmentInfoByPathId(Long id);
     Optional<Center> findCenterByPathId(Long id);
 }

@@ -153,33 +153,15 @@ public class PathService {
     }
 
     public MapDrawRes getMapDraw(Long id) {
-        pathRepository.findById(id)
+        // 데이터베이스에서 필요한 값 조회
+        List<Node> nodeList = pathRepository.findNodeListWithSegmentInfoByPathId(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NO_EXIST_VALUE, "DB에 경로 데이터가 존재하지 않습니다."));
-
-        List<Node> nodeList = pathRepository.findNodeListWithSegmentInfoByPathId(id);
-        List<SegmentRes> segmentResList = nodeList.stream()
-                .map(Node::getLeftSegment)
-                .filter(Objects::nonNull)
-                .map(segment -> {
-                    List<LatLng> pointList = segment.getPoints().stream()
-                            .map(point -> new LatLng(point.getLat(), point.getLng()))
-                            .toList();
-                    return new SegmentRes(segment.getId(), pointList);
-                })
-                .toList();
-
         Center center = pathRepository.findCenterByPathId(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NO_EXIST_VALUE, "경로에 해당하는 센터가 존재하지 않습니다."));
 
-        List<MarkerRes> markerResList = nodeList.stream()
-                .map(node -> {
-                    if (node.getType() == NodeType.CENTER) {
-                        return MarkerRes.from(center, node);
-                    } else {
-                        return MarkerRes.from(node);
-                    }
-                })
-                .toList();
+        // 응답 형식으로 변환
+        List<SegmentRes> segmentResList = getSegmentResList(nodeList);
+        List<MarkerRes> markerResList = getMarkerResList(nodeList, center);
 
         return MapDrawRes.builder()
                 .polyline(segmentResList)
@@ -188,6 +170,21 @@ public class PathService {
                 .build();
     }
 
+    private List<MarkerRes> getMarkerResList(List<Node> nodeList, Center center) {
+        return nodeList.stream()
+                .map(node -> node.getType() == NodeType.CENTER
+                        ? MarkerRes.from(center, node)
+                        : MarkerRes.from(node))
+                .toList();
+    }
+
+    private List<SegmentRes> getSegmentResList(List<Node> nodeList) {
+        return nodeList.stream()
+                .map(Node::getLeftSegment)
+                .filter(Objects::nonNull) // 센터의 경우 leftSegment가 null이므로 제외
+                .map(SegmentRes::from)
+                .toList();
+    }
 
     private LocalTime minTime(LocalTime timeA, LocalTime timeB) {
         return timeA.isBefore(timeB) ? timeA : timeB;
