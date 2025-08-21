@@ -7,14 +7,18 @@ import hyfive.gachita.application.common.enums.SearchPeriod;
 import hyfive.gachita.application.common.util.DateRangeUtil;
 import hyfive.gachita.application.node.Node;
 import hyfive.gachita.application.node.NodeType;
+import hyfive.gachita.application.node.Point;
+import hyfive.gachita.application.node.Segment;
 import hyfive.gachita.application.path.dto.*;
 import hyfive.gachita.application.path.respository.PathRepository;
 import hyfive.gachita.client.geocode.dto.LatLng;
 import hyfive.gachita.client.kakao.KakaoNaviService;
+import hyfive.gachita.client.kakao.RouteInfo;
 import hyfive.gachita.dispatch.dto.FinalNewPathDto;
 import hyfive.gachita.global.BusinessException;
 import hyfive.gachita.global.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +36,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PathService {
     private final PathRepository pathRepository;
     private final KakaoNaviService kakaoNaviService;
@@ -206,13 +211,32 @@ public class PathService {
         List<LatLng> locationList = nodeList.stream()
                         .map(node -> new LatLng(node.getLat(), node.getLng()))
                         .toList();
-        List<List<LatLng>> polylineList = kakaoNaviService.geRouteInfo(locationList).polylineList();
+        RouteInfo routeInfo = kakaoNaviService.geRouteInfo(locationList);
+        List<List<LatLng>> polylineList = routeInfo.polylineList();
 
+        log.info("Polyline size: {}", polylineList.size());
         for (int i = 0; i < polylineList.size(); i++) {
+            Node node = nodeList.get(i + 1);
+
             List<LatLng> polyline = polylineList.get(i);
 
-            Node node = nodeList.get(i + 1); // 첫 번째 노드는 시작점(센터)이므로 제외
-            node.getLeftSegment().setPolyline(polyline);
+            Segment segment = Segment.builder()
+                    .startNode(nodeList.get(i))
+                    .endNode(node)
+                    .duration(routeInfo.durationList().get(i))
+                    .sequence(i + 1)
+                    .build();
+
+            List<Point> points = polyline.stream()
+                    .map(point -> Point.builder()
+                            .segment(segment)
+                            .lat(point.lat())
+                            .lng(point.lng())
+                            .build())
+                    .toList();
+
+            segment.setPoints(points);
+            node.setLeftSegment(segment);
         }
     }
 

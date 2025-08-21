@@ -47,7 +47,7 @@ public class Node {
     @Column(name = "type", nullable = false, columnDefinition = "VARCHAR(50)")
     private NodeType type;
 
-    @OneToOne(mappedBy = "endNode")
+    @OneToOne(mappedBy = "endNode", cascade = CascadeType.ALL)
     private Segment leftSegment;
 }
 
