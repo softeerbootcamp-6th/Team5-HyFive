@@ -41,6 +41,7 @@ public class CustomNodeRepositoryImpl implements CustomNodeRepository {
                                 MarkerRes.class,
                                 node.id,
                                 node.book.id,
+                                node.book.bookName,
                                 Projections.constructor(
                                         LatLng.class,
                                         node.lat,
