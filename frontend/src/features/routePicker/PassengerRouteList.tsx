@@ -8,7 +8,7 @@ const { color } = theme;
 
 interface PassengerListProps {
   passengers: Partial<HighlightType>[];
-  onSelect: (passenger: Partial<HighlightType>) => void;
+  onSelect: (id: number) => void;
   onClose: () => void;
 }
 
@@ -25,7 +25,7 @@ const PassengerRouteList = ({
             data-testid="passenger-highlight-btn"
             key={passenger.bookId}
             css={PartPassengerWrapper}
-            onClick={() => onSelect(passenger)}
+            onClick={() => passenger.bookId && onSelect(passenger.bookId)}
           >
             <PassengerRouteItem passenger={passenger} />
           </li>

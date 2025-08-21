@@ -1,31 +1,27 @@
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
-import { useEffect, useState, type MouseEvent } from "react";
-import type { PassengerRoute } from "@/types/routeType.types";
+import { useState, type MouseEvent } from "react";
 import PassengerRouteList from "@/features/routePicker/PassengerRouteList";
 import RouteButton from "@/features/routePicker/RouteButton";
 import type { HighlightType } from "@/features/map/Map.types";
-
 const { color, typography } = theme;
 
 interface RoutePickerProps {
   passengers: Partial<HighlightType>[];
+  selectedPassenger: Partial<HighlightType> | null;
   handleHighlight: (id: number) => void;
   handleReset: () => void;
 }
 const RoutePicker = ({
   passengers,
+  selectedPassenger,
   handleHighlight,
   handleReset,
 }: RoutePickerProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedPassenger, setSelectedPassenger] =
-    useState<Partial<HighlightType> | null>(null);
 
-  const handleSelectPassenger = (passenger: Partial<HighlightType>) => {
-    if (!passenger.bookId) return;
-    handleHighlight(passenger.bookId);
-    setSelectedPassenger(passenger);
+  const handleSelectPassenger = (id: number) => {
+    handleHighlight(id);
     setIsOpen(false);
   };
 
@@ -33,7 +29,6 @@ const RoutePicker = ({
     e.stopPropagation();
     handleReset();
     setIsOpen(false);
-    setSelectedPassenger(null);
   };
 
   return (
