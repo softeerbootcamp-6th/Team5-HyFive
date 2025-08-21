@@ -55,13 +55,13 @@ const MapContent = () => {
       bookName: highlight.bookName,
       hospitalTime: highlight.hospitalTime,
     });
-    const { startLoc, endLoc, segmentList } = highlight;
+    const { segmentList } = highlight;
     const slicedPolylineList = polylinePath
       .filter((segment) => segmentList.includes(segment.segmentId))
       .flatMap((segment) => segment.pointList);
 
     highlightRoute(slicedPolylineList);
-    highlightMarker({ start: startLoc, end: endLoc, data: highlight });
+    highlightMarker({ data: highlight });
   }
 
   function handleReset() {

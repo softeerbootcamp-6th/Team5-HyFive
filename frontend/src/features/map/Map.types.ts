@@ -149,9 +149,8 @@ export interface PolylinePath {
 
 export interface MarkerPath {
   nodeId: number;
-  bookId: number;
+  bookId: number | null;
   point: LatLng;
-  time: string;
   type: string;
 }
 

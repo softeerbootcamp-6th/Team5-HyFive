@@ -61,7 +61,7 @@ const useVisualizeMarker = ({
     }: {
       markerType: MarkerType;
       point: LatLng;
-      bookId: number;
+      bookId: number | null;
       mode?: "default" | "highlight";
     }) => {
       const markerImage = new kakaoMaps.MarkerImage(
@@ -76,7 +76,7 @@ const useVisualizeMarker = ({
       });
       if (mode === "default") {
         kakaoMaps.event.addListener(marker, "click", function () {
-          onClickMarker(bookId);
+          if (bookId) onClickMarker(bookId);
         });
       }
       return marker;
@@ -139,27 +139,18 @@ const useVisualizeMarker = ({
     };
   }, [map, kakaoMaps, initMarker]);
 
-  const highlightMarker = ({
-    start,
-    end,
-    data,
-  }: {
-    data: HighlightType;
-    start: LatLng;
-    end: LatLng;
-  }) => {
+  const highlightMarker = ({ data }: { data: HighlightType }) => {
     removeMarker();
-    //TODO: bookId 연동 필요
     const startMarker = renderMarker({
       markerType: "enter",
-      point: start,
-      bookId: 1,
+      point: { lat: data.startLoc.lat, lng: data.startLoc.lng },
+      bookId: data.bookId,
       mode: "highlight",
     });
     const endMarker = renderMarker({
       markerType: "out",
-      point: end,
-      bookId: 1,
+      point: { lat: data.endLoc.lat, lng: data.endLoc.lng },
+      bookId: data.bookId,
       mode: "highlight",
     });
     renderInfoWindow({ data });
