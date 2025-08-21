@@ -28,10 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -208,9 +205,19 @@ public class PathService {
     @Transactional
     public void savePolyline(Long pathId) {
         List<Node> nodeList = pathRepository.findNodeListByPathId(pathId);
+
+        if (nodeList.isEmpty()) {
+            throw new BusinessException(ErrorCode.NO_EXIST_VALUE, "경로에 노드가 존재하지 않습니다. pathId=" + pathId);
+        }
+
+        if (nodeList.stream().anyMatch(node -> node.getLeftSegment() != null)) {
+            throw new BusinessException(ErrorCode.INVALID_INPUT, "이미 polyline이 존재하는 경로입니다. pathId=" + pathId);
+        }
+
         List<LatLng> locationList = nodeList.stream()
                         .map(node -> new LatLng(node.getLat(), node.getLng()))
                         .toList();
+
         RouteInfo routeInfo = kakaoNaviService.geRouteInfo(locationList);
         List<List<LatLng>> polylineList = routeInfo.polylineList();
 
@@ -240,13 +247,29 @@ public class PathService {
         }
     }
 
-    public void saveTodayPathPolyline() {
+    public Map<String, Object> saveTodayPathPolyline() {
         LocalDate today = LocalDate.now();
         List<Path> pathList = pathRepository.findAllByDriveDate(today);
 
+        int successCount = 0;
+        List<Long> failedIds = new ArrayList<>();
+
         for (Path path : pathList) {
-            savePolyline(path.getId());
+            try {
+                savePolyline(path.getId());
+                successCount++;
+            } catch (Exception e) {
+                log.error("Failed to save polyline for pathId {}: {}", path.getId(), e.getMessage());
+                failedIds.add(path.getId());
+            }
         }
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("total", pathList.size());
+        result.put("success", successCount);
+        result.put("failedIds", failedIds);
+
+        return result;
     }
 
     private LocalTime minTime(LocalTime timeA, LocalTime timeB) {
