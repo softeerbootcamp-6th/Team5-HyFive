@@ -66,6 +66,8 @@ public class OldPathDispatchFlow {
             for (Integer si : startSlotCandidates) {
                 for (Integer ei : endSlotCandidates) {
                     if (si <= ei) {
+                        log.info("후보 위치 : si: {}, ei: {}", si, ei+1);
+
                         List<NodeDto> candidatePath = new ArrayList<>(oldNodes);
                         candidatePath.add(ei, newBookEndNode);
                         candidatePath.add(si, newBookStartNode);

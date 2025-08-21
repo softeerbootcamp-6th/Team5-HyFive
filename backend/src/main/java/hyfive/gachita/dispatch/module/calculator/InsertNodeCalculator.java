@@ -19,81 +19,94 @@ import java.util.List;
 @RequiredArgsConstructor
 public class InsertNodeCalculator {
 
-    private final int MAX_TOTAL_DURATION = 7200;
+    private final int MAX_TOTAL_DURATION = 7200; // 2시간
     private final KakaoNaviService kakaoNaviService;
 
     public UpdatedPathDto getUpdatedPath(List<NodeDto> candidatePath) {
-        // [수정] 실제 API를 호출하는 대신, 시뮬레이션 로그를 남깁니다.
-        log.trace("getUpdatedPath 호출됨. (Kakao API 호출 시뮬레이션)");
+        log.debug("[getUpdatedPath] 시작. 후보 경로 노드 수: {}", candidatePath.size());
 
         List<LatLng> latLngList = candidatePath.stream()
                 .map(node -> new LatLng(node.lat(), node.lng()))
                 .toList();
 
+        // 1. Kakao Navi API 호출
+        log.trace(" -> KakaoNavi API 호출. Waypoints: {}개", latLngList.size());
         RouteInfo routeInfo = kakaoNaviService.geRouteInfo(latLngList);
+        log.trace(" -> KakaoNavi API 응답. 총 소요시간: {}초, 총 거리: {}m", routeInfo.totalDuration(), routeInfo.totalDistance());
 
-//        // ======================= [추가] 테스트를 위한 가짜 데이터 생성 =======================
-//        // 경로 노드 수에 기반하여 그럴듯한 가짜 데이터를 만듭니다.
-//        // 이렇게 하면 이후 로직(isDeadlineValid 등)이 정상적으로 동작하여 NullPointerException 등을 방지할 수 있습니다.
-//        int nodeCount = candidatePath.size();
-//        if (nodeCount < 2) {
-//            return null; // 노드가 2개 미만이면 경로가 성립하지 않음
-//        }
-//        // 각 구간(segment)의 소요시간을 300초(5분)로 가정
-//        List<Integer> dummyDurations = Collections.nCopies(nodeCount - 1, 300);
-//        int totalDuration = dummyDurations.stream().mapToInt(Integer::intValue).sum();
-//        int totalDistance = (nodeCount - 1) * 2000; // 각 구간 거리를 2km로 가정
-//        RouteInfo routeInfo = new RouteInfo(totalDuration, totalDistance, List.of(), List.of(), dummyDurations);
-//        // ==============================================================================
-
+        // 2. API 결과를 바탕으로 각 노드의 예상 도착 시간 업데이트
         List<NodeDto> updatedTimeCandidatePath = updateNodeTime(candidatePath, routeInfo.durationList());
 
-        if (!isDeadlineValid(updatedTimeCandidatePath, routeInfo)) return null;
+        // 3. 업데이트된 경로가 유효한지(마감시간 등) 검증
+        if (!isDeadlineValid(updatedTimeCandidatePath, routeInfo)) {
+            log.debug("[getUpdatedPath] 유효성 검증 실패. null을 반환합니다.");
+            return null;
+        }
 
+        log.debug("[getUpdatedPath] 유효성 검증 성공. UpdatedPathDto를 생성하여 반환합니다.");
         return UpdatedPathDto.builder()
                 .routeInfo(routeInfo)
                 .updatedNodes(updatedTimeCandidatePath)
                 .build();
     }
 
-    // node time update
+    /**
+     * 첫 번째 노드의 시간을 기준으로, 각 구간별 소요시간(durationList)을 누적하여
+     * 모든 노드의 예상 도착 시간을 새로 계산합니다.
+     */
     private List<NodeDto> updateNodeTime(List<NodeDto> nodeList, List<Integer> durationList) {
-        List<NodeDto> updatedList = new ArrayList<>();
-        LocalTime baseTimeSec = nodeList.get(0).time();
-        int cumulativeSec = 0;
+        LocalTime baseTime = nodeList.get(0).time();
+        log.trace("[updateNodeTime] 노드 시간 업데이트 시작. 기준 시간: {}, 구간별 소요시간 수: {}", baseTime, durationList.size());
 
-        updatedList.add(nodeList.get(0));
+        List<NodeDto> updatedList = new ArrayList<>();
+        updatedList.add(nodeList.get(0)); // 첫 번째 노드는 기준이므로 그대로 추가
+
+        long cumulativeSeconds = 0;
 
         for (int i = 1; i < nodeList.size(); i++) {
-            cumulativeSec += durationList.get(i - 1);
-            LocalTime newTime = baseTimeSec.plusSeconds(cumulativeSec);
+            // 이전 노드와의 이동 시간을 누적
+            cumulativeSeconds += durationList.get(i - 1);
+            LocalTime newTime = baseTime.plusSeconds(cumulativeSeconds);
 
             NodeDto updatedNode = NodeDto.updateTime(nodeList.get(i), newTime);
-
             updatedList.add(updatedNode);
+            log.trace("  -> 노드 {} 시간 업데이트: {}", i, newTime);
         }
 
         return updatedList;
     }
 
-    // node time의 deadline 확인
+    /**
+     * 계산된 경로가 비즈니스 규칙에 맞는지 검증합니다.
+     * 1. 총 운행 시간이 최대 허용 시간을 초과하는지 확인
+     * 2. 각 승객의 하차 노드 도착 시간이 요청된 마감 시간 범위 내에 있는지 확인
+     */
     private boolean isDeadlineValid(List<NodeDto> nodeList, RouteInfo routeInfo) {
-        if (routeInfo.totalDuration() > MAX_TOTAL_DURATION) return false;
+        log.trace("[isDeadlineValid] 경로 유효성 검증 시작.");
+        // 1. 총 운행 시간 검증
+        if (routeInfo.totalDuration() > MAX_TOTAL_DURATION) {
+            log.debug("  -> 유효성 검증 실패: 총 소요시간 초과 (결과: {}초 > 최대: {}초)", routeInfo.totalDuration(), MAX_TOTAL_DURATION);
+            return false;
+        }
 
+        // 2. 각 노드별 마감 시간 검증
         for (int i = 1; i < nodeList.size(); i++) {
             NodeDto node = nodeList.get(i);
 
+            // 하차(END) 타입 노드만 마감 시간이 존재
             if (node.type() == NodeType.END) {
-                int arrivalSec = node.time().toSecondOfDay();
-                int windowStartSec = node.deadline().getFirst().toSecondOfDay();
-                int windowEndSec = node.deadline().getSecond().toSecondOfDay();
+                LocalTime arrivalTime = node.time();
+                LocalTime windowStartTime = node.deadline().getFirst();
+                LocalTime windowEndTime = node.deadline().getSecond();
 
-                if (arrivalSec < windowStartSec || arrivalSec > windowEndSec) {
+                if (arrivalTime.isBefore(windowStartTime) || arrivalTime.isAfter(windowEndTime)) {
+                    log.debug("  -> 유효성 검증 실패: 노드 {}의 마감시간 위반 (예상 도착: {}, 허용 범위: {} - {})", i, arrivalTime, windowStartTime, windowEndTime);
                     return false;
                 }
             }
         }
 
+        log.trace("  -> 유효성 검증 통과.");
         return true;
     }
 }

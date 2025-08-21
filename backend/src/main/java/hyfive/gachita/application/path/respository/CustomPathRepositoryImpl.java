@@ -8,10 +8,10 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hyfive.gachita.application.car.DelYn;
-import hyfive.gachita.application.node.Node;
 import hyfive.gachita.application.path.DriveStatus;
 import hyfive.gachita.application.path.Path;
 import hyfive.gachita.application.path.QPath;
+import hyfive.gachita.application.path.dto.NodeWithDeadline;
 import hyfive.gachita.application.path.dto.PathCursor;
 import hyfive.gachita.application.path.dto.PathRes;
 import hyfive.gachita.dispatch.dto.OldPathDto;
@@ -45,7 +45,8 @@ public class CustomPathRepositoryImpl implements CustomPathRepository {
                 .select(
                         path.id,
                         car.id,
-                        node
+                        node,
+                        node.book.deadline
                 )
                 .from(path)
                 .join(path.car, car)
@@ -70,8 +71,11 @@ public class CustomPathRepositoryImpl implements CustomPathRepository {
                     Long pathId = firstTuple.get(path.id);
                     Long carId = firstTuple.get(car.id);
 
-                    List<Node> nodes = tuplesForOnePath.stream()
-                            .map(tuple -> tuple.get(node))
+                    List<NodeWithDeadline> nodes = tuplesForOnePath.stream()
+                            .map(tuple -> new NodeWithDeadline(
+                                    tuple.get(node),
+                                    tuple.get(node.book.deadline)
+                            ))
                             .toList();
 
                     return OldPathDto.from(pathId, carId, nodes);
