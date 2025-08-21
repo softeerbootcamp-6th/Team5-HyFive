@@ -6,6 +6,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hyfive.gachita.application.car.DelYn;
+import hyfive.gachita.application.center.Center;
 import hyfive.gachita.application.node.Node;
 import hyfive.gachita.application.path.DriveStatus;
 import hyfive.gachita.application.path.Path;
@@ -180,6 +181,17 @@ public class CustomPathRepositoryImpl implements CustomPathRepository {
                 .where(node.path.id.eq(id))
                 .orderBy(node.time.asc())
                 .fetch();
+    }
+
+    @Override
+    public Optional<Center> findCenterByPathId(Long id) {
+        return Optional.ofNullable(queryFactory
+                .select(center)
+                .from(path)
+                .join(path.car, car)
+                .join(car.center, center)
+                .where(path.id.eq(id))
+                .fetchOne());
     }
 
     private BooleanExpression statusEq(QPath path, DriveStatus status) {

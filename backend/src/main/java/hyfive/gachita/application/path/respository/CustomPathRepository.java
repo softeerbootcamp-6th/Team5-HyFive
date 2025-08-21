@@ -1,5 +1,6 @@
 package hyfive.gachita.application.path.respository;
 
+import hyfive.gachita.application.center.Center;
 import hyfive.gachita.application.node.Node;
 import hyfive.gachita.application.path.DriveStatus;
 import hyfive.gachita.application.path.Path;
@@ -24,4 +25,5 @@ public interface CustomPathRepository {
                                          DriveStatus status,
                                          Pageable pageable);
     List<Node> findNodeListWithSegmentInfoByPathId(Long id);
+    Optional<Center> findCenterByPathId(Long id);
 }

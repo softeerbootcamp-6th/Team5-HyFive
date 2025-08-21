@@ -1,13 +1,14 @@
 package hyfive.gachita.application.path;
 
 import hyfive.gachita.application.book.Book;
+import hyfive.gachita.application.center.Center;
 import hyfive.gachita.application.common.dto.PagedListRes;
 import hyfive.gachita.application.common.dto.ScrollRes;
 import hyfive.gachita.application.common.enums.SearchPeriod;
 import hyfive.gachita.application.common.util.DateRangeUtil;
 import hyfive.gachita.application.node.Node;
-import hyfive.gachita.application.node.repository.NodeRepository;
 import hyfive.gachita.application.node.NodeType;
+import hyfive.gachita.application.node.repository.NodeRepository;
 import hyfive.gachita.application.path.dto.*;
 import hyfive.gachita.application.path.respository.PathRepository;
 import hyfive.gachita.client.geocode.dto.LatLng;
@@ -167,9 +168,22 @@ public class PathService {
                 })
                 .toList();
 
+        Center center = pathRepository.findCenterByPathId(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NO_EXIST_VALUE, "경로에 해당하는 센터가 존재하지 않습니다."));
+
+        List<MarkerRes> markerResList = nodeList.stream()
+                .map(node -> {
+                    if (node.getType() == NodeType.CENTER) {
+                        return MarkerRes.from(center, node);
+                    } else {
+                        return MarkerRes.from(node);
+                    }
+                })
+                .toList();
+
         return MapDrawRes.builder()
                 .polyline(segmentResList)
-                .marker(null)
+                .marker(markerResList)
                 .highlight(null)
                 .build();
     }
