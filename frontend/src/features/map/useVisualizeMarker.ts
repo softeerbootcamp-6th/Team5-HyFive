@@ -48,7 +48,17 @@ const useVisualizeMarker = ({
   };
 
   const renderMarker = useCallback(
-    ({ markerType, point }: { markerType: MarkerType; point: LatLng }) => {
+    ({
+      markerType,
+      point,
+      bookId,
+      mode = "default",
+    }: {
+      markerType: MarkerType;
+      point: LatLng;
+      bookId: number;
+      mode?: "default" | "highlight";
+    }) => {
       const markerImage = new kakaoMaps.MarkerImage(
         imageSrc[markerType],
         new kakaoMaps.Size(32, 32),
@@ -59,7 +69,11 @@ const useVisualizeMarker = ({
         title: "User Marker",
         image: markerImage,
       });
-
+      if (mode === "default") {
+        kakaoMaps.event.addListener(marker, "click", function () {
+          onClickMarker(bookId);
+        });
+      }
       return marker;
     },
     [kakaoMaps, map, imageSrc],
@@ -90,7 +104,11 @@ const useVisualizeMarker = ({
 
     markersRef.current = markerPath.map((partMarkerPath, i) => {
       const markerType = getMarkerType(i, markerPath.length);
-      const marker = renderMarker({ markerType, point: partMarkerPath.point });
+      const marker = renderMarker({
+        markerType,
+        point: partMarkerPath.point,
+        bookId: partMarkerPath.bookId,
+      });
       return marker;
     });
   }, [markerPath, renderMarker]);
@@ -120,13 +138,18 @@ const useVisualizeMarker = ({
     end: LatLng;
   }) => {
     removeMarker();
+    //TODO: bookId 연동 필요
     const startMarker = renderMarker({
       markerType: "enter",
       point: start,
+      bookId: 1,
+      mode: "highlight",
     });
     const endMarker = renderMarker({
       markerType: "out",
       point: end,
+      bookId: 1,
+      mode: "highlight",
     });
     markersRef.current.push(startMarker);
     markersRef.current.push(endMarker);
