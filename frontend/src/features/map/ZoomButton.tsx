@@ -1,21 +1,52 @@
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
 import { AddIcon, RemoveIcon } from "@/assets/icons";
-import type { SetStateAction } from "react";
+import { MAX_ZOOM_LEVEL } from "@/features/map/useZoomLevel";
+import usePressDetection from "@/hooks/usePressDetection";
+import { useState } from "react";
 const { color } = theme;
 
 interface ZoomButtonProps {
-  setZoomLevel: React.Dispatch<SetStateAction<number>>;
+  zoomLevel: number;
+  handleZoomLevel: (mode: "add" | "remove") => void;
 }
-const ZoomButton = ({ setZoomLevel }: ZoomButtonProps) => {
-  const handleZoomLevel = (size: number) => {
-    setZoomLevel((prev) => prev + size);
+const ZoomButton = ({ zoomLevel, handleZoomLevel }: ZoomButtonProps) => {
+  const isActiveZoomLevel = (type: "min" | "max") => {
+    if (type === "min") return zoomLevel === 1;
+    if (type === "max") return zoomLevel === MAX_ZOOM_LEVEL;
+    return true;
   };
+
+  const [isAddPressing, setIsAddPressing] = useState(false);
+  const [isRemovePressing, setIsRemovePressing] = useState(false);
+
+  const addHandlers = usePressDetection({ setIsPressing: setIsAddPressing });
+  const removeHandlers = usePressDetection({
+    setIsPressing: setIsRemovePressing,
+  });
   return (
     <div css={ZoomButtonContainer}>
-      <AddIcon onClick={() => handleZoomLevel(-1)} />
+      <div {...addHandlers} css={ButtonWrapper(isAddPressing)}>
+        <AddIcon
+          onClick={() => handleZoomLevel("add")}
+          fill={
+            isActiveZoomLevel("min")
+              ? color.GrayScale.gray3
+              : color.GrayScale.gray5
+          }
+        />
+      </div>
       <div css={LineWrapper} />
-      <RemoveIcon onClick={() => handleZoomLevel(+1)} />
+      <div {...removeHandlers} css={ButtonWrapper(isRemovePressing)}>
+        <RemoveIcon
+          onClick={() => handleZoomLevel("remove")}
+          fill={
+            isActiveZoomLevel("max")
+              ? color.GrayScale.gray3
+              : color.GrayScale.gray5
+          }
+        />
+      </div>
     </div>
   );
 };
@@ -43,4 +74,15 @@ const ZoomButtonContainer = css`
 const LineWrapper = css`
   width: 100%;
   border-bottom: 1px solid ${color.GrayScale.gray3};
+`;
+
+const ButtonWrapper = (isPressing: boolean) => css`
+  border-radius: 2px;
+  background-color: ${isPressing ? color.GrayScale.gray3 : "transparent"};
+  ${!isPressing &&
+  css`
+    &:hover {
+      background-color: ${color.GrayScale.gray1};
+    }
+  `}
 `;

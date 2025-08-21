@@ -20,7 +20,6 @@ const Header = ({ type, hasTab = false }: HeaderProps) => {
   const tabItems = [
     { label: "예약 · 운행 관리", path: "/admin/book" },
     { label: "센터 차량 관리", path: "/admin/centers" },
-    { label: "운전 기사 관리", path: "/admin/drivers" },
   ];
 
   // 현재 URL 경로에 해당하는 탭 항목 찾기
@@ -38,12 +37,12 @@ const Header = ({ type, hasTab = false }: HeaderProps) => {
   return (
     <div css={HeaderContainer}>
       <div css={LogoSection}>
-        <Link to={type === "ADMIN" ? "/admin" : "/center"}>
+        <Link to="/">
           <LogoIcon />
         </Link>
-        <div css={UserTypeLabel}>
-          {type === "ADMIN" ? "관리자용" : "센터용"}
-        </div>
+        <Link to={type === "ADMIN" ? "/admin" : "/center"} css={UserTypeLabel}>
+          <p css={TextColor}>{type === "ADMIN" ? "관리자용" : "센터용"}</p>
+        </Link>
       </div>
       {hasTab && (
         <Tabs
@@ -88,5 +87,9 @@ const UserTypeLabel = css`
   border: 1px solid ${color.GrayScale.white};
 
   font: ${typography.Body.b4_medi};
+  cursor: pointer;
+`;
+
+const TextColor = css`
   color: ${color.GrayScale.white};
 `;

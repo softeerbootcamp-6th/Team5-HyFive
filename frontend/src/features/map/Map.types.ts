@@ -28,6 +28,19 @@ declare global {
     MarkerImage: {
       new (url: string, size?: SizeInstance): MarkerImageInstance;
     };
+    event: {
+      addListener<T extends object>(
+        target: T,
+        type: string,
+        handler: (map: MapInstance, mode: string, fn: () => void) => void,
+      ): void;
+      removeListener<T extends object>(
+        target: T,
+        type: string,
+        handler: (map: MapInstance, mode: string, fn: () => void) => void,
+      ): void;
+      trigger(target: object, type: string): void;
+    };
   }
 
   interface LatLngInstance {
@@ -42,6 +55,7 @@ declare global {
 
   interface MapInstance {
     setLevel(level: number): void;
+    setMaxLevel(level: number): void;
     getLevel(): number;
     setCenter(latlng: LatLngInstance): void;
   }

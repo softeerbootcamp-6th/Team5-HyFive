@@ -1,3 +1,4 @@
+import MidPointButton from "@/features/map/MidPointButton";
 import getRouteMidPoint from "@/features/map/getRouteMidPoint.util";
 import useInitializeMap from "@/features/map/useInitializeMap";
 import useVisualizeMarker from "@/features/map/useVisualizeMarker";
@@ -12,13 +13,18 @@ import { useRef } from "react";
 const MapContent = () => {
   const mapRef = useRef<HTMLDivElement>(null);
   const markerPathLatLng = markerPath.flatMap((path) => path.point);
-  const { map } = useInitializeMap({
+
+  // map 초기화
+  const { map, handleInitMidPoint } = useInitializeMap({
     mapRef,
     centerLat:
       getRouteMidPoint(markerPathLatLng).lat || markerPath[0].point.lat,
     centerLng:
       getRouteMidPoint(markerPathLatLng).lng || markerPath[0].point.lng,
   });
+  const { zoomLevel, handleZoomLevel } = useZoomLevel({ map });
+
+  // marker, polyline 시각화
   const { highlightMarker, initMarker } = useVisualizeMarker({
     map,
     markerPath,
@@ -27,8 +33,8 @@ const MapContent = () => {
     map,
     polylinePath,
   });
-  const { setZoomLevel } = useZoomLevel({ map });
 
+  // 개별 탑승자 경로 하이라이팅
   const handleHighlight = (id: number) => {
     const highlight = highlightPath.find((value) => value.bookId === id);
     if (!highlight) return;
@@ -49,7 +55,8 @@ const MapContent = () => {
   return (
     <div css={MapContentContainer}>
       <div id="map" ref={mapRef} css={MapWrapper} />
-      <ZoomButton setZoomLevel={setZoomLevel} />
+      <MidPointButton onClick={handleInitMidPoint} />
+      <ZoomButton zoomLevel={zoomLevel} handleZoomLevel={handleZoomLevel} />
       <RoutePicker
         handleHighlight={handleHighlight}
         handleReset={handleReset}
