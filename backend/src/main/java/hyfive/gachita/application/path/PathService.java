@@ -9,6 +9,8 @@ import hyfive.gachita.application.node.Node;
 import hyfive.gachita.application.node.NodeType;
 import hyfive.gachita.application.path.dto.*;
 import hyfive.gachita.application.path.respository.PathRepository;
+import hyfive.gachita.client.geocode.dto.LatLng;
+import hyfive.gachita.client.kakao.KakaoNaviService;
 import hyfive.gachita.dispatch.dto.FinalNewPathDto;
 import hyfive.gachita.global.BusinessException;
 import hyfive.gachita.global.ErrorCode;
@@ -32,6 +34,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PathService {
     private final PathRepository pathRepository;
+    private final KakaoNaviService kakaoNaviService;
 
     @Transactional
     public Path createPathWithNodes(FinalNewPathDto finalPathDto, Book book) {
@@ -195,6 +198,22 @@ public class PathService {
                 .filter(Objects::nonNull) // 센터의 경우 leftSegment가 null이므로 제외
                 .map(SegmentRes::from)
                 .toList();
+    }
+
+    @Transactional
+    public void savePolyline(Long pathId) {
+        List<Node> nodeList = pathRepository.findNodeListByPathId(pathId);
+        List<LatLng> locationList = nodeList.stream()
+                        .map(node -> new LatLng(node.getLat(), node.getLng()))
+                        .toList();
+        List<List<LatLng>> polylineList = kakaoNaviService.geRouteInfo(locationList).polylineList();
+
+        for (int i = 0; i < polylineList.size(); i++) {
+            List<LatLng> polyline = polylineList.get(i);
+
+            Node node = nodeList.get(i + 1); // 첫 번째 노드는 시작점(센터)이므로 제외
+            node.getLeftSegment().setPolyline(polyline);
+        }
     }
 
     private LocalTime minTime(LocalTime timeA, LocalTime timeB) {

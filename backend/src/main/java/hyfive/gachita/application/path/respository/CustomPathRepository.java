@@ -22,4 +22,6 @@ public interface CustomPathRepository {
                                          DriveStatus status,
                                          Pageable pageable);
     Optional<List<Node>> findNodeListWithSegmentInfoByPathId(Long id);
+
+    List<Node> findNodeListByPathId(Long id);
 }

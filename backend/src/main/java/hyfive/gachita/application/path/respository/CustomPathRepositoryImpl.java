@@ -162,6 +162,16 @@ public class CustomPathRepositoryImpl implements CustomPathRepository {
                 .fetch());
     }
 
+    @Override
+    public List<Node> findNodeListByPathId(Long id) {
+        return queryFactory
+                .selectFrom(node)
+                .leftJoin(node.path, path)
+                .where(node.path.id.eq(id))
+                .orderBy(node.time.asc())
+                .fetch();
+    }
+
     private BooleanExpression statusEq(QPath path, DriveStatus status) {
         return status != null ? path.driveStatus.eq(status) : null;
     }
