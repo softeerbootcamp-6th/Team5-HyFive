@@ -150,7 +150,7 @@ public class PathService {
     }
 
     public MapDrawRes getMapDraw(Long id) {
-        Path path = pathRepository.findById(id)
+        pathRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NO_EXIST_VALUE, "DB에 경로 데이터가 존재하지 않습니다."));
 
         List<MarkerRes> markerList = nodeRepository.findByAllPathId(id);

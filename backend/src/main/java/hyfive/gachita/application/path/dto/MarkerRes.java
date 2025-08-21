@@ -17,6 +17,9 @@ public record MarkerRes(
         @Schema(description = "예약 ID", example = "1")
         Long bookId,
 
+        @Schema(description = "예약자 이름", example = "김코드")
+        String bookName,
+
         @Schema(description = "노드 좌표 (lat, lng)", implementation = LatLng.class)
         LatLng point,
 
