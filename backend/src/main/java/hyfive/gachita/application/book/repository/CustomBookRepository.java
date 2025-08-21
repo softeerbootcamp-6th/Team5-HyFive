@@ -15,6 +15,6 @@ public interface CustomBookRepository {
     Page<Book> searchBookPageByCondition(Pair<LocalDateTime, LocalDateTime> dateRange,
                                          BookStatus status,
                                          Pageable pageable);
-    List<Book> findBooksForScroll(BookStatus status, BookCursor cursorId, int size);
+    List<Book> findBooksForScrollWithPath(Pair<LocalDateTime, LocalDateTime> dateRange, BookStatus status, BookCursor cursor, int size);
     List<Book> searchCandidates(LocalDate hospitalTime);
 }

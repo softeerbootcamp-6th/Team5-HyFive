@@ -1,7 +1,7 @@
 package hyfive.gachita.dispatch.module.provider;
 
 import hyfive.gachita.application.center.repository.CenterRepository;
-import hyfive.gachita.dispatch.dto.CenterDto;
+import hyfive.gachita.dispatch.dto.FilteredCenterDto;
 import hyfive.gachita.dispatch.dto.NewBookDto;
 import hyfive.gachita.dispatch.dto.CarScheduleDto;
 import hyfive.gachita.dispatch.module.condition.CenterCondition;
@@ -15,10 +15,14 @@ import java.util.List;
 public class IdleCarListProvider {
     private final CenterRepository centerRepository;
 
-    public List<CarScheduleDto> getByCondition(List<CenterDto> filteredCenterList, NewBookDto newBookDto) {
+    public List<CarScheduleDto> getByCondition(List<FilteredCenterDto> filteredCenterList, NewBookDto newBookDto) {
+        List<Long> centerIdList = filteredCenterList.stream()
+                .map(FilteredCenterDto::centerId)
+                .toList();
+
         CenterCondition condition = CenterCondition.builder()
-                .centerIdList(filteredCenterList)
-                .deadline(newBookDto.deadline())
+                .centerIdList(centerIdList)
+                .deadline(newBookDto.deadline().getSecond())
                 .hospitalDate(newBookDto.hospitalDate())
                 .maybeOnTime(newBookDto.maybeOnTime())
                 .walker(newBookDto.walker())
