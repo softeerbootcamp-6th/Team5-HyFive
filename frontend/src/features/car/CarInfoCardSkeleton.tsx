@@ -34,12 +34,12 @@ const CarInfoCardSkeleton = () => {
 export default CarInfoCardSkeleton;
 
 const skeletonAnimation = css`
-  @keyframes shimmer {
-    from {
-      transform: translateX(-150%);
+  @keyframes skeleton-loading {
+    0% {
+      background-position: -200px 0;
     }
-    to {
-      transform: translateX(150%);
+    100% {
+      background-position: calc(200px + 100%) 0;
     }
   }
 `;
