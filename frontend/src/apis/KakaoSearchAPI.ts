@@ -10,10 +10,6 @@ type KakaoSearchParams = {
   sort?: "accuracy" | "distance";
   signal?: AbortSignal;
 };
-const KAKAO_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY;
-if (!KAKAO_KEY) {
-  throw new Error("Kakao REST API key를 찾지 못했어요");
-}
 
 export const fetchKakaoSearch = async ({
   query,
@@ -26,6 +22,12 @@ export const fetchKakaoSearch = async ({
   signal,
 }: KakaoSearchParams): Promise<KakaoKeywordResponse> => {
   const url = new URL("https://dapi.kakao.com/v2/local/search/keyword.json");
+
+  const KAKAO_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY;
+  if (!KAKAO_KEY) {
+    throw new Error("Kakao REST API key를 찾지 못했어요");
+  }
+
   const safeRadius = radius ? Math.min(radius, 20000) : undefined;
 
   url.searchParams.set("query", query);
