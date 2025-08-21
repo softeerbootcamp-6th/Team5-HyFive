@@ -6,7 +6,6 @@ import hyfive.gachita.application.common.dto.ScrollRes;
 import hyfive.gachita.application.common.enums.SearchPeriod;
 import hyfive.gachita.application.common.util.DateRangeUtil;
 import hyfive.gachita.application.node.Node;
-import hyfive.gachita.application.node.repository.NodeRepository;
 import hyfive.gachita.application.node.NodeType;
 import hyfive.gachita.application.path.dto.*;
 import hyfive.gachita.application.path.respository.PathRepository;
@@ -25,12 +24,14 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class PathService {
     private final PathRepository pathRepository;
-    private final NodeRepository nodeRepository;
 
     @Transactional
     public Path createPathWithNodes(FinalNewPathDto finalPathDto, Book book) {
@@ -66,11 +67,6 @@ public class PathService {
         return pathRepository.save(path);
     }
 
-    public PathRes getPathByBook(Long bookId) {
-        return pathRepository.findPathResByBookId(bookId)
-                .orElseThrow(() -> new RuntimeException("경로 없음"));
-    }
-
     public List<PassengerRes> getPathPassengers(Long pathId) {
         Path pathWithInfo = pathRepository.findPassengersByPathId(pathId);
         return pathWithInfo.getBookList().stream()
@@ -80,8 +76,8 @@ public class PathService {
     }
 
     private PassengerRes createPassengerDto(Book book) {
-        LocalTime startTime = findNodeTimeByType(book, NodeType.START);
-        LocalTime endTime = findNodeTimeByType(book, NodeType.END);
+        LocalTime startTime = findNodeByType(book, NodeType.START).getTime();
+        LocalTime endTime = findNodeByType(book, NodeType.END).getTime();
 
         return PassengerRes.builder()
                 .name(book.getBookName())
@@ -92,11 +88,10 @@ public class PathService {
                 .build();
     }
 
-    private LocalTime findNodeTimeByType(Book book, NodeType nodeType) {
+    private Node findNodeByType(Book book, NodeType nodeType) {
         return book.getNodeList().stream()
                 .filter(node -> node.getType() == nodeType) // 파라미터로 받은 nodeType을 사용
                 .findFirst()
-                .map(Node::getTime)
                 .orElseThrow(() -> new BusinessException(
                         ErrorCode.NO_EXIST_VALUE,
                         String.format("경로에 %s 노드가 없습니다. bookId: %d", nodeType, book.getId())
@@ -150,20 +145,57 @@ public class PathService {
     }
 
     public MapDrawRes getMapDraw(Long id) {
-        pathRepository.findById(id)
+        // 데이터베이스에서 필요한 값 조회
+        List<Node> orderedNodeList = pathRepository.findNodeListWithSegmentInfoByPathId(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NO_EXIST_VALUE, "DB에 경로 데이터가 존재하지 않습니다."));
 
-        List<MarkerRes> markerList = nodeRepository.findByAllPathId(id);
-        List<SegmentRes> segmentList = nodeRepository.findSegmentsByMarkers(markerList);
-        List<HighlightRes> highlightList = nodeRepository.getHighlightsByPath(id);
+        // 응답 형식으로 변환
+        List<SegmentRes> segmentResList = getSegmentResList(orderedNodeList);
+        List<MarkerRes> markerResList = getMarkerResList(orderedNodeList);
+        List<HighlightRes> highlightResList = getHighlightResList(orderedNodeList, segmentResList);
 
         return MapDrawRes.builder()
-                .polyline(segmentList)
-                .marker(markerList)
-                .highlight(highlightList)
+                .polyline(segmentResList)
+                .marker(markerResList)
+                .highlight(highlightResList)
                 .build();
     }
 
+    private List<HighlightRes> getHighlightResList(List<Node> orderedNodeList, List<SegmentRes> segmentResList) {
+        Map<Book, List<Node>> nodesByBook = orderedNodeList.stream()
+                .filter(node -> node.getBook() != null)
+                .collect(Collectors.groupingBy(Node::getBook));
+
+        return nodesByBook.keySet().stream()
+                .map(book -> {
+                    Node startNode = findNodeByType(book, NodeType.START);
+                    Node endNode = findNodeByType(book, NodeType.END);
+
+                    int startIdx = orderedNodeList.indexOf(startNode);
+                    int endIdx = orderedNodeList.indexOf(endNode);
+                    List<Long> selectedSegment = segmentResList.subList(startIdx, endIdx).stream()
+                            .map(SegmentRes::segmentId)
+                            .toList();
+
+                    return HighlightRes.from(startNode, endNode, book, selectedSegment);
+                })
+                .sorted(Comparator.comparing(HighlightRes::startTime))
+                .toList();
+    }
+
+    private List<MarkerRes> getMarkerResList(List<Node> nodeList) {
+        return nodeList.stream()
+                .map(MarkerRes::from)
+                .toList();
+    }
+
+    private List<SegmentRes> getSegmentResList(List<Node> nodeList) {
+        return nodeList.stream()
+                .map(Node::getLeftSegment)
+                .filter(Objects::nonNull) // 센터의 경우 leftSegment가 null이므로 제외
+                .map(SegmentRes::from)
+                .toList();
+    }
 
     private LocalTime minTime(LocalTime timeA, LocalTime timeB) {
         return timeA.isBefore(timeB) ? timeA : timeB;
