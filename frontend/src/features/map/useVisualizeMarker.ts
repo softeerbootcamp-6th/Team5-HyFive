@@ -104,6 +104,7 @@ const useVisualizeMarker = ({
   };
 
   const removeMarker = () => {
+    currentOverlayRef.current?.setMap(null);
     markersRef.current.forEach((m) => m.setMap(null));
     markersRef.current = [];
   };
