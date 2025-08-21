@@ -3,7 +3,17 @@ export type CenterOverviewType = {
   centerTel: string;
   centerAddr: string;
   registeredCars: number;
-  estimatedRevenue: string;
+  estimatedRevenue: number;
+};
+
+export type CenterOverviewProps = {
+  centerName?: string;
+  centerTel?: string;
+  centerAddr?: string;
+  registeredCars?: number;
+  estimatedRevenue?: number;
+  isLoading?: boolean;
+  error?: string | Error | null;
 };
 
 export type CenterInfoCardType = {
