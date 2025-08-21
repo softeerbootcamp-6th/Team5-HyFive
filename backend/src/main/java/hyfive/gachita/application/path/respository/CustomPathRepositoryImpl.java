@@ -6,6 +6,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hyfive.gachita.application.car.DelYn;
+import hyfive.gachita.application.node.Node;
 import hyfive.gachita.application.path.DriveStatus;
 import hyfive.gachita.application.path.Path;
 import hyfive.gachita.application.path.QPath;
@@ -30,6 +31,7 @@ import static hyfive.gachita.application.book.QBook.book;
 import static hyfive.gachita.application.car.QCar.car;
 import static hyfive.gachita.application.center.QCenter.center;
 import static hyfive.gachita.application.node.QNode.node;
+import static hyfive.gachita.application.node.QSegment.segment;
 import static hyfive.gachita.application.path.QPath.path;
 
 @Repository
@@ -167,6 +169,17 @@ public class CustomPathRepositoryImpl implements CustomPathRepository {
                 .fetchOne();
 
         return new PageImpl<>(pathList, pageable, totalCount == null ? 0L : totalCount);
+    }
+
+    @Override
+    public List<Node> findNodeListWithSegmentInfoByPathId(Long id) {
+        return queryFactory
+                .selectFrom(node)
+                .leftJoin(node.book, book).fetchJoin()
+                .leftJoin(node.leftSegment, segment).fetchJoin()
+                .where(node.path.id.eq(id))
+                .orderBy(node.time.asc())
+                .fetch();
     }
 
     private BooleanExpression statusEq(QPath path, DriveStatus status) {

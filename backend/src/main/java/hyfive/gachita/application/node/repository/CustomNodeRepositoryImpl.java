@@ -59,54 +59,55 @@ public class CustomNodeRepositoryImpl implements CustomNodeRepository {
 
     @Override
     public List<SegmentRes> findSegmentsByMarkers(List<MarkerRes> markers) {
-        // (startNodeId, endNodeId) 쌍 추출
-        List<NodePair> nodePairs = IntStream.range(0, markers.size() - 1)
-                .mapToObj(i -> new NodePair(markers.get(i).nodeId(), markers.get(i + 1).nodeId()))
-                .toList();
-
-        // where 조건: (startNodeId = ? and endNodeId = ?) OR ...
-        BooleanBuilder condition = new BooleanBuilder();
-        nodePairs.forEach(pair -> condition.or(
-                segment.startNode.id.eq(pair.startId())
-                        .and(segment.endNode.id.eq(pair.endId()))
-        ));
-
-        // 한 번의 쿼리로 전체 데이터 조회
-        List<Tuple> rows = queryFactory
-                .select(
-                        segment.sequence,
-                        segment.startNode.id,
-                        segment.endNode.id,
-                        point.lat,
-                        point.lng
-                )
-                .from(segment)
-                .join(segment.points, point)
-                .where(condition)
-                .orderBy(segment.sequence.asc(), point.id.asc()) // 순서 보장
-                .fetch();
-
-        // (startNodeId, endNodeId) → SegmentRes 맵핑
-        Map<String, List<Tuple>> grouped = rows.stream()
-                .collect(Collectors.groupingBy(r ->
-                        r.get(segment.startNode.id) + "-" + r.get(segment.endNode.id)));
-
-        // 결과 조립
-        List<SegmentRes> result = new ArrayList<>();
-        for (NodePair pair : nodePairs) {
-            List<Tuple> group = grouped.getOrDefault(pair.key(), Collections.emptyList());
-
-            if (!group.isEmpty()) {
-                int sequence = group.get(0).get(segment.sequence);
-                List<LatLng> points = group.stream()
-                        .map(r -> new LatLng(r.get(point.lat), r.get(point.lng)))
-                        .toList();
-
-                result.add(new SegmentRes(sequence, points));
-            }
-        }
-
-        return result;
+//        // (startNodeId, endNodeId) 쌍 추출
+//        List<NodePair> nodePairs = IntStream.range(0, markers.size() - 1)
+//                .mapToObj(i -> new NodePair(markers.get(i).nodeId(), markers.get(i + 1).nodeId()))
+//                .toList();
+//
+//        // where 조건: (startNodeId = ? and endNodeId = ?) OR ...
+//        BooleanBuilder condition = new BooleanBuilder();
+//        nodePairs.forEach(pair -> condition.or(
+//                segment.startNode.id.eq(pair.startId())
+//                        .and(segment.endNode.id.eq(pair.endId()))
+//        ));
+//
+//        // 한 번의 쿼리로 전체 데이터 조회
+//        List<Tuple> rows = queryFactory
+//                .select(
+//                        segment.sequence,
+//                        segment.startNode.id,
+//                        segment.endNode.id,
+//                        point.lat,
+//                        point.lng
+//                )
+//                .from(segment)
+//                .join(segment.points, point)
+//                .where(condition)
+//                .orderBy(segment.sequence.asc(), point.id.asc()) // 순서 보장
+//                .fetch();
+//
+//        // (startNodeId, endNodeId) → SegmentRes 맵핑
+//        Map<String, List<Tuple>> grouped = rows.stream()
+//                .collect(Collectors.groupingBy(r ->
+//                        r.get(segment.startNode.id) + "-" + r.get(segment.endNode.id)));
+//
+//        // 결과 조립
+//        List<SegmentRes> result = new ArrayList<>();
+//        for (NodePair pair : nodePairs) {
+//            List<Tuple> group = grouped.getOrDefault(pair.key(), Collections.emptyList());
+//
+//            if (!group.isEmpty()) {
+//                int sequence = group.get(0).get(segment.sequence);
+//                List<LatLng> points = group.stream()
+//                        .map(r -> new LatLng(r.get(point.lat), r.get(point.lng)))
+//                        .toList();
+//
+//                result.add(new SegmentRes(sequence, points));
+//            }
+//        }
+//
+//        return result;
+        return null;
     }
 
     public List<HighlightRes> getHighlightsByPath(Long pathId) {

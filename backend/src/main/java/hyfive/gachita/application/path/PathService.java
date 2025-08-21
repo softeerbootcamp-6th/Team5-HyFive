@@ -10,6 +10,7 @@ import hyfive.gachita.application.node.repository.NodeRepository;
 import hyfive.gachita.application.node.NodeType;
 import hyfive.gachita.application.path.dto.*;
 import hyfive.gachita.application.path.respository.PathRepository;
+import hyfive.gachita.client.geocode.dto.LatLng;
 import hyfive.gachita.dispatch.dto.FinalNewPathDto;
 import hyfive.gachita.global.BusinessException;
 import hyfive.gachita.global.ErrorCode;
@@ -25,6 +26,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -153,14 +155,22 @@ public class PathService {
         pathRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NO_EXIST_VALUE, "DB에 경로 데이터가 존재하지 않습니다."));
 
-        List<MarkerRes> markerList = nodeRepository.findByAllPathId(id);
-        List<SegmentRes> segmentList = nodeRepository.findSegmentsByMarkers(markerList);
-        List<HighlightRes> highlightList = nodeRepository.getHighlightsByPath(id);
+        List<Node> nodeList = pathRepository.findNodeListWithSegmentInfoByPathId(id);
+        List<SegmentRes> segmentResList = nodeList.stream()
+                .map(Node::getLeftSegment)
+                .filter(Objects::nonNull)
+                .map(segment -> {
+                    List<LatLng> pointList = segment.getPoints().stream()
+                            .map(point -> new LatLng(point.getLat(), point.getLng()))
+                            .toList();
+                    return new SegmentRes(segment.getId(), pointList);
+                })
+                .toList();
 
         return MapDrawRes.builder()
-                .polyline(segmentList)
-                .marker(markerList)
-                .highlight(highlightList)
+                .polyline(segmentResList)
+                .marker(null)
+                .highlight(null)
                 .build();
     }
 

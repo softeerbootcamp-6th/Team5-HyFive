@@ -10,7 +10,7 @@ import java.util.List;
 @Schema(description = "polyline을 그리기 위한 dto")
 public record SegmentRes(
         @Schema(description = "세그먼트 ID", example = "1")
-        int segmentId,
+        Long segmentId,
 
         @Schema(description = "세그먼트에 포함된 좌표 리스트", implementation = LatLng.class)
         List<LatLng> pointList
