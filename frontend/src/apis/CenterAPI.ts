@@ -1,3 +1,4 @@
+import type { BackendCenterInfoType } from "@/features/centerOverview/CenterOverview.type";
 import { clientInstance } from "@/utils/AxiosInstance";
 import { useQuery } from "@tanstack/react-query";
 
@@ -5,14 +6,7 @@ interface CenterInfoAPIResponse {
   isSuccess: boolean;
   code: number;
   message: string;
-  data: {
-    centerId: number;
-    centerName: string;
-    centerTel: string;
-    centerAddr: string;
-    carCount: number;
-    payAmount: number;
-  };
+  data: BackendCenterInfoType;
 }
 
 const CENTER_ID = 1; // MVP 단계에선 고정
