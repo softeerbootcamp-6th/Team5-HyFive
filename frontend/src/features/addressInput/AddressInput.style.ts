@@ -23,7 +23,7 @@ export const DropdownContainer = css`
   margin-top: 12px;
   background-color: ${color.GrayScale.white};
   width: 100%;
-  height: 446px;
+  max-height: 446px;
   border: 1px solid ${color.GrayScale.gray3};
   border-radius: ${borderRadius.Large};
   overflow: hidden;
@@ -46,6 +46,7 @@ export const HeaderStyle = css`
 export const DropdownContentList = css`
   display: flex;
   flex-direction: column;
+
   overflow-y: scroll;
 `;
 
@@ -90,4 +91,18 @@ export const CloseButtonStyle = css`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+export const NoContentText = css`
+  font: ${typography.Body.b3_medi};
+  color: ${color.GrayScale.gray4};
+`;
+
+export const LoadingContent = css`
+  display: flex;
+  gap: 12px;
+  border-bottom: 1px solid ${color.GrayScale.gray2};
+  align-items: center;
+  justify-content: center;
+  min-height: 80px;
 `;
