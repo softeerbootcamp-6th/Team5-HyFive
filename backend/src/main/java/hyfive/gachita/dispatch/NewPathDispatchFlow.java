@@ -33,9 +33,7 @@ public class NewPathDispatchFlow {
 
     public DispatchResult execute(NewBookDto newBookDto) {
         log.info("========= [NewPathDispatchFlow] 신규 경로 배차 로직 시작 =========");
-        log.info("신규 예약 정보: {}", newBookDto);
 
-        // 1. 반경 내 센터 필터링
         log.info("--- STEP 1: 반경 내 센터 필터링 (반경: {}m) ---", RADIUS_METERS);
         BoundingBoxCondition boundingBoxCondition = BoundingBoxCondition.from(newBookDto.startLat(), newBookDto.startLng(), RADIUS_METERS);
         RadiusCondition radiusCondition = RadiusCondition.from(newBookDto.startLat(), newBookDto.startLng(), RADIUS_METERS);
@@ -54,7 +52,6 @@ public class NewPathDispatchFlow {
             throw new DispatchException("배차 가능한 센터가 없습니다.");
         }
 
-        // 2. 유휴 차량 필터링
         log.info("--- STEP 2: 유휴 차량 필터링 ---");
         List<CarScheduleDto> filteredScheduleList = idleCarListProvider.getByCondition(filteredCenterList, newBookDto);
 
@@ -67,7 +64,6 @@ public class NewPathDispatchFlow {
             throw new DispatchException("예약 조건에 맞는 유휴 차량이 없습니다.");
         }
 
-        // 3. 최적 경로 탐색
         log.info("--- STEP 3: 최적 경로 탐색 ---");
         AtomicInteger apiCallCounter = new AtomicInteger(0);
         // TODO: 동일한 센터에 대한 유휴시간인 경우 API 호출을 최소화하도록 구현 필요

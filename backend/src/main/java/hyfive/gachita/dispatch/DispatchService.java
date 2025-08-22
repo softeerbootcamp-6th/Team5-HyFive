@@ -31,7 +31,8 @@ public class DispatchService {
     @EventListener(BookCompletedEvent.class)
     public void execute(BookCompletedEvent bookCompletedEvent) {
         Book newBook = bookCompletedEvent.book();
-        log.info("예약 배차 시작 {}", newBook);
+        log.info("========= 예약 배차 시작 =========");
+        log.info("예약 정보: {}", newBook);
 
         long start = System.currentTimeMillis();
 
