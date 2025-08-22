@@ -81,11 +81,6 @@ public class PathService {
         return path;
     }
 
-    public PathRes getPathByBook(Long bookId) {
-        return pathRepository.findPathResByBookId(bookId)
-                .orElseThrow(() -> new RuntimeException("경로 없음"));
-    }
-
     public List<PassengerRes> getPathPassengers(Long pathId) {
         Path pathWithInfo = pathRepository.findPassengersByPathId(pathId);
         return pathWithInfo.getBookList().stream()
