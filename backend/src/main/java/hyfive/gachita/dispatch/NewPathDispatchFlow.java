@@ -28,7 +28,7 @@ public class NewPathDispatchFlow {
     private final HaversineFilter haversineFilter;
     private final FinalNewPathChecker finalNewPathChecker;
 
-    private final static int RADIUS_METERS = 500;
+    private final static int RADIUS_METERS = 3000;
 
     public DispatchResult execute(NewBookDto newBookDto) {
         // center 정보

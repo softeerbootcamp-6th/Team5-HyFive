@@ -77,8 +77,7 @@ public class DispatchFlowSelector {
             return newPathDispatchFlow.execute(newBookDto);
         } else {
             log.info("기존 경로 배차 실행");
-            oldPathDispatchFlow.execute(new ArrayList<>(candidatePathIds), newBookDto);
-            return null;
+            return oldPathDispatchFlow.execute(new ArrayList<>(candidatePathIds), newBookDto);
         }
     }
 }

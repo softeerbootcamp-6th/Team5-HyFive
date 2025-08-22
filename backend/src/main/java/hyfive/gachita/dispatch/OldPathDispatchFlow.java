@@ -21,6 +21,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 @RequiredArgsConstructor
 public class OldPathDispatchFlow {
 
+    // TODO : 1) 후보가 0개일 때 다음 로직 가지 않고 바로 배차 중단
+
     private final SlotCandidateProvider slotCandidateProvider;
     private final InsertNodeCalculator insertNodeCalculator;
     private final OldPathListProvider oldPathListProvider;
