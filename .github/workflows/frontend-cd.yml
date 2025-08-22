@@ -52,6 +52,7 @@ jobs:
       - name: Create production env
         run: |
           echo "VITE_KAKAO_REST_API_KEY=${{ secrets.KAKAO_REST_API_KEY }}" > .env.production
+          echo "VITE_API_BASE_URL=${{ secrets.API_BASE_URL }}" >> .env.production
           echo "VITE_KAKAOMAP_API_KEY=${{ secrets.KAKAOMAP_API_KEY }}" >> .env.production
 
       - name: Build Project
