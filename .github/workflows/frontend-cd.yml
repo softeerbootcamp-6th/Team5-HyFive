@@ -50,7 +50,9 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Create production env
-        run: echo "VITE_KAKAOMAP_API_KEY=${{ secrets.KAKAOMAP_API_KEY }}" > .env.production
+        run: |
+          echo "VITE_KAKAO_REST_API_KEY=${{ secrets.KAKAO_REST_API_KEY }}" > .env.production
+          echo "VITE_KAKAOMAP_API_KEY=${{ secrets.KAKAOMAP_API_KEY }}" >> .env.production
 
       - name: Build Project
         run: pnpm build
