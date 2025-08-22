@@ -49,7 +49,7 @@ public class KakaoNaviService {
         for (KakaoNaviRes.Road road : section.roads()) {
             List<Double> vertexes = road.vertexes();
             for (int i = 0; i < vertexes.size(); i += 2) {
-                pointList.add(new LatLng(vertexes.get(i), vertexes.get(i + 1)));
+                pointList.add(new LatLng(vertexes.get(i + 1), vertexes.get(i)));
             }
         }
         return pointList;

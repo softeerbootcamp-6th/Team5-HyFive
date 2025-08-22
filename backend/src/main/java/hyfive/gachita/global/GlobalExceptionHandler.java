@@ -44,7 +44,7 @@ public class GlobalExceptionHandler {
             log.error("{}", e.getMessage());
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(BaseResponse.fail(ErrorCode.INTERNAL_SERVER_ERROR));
+                    .body(BaseResponse.fail(ErrorCode.INTERNAL_SERVER_ERROR, e.getMessage()));
         }
         log.info("{}", e.getMessage());
         return ResponseEntity

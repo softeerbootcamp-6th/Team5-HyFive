@@ -1,19 +1,27 @@
 package hyfive.gachita.application.path;
 
 import hyfive.gachita.application.book.Book;
+import hyfive.gachita.application.book.BookStatus;
 import hyfive.gachita.application.common.dto.PagedListRes;
 import hyfive.gachita.application.common.dto.ScrollRes;
 import hyfive.gachita.application.common.enums.SearchPeriod;
 import hyfive.gachita.application.common.util.DateRangeUtil;
 import hyfive.gachita.application.node.Node;
-import hyfive.gachita.application.node.repository.NodeRepository;
 import hyfive.gachita.application.node.NodeType;
+import hyfive.gachita.application.node.Point;
+import hyfive.gachita.application.node.Segment;
 import hyfive.gachita.application.path.dto.*;
 import hyfive.gachita.application.path.respository.PathRepository;
+import hyfive.gachita.client.geocode.dto.LatLng;
+import hyfive.gachita.client.kakao.KakaoNaviService;
+import hyfive.gachita.client.kakao.RouteInfo;
 import hyfive.gachita.dispatch.dto.FinalNewPathDto;
+import hyfive.gachita.dispatch.dto.FinalOldPathDto;
+import hyfive.gachita.dispatch.dto.NodeDto;
 import hyfive.gachita.global.BusinessException;
 import hyfive.gachita.global.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,14 +31,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PathService {
     private final PathRepository pathRepository;
-    private final NodeRepository nodeRepository;
+    private final KakaoNaviService kakaoNaviService;
 
     @Transactional
     public Path createPathWithNodes(FinalNewPathDto finalPathDto, Book book) {
@@ -66,9 +76,15 @@ public class PathService {
         return pathRepository.save(path);
     }
 
-    public PathRes getPathByBook(Long bookId) {
-        return pathRepository.findPathResByBookId(bookId)
-                .orElseThrow(() -> new RuntimeException("경로 없음"));
+    @Transactional
+    public Path updatePathWithNodes(FinalOldPathDto finalOldPathDto, Book book) {
+        Path path = pathRepository.findById(finalOldPathDto.pathId())
+                .orElseThrow(() -> new BusinessException(ErrorCode.NO_EXIST_VALUE, "DB에 경로 데이터가 존재하지 않습니다."));
+
+        updateNodesInPath(path, finalOldPathDto.nodeList(), book);
+        updatePathDetails(path, finalOldPathDto.nodeList(), book);
+
+        return path;
     }
 
     public List<PassengerRes> getPathPassengers(Long pathId) {
@@ -80,8 +96,8 @@ public class PathService {
     }
 
     private PassengerRes createPassengerDto(Book book) {
-        LocalTime startTime = findNodeTimeByType(book, NodeType.START);
-        LocalTime endTime = findNodeTimeByType(book, NodeType.END);
+        LocalTime startTime = findNodeByType(book, NodeType.START).getTime();
+        LocalTime endTime = findNodeByType(book, NodeType.END).getTime();
 
         return PassengerRes.builder()
                 .name(book.getBookName())
@@ -92,11 +108,10 @@ public class PathService {
                 .build();
     }
 
-    private LocalTime findNodeTimeByType(Book book, NodeType nodeType) {
+    private Node findNodeByType(Book book, NodeType nodeType) {
         return book.getNodeList().stream()
                 .filter(node -> node.getType() == nodeType) // 파라미터로 받은 nodeType을 사용
                 .findFirst()
-                .map(Node::getTime)
                 .orElseThrow(() -> new BusinessException(
                         ErrorCode.NO_EXIST_VALUE,
                         String.format("경로에 %s 노드가 없습니다. bookId: %d", nodeType, book.getId())
@@ -150,23 +165,170 @@ public class PathService {
     }
 
     public MapDrawRes getMapDraw(Long id) {
-        pathRepository.findById(id)
+        // 데이터베이스에서 필요한 값 조회
+        List<Node> orderedNodeList = pathRepository.findNodeListWithSegmentInfoByPathId(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NO_EXIST_VALUE, "DB에 경로 데이터가 존재하지 않습니다."));
 
-        List<MarkerRes> markerList = nodeRepository.findByAllPathId(id);
-        List<SegmentRes> segmentList = nodeRepository.findSegmentsByMarkers(markerList);
-        List<HighlightRes> highlightList = nodeRepository.getHighlightsByPath(id);
+        // 응답 형식으로 변환
+        List<SegmentRes> segmentResList = getSegmentResList(orderedNodeList);
+        List<MarkerRes> markerResList = getMarkerResList(orderedNodeList);
+        List<HighlightRes> highlightResList = getHighlightResList(orderedNodeList, segmentResList);
 
         return MapDrawRes.builder()
-                .polyline(segmentList)
-                .marker(markerList)
-                .highlight(highlightList)
+                .polyline(segmentResList)
+                .marker(markerResList)
+                .highlight(highlightResList)
                 .build();
     }
 
+    private List<HighlightRes> getHighlightResList(List<Node> orderedNodeList, List<SegmentRes> segmentResList) {
+        Map<Book, List<Node>> nodesByBook = orderedNodeList.stream()
+                .filter(node -> node.getBook() != null)
+                .collect(Collectors.groupingBy(Node::getBook));
+
+        return nodesByBook.keySet().stream()
+                .map(book -> {
+                    Node startNode = findNodeByType(book, NodeType.START);
+                    Node endNode = findNodeByType(book, NodeType.END);
+
+                    int startIdx = orderedNodeList.indexOf(startNode);
+                    int endIdx = orderedNodeList.indexOf(endNode);
+                    List<Long> selectedSegment = segmentResList.subList(startIdx, endIdx).stream()
+                            .map(SegmentRes::segmentId)
+                            .toList();
+
+                    return HighlightRes.from(startNode, endNode, book, selectedSegment);
+                })
+                .sorted(Comparator.comparing(HighlightRes::startTime))
+                .toList();
+    }
+
+    private List<MarkerRes> getMarkerResList(List<Node> nodeList) {
+        return nodeList.stream()
+                .map(MarkerRes::from)
+                .toList();
+    }
+
+    private List<SegmentRes> getSegmentResList(List<Node> nodeList) {
+        return nodeList.stream()
+                .map(Node::getLeftSegment)
+                .filter(Objects::nonNull) // 센터의 경우 leftSegment가 null이므로 제외
+                .map(SegmentRes::from)
+                .toList();
+    }
+
+    @Transactional
+    public void savePolyline(Long pathId) {
+        List<Node> nodeList = pathRepository.findNodeListByPathId(pathId);
+
+        if (nodeList.isEmpty()) {
+            throw new BusinessException(ErrorCode.NO_EXIST_VALUE, "경로에 노드가 존재하지 않습니다. pathId=" + pathId);
+        }
+
+        if (nodeList.stream().anyMatch(node -> node.getLeftSegment() != null)) {
+            throw new BusinessException(ErrorCode.INVALID_INPUT, "이미 polyline이 존재하는 경로입니다. pathId=" + pathId);
+        }
+
+        List<LatLng> locationList = nodeList.stream()
+                        .map(node -> new LatLng(node.getLat(), node.getLng()))
+                        .toList();
+
+        RouteInfo routeInfo = kakaoNaviService.geRouteInfo(locationList);
+        List<List<LatLng>> polylineList = routeInfo.polylineList();
+
+        log.info("Polyline size: {}", polylineList.size());
+        for (int i = 0; i < polylineList.size(); i++) {
+            Node node = nodeList.get(i + 1);
+
+            List<LatLng> polyline = polylineList.get(i);
+
+            Segment segment = Segment.builder()
+                    .startNode(nodeList.get(i))
+                    .endNode(node)
+                    .duration(routeInfo.durationList().get(i))
+                    .sequence(i + 1)
+                    .build();
+
+            List<Point> points = polyline.stream()
+                    .map(point -> Point.builder()
+                            .segment(segment)
+                            .lat(point.lat())
+                            .lng(point.lng())
+                            .build())
+                    .toList();
+
+            segment.setPoints(points);
+            node.setLeftSegment(segment);
+            node.getBook().update(BookStatus.FIXED);
+        }
+    }
+
+    public Map<String, Object> saveTodayPathPolyline() {
+        LocalDate today = LocalDate.now();
+        List<Path> pathList = pathRepository.findAllByDriveDate(today);
+
+        int successCount = 0;
+        List<Long> failedIds = new ArrayList<>();
+
+        for (Path path : pathList) {
+            try {
+                savePolyline(path.getId());
+                successCount++;
+            } catch (Exception e) {
+                log.error("Failed to save polyline for pathId {}: {}", path.getId(), e.getMessage());
+                failedIds.add(path.getId());
+            }
+        }
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("total", pathList.size());
+        result.put("success", successCount);
+        result.put("failedIds", failedIds);
+
+        return result;
+    }
 
     private LocalTime minTime(LocalTime timeA, LocalTime timeB) {
         return timeA.isBefore(timeB) ? timeA : timeB;
+    }
+
+    private void updateNodesInPath(Path path, List<NodeDto> upateNodeList, Book book) {
+        Map<Long, Node> oldNodeMap = path.getNodeList().stream()
+                .collect(Collectors.toMap(Node::getId, Function.identity()));
+
+        for (NodeDto nodeDto : upateNodeList) {
+            if (nodeDto.nodeId() != null) {
+                // update
+                Node oldNode = oldNodeMap.get(nodeDto.nodeId());
+                if (oldNode != null) {
+                    oldNode.setTime(nodeDto.time());
+                }
+            } else {
+                // create
+                Node newNode = Node.builder()
+                        .path(path)
+                        .book(book)
+                        .lat(nodeDto.lat())
+                        .lng(nodeDto.lng())
+                        .time(nodeDto.time())
+                        .type(nodeDto.type())
+                        .build();
+                path.getNodeList().add(newNode);
+            }
+        }
+    }
+
+    private void updatePathDetails(Path path, List<NodeDto> updateNodeList, Book book) {
+        if (updateNodeList.isEmpty()) {
+            throw new BusinessException(ErrorCode.NO_EXIST_NODE_LIST, "OldPathDispatchFlow - 업데이트된 노드 리스트가 존재하지 않습니다.");
+        }
+
+        NodeDto lastNode = updateNodeList.get(updateNodeList.size() - 1);
+        path.update(
+                lastNode.time(),
+                lastNode.time(),
+                book.getEndAddr()
+        );
     }
 }
 

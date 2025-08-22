@@ -1,7 +1,9 @@
 package hyfive.gachita.application.node;
 
+import hyfive.gachita.client.geocode.dto.LatLng;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "segment")
+@Builder
 public class Segment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,4 +38,8 @@ public class Segment {
 
     @OneToMany(mappedBy = "segment", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Point> points = new ArrayList<>();
+
+    public void setPoints(List<Point> points) {
+        this.points = points;
+    }
 }

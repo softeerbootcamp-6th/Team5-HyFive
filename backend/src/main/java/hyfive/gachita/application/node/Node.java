@@ -46,5 +46,8 @@ public class Node {
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false, columnDefinition = "VARCHAR(50)")
     private NodeType type;
+
+    @OneToOne(mappedBy = "endNode", cascade = CascadeType.ALL)
+    private Segment leftSegment;
 }
 

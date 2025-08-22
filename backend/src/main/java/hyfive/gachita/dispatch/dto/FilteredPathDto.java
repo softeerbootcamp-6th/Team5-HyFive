@@ -6,23 +6,23 @@ import lombok.Builder;
 @Builder
 public record FilteredPathDto(
         Long pathId,
-        double lat,
-        double lng
+        double latt,
+        double lngg
 ) implements FilterDto {
 
     public static FilteredPathDto fromStart(Book book) {
         return FilteredPathDto.builder()
                 .pathId(book.getPath().getId())
-                .lat(book.getStartLat())
-                .lng(book.getStartLng())
+                .latt(book.getStartLat())
+                .lngg(book.getStartLng())
                 .build();
     }
 
     public static FilteredPathDto fromEnd(Book book) {
         return FilteredPathDto.builder()
                 .pathId(book.getPath().getId())
-                .lat(book.getEndLat())
-                .lng(book.getEndLng())
+                .latt(book.getEndLat())
+                .lngg(book.getEndLng())
                 .build();
     }
 
@@ -30,8 +30,8 @@ public record FilteredPathDto(
     public Long id() { return this.pathId(); };
 
     @Override
-    public double lat() { return this.lat(); };
+    public double lat() { return this.latt(); };
 
     @Override
-    public double lng() { return this.lng(); };
+    public double lng() { return this.lngg(); };
 }

@@ -1,16 +1,19 @@
 package hyfive.gachita.application.path.respository;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hyfive.gachita.application.car.DelYn;
+import hyfive.gachita.application.node.Node;
 import hyfive.gachita.application.path.DriveStatus;
 import hyfive.gachita.application.path.Path;
 import hyfive.gachita.application.path.QPath;
+import hyfive.gachita.application.path.dto.NodeWithDeadline;
 import hyfive.gachita.application.path.dto.PathCursor;
-import hyfive.gachita.application.path.dto.PathRes;
 import hyfive.gachita.dispatch.dto.OldPathDto;
 import hyfive.gachita.dispatch.module.condition.PathCondition;
 import lombok.RequiredArgsConstructor;
@@ -23,13 +26,13 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-import static com.querydsl.core.group.GroupBy.groupBy;
-import static com.querydsl.core.types.Projections.list;
 import static hyfive.gachita.application.book.QBook.book;
 import static hyfive.gachita.application.car.QCar.car;
 import static hyfive.gachita.application.center.QCenter.center;
 import static hyfive.gachita.application.node.QNode.node;
+import static hyfive.gachita.application.node.QSegment.segment;
 import static hyfive.gachita.application.path.QPath.path;
 
 @Repository
@@ -39,11 +42,17 @@ public class CustomPathRepositoryImpl implements CustomPathRepository {
 
     @Override
     public List<OldPathDto> searchPathList(PathCondition condition) {
-        return queryFactory
+        List<Tuple> pathList = queryFactory
+                .select(
+                        path.id,
+                        car.id,
+                        node,
+                        node.book.deadline
+                )
                 .from(path)
                 .join(path.car, car)
                 .on(
-                        car.lowFloor.eq(condition.walker()),
+                        (condition.walker() ? car.lowFloor.isTrue() : Expressions.TRUE.isTrue()),
                         car.capacity.gt(path.userCount),
                         car.delYn.eq(DelYn.N)
                 )
@@ -53,35 +62,26 @@ public class CustomPathRepositoryImpl implements CustomPathRepository {
                         path.maybeEndTime.goe(condition.deadline()),
                         path.id.in(condition.pathIds())
                 )
-                .transform(
-                        groupBy(path.id).list(
-                                Projections.constructor(
-                                        OldPathDto.class,
-                                        path.id,
-                                        car.id,
-                                        list(node)
-                                )
-                        )
-                );
-    }
+                .fetch();
 
-    @Override
-    public Optional<PathRes> findPathResByBookId(Long bookId) {
-        return Optional.ofNullable(queryFactory
-                .select(Projections.constructor(PathRes.class,
-                        path.id,
-                        car.carNumber,
-                        path.realStartTime,
-                        path.realEndTime,
-                        path.startAddr,
-                        path.endAddr
-                ))
-                .from(book)
-                .leftJoin(book.path, path)
-                .leftJoin(path.car, car)
-                .where(book.id.eq(bookId))
-                .fetchOne()
-        );
+        return pathList.stream()
+                .collect(Collectors.groupingBy(tuple -> tuple.get(path.id)))
+                .values().stream()
+                .map(tuplesForOnePath -> {
+                    Tuple firstTuple = tuplesForOnePath.get(0);
+                    Long pathId = firstTuple.get(path.id);
+                    Long carId = firstTuple.get(car.id);
+
+                    List<NodeWithDeadline> nodes = tuplesForOnePath.stream()
+                            .map(tuple -> new NodeWithDeadline(
+                                    tuple.get(node),
+                                    tuple.get(node.book.deadline)
+                            ))
+                            .toList();
+
+                    return OldPathDto.from(pathId, carId, nodes);
+                })
+                .toList();
     }
 
     @Override
@@ -105,9 +105,6 @@ public class CustomPathRepositoryImpl implements CustomPathRepository {
                             .and(path.id.lt(cursor.lastId()))
             );
         }
-
-
-
 
         return queryFactory.select(path)
                 .from(path)
@@ -167,6 +164,39 @@ public class CustomPathRepositoryImpl implements CustomPathRepository {
                 .fetchOne();
 
         return new PageImpl<>(pathList, pageable, totalCount == null ? 0L : totalCount);
+    }
+
+    @Override
+    public Optional<List<Node>> findNodeListWithSegmentInfoByPathId(Long id) {
+        return Optional.ofNullable(queryFactory
+                .selectFrom(node)
+                .leftJoin(node.book, book).fetchJoin()
+                .leftJoin(node.leftSegment, segment).fetchJoin()
+                .where(node.path.id.eq(id))
+                .orderBy(node.time.asc())
+                .fetch());
+    }
+
+    @Override
+    public List<Node> findNodeListByPathId(Long id) {
+        return queryFactory
+                .selectFrom(node)
+                .leftJoin(node.leftSegment, segment).fetchJoin()
+                .where(node.path.id.eq(id))
+                .orderBy(node.time.asc())
+                .fetch();
+    }
+
+    @Override
+    public List<Path> findAllByDriveDate(LocalDate today) {
+        return queryFactory
+                .selectFrom(path)
+                .where(
+                        path.driveDate.eq(today),
+                        path.driveStatus.eq(DriveStatus.WAITING)
+                )
+                .orderBy(path.realStartTime.asc(), path.realEndTime.asc(), path.id.desc())
+                .fetch();
     }
 
     private BooleanExpression statusEq(QPath path, DriveStatus status) {
