@@ -2,6 +2,7 @@ package hyfive.gachita.application.node;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name = "point")
+@Builder
 public class Point {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

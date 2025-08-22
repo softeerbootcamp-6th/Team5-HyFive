@@ -177,6 +177,28 @@ public class CustomPathRepositoryImpl implements CustomPathRepository {
                 .fetch());
     }
 
+    @Override
+    public List<Node> findNodeListByPathId(Long id) {
+        return queryFactory
+                .selectFrom(node)
+                .leftJoin(node.leftSegment, segment).fetchJoin()
+                .where(node.path.id.eq(id))
+                .orderBy(node.time.asc())
+                .fetch();
+    }
+
+    @Override
+    public List<Path> findAllByDriveDate(LocalDate today) {
+        return queryFactory
+                .selectFrom(path)
+                .where(
+                        path.driveDate.eq(today),
+                        path.driveStatus.eq(DriveStatus.WAITING)
+                )
+                .orderBy(path.realStartTime.asc(), path.realEndTime.asc(), path.id.desc())
+                .fetch();
+    }
+
     private BooleanExpression statusEq(QPath path, DriveStatus status) {
         return status != null ? path.driveStatus.eq(status) : null;
     }
