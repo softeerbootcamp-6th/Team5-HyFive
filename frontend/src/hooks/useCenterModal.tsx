@@ -29,7 +29,7 @@ export const useCenterModal = () => {
           onConfirm={handlers.handleDeleteConfirm}
         />
       ),
-      done: <ModalContent onClose={close} content="삭제되었습니다." />,
+      done: <ModalContent onClose={handlers.close} content="삭제되었습니다." />,
     };
 
     return contents[modalState];
