@@ -1,10 +1,13 @@
-import { TableContainer, TableBody } from "../TimeTable.style";
+import {
+  TableContainer,
+  TableBody,
+  LoadingContainer,
+} from "../TimeTable.style";
 import type {
   AvailableTimeSlotType,
   TimeTableProps,
 } from "@/features/timeTable/TimeTable.type";
 
-import { generateAvailableTimeSlots } from "@/mocks/timeBlockMocks";
 import { useEffect, useState } from "react";
 import {
   AvailableTimeSlots,
@@ -14,42 +17,59 @@ import {
   AvailableTimeSlot,
 } from "./index";
 import { TIME_TABLE_CONFIG } from "@/features/timeTable/TimeTable.constants";
-import { isAllSlotsInSelectedWeek } from "@/features/timeTable/utils/TimeTable.util";
 import { useTimeTableDrag } from "@/features/timeTable/hooks/useTimeTableDrag";
+import { useGetTimeSlot } from "@/apis/TimeTableAPI";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import ModalContent from "@/components/ModalContent";
+import Modal from "@/components/Modal";
 
-const mockWeek: Date[] = Array.from({ length: 7 }, (_, i) => {
-  return new Date(2025, 7, 10 + i);
-});
-const mockTimeSlot: AvailableTimeSlotType[] =
-  generateAvailableTimeSlots(mockWeek);
+const TimeTable = ({ selectedCarId, selectedWeek, mode }: TimeTableProps) => {
+  const { timeSlotData, isFetching, error } = useGetTimeSlot(
+    selectedCarId,
+    selectedWeek,
+  );
 
-const TimeTable = ({
-  selectedCarId: _selectedCarId,
-  selectedWeek,
-  mode,
-}: TimeTableProps) => {
-  const [availableTimeSlots, setAvailableTimeSlots] =
-    useState<AvailableTimeSlotType[]>(mockTimeSlot);
+  // draft 상태는 편집 모드에서만 사용 (수정/취소/저장을 위한 상태)
+  const [timeSlotsDraft, setTimeSlotsDraft] = useState<AvailableTimeSlotType[]>(
+    [],
+  );
 
   const [previewSlot, setPreviewSlot] = useState<AvailableTimeSlotType | null>(
     null,
   );
 
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+
   useEffect(() => {
-    const TimeSlot = generateAvailableTimeSlots(selectedWeek);
-    setAvailableTimeSlots(TimeSlot);
-  }, [selectedWeek]);
-  const canRenderSlots = isAllSlotsInSelectedWeek(
-    availableTimeSlots,
-    selectedWeek,
-  );
+    setTimeSlotsDraft([]);
+    setPreviewSlot(null);
+  }, [selectedCarId, selectedWeek]);
+
+  // 새로운 데이터가 로드되면 draft 상태 초기화
+  useEffect(() => {
+    if (timeSlotData) {
+      setTimeSlotsDraft(timeSlotData);
+      setPreviewSlot(null);
+    }
+  }, [timeSlotData]);
+
+  // 에러 발생 시 모달 열기
+  useEffect(() => {
+    if (error) {
+      setIsErrorModalOpen(true);
+    }
+  }, [error]);
+
+  const handleCloseErrorModal = () => {
+    setIsErrorModalOpen(false);
+  };
 
   const { handleCellMouseDown, handleCellMouseEnter, deleteSlot } =
     useTimeTableDrag({
       mode,
       selectedWeek,
-      availableTimeSlots,
-      onSlotsUpdate: (slots) => setAvailableTimeSlots(slots),
+      availableTimeSlots: timeSlotsDraft,
+      onSlotsUpdate: (slots) => setTimeSlotsDraft(slots),
       setPreviewSlot: setPreviewSlot,
     });
 
@@ -78,15 +98,13 @@ const TimeTable = ({
         />
 
         {/* 유휴시간 블록들 - TimeCell 위 블록*/}
-        {canRenderSlots && (
-          <AvailableTimeSlots
-            availableTimeData={availableTimeSlots}
-            selectedWeek={selectedWeek}
-            mode={mode}
-            onDelete={deleteSlot}
-            disabled={slotsDisabled}
-          />
-        )}
+        <AvailableTimeSlots
+          availableTimeData={timeSlotsDraft}
+          selectedWeek={selectedWeek}
+          mode={mode}
+          onDelete={deleteSlot}
+          disabled={slotsDisabled}
+        />
 
         {previewSlot && (
           <AvailableTimeSlot
@@ -97,6 +115,24 @@ const TimeTable = ({
             mode={mode}
             disabled
           />
+        )}
+
+        {isFetching && (
+          <div css={LoadingContainer}>
+            <LoadingSpinner size="large" />
+          </div>
+        )}
+
+        {error && (
+          <Modal isOpen={isErrorModalOpen} onClose={handleCloseErrorModal}>
+            <ModalContent
+              type="alert"
+              content={
+                error.message || "시간표 데이터를 불러오는데 실패했습니다."
+              }
+              onClose={handleCloseErrorModal}
+            />
+          </Modal>
         )}
       </div>
     </div>
