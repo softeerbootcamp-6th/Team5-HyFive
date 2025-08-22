@@ -1,6 +1,7 @@
 package hyfive.gachita.application.path;
 
 import hyfive.gachita.application.book.Book;
+import hyfive.gachita.application.book.BookStatus;
 import hyfive.gachita.application.common.dto.PagedListRes;
 import hyfive.gachita.application.common.dto.ScrollRes;
 import hyfive.gachita.application.common.enums.SearchPeriod;
@@ -244,6 +245,7 @@ public class PathService {
 
             segment.setPoints(points);
             node.setLeftSegment(segment);
+            node.getBook().update(BookStatus.FIXED);
         }
     }
 
