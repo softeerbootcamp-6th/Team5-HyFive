@@ -1,6 +1,6 @@
 package hyfive.gachita.dispatch.dto;
 
-import hyfive.gachita.application.node.Node;
+import hyfive.gachita.application.path.dto.NodeWithDeadline;
 import lombok.Builder;
 
 import java.util.List;
@@ -13,9 +13,9 @@ public record OldPathDto(
         int duration,                        // 단위 : sec : 총 이동 시간
         int distance                         // 단위 : meters
 ) {
-    public static OldPathDto from(Long pathId, Long carId, List<Node> nodeList) {
+    public static OldPathDto from(Long pathId, Long carId, List<NodeWithDeadline> nodeList) {
         List<NodeDto> nodeDtoList = nodeList.stream()
-                .map(NodeDto::from)
+                .map(nwd -> NodeDto.from(nwd.node(), nwd.deadline()))
                 .toList();
 
         return OldPathDto.builder()

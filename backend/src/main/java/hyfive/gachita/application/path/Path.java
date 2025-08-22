@@ -82,4 +82,12 @@ public class Path {
     public void setNodes(List<Node> nodeList) {
         this.nodeList = nodeList;
     }
+
+    // 기존 경로 배차 update
+    public void update(LocalTime maybeEndTime, LocalTime realEndTime, String endAddr) {
+        this.maybeEndTime = maybeEndTime;
+        this.realEndTime = realEndTime;
+        this.endAddr = endAddr;
+        this.userCount += 1;
+    }
 }

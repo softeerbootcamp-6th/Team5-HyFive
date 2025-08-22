@@ -1,8 +1,10 @@
 package hyfive.gachita.application.path.respository;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hyfive.gachita.application.car.DelYn;
@@ -10,6 +12,7 @@ import hyfive.gachita.application.node.Node;
 import hyfive.gachita.application.path.DriveStatus;
 import hyfive.gachita.application.path.Path;
 import hyfive.gachita.application.path.QPath;
+import hyfive.gachita.application.path.dto.NodeWithDeadline;
 import hyfive.gachita.application.path.dto.PathCursor;
 import hyfive.gachita.dispatch.dto.OldPathDto;
 import hyfive.gachita.dispatch.module.condition.PathCondition;
@@ -23,9 +26,8 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-import static com.querydsl.core.group.GroupBy.groupBy;
-import static com.querydsl.core.types.Projections.list;
 import static hyfive.gachita.application.book.QBook.book;
 import static hyfive.gachita.application.car.QCar.car;
 import static hyfive.gachita.application.center.QCenter.center;
@@ -40,11 +42,17 @@ public class CustomPathRepositoryImpl implements CustomPathRepository {
 
     @Override
     public List<OldPathDto> searchPathList(PathCondition condition) {
-        return queryFactory
+        List<Tuple> pathList = queryFactory
+                .select(
+                        path.id,
+                        car.id,
+                        node,
+                        node.book.deadline
+                )
                 .from(path)
                 .join(path.car, car)
                 .on(
-                        car.lowFloor.eq(condition.walker()),
+                        (condition.walker() ? car.lowFloor.isTrue() : Expressions.TRUE.isTrue()),
                         car.capacity.gt(path.userCount),
                         car.delYn.eq(DelYn.N)
                 )
@@ -54,16 +62,26 @@ public class CustomPathRepositoryImpl implements CustomPathRepository {
                         path.maybeEndTime.goe(condition.deadline()),
                         path.id.in(condition.pathIds())
                 )
-                .transform(
-                        groupBy(path.id).list(
-                                Projections.constructor(
-                                        OldPathDto.class,
-                                        path.id,
-                                        car.id,
-                                        list(node)
-                                )
-                        )
-                );
+                .fetch();
+
+        return pathList.stream()
+                .collect(Collectors.groupingBy(tuple -> tuple.get(path.id)))
+                .values().stream()
+                .map(tuplesForOnePath -> {
+                    Tuple firstTuple = tuplesForOnePath.get(0);
+                    Long pathId = firstTuple.get(path.id);
+                    Long carId = firstTuple.get(car.id);
+
+                    List<NodeWithDeadline> nodes = tuplesForOnePath.stream()
+                            .map(tuple -> new NodeWithDeadline(
+                                    tuple.get(node),
+                                    tuple.get(node.book.deadline)
+                            ))
+                            .toList();
+
+                    return OldPathDto.from(pathId, carId, nodes);
+                })
+                .toList();
     }
 
     @Override
@@ -87,9 +105,6 @@ public class CustomPathRepositoryImpl implements CustomPathRepository {
                             .and(path.id.lt(cursor.lastId()))
             );
         }
-
-
-
 
         return queryFactory.select(path)
                 .from(path)

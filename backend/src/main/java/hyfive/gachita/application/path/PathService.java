@@ -16,6 +16,8 @@ import hyfive.gachita.client.geocode.dto.LatLng;
 import hyfive.gachita.client.kakao.KakaoNaviService;
 import hyfive.gachita.client.kakao.RouteInfo;
 import hyfive.gachita.dispatch.dto.FinalNewPathDto;
+import hyfive.gachita.dispatch.dto.FinalOldPathDto;
+import hyfive.gachita.dispatch.dto.NodeDto;
 import hyfive.gachita.global.BusinessException;
 import hyfive.gachita.global.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -71,6 +74,17 @@ public class PathService {
                 ).toList();
         path.setNodes(nodeList);
         return pathRepository.save(path);
+    }
+
+    @Transactional
+    public Path updatePathWithNodes(FinalOldPathDto finalOldPathDto, Book book) {
+        Path path = pathRepository.findById(finalOldPathDto.pathId())
+                .orElseThrow(() -> new BusinessException(ErrorCode.NO_EXIST_VALUE, "DB에 경로 데이터가 존재하지 않습니다."));
+
+        updateNodesInPath(path, finalOldPathDto.nodeList(), book);
+        updatePathDetails(path, finalOldPathDto.nodeList(), book);
+
+        return path;
     }
 
     public List<PassengerRes> getPathPassengers(Long pathId) {
@@ -276,6 +290,45 @@ public class PathService {
 
     private LocalTime minTime(LocalTime timeA, LocalTime timeB) {
         return timeA.isBefore(timeB) ? timeA : timeB;
+    }
+
+    private void updateNodesInPath(Path path, List<NodeDto> upateNodeList, Book book) {
+        Map<Long, Node> oldNodeMap = path.getNodeList().stream()
+                .collect(Collectors.toMap(Node::getId, Function.identity()));
+
+        for (NodeDto nodeDto : upateNodeList) {
+            if (nodeDto.nodeId() != null) {
+                // update
+                Node oldNode = oldNodeMap.get(nodeDto.nodeId());
+                if (oldNode != null) {
+                    oldNode.setTime(nodeDto.time());
+                }
+            } else {
+                // create
+                Node newNode = Node.builder()
+                        .path(path)
+                        .book(book)
+                        .lat(nodeDto.lat())
+                        .lng(nodeDto.lng())
+                        .time(nodeDto.time())
+                        .type(nodeDto.type())
+                        .build();
+                path.getNodeList().add(newNode);
+            }
+        }
+    }
+
+    private void updatePathDetails(Path path, List<NodeDto> updateNodeList, Book book) {
+        if (updateNodeList.isEmpty()) {
+            throw new BusinessException(ErrorCode.NO_EXIST_NODE_LIST, "OldPathDispatchFlow - 업데이트된 노드 리스트가 존재하지 않습니다.");
+        }
+
+        NodeDto lastNode = updateNodeList.get(updateNodeList.size() - 1);
+        path.update(
+                lastNode.time(),
+                lastNode.time(),
+                book.getEndAddr()
+        );
     }
 }
 

@@ -28,9 +28,9 @@ public class NewPathDispatchFlow {
     private final HaversineFilter haversineFilter;
     private final FinalNewPathChecker finalNewPathChecker;
 
-    private final static int RADIUS_METERS = 500;
+    private final static int RADIUS_METERS = 3000;
 
-    public FinalNewPathDto execute(NewBookDto newBookDto) {
+    public DispatchResult execute(NewBookDto newBookDto) {
         // center 정보
         BoundingBoxCondition boundingBoxCondition = BoundingBoxCondition.from(newBookDto.startLat(), newBookDto.startLng(), RADIUS_METERS);
         RadiusCondition radiusCondition = RadiusCondition.from(newBookDto.startLat(), newBookDto.startLng(), RADIUS_METERS);
@@ -39,6 +39,7 @@ public class NewPathDispatchFlow {
                 .filter(center -> boundingBoxFilter.test(center, boundingBoxCondition))
                 .filter(center -> haversineFilter.test(center, radiusCondition))
                 .toList();
+        log.info("Filtered center list: ", filteredCenterList);
         log.info("Filtered centers: {}", filteredCenterList.size());
         if (filteredCenterList.isEmpty()) {
             throw new DispatchException("배차 가능한 센터가 없습니다.");

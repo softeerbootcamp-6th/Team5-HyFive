@@ -2,6 +2,7 @@ package hyfive.gachita.application.center.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -74,7 +75,7 @@ public class CustomCenterRepositoryImpl implements CustomCenterRepository{
                 .from(center)
                 .join(center.carList, car)
                 .where(
-                        car.lowFloor.eq(condition.walker()),
+                        (condition.walker() ? car.lowFloor.isTrue() : Expressions.TRUE.isTrue()),
                         car.delYn.eq(DelYn.N)
                 )
                 .join(rental)

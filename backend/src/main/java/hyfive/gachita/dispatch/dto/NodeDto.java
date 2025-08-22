@@ -21,14 +21,20 @@ public record NodeDto(
     /**
      * 기존 경로의 node
      */
-    public static NodeDto from(Node node) {
-        return NodeDto.builder()
+    public static NodeDto from(Node node, LocalTime deadline) {
+        NodeDto.NodeDtoBuilder builder = NodeDto.builder()
                 .nodeId(node.getId())
                 .lat(node.getLat())
                 .lng(node.getLng())
                 .time(node.getTime())
-                .type(node.getType())
-                .build();
+                .type(node.getType());
+
+        if (node.getType() == NodeType.END && deadline != null) {
+            LocalTime firstDeadline = deadline.minusMinutes(30);
+            builder.deadline(Pair.of(firstDeadline, deadline));
+        }
+
+        return builder.build();
     }
 
     /**

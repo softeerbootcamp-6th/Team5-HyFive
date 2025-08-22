@@ -30,8 +30,8 @@ public record FilteredPathDto(
     public Long id() { return this.pathId(); };
 
     @Override
-    public double lat() { return this.lat(); };
+    public double lat() { return this.latt(); };
 
     @Override
-    public double lng() { return this.lng(); };
+    public double lng() { return this.lngg(); };
 }

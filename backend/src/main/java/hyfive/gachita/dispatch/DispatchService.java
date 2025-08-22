@@ -6,7 +6,7 @@ import hyfive.gachita.application.book.BookService;
 import hyfive.gachita.application.book.BookStatus;
 import hyfive.gachita.application.path.Path;
 import hyfive.gachita.application.path.PathService;
-import hyfive.gachita.dispatch.dto.FinalNewPathDto;
+import hyfive.gachita.dispatch.dto.DispatchResult;
 import hyfive.gachita.dispatch.dto.NewBookDto;
 import hyfive.gachita.dispatch.excepion.DispatchException;
 import hyfive.gachita.dispatch.module.evaluation.DrivingTimeEvaluation;
@@ -21,8 +21,6 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class DispatchService {
     private final DispatchFlowSelector dispatchFlowSelector;
-    private final NewPathDispatchFlow newPathDispatchFlow;
-    private final OldPathDispatchFlow oldPathDispatchFlow;
     private final BookService bookService;
     private final PathService pathService;
 
@@ -41,10 +39,10 @@ public class DispatchService {
 
             // TODO : FinalNewPathDto, FinalOldPathDto 를 추상화하여 처리 필요
             // 2. DispatchFlowSelector 실행
-            FinalNewPathDto finalPathDto = dispatchFlowSelector.execute(newBookDto);
+            DispatchResult dispatchResult = dispatchFlowSelector.execute(newBookDto);
 
             // 3. 경로 및 노드 정보 반영
-            Path savedPath = pathService.createPathWithNodes(finalPathDto, newBook);
+            Path savedPath = dispatchResult.apply(pathService, newBook);
 
             // 4. 배차 결과 반영
             bookStatus = BookStatus.SUCCESS;
