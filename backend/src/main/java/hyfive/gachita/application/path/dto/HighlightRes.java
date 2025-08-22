@@ -19,8 +19,9 @@ public record HighlightRes(
         @Schema(description = "예약자 이름 또는 센터 이름", example = "김코드")
         String bookName,
 
-        @Schema(description = "보행기 사용 여부", example = "true")
-        boolean walker,
+        @Schema(description = "예약 시간(병원 도착 희망 시간)", example = "11:00")
+        @JsonFormat(pattern = "HH:mm")
+        LocalTime hospitalTime,
 
         @Schema(description = "승차 시간 (HH:mm)", example = "10:00")
         @JsonFormat(pattern = "HH:mm")
@@ -49,7 +50,7 @@ public record HighlightRes(
         return new HighlightRes(
                 book.getId(),
                 book.getBookName(),
-                book.getWalker(),
+                book.getHospitalTime(),
                 startNode.getTime(),
                 endNode.getTime(),
                 book.getStartAddr(),
