@@ -68,7 +68,12 @@ export const useAddressSearch = ({
           return;
         }
 
-        setError("주소 검색 중 오류가 발생했어요");
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("알 수 없는 오류가 발생했어요");
+        }
+
         setResults([]);
       } finally {
         setIsLoading(false);
