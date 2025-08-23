@@ -60,7 +60,7 @@ const ScheduleDataFetcher = ({
             setSelectedSchedule({
               routeId: scheduleData.routeId,
               routeStartLocation: scheduleData.routeStartLocation,
-              routeEndLocation: scheduleData.routeStartLocation,
+              routeEndLocation: scheduleData.routeEndLocation,
             })
           }
         >
