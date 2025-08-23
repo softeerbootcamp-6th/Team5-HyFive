@@ -1,25 +1,27 @@
 import FallbackUI from "@/components/FallbackUI";
 import MapContent from "@/features/map/MapContent";
 import MapHeader from "@/features/schedule/MapHeader";
-import type { ScheduleType } from "@/features/schedule/Schedule.types";
+import type {
+  ScheduleData,
+  ScheduleType,
+} from "@/features/schedule/Schedule.types";
 import { css } from "@emotion/react";
 import { ErrorBoundary } from "react-error-boundary";
 
 interface ScheduleDetailSectionProps {
   scheduleType: ScheduleType;
-  data: {
-    id: number;
-    routeStartLocation: string;
-    routeEndLocation: string;
-  };
+  selectedSchedule: Partial<ScheduleData>;
 }
 const ScheduleDetailSection = ({
   scheduleType,
-  data,
+  selectedSchedule,
 }: ScheduleDetailSectionProps) => {
   return (
     <div css={ScheduleDetailSectionContainer}>
-      <MapHeader scheduleType={scheduleType} data={data} />
+      <MapHeader
+        scheduleType={scheduleType}
+        selectedSchedule={selectedSchedule}
+      />
       <ErrorBoundary
         fallbackRender={({ error, resetErrorBoundary }) => (
           <FallbackUI error={error} handleRetry={resetErrorBoundary} />

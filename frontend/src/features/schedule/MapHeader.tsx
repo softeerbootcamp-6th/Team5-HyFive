@@ -5,7 +5,10 @@ import {
   WaitingIcon,
 } from "@/assets/icons";
 import PassengerDropDown from "@/features/schedule/PassengerDropDown";
-import type { ScheduleType } from "@/features/schedule/Schedule.types";
+import type {
+  ScheduleData,
+  ScheduleType,
+} from "@/features/schedule/Schedule.types";
 import { theme } from "@/styles/themes.style";
 import TabMatcher from "@/utils/TabMatcher";
 import { css } from "@emotion/react";
@@ -13,13 +16,9 @@ const { color, typography } = theme;
 
 interface MapHeaderProps {
   scheduleType: ScheduleType;
-  data: {
-    id: number;
-    routeStartLocation: string;
-    routeEndLocation: string;
-  };
+  selectedSchedule: Partial<ScheduleData>;
 }
-const MapHeader = ({ scheduleType, data }: MapHeaderProps) => {
+const MapHeader = ({ scheduleType, selectedSchedule }: MapHeaderProps) => {
   const ICON_MAPPER = {
     waiting: <WaitingIcon />,
     inProgress: <InProgressIcon />,
@@ -28,16 +27,16 @@ const MapHeader = ({ scheduleType, data }: MapHeaderProps) => {
   const parsedScheduleType = TabMatcher.matchScheduleTypeENGToKR(scheduleType);
   return (
     <div css={MapHeaderContainer}>
-      <p css={RouteIdText}>경로 #{data.id}</p>
+      <p css={RouteIdText}>경로 #{selectedSchedule.routeId}</p>
       <div css={SectionWrapper}>
         <div css={LeftSectionWrapper}>
           <div>{ICON_MAPPER[scheduleType]}</div>
           <div>
             <p css={RouteStatusText}>{parsedScheduleType}</p>
             <div css={RouteLocationWrapper}>
-              <p>{data.routeStartLocation}</p>
+              <p>{selectedSchedule.routeStartLocation}</p>
               <ArrowRightIcon />
-              <p>{data.routeEndLocation}</p>
+              <p>{selectedSchedule.routeEndLocation}</p>
             </div>
           </div>
         </div>

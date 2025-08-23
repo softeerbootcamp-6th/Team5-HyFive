@@ -8,11 +8,6 @@ import { useEffect, useState } from "react";
 const SchedulePage = () => {
   const TAB_LIST = ["운행 중", "운행 대기", "운행 완료"];
   const [activeTab, setActiveTab] = useState<string>(TAB_LIST[0]);
-  const sampleData = {
-    id: 8888,
-    routeStartLocation: "출발로123",
-    routeEndLocation: "도착로123",
-  };
   const parsedActiveTab = TabMatcher.matchScheduleTypeKRToENG(activeTab);
   const [selectedSchedule, setSelectedSchedule] =
     useState<Partial<ScheduleData> | null>(null);
@@ -29,7 +24,12 @@ const SchedulePage = () => {
         selectedSchedule={selectedSchedule}
         setSelectedSchedule={setSelectedSchedule}
       />
-      <ScheduleDetailSection scheduleType={parsedActiveTab} data={sampleData} />
+      {selectedSchedule && (
+        <ScheduleDetailSection
+          scheduleType={parsedActiveTab}
+          selectedSchedule={selectedSchedule}
+        />
+      )}
     </div>
   );
 };

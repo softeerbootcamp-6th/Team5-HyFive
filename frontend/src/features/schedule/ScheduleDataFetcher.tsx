@@ -9,7 +9,7 @@ import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
 import { CustomError } from "@/utils/CustomError";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import type { Dispatch, SetStateAction } from "react";
+import { useEffect, type Dispatch, type SetStateAction } from "react";
 const { color } = theme;
 
 const ScheduleDataFetcher = ({
@@ -29,7 +29,17 @@ const ScheduleDataFetcher = ({
       message: error?.message || "데이터 통신 중 에러가 발생했습니다.",
     });
 
-  if (isFetching && (!data || data.length === 0)) {
+  useEffect(() => {
+    if (data && data.length > 0 && !selectedSchedule?.routeId) {
+      setSelectedSchedule({
+        routeId: data[0].routeId,
+        routeStartLocation: data[0].routeStartLocation,
+        routeEndLocation: data[0].routeEndLocation,
+      });
+    }
+  }, [data, setSelectedSchedule]);
+
+  if (isFetching) {
     return (
       <div css={LoadingSpinnerWrapper}>
         <LoadingSpinner />
