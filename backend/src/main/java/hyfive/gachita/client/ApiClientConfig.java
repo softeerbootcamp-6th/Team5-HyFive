@@ -31,10 +31,10 @@ public class ApiClientConfig {
 
     private ClientHttpRequestInterceptor loggingInterceptor() {
         return (request, body, execution) -> {
-            log.info("요청 URI: {}", request.getURI());
-            log.info("요청 Body: {}", new String(body, StandardCharsets.UTF_8));
+            log.debug("요청 URI: {}", request.getURI());
+            log.debug("요청 Body: {}", new String(body, StandardCharsets.UTF_8));
             ClientHttpResponse response = execution.execute(request, body);
-            log.info("응답 상태 코드 : {}", response.getStatusCode());
+            log.debug("응답 상태 코드 : {}", response.getStatusCode());
             return response;
         };
     }

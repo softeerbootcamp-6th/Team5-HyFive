@@ -78,7 +78,7 @@ public class NewPathDispatchFlow {
                 )
                 // TODO: 각 필터에 대한 예외 처리 추가 필요
                 .orElseThrow(()
-                        -> new DispatchException("운행 시간이 한시간 이상이거나, 예약 시간 내에 운행이 불가능한 차량이 없습니다."));
+                        -> new DispatchException("운행 시간이 한시간 이상이거나, 예약 시간 내에 운행이 가능한 차량이 없습니다."));
 
         log.info("최종 선택된 최적 경로 -> Car ID: {}, 소요시간: {}초, 거리: {}m", bestPath.car().getId(), bestPath.totalDuration(), bestPath.totalDistance());
         log.info("Kakao API 호출 시뮬레이션 총 횟수: {} 회", apiCallCounter.get());

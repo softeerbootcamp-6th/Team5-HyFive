@@ -12,7 +12,7 @@ public class FinalNewPathChecker {
     // 첫 운행의 최대 운행 시간 (1시간) 을 초과하는지 확인
     public boolean isFirstPathDurationExceed(FinalNewPathDto path) {
         boolean isExceed = path.totalDuration() <= 3600; // 1시간 = 3600초
-        log.debug("운행 시간 초과 확인 (1시간): {}, path: {}", isExceed, path);
+        log.info("운행 시간 초과 확인 (1시간): {}, path: {}", isExceed, path);
         return isExceed;
     }
 
@@ -23,7 +23,7 @@ public class FinalNewPathChecker {
         LocalTime rentalStartTime = path.rentalStartTime();
         LocalTime rentalEndTime = path.rentalEndTime();
         boolean isWithin = rentalStartTime.isBefore(startTime) && endTime.isBefore(rentalEndTime);
-        log.debug("유휴 시간 내 운행 확인: {}, path: {}", isWithin, path);
+        log.info("유휴 시간 내 운행 확인: {}, path: {}", isWithin, path);
         return isWithin;
     }
 
