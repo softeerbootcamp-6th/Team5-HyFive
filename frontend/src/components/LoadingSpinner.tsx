@@ -14,7 +14,7 @@ const LoadingSpinner = ({
   color: spinnerColor = color.Maincolor.primary,
 }: LoadingSpinnerProps) => {
   return (
-    <div css={SpinnerContainer(size)}>
+    <div css={SpinnerContainer(size)} data-testid="loading-spinner">
       <div css={Spinner(size, spinnerColor)} />
     </div>
   );
