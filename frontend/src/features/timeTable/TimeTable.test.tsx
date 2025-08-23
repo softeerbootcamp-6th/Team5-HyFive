@@ -71,6 +71,7 @@ describe("TimeTable 컴포넌트", () => {
       timeSlotData: mockTimeSlotAPIData,
       isFetching: false,
       error: null,
+      refetch: vi.fn(),
     });
   });
 
@@ -120,9 +121,10 @@ describe("TimeTable 컴포넌트", () => {
   it("API에서 데이터를 가져오는 중일 때 로딩 스피너가 표시된다.", async () => {
     // API 모킹 - 로딩 상태
     mockUseGetTimeSlot.mockReturnValue({
-      timeSlotData: undefined,
+      timeSlotData: [],
       isFetching: true,
       error: null,
+      refetch: vi.fn(),
     });
 
     renderWithQueryClient(<TimeTable {...testData} />);
