@@ -1,15 +1,8 @@
-import {
-  TableContainer,
-  TableBody,
-  LoadingContainer,
-  TimeTableWrapper,
-} from "../TimeTable.style";
-import type {
-  AvailableTimeSlotType,
-  TimeTableProps,
-} from "@/features/timeTable/TimeTable.type";
-
 import { useEffect, useMemo, useState } from "react";
+
+import { useQueryClient } from "@tanstack/react-query";
+
+// 컴포넌트
 import {
   AvailableTimeSlots,
   TimeTableHeader,
@@ -17,20 +10,38 @@ import {
   TimeCells,
   AvailableTimeSlot,
 } from "./index";
-import { TIME_TABLE_CONFIG } from "@/features/timeTable/TimeTable.constants";
-import { useTimeTableDrag } from "@/features/timeTable/hooks/useTimeTableDrag";
+import ActionButtonGroup from "@/features/timeTable/components/ActionButtonGroup";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import ModalContent from "@/components/ModalContent";
+import Modal from "@/components/Modal";
+
+// 스타일
+import {
+  TableContainer,
+  TableBody,
+  LoadingContainer,
+  TimeTableWrapper,
+} from "../TimeTable.style";
+
+// 타입
+import type {
+  AvailableTimeSlotType,
+  TimeTableProps,
+} from "@/features/timeTable/TimeTable.type";
+import type { TimeSlotAPIResponse } from "@/apis/TimeTableAPI";
+
+// API, 훅
 import {
   timeSlotQueryKey,
   useGetTimeSlot,
   usePostTimeSlot,
-  type TimeSlotAPIResponse,
 } from "@/apis/TimeTableAPI";
-import LoadingSpinner from "@/components/LoadingSpinner";
-import ModalContent from "@/components/ModalContent";
-import Modal from "@/components/Modal";
+import { useTimeTableDrag } from "@/features/timeTable/hooks/useTimeTableDrag";
+import { useTimeTableError } from "@/features/timeTable/hooks/useTimeTableError";
+
+// 상수, 유틸
+import { TIME_TABLE_CONFIG } from "@/features/timeTable/TimeTable.constants";
 import { formatDateToYYMMDD } from "@/features/calender/Calender.util";
-import ActionButtonGroup from "@/features/timeTable/components/ActionButtonGroup";
-import { useQueryClient } from "@tanstack/react-query";
 
 const TimeTable = ({
   selectedCarId,
@@ -41,10 +52,17 @@ const TimeTable = ({
   isEditMode = false,
   onEditModeChange = () => {},
 }: TimeTableProps) => {
-  const { createTimeSlot, error } = usePostTimeSlot();
-
+  // Display 관련 상태
   const [displayWeek, setDisplayWeek] = useState(selectedWeek);
   const [showSlots, setShowSlots] = useState(true);
+
+  // TimeSlot 관련 상태
+  const [timeSlotsDraft, setTimeSlotsDraft] = useState<AvailableTimeSlotType[]>(
+    [],
+  );
+  const [previewSlot, setPreviewSlot] = useState<AvailableTimeSlotType | null>(
+    null,
+  );
 
   const weekKey = useMemo(() => {
     return formatDateToYYMMDD(displayWeek[0]);
@@ -54,28 +72,34 @@ const TimeTable = ({
     return formatDateToYYMMDD(selectedWeek[0]);
   }, [selectedWeek]);
 
+  const queryKey = useMemo(
+    () => timeSlotQueryKey(selectedCarId, nextWeekKey),
+    [selectedCarId, nextWeekKey],
+  );
+
+  const slotsDisabled = Boolean(previewSlot);
+
+  const queryClient = useQueryClient();
+  const { createTimeSlot, error } = usePostTimeSlot();
   const {
     timeSlotData,
     isFetching,
     error: fetchError,
     refetch,
   } = useGetTimeSlot(selectedCarId, nextWeekKey);
-  const queryClient = useQueryClient();
 
-  const queryKey = useMemo(
-    () => timeSlotQueryKey(selectedCarId, nextWeekKey),
-    [selectedCarId, nextWeekKey],
-  );
-  // draft 상태는 편집 모드에서만 사용 (수정/취소/저장을 위한 상태)
-  const [timeSlotsDraft, setTimeSlotsDraft] = useState<AvailableTimeSlotType[]>(
-    [],
-  );
+  // Error 관련 상태
+  const { errorMessage, isErrorModalOpen, handleCloseErrorModal } =
+    useTimeTableError(error, fetchError);
 
-  const [previewSlot, setPreviewSlot] = useState<AvailableTimeSlotType | null>(
-    null,
-  );
-  const [errorMessage, setErrorMessage] = useState<string>("");
-  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const { handleCellMouseDown, handleCellMouseEnter, deleteSlot } =
+    useTimeTableDrag({
+      mode,
+      selectedWeek,
+      availableTimeSlots: timeSlotsDraft,
+      onSlotsUpdate: (slots) => setTimeSlotsDraft(slots),
+      setPreviewSlot: setPreviewSlot,
+    });
 
   // selectedCarId나 selectedWeek이 변경되면 draft 상태 초기화 및 애니메이션 처리
   useEffect(() => {
@@ -98,33 +122,6 @@ const TimeTable = ({
     }
   }, [timeSlotData]);
 
-  // 에러 발생 시 모달 표시
-  useEffect(() => {
-    if (error || fetchError) {
-      setErrorMessage(
-        error?.message ||
-          fetchError?.message ||
-          "시간표 데이터를 불러오는데 실패했습니다.",
-      );
-      setIsErrorModalOpen(true);
-    }
-  }, [error, fetchError]);
-
-  const handleCloseErrorModal = () => {
-    setIsErrorModalOpen(false);
-    setErrorMessage("");
-  };
-
-  const { handleCellMouseDown, handleCellMouseEnter, deleteSlot } =
-    useTimeTableDrag({
-      mode,
-      selectedWeek,
-      availableTimeSlots: timeSlotsDraft,
-      onSlotsUpdate: (slots) => setTimeSlotsDraft(slots),
-      setPreviewSlot: setPreviewSlot,
-    });
-
-  const slotsDisabled = Boolean(previewSlot);
   const handleCancelClick = () => {
     const cachedSlotData =
       queryClient.getQueryData<TimeSlotAPIResponse>(queryKey);
