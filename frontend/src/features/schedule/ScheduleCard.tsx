@@ -1,4 +1,10 @@
-import { CarIcon, DotIcon, LocationIcon, PersonIcon } from "@/assets/icons";
+import {
+  ArrowRightIcon,
+  CarIcon,
+  DotIcon,
+  LocationIcon,
+  PersonIcon,
+} from "@/assets/icons";
 import type { DrivingDataType } from "@/types/drivingType";
 import type { ScheduleType } from "@/features/schedule/Schedule.types";
 import {
@@ -51,7 +57,9 @@ const ScheduleCard = ({
       <div css={ContentWrapper}>
         <div css={Content}>
           <LocationIcon fill={grayColor} />
-          <p>현재 위치: {data.routeStartLocation}</p>
+          <p>{data.routeStartLocation}</p>
+          <ArrowRightIcon fill={grayColor} />
+          <p>{data.routeEndLocation}</p>
         </div>
         <div css={Content}>
           <CarIcon fill={grayColor} />

@@ -71,6 +71,7 @@ export default ScheduleListSection;
 
 const ScheduleListSectionContainer = css`
   min-width: 485px;
+  max-width: 485px;
   height: calc(100vh - 72px);
   display: flex;
   flex-direction: column;
