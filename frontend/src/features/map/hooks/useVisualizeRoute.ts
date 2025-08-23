@@ -14,9 +14,10 @@ const useVisualizeRoute = ({ map, polylinePath }: UseVisualizeRouteProps) => {
   const highlightPolylineRef = useRef<PolylineInstance | null>(null);
 
   useEffect(() => {
-    console.log(polylinePath);
     if (!kakaoMaps || !map || !polylinePath || polylinePath.length === 0)
       return;
+    if (basePolylineRef.current) basePolylineRef.current = null;
+    if (highlightPolylineRef.current) highlightPolylineRef.current = null;
 
     const basePolyline = new kakaoMaps.Polyline({
       path: [],
