@@ -69,6 +69,7 @@ export const TableBody = css`
   flex: 1;
   overflow-y: auto;
   display: grid;
+  position: relative;
   grid-template-columns: 129px repeat(7, 1fr);
   grid-template-rows: repeat(11, 1fr);
 `;
@@ -138,3 +139,12 @@ export const getTimeSlotGridStyle = (
     z-index: 10;
   `;
 };
+
+export const LoadingContainer = css`
+  display: grid;
+  grid-column: 5;
+  grid-row: 6;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+`;

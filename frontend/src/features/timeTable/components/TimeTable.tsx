@@ -1,11 +1,14 @@
-import { TableContainer, TableBody } from "../TimeTable.style";
+import {
+  TableContainer,
+  TableBody,
+  LoadingContainer,
+} from "../TimeTable.style";
 import type {
   AvailableTimeSlotType,
   TimeTableProps,
 } from "@/features/timeTable/TimeTable.type";
 
-import { generateAvailableTimeSlots } from "@/mocks/timeBlockMocks";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   AvailableTimeSlots,
   TimeTableHeader,
@@ -14,42 +17,83 @@ import {
   AvailableTimeSlot,
 } from "./index";
 import { TIME_TABLE_CONFIG } from "@/features/timeTable/TimeTable.constants";
-import { isAllSlotsInSelectedWeek } from "@/features/timeTable/utils/TimeTable.util";
 import { useTimeTableDrag } from "@/features/timeTable/hooks/useTimeTableDrag";
+import { useGetTimeSlot } from "@/apis/TimeTableAPI";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import ModalContent from "@/components/ModalContent";
+import Modal from "@/components/Modal";
+import { formatDateToYYMMDD } from "@/features/calender/Calender.util";
 
-const mockWeek: Date[] = Array.from({ length: 7 }, (_, i) => {
-  return new Date(2025, 7, 10 + i);
-});
-const mockTimeSlot: AvailableTimeSlotType[] =
-  generateAvailableTimeSlots(mockWeek);
+const TimeTable = ({ selectedCarId, selectedWeek, mode }: TimeTableProps) => {
+  const [displayWeek, setDisplayWeek] = useState(selectedWeek);
+  const [showSlots, setShowSlots] = useState(true);
 
-const TimeTable = ({
-  selectedCarId: _selectedCarId,
-  selectedWeek,
-  mode,
-}: TimeTableProps) => {
-  const [availableTimeSlots, setAvailableTimeSlots] =
-    useState<AvailableTimeSlotType[]>(mockTimeSlot);
+  const weekKey = useMemo(() => {
+    return formatDateToYYMMDD(displayWeek[0]);
+  }, [displayWeek]);
+
+  const nextWeekKey = useMemo(() => {
+    return formatDateToYYMMDD(selectedWeek[0]);
+  }, [selectedWeek]);
+
+  const { timeSlotData, isFetching, error } = useGetTimeSlot(
+    selectedCarId,
+    nextWeekKey,
+  );
+
+  // draft 상태는 편집 모드에서만 사용 (수정/취소/저장을 위한 상태)
+  const [timeSlotsDraft, setTimeSlotsDraft] = useState<AvailableTimeSlotType[]>(
+    [],
+  );
 
   const [previewSlot, setPreviewSlot] = useState<AvailableTimeSlotType | null>(
     null,
   );
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
 
+  // selectedCarId나 selectedWeek이 변경되면 draft 상태 초기화 및 애니메이션 처리
   useEffect(() => {
-    const TimeSlot = generateAvailableTimeSlots(selectedWeek);
-    setAvailableTimeSlots(TimeSlot);
-  }, [selectedWeek]);
-  const canRenderSlots = isAllSlotsInSelectedWeek(
-    availableTimeSlots,
-    selectedWeek,
-  );
+    setShowSlots(false);
+    setTimeSlotsDraft([]);
+    setPreviewSlot(null);
+
+    const rafId = window.requestAnimationFrame(() => {
+      setDisplayWeek(selectedWeek);
+    });
+    return () => window.cancelAnimationFrame(rafId);
+  }, [selectedCarId, selectedWeek]);
+
+  // 새로운 데이터가 로드되면 draft 상태 초기화
+  useEffect(() => {
+    if (timeSlotData) {
+      setTimeSlotsDraft(timeSlotData);
+      setPreviewSlot(null);
+      setShowSlots(true);
+    }
+  }, [timeSlotData]);
+
+  // 에러 발생 시 모달 표시
+  useEffect(() => {
+    if (error) {
+      setErrorMessage(
+        error.message || "시간표 데이터를 불러오는데 실패했습니다.",
+      );
+      setIsErrorModalOpen(true);
+    }
+  }, [error]);
+
+  const handleCloseErrorModal = () => {
+    setIsErrorModalOpen(false);
+    setErrorMessage("");
+  };
 
   const { handleCellMouseDown, handleCellMouseEnter, deleteSlot } =
     useTimeTableDrag({
       mode,
       selectedWeek,
-      availableTimeSlots,
-      onSlotsUpdate: (slots) => setAvailableTimeSlots(slots),
+      availableTimeSlots: timeSlotsDraft,
+      onSlotsUpdate: (slots) => setTimeSlotsDraft(slots),
       setPreviewSlot: setPreviewSlot,
     });
 
@@ -58,9 +102,9 @@ const TimeTable = ({
   return (
     <div css={TableContainer}>
       {/* 헤더 - 최상단 날짜 */}
-      <TimeTableHeader selectedWeek={selectedWeek} />
+      <TimeTableHeader selectedWeek={displayWeek} />
 
-      <div css={TableBody}>
+      <div css={TableBody} key={weekKey}>
         {/* 시간 레이블들 - 좌측 9:00 ~ 19:00 셀 */}
         <TimeLabels />
 
@@ -68,7 +112,7 @@ const TimeTable = ({
         <TimeCells
           mode={mode}
           totalHours={TIME_TABLE_CONFIG.TOTAL_HOURS}
-          selectedWeek={selectedWeek}
+          selectedWeek={displayWeek}
           handleCellMouseDown={
             mode === "edit" ? handleCellMouseDown : undefined
           }
@@ -78,10 +122,11 @@ const TimeTable = ({
         />
 
         {/* 유휴시간 블록들 - TimeCell 위 블록*/}
-        {canRenderSlots && (
+        {!isFetching && showSlots && (
           <AvailableTimeSlots
-            availableTimeData={availableTimeSlots}
-            selectedWeek={selectedWeek}
+            key={`slots-${weekKey}`}
+            availableTimeData={timeSlotsDraft}
+            selectedWeek={displayWeek}
             mode={mode}
             onDelete={deleteSlot}
             disabled={slotsDisabled}
@@ -92,11 +137,27 @@ const TimeTable = ({
           <AvailableTimeSlot
             key={`preview-${previewSlot.rentalDate}-${previewSlot.rentalStartTime}-${previewSlot.rentalEndTime}`}
             slot={previewSlot}
-            selectedWeek={selectedWeek}
+            selectedWeek={displayWeek}
             variant="preview"
             mode={mode}
             disabled
           />
+        )}
+
+        {isFetching && (
+          <div css={LoadingContainer}>
+            <LoadingSpinner size="large" />
+          </div>
+        )}
+
+        {error && (
+          <Modal isOpen={isErrorModalOpen} onClose={handleCloseErrorModal}>
+            <ModalContent
+              type="alert"
+              content={errorMessage}
+              onClose={handleCloseErrorModal}
+            />
+          </Modal>
         )}
       </div>
     </div>
