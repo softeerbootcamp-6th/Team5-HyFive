@@ -1,11 +1,12 @@
 package hyfive.gachita.dispatch;
 
+import hyfive.gachita.client.kakao.KakaoNaviService;
 import hyfive.gachita.dispatch.dto.*;
 import hyfive.gachita.dispatch.excepion.DispatchException;
+import hyfive.gachita.dispatch.module.checker.FinalNewPathChecker;
 import hyfive.gachita.dispatch.module.condition.BoundingBoxCondition;
 import hyfive.gachita.dispatch.module.condition.RadiusCondition;
 import hyfive.gachita.dispatch.module.filter.BoundingBoxFilter;
-import hyfive.gachita.dispatch.module.checker.FinalNewPathChecker;
 import hyfive.gachita.dispatch.module.filter.HaversineFilter;
 import hyfive.gachita.dispatch.module.provider.CenterListProvider;
 import hyfive.gachita.dispatch.module.provider.IdleCarListProvider;
@@ -16,7 +17,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -28,6 +30,7 @@ public class NewPathDispatchFlow {
     private final BoundingBoxFilter boundingBoxFilter;
     private final HaversineFilter haversineFilter;
     private final FinalNewPathChecker finalNewPathChecker;
+    private final KakaoNaviService kakaoNaviService;
 
     private final static int RADIUS_METERS = 3000;
 
@@ -64,11 +67,14 @@ public class NewPathDispatchFlow {
             throw new DispatchException("예약 조건에 맞는 유휴 차량이 없습니다.");
         }
 
+        Map<FilteredCenterDto, List<CarScheduleDto>> scheduleListByCenter = filteredScheduleList.stream()
+                        .collect(Collectors.groupingBy(CarScheduleDto::centerDto));
+
         log.info("--- STEP 3: 최적 경로 탐색 ---");
-        AtomicInteger apiCallCounter = new AtomicInteger(0);
-        // TODO: 동일한 센터에 대한 유휴시간인 경우 API 호출을 최소화하도록 구현 필요
-        FinalNewPathDto bestPath = routeInfoProvider.getAll(filteredScheduleList, newBookDto).stream()
-                .peek(p -> apiCallCounter.incrementAndGet())
+        List<FinalNewPathDto> allPaths = routeInfoProvider.getAll(scheduleListByCenter, newBookDto);
+        log.info("Kakao API 호출 시뮬레이션 총 횟수: {} 회", routeInfoProvider.getApiCallCount());
+
+        FinalNewPathDto bestPath = allPaths.stream()
                 .filter(finalNewPathChecker::isFirstPathDurationExceed)
                 .filter(finalNewPathChecker::isScheduleWithinRentalWindow)
                 .min(Comparator
@@ -81,7 +87,6 @@ public class NewPathDispatchFlow {
                         -> new DispatchException("운행 시간이 한시간 이상이거나, 예약 시간 내에 운행이 가능한 차량이 없습니다."));
 
         log.info("최종 선택된 최적 경로 -> Car ID: {}, 소요시간: {}초, 거리: {}m", bestPath.car().getId(), bestPath.totalDuration(), bestPath.totalDistance());
-        log.info("Kakao API 호출 시뮬레이션 총 횟수: {} 회", apiCallCounter.get());
         log.info("========= [NewPathDispatchFlow] 신규 경로 배차 로직 종료 =========");
         return bestPath;
     }
