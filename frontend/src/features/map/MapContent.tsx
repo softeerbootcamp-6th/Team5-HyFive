@@ -35,7 +35,7 @@ const MapContent = ({ id }: { id: number }) => {
   const markerPathLatLng = safeMarkerPath.flatMap((path) => path.point);
   const defaultCenter = markerPathLatLng.length
     ? getRouteMidPoint(markerPathLatLng)
-    : { lat: 37.5665, lng: 126.978 };
+    : { lat: 37.674088, lng: 127.070157 };
 
   // Map 초기화
   const { map, handleInitMidPoint } = useInitializeMap({
