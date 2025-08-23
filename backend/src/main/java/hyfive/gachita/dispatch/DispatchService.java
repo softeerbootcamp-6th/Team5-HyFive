@@ -31,13 +31,16 @@ public class DispatchService {
     @EventListener(BookCompletedEvent.class)
     public void execute(BookCompletedEvent bookCompletedEvent) {
         Book newBook = bookCompletedEvent.book();
-        log.info("예약 배차 시작 {}", newBook);
+        log.info("========= 예약 배차 시작 =========");
+        log.info("예약 정보: {}", newBook);
+
+        long start = System.currentTimeMillis();
+
         BookStatus bookStatus = BookStatus.NEW;
         try {
             // 1. 예약 추가 정보 로드
             NewBookDto newBookDto = drivingTimeEvaluation.evaluate(newBook);
 
-            // TODO : FinalNewPathDto, FinalOldPathDto 를 추상화하여 처리 필요
             // 2. DispatchFlowSelector 실행
             DispatchResult dispatchResult = dispatchFlowSelector.execute(newBookDto);
 
@@ -58,6 +61,9 @@ public class DispatchService {
         } finally {
             // BookStatus 변환 - 성공, 실패
             bookService.updateBookStatus(newBook.getId(), bookStatus);
+
+            long end = System.currentTimeMillis(); // 종료 시간 기록
+            log.info("예약 배차 종료 (소요 시간: {} ms)", (end - start));
         }
     }
 }

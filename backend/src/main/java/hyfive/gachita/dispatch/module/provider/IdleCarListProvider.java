@@ -6,12 +6,14 @@ import hyfive.gachita.dispatch.dto.NewBookDto;
 import hyfive.gachita.dispatch.dto.CarScheduleDto;
 import hyfive.gachita.dispatch.module.condition.CenterCondition;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class IdleCarListProvider {
     private final CenterRepository centerRepository;
 
@@ -28,6 +30,9 @@ public class IdleCarListProvider {
                 .walker(newBookDto.walker())
                 .build();
 
-        return centerRepository.searchCarListWithCenter(condition);
+        log.info("유휴 차량 조회 시작. 조건: {}", condition);
+        List<CarScheduleDto> carScheduleList = centerRepository.searchCarListWithCenter(condition);
+        log.info("유휴 차량 조회 완료. 조회된 차량: {}개", carScheduleList.size());
+        return carScheduleList;
     }
 }
