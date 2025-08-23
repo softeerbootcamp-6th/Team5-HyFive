@@ -1,4 +1,7 @@
-import type { ScheduleAPIResposne } from "@/features/schedule/Schedule.types";
+import type {
+  PassengerAPIResponse,
+  ScheduleAPIResposne,
+} from "@/features/schedule/Schedule.types";
 import { APIMatcher } from "@/utils/APIMatcher";
 import { clientInstance } from "@/utils/AxiosInstance";
 import TabMatcher from "@/utils/TabMatcher";
@@ -20,6 +23,27 @@ export const useGetEntireSchedule = (activeTab: string) => {
   );
   return {
     data: entireScheduleData,
+    isError,
+    error,
+    isFetching,
+    refetch,
+  };
+};
+
+export const useGetPassenger = (activeId: number) => {
+  const { data, isError, error, isFetching, refetch } =
+    useQuery<PassengerAPIResponse>({
+      queryKey: ["passenger", activeId],
+      queryFn: () => clientInstance.get(`/path/${activeId}/passenger`),
+      retry: 1,
+    });
+
+  const passengerData = data?.data?.map((partData) =>
+    APIMatcher.matchPassengerAPI(partData),
+  );
+
+  return {
+    data: passengerData,
     isError,
     error,
     isFetching,

@@ -18,10 +18,16 @@ const ScheduleDetailSection = ({
 }: ScheduleDetailSectionProps) => {
   return (
     <div css={ScheduleDetailSectionContainer}>
-      <MapHeader
-        scheduleType={scheduleType}
-        selectedSchedule={selectedSchedule}
-      />
+      <ErrorBoundary
+        fallbackRender={({ error, resetErrorBoundary }) => (
+          <FallbackUI error={error} handleRetry={resetErrorBoundary} />
+        )}
+      >
+        <MapHeader
+          scheduleType={scheduleType}
+          selectedSchedule={selectedSchedule}
+        />
+      </ErrorBoundary>
       <ErrorBoundary
         fallbackRender={({ error, resetErrorBoundary }) => (
           <FallbackUI error={error} handleRetry={resetErrorBoundary} />

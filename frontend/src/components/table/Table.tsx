@@ -26,7 +26,11 @@ const Table = ({ rows }: TableProps) => {
           <tr key={idx} css={TableContentRow}>
             {keys.map((key) => (
               <td key={key} css={TableContentElement}>
-                {row[key]}
+                {key === "isExistWalkingDevice"
+                  ? row[key]
+                    ? "o"
+                    : "x"
+                  : row[key]}
               </td>
             ))}
           </tr>

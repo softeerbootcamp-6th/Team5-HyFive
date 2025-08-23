@@ -28,7 +28,7 @@ export interface ScheduleAPIResposne {
   };
 }
 
-export type ScheduleAPIData = {
+export interface ScheduleAPIData {
   pathId: number;
   carNumber: string;
   startTime: string;
@@ -38,4 +38,27 @@ export type ScheduleAPIData = {
   centerName: string;
   driveStatus: ScheduleStatus;
   userCount: number;
-};
+}
+
+export interface PassengerData {
+  name: string;
+  phone: string;
+  isExistWalkingDevice: boolean;
+  boardingTime: string;
+  getOffTime: string;
+}
+
+export interface PassengerAPIResponse {
+  isSuccess: boolean;
+  code: number;
+  message: string;
+  data: PassengerAPIData[];
+}
+
+export interface PassengerAPIData {
+  name: string;
+  phoneNumber: string;
+  walker: boolean;
+  onTime: string;
+  offTime: string;
+}

@@ -1,3 +1,4 @@
+import { useGetPassenger } from "@/apis/ScheduleAPI";
 import {
   ArrowRightIcon,
   CompletedIcon,
@@ -25,6 +26,7 @@ const MapHeader = ({ scheduleType, selectedSchedule }: MapHeaderProps) => {
     completed: <CompletedIcon />,
   };
   const parsedScheduleType = TabMatcher.matchScheduleTypeENGToKR(scheduleType);
+  const { data } = useGetPassenger(selectedSchedule.routeId as number);
   return (
     <div css={MapHeaderContainer}>
       <p css={RouteIdText}>경로 #{selectedSchedule.routeId}</p>
@@ -40,7 +42,7 @@ const MapHeader = ({ scheduleType, selectedSchedule }: MapHeaderProps) => {
             </div>
           </div>
         </div>
-        <PassengerDropDown />
+        {data && <PassengerDropDown data={data} />}
       </div>
     </div>
   );
