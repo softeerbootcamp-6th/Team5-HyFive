@@ -1,0 +1,28 @@
+import type { ScheduleAPIResposne } from "@/features/schedule/Schedule.types";
+import { APIMatcher } from "@/utils/APIMatcher";
+import { clientInstance } from "@/utils/AxiosInstance";
+import TabMatcher from "@/utils/TabMatcher";
+import { useQuery } from "@tanstack/react-query";
+
+export const useGetEntireSchedule = (activeTab: string) => {
+  const engScheduleStatus = TabMatcher.matchScheduleTypeKRToENG(activeTab);
+  const scheduleStatus =
+    TabMatcher.matchScheduleTypeClientToServer(engScheduleStatus);
+  const { data, isError, error, isFetching, refetch } =
+    useQuery<ScheduleAPIResposne>({
+      queryKey: ["schedule", scheduleStatus],
+      queryFn: () =>
+        clientInstance.get(`/path/scroll?status=${scheduleStatus}&size=100`),
+      retry: 1,
+    });
+  const entireScheduleData = data?.data?.items?.map((partData) =>
+    APIMatcher.matchScheduleAPI(partData),
+  );
+  return {
+    data: entireScheduleData,
+    isError,
+    error,
+    isFetching,
+    refetch,
+  };
+};
