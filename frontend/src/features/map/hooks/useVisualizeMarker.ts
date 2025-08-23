@@ -5,8 +5,8 @@ import {
   MarkerOutIcon,
   MarkerStartIcon,
 } from "@/assets/icons";
-import getRouteMidPoint from "@/features/map/getRouteMidPoint.util";
-import createInfoWindowHTML from "@/features/map/InfoWindow";
+import getRouteMidPoint from "@/features/map/utils/getRouteMidPoint.util";
+import createInfoWindowHTML from "@/features/map/components/InfoWindow";
 import type {
   HighlightType,
   LatLng,

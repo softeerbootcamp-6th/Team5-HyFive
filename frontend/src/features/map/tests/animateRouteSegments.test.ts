@@ -1,5 +1,5 @@
-import animateRouteSegments from "@/features/map/animateRouteSegments.util";
 import type { LatLng } from "@/features/map/Map.types";
+import animateRouteSegments from "@/features/map/utils/animateRouteSegments.util";
 
 const pathMock = [
   [

@@ -1,4 +1,4 @@
-import animateRouteSegments from "@/features/map/animateRouteSegments.util";
+import animateRouteSegments from "@/features/map/utils/animateRouteSegments.util";
 import type { LatLng, PolylinePath } from "@/features/map/Map.types";
 import { theme } from "@/styles/themes.style";
 import { useEffect, useRef } from "react";

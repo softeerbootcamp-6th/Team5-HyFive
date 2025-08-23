@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
 import { AddIcon, RemoveIcon } from "@/assets/icons";
-import { MAX_ZOOM_LEVEL } from "@/features/map/useZoomLevel";
+import { MAX_ZOOM_LEVEL } from "@/features/map/hooks/useZoomLevel";
 import usePressDetection from "@/hooks/usePressDetection";
 import { useState } from "react";
 const { color } = theme;

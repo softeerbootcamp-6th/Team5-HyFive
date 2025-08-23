@@ -13,11 +13,11 @@ const MidPointButton = ({ onClick }: { onClick: () => void }) => {
   };
 
   return (
-    <div css={MidPointButtonContainer} onClick={handleMidPoint}>
-      <RefreashIcon
-        css={isClickActive ? rotating : undefined}
-        fill={theme.color.GrayScale.gray5}
-      />
+    <div
+      css={[MidPointButtonContainer, isClickActive && rotating()]}
+      onClick={handleMidPoint}
+    >
+      <RefreashIcon fill={theme.color.GrayScale.gray5} />
     </div>
   );
 };
