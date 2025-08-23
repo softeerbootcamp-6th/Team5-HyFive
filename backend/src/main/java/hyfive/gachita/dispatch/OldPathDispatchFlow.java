@@ -21,8 +21,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 @RequiredArgsConstructor
 public class OldPathDispatchFlow {
 
-    // TODO : 1) 후보가 0개일 때 다음 로직 가지 않고 바로 배차 중단
-
     private final SlotCandidateProvider slotCandidateProvider;
     private final InsertNodeCalculator insertNodeCalculator;
     private final OldPathListProvider oldPathListProvider;
@@ -44,6 +42,10 @@ public class OldPathDispatchFlow {
             log.debug(" -> 유효 경로 후보 Path IDs: {}", validPathIds);
         }
 
+        if (pathCandidates.isEmpty()) {
+            throw new DispatchException("배차 가능한 경로가 없습니다.");
+        }
+
         // 2. 각 경로 후보에 대해 신규 예약 노드를 삽입하는 모든 경우의 수 탐색
         for (OldPathDto pathCandidate : pathCandidates) {
             Long pathId = pathCandidate.pathId();
@@ -61,6 +63,9 @@ public class OldPathDispatchFlow {
             log.debug(" -> 시작점 삽입 인덱스 후보: {}", startSlotCandidates);
             log.debug(" -> 도착점 삽입 인덱스 후보: {}", endSlotCandidates);
 
+            if (startSlotCandidates.isEmpty() || endSlotCandidates.isEmpty()) {
+                throw new DispatchException("노드를 삽입할 슬롯 후보가 없습니다.");
+            }
 
             // 2-2. 가능한 모든 삽입 위치 조합에 대해 경로 정보 업데이트 (완전 탐색)
             List<FinalOldPathDto> singlePathCandidates = new ArrayList<>();
@@ -116,8 +121,11 @@ public class OldPathDispatchFlow {
             );
         }
 
+        if (finalPathCandidates.isEmpty()) {
+            throw new DispatchException("최종 경로 후보가 없습니다.");
+        }
+
         // 3. 전체 경로 후보들 중 최종 Best Path 1개 선출
-        // TODO : 0개일 때 valid 넣어주기
         FinalOldPathDto bestPath = finalPathCandidates.stream()
                 .min(Comparator
                         .comparingInt(FinalOldPathDto::totalDuration)
