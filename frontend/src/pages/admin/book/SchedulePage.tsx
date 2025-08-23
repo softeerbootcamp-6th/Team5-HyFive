@@ -29,12 +29,10 @@ const SchedulePage = () => {
         selectedSchedule={selectedSchedule}
         setSelectedSchedule={setSelectedSchedule}
       />
-      {selectedSchedule && (
-        <ScheduleDetailSection
-          scheduleType={parsedActiveTab}
-          selectedSchedule={selectedSchedule}
-        />
-      )}
+      <ScheduleDetailSection
+        scheduleType={parsedActiveTab}
+        selectedSchedule={selectedSchedule}
+      />
     </div>
   );
 };

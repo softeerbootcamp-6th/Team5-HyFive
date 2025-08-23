@@ -26,6 +26,7 @@ const MapHeader = ({ scheduleType, selectedSchedule }: MapHeaderProps) => {
     completed: <CompletedIcon />,
   };
   const parsedScheduleType = TabMatcher.matchScheduleTypeENGToKR(scheduleType);
+
   const { data } = useGetPassenger(selectedSchedule.routeId as number);
   return (
     <div css={MapHeaderContainer}>

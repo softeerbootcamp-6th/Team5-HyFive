@@ -1,3 +1,4 @@
+import EmptyUI from "@/components/EmptyUI";
 import FallbackUI from "@/components/FallbackUI";
 import MapContent from "@/features/map/MapContent";
 import MapHeader from "@/features/schedule/MapHeader";
@@ -10,12 +11,15 @@ import { ErrorBoundary } from "react-error-boundary";
 
 interface ScheduleDetailSectionProps {
   scheduleType: ScheduleType;
-  selectedSchedule: Partial<ScheduleData>;
+  selectedSchedule: Partial<ScheduleData> | null;
 }
 const ScheduleDetailSection = ({
   scheduleType,
   selectedSchedule,
 }: ScheduleDetailSectionProps) => {
+  if (!selectedSchedule) {
+    return <EmptyUI type="dynamic" message="지도에 나타낼 정보가 없습니다" />;
+  }
   return (
     <div css={ScheduleDetailSectionContainer}>
       <ErrorBoundary
