@@ -1,6 +1,7 @@
 package hyfive.gachita.dispatch;
 
 import hyfive.gachita.dispatch.dto.*;
+import hyfive.gachita.dispatch.excepion.DispatchErrorCode;
 import hyfive.gachita.dispatch.excepion.DispatchException;
 import hyfive.gachita.dispatch.module.calculator.InsertNodeCalculator;
 import hyfive.gachita.dispatch.module.condition.PathCondition;
@@ -43,7 +44,7 @@ public class OldPathDispatchFlow {
         }
 
         if (pathCandidates.isEmpty()) {
-            throw new DispatchException("배차 가능한 경로가 없습니다.");
+            throw new DispatchException(DispatchErrorCode.CANDIDATE_EMPTY, "배차 가능한 경로가 없습니다.");
         }
 
         // 2. 각 경로 후보에 대해 신규 예약 노드를 삽입하는 모든 경우의 수 탐색
@@ -64,7 +65,7 @@ public class OldPathDispatchFlow {
             log.debug(" -> 도착점 삽입 인덱스 후보: {}", endSlotCandidates);
 
             if (startSlotCandidates.isEmpty() || endSlotCandidates.isEmpty()) {
-                throw new DispatchException("노드를 삽입할 슬롯 후보가 없습니다.");
+                throw new DispatchException(DispatchErrorCode.CANDIDATE_EMPTY, "노드를 삽입할 슬롯 후보가 없습니다.");
             }
 
             // 2-2. 가능한 모든 삽입 위치 조합에 대해 경로 정보 업데이트 (완전 탐색)
@@ -122,7 +123,7 @@ public class OldPathDispatchFlow {
         }
 
         if (finalPathCandidates.isEmpty()) {
-            throw new DispatchException("최종 경로 후보가 없습니다.");
+            throw new DispatchException(DispatchErrorCode.CANDIDATE_EMPTY, "최종 경로 후보가 없습니다.");
         }
 
         // 3. 전체 경로 후보들 중 최종 Best Path 1개 선출
@@ -131,7 +132,7 @@ public class OldPathDispatchFlow {
                         .comparingInt(FinalOldPathDto::totalDuration)
                         .thenComparingInt(FinalOldPathDto::totalDistance)
                 )
-                .orElseThrow(() -> new DispatchException("최종 경로 후보에서 최종 경로를 선정하던 중 오류가 발생했습니다."));
+                .orElseThrow(() -> new DispatchException(DispatchErrorCode.CANDIDATE_EMPTY, "최종 경로 후보에서 최종 경로를 선정하던 중 오류가 발생했습니다."));
 
         log.info("최종 선택된 최적 경로 -> Path ID: {}, Car ID: {}, 소요시간: {}초, 거리: {}m", bestPath.pathId(), bestPath.carId(), bestPath.totalDuration(), bestPath.totalDistance());
         log.info("Kakao API 호출 시뮬레이션 총 횟수: {} 회", apiCallCounter.get());

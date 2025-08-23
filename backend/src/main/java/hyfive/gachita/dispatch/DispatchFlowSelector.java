@@ -3,6 +3,8 @@ package hyfive.gachita.dispatch;
 import hyfive.gachita.dispatch.dto.DispatchResult;
 import hyfive.gachita.dispatch.dto.FilteredPathDto;
 import hyfive.gachita.dispatch.dto.NewBookDto;
+import hyfive.gachita.dispatch.excepion.DispatchErrorCode;
+import hyfive.gachita.dispatch.excepion.DispatchException;
 import hyfive.gachita.dispatch.module.condition.BoundingBoxCondition;
 import hyfive.gachita.dispatch.module.condition.RadiusCondition;
 import hyfive.gachita.dispatch.module.filter.BoundingBoxFilter;
@@ -72,12 +74,20 @@ public class DispatchFlowSelector {
         log.debug(" -> 최종 후보 Path IDs: {}", candidatePathIds);
         log.info("========= 배차 필터링 종료 =========");
 
-        if (candidatePathIds.isEmpty()) {
-            log.info("신규 경로 배차 실행");
-            return newPathDispatchFlow.execute(newBookDto);
-        } else {
-            log.info("기존 경로 배차 실행");
-            return oldPathDispatchFlow.execute(new ArrayList<>(candidatePathIds), newBookDto);
+        try {
+            if (candidatePathIds.isEmpty()) {
+                log.info("신규 경로 배차 실행");
+                return newPathDispatchFlow.execute(newBookDto);
+            } else {
+                log.info("기존 경로 배차 실행");
+                return oldPathDispatchFlow.execute(new ArrayList<>(candidatePathIds), newBookDto);
+            }
+        } catch (DispatchException e) {
+            if (e.getErrorCode() == DispatchErrorCode.CANDIDATE_EMPTY) {
+                log.info("기존 경로 배차 후보 0개 → 신규 경로 배차 실행 (예외 기반)");
+                return newPathDispatchFlow.execute(newBookDto);
+            }
+            throw e; // 다른 코드(8000 등)는 그대로 전파
         }
     }
 }
