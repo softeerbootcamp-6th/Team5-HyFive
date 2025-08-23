@@ -1,4 +1,5 @@
 import type {
+  NodeAPIReponse,
   PassengerAPIResponse,
   ScheduleAPIResposne,
 } from "@/features/schedule/Schedule.types";
@@ -44,6 +45,27 @@ export const useGetPassenger = (activeId: number) => {
 
   return {
     data: passengerData,
+    isError,
+    error,
+    isFetching,
+    refetch,
+  };
+};
+
+export const useGetNode = (activeId: number) => {
+  const { data, isError, error, isFetching, refetch } =
+    useQuery<NodeAPIReponse>({
+      queryKey: ["node", activeId],
+      queryFn: () => clientInstance.get(`/path/${activeId}/nodes`),
+      retry: 1,
+    });
+
+  const { polyline, marker, highlight } = data?.data ?? {};
+
+  return {
+    polyline,
+    marker,
+    highlight,
     isError,
     error,
     isFetching,

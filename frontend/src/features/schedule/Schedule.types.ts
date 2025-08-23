@@ -1,7 +1,14 @@
+import type {
+  HighlightType,
+  MarkerPath,
+  PolylinePath,
+} from "@/features/map/Map.types";
+
 export type ScheduleType = "waiting" | "inProgress" | "completed";
 
 export type ScheduleStatus = "WAITING" | "RUNNING" | "FINISHED";
 
+// 전체 운행 경로 데이터
 export interface ScheduleData {
   routeId: number;
   totalUserCount: number;
@@ -40,6 +47,7 @@ export interface ScheduleAPIData {
   userCount: number;
 }
 
+// 개별 운행 경로 탑승자 데이터
 export interface PassengerData {
   name: string;
   phone: string;
@@ -61,4 +69,18 @@ export interface PassengerAPIData {
   walker: boolean;
   onTime: string;
   offTime: string;
+}
+
+// 개별 운행 경로 데이터
+export interface NodeData {
+  polyline: PolylinePath[];
+  marker: MarkerPath[];
+  highlight: HighlightType[];
+}
+
+export interface NodeAPIReponse {
+  isSuccess: boolean;
+  code: number;
+  message: string;
+  data: NodeData;
 }
