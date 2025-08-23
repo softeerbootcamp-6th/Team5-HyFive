@@ -23,7 +23,7 @@ const createInstance = () => {
     },
     (error: AxiosError) => {
       throw new CustomError({
-        message: "통신에 문제가 발생했습니다! :(",
+        message: "통신에 문제가 발생했습니다",
         status: error.status,
       });
     },

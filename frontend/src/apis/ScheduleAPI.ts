@@ -16,7 +16,7 @@ export const useGetEntireSchedule = (activeTab: string) => {
     useQuery<ScheduleAPIResposne>({
       queryKey: ["schedule", scheduleStatus],
       queryFn: () =>
-        clientInstance.get(`/path/scroll?status=${scheduleStatus}&size=100`),
+        clientInstance.get(`/path/sroll?status=${scheduleStatus}&size=100`),
       retry: 1,
     });
   const entireScheduleData = data?.data?.items?.map((partData) =>
