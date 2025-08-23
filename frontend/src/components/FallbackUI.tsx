@@ -19,7 +19,7 @@ const FallbackUI = ({
         <p>{error.message}</p>
       </div>
       <div css={ButtonWrapper} onClick={handleRetry}>
-        <Button label="재시도" />
+        <Button label="재시도" size="xsmall" />
       </div>
     </div>
   );
@@ -51,5 +51,5 @@ const TextWrapper = css`
 `;
 
 const ButtonWrapper = css`
-  width: 20%;
+  width: 40%;
 `;

@@ -6,7 +6,7 @@ const { color, typography } = theme;
 
 type Color = "gray" | "orange";
 type textColor = "black" | "white";
-type Size = "small" | "big";
+type Size = "xsmall" | "small" | "big";
 interface ButtonProps {
   label: string;
   bgColor?: Color;
@@ -72,11 +72,13 @@ const ButtonContainer = (
     ? BASE_COLOR_MAP[bgColor].press
     : BASE_COLOR_MAP[bgColor].default};
   width: 100%;
-  height: ${size === "small" ? "52px" : "68px"};
+  height: ${size === "xsmall" ? "48px" : size === "small" ? "52px" : "68px"};
   padding: ${size === "small" ? "20px 24px" : "16px 29px"};
-  font: ${size === "small"
-    ? typography.Label.l4_semi
-    : typography.Body.b2_semi};
+  font: ${size === "xsmall"
+    ? typography.Heading.h5_semi
+    : size === "small"
+      ? typography.Label.l4_semi
+      : typography.Body.b2_semi};
   color: ${textColor === "white"
     ? color.GrayScale.white
     : color.GrayScale.black};

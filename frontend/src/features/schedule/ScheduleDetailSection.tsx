@@ -32,13 +32,13 @@ const ScheduleDetailSection = ({
           selectedSchedule={selectedSchedule}
         />
       </ErrorBoundary>
-      {/* <ErrorBoundary
+      <ErrorBoundary
         fallbackRender={({ error, resetErrorBoundary }) => (
           <FallbackUI error={error} handleRetry={resetErrorBoundary} />
         )}
-      > */}
-      <MapContent id={selectedSchedule.routeId} />
-      {/* </ErrorBoundary> */}
+      >
+        <MapContent id={selectedSchedule.routeId} />
+      </ErrorBoundary>
     </div>
   );
 };
