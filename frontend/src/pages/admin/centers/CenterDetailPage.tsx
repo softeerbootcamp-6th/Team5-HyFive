@@ -34,16 +34,16 @@ const CenterDetailPage = () => {
     centerInfoData && mapBackendCenterInfoToCenterOverview(centerInfoData);
   const mappedCarList = carList && mapBackendCarListToCarList(carList);
 
-  // 선택된 차량 초기화를 위함
-  useEffect(() => {
-    if (mappedCarList && mappedCarList.length > 0) {
-      setSelectedCarId(mappedCarList[0].carId);
-    }
-  }, [mappedCarList]);
-
   const [selectedCarId, setSelectedCarId] = useState<number>(0);
 
   const [state, dispatch] = useReducer(calenderReducer, initialState);
+
+  // 선택된 차량 초기화를 위함
+  useEffect(() => {
+    if (selectedCarId === 0 && mappedCarList && mappedCarList.length > 0) {
+      setSelectedCarId(mappedCarList[0].carId);
+    }
+  }, [mappedCarList, selectedCarId]);
 
   // Calender - 헤더용 핸들러
   const handleMonthChange = (direction: "next" | "prev") => {
