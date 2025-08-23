@@ -8,7 +8,7 @@ import type {
   TimeTableProps,
 } from "@/features/timeTable/TimeTable.type";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   AvailableTimeSlots,
   TimeTableHeader,
@@ -22,11 +22,23 @@ import { useGetTimeSlot } from "@/apis/TimeTableAPI";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import ModalContent from "@/components/ModalContent";
 import Modal from "@/components/Modal";
+import { formatDateToYYMMDD } from "@/features/calender/Calender.util";
 
 const TimeTable = ({ selectedCarId, selectedWeek, mode }: TimeTableProps) => {
+  const [displayWeek, setDisplayWeek] = useState(selectedWeek);
+  const [showSlots, setShowSlots] = useState(true);
+
+  const weekKey = useMemo(() => {
+    return formatDateToYYMMDD(displayWeek[0]);
+  }, [displayWeek]);
+
+  const nextWeekKey = useMemo(() => {
+    return formatDateToYYMMDD(selectedWeek[0]);
+  }, [selectedWeek]);
+
   const { timeSlotData, isFetching, error } = useGetTimeSlot(
     selectedCarId,
-    selectedWeek,
+    nextWeekKey,
   );
 
   // draft 상태는 편집 모드에서만 사용 (수정/취소/저장을 위한 상태)
@@ -40,10 +52,16 @@ const TimeTable = ({ selectedCarId, selectedWeek, mode }: TimeTableProps) => {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
 
-  // selectedCarId나 selectedWeek이 변경되면 draft 상태 초기화
+  // selectedCarId나 selectedWeek이 변경되면 draft 상태 초기화 및 애니메이션 처리
   useEffect(() => {
+    setShowSlots(false);
     setTimeSlotsDraft([]);
     setPreviewSlot(null);
+
+    const rafId = window.requestAnimationFrame(() => {
+      setDisplayWeek(selectedWeek);
+    });
+    return () => window.cancelAnimationFrame(rafId);
   }, [selectedCarId, selectedWeek]);
 
   // 새로운 데이터가 로드되면 draft 상태 초기화
@@ -51,9 +69,11 @@ const TimeTable = ({ selectedCarId, selectedWeek, mode }: TimeTableProps) => {
     if (timeSlotData) {
       setTimeSlotsDraft(timeSlotData);
       setPreviewSlot(null);
+      setShowSlots(true);
     }
   }, [timeSlotData]);
 
+  // 에러 발생 시 모달 표시
   useEffect(() => {
     if (error) {
       setErrorMessage(
@@ -82,9 +102,9 @@ const TimeTable = ({ selectedCarId, selectedWeek, mode }: TimeTableProps) => {
   return (
     <div css={TableContainer}>
       {/* 헤더 - 최상단 날짜 */}
-      <TimeTableHeader selectedWeek={selectedWeek} />
+      <TimeTableHeader selectedWeek={displayWeek} />
 
-      <div css={TableBody}>
+      <div css={TableBody} key={weekKey}>
         {/* 시간 레이블들 - 좌측 9:00 ~ 19:00 셀 */}
         <TimeLabels />
 
@@ -92,7 +112,7 @@ const TimeTable = ({ selectedCarId, selectedWeek, mode }: TimeTableProps) => {
         <TimeCells
           mode={mode}
           totalHours={TIME_TABLE_CONFIG.TOTAL_HOURS}
-          selectedWeek={selectedWeek}
+          selectedWeek={displayWeek}
           handleCellMouseDown={
             mode === "edit" ? handleCellMouseDown : undefined
           }
@@ -102,19 +122,22 @@ const TimeTable = ({ selectedCarId, selectedWeek, mode }: TimeTableProps) => {
         />
 
         {/* 유휴시간 블록들 - TimeCell 위 블록*/}
-        <AvailableTimeSlots
-          availableTimeData={timeSlotsDraft}
-          selectedWeek={selectedWeek}
-          mode={mode}
-          onDelete={deleteSlot}
-          disabled={slotsDisabled}
-        />
+        {!isFetching && showSlots && (
+          <AvailableTimeSlots
+            key={`slots-${weekKey}`}
+            availableTimeData={timeSlotsDraft}
+            selectedWeek={displayWeek}
+            mode={mode}
+            onDelete={deleteSlot}
+            disabled={slotsDisabled}
+          />
+        )}
 
         {previewSlot && (
           <AvailableTimeSlot
             key={`preview-${previewSlot.rentalDate}-${previewSlot.rentalStartTime}-${previewSlot.rentalEndTime}`}
             slot={previewSlot}
-            selectedWeek={selectedWeek}
+            selectedWeek={displayWeek}
             variant="preview"
             mode={mode}
             disabled
