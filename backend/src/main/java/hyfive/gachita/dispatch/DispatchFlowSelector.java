@@ -38,7 +38,7 @@ public class DispatchFlowSelector {
     private final OldPathDispatchFlow oldPathDispatchFlow;
 
     public DispatchResult execute(NewBookDto newBookDto){
-        log.info("========= 배차 필터링 시작 =========");
+        log.info("========= Dispatch Flow Selector 필터링 시작 =========");
         List<FilteredPathDto> candidates = filteredPathProvider.getByCondition(newBookDto.hospitalDate());
         log.info("초기 필터링(날짜 기준)된 후보 경로: {}개", candidates.size());
 
@@ -72,22 +72,17 @@ public class DispatchFlowSelector {
 
         log.info("[최종 합집합] 총 후보 경로: {}개", candidatePathIds.size());
         log.debug(" -> 최종 후보 Path IDs: {}", candidatePathIds);
-        log.info("========= 배차 필터링 종료 =========");
+        log.info("========= Dispatch Flow Selector 필터링 종료 =========");
 
         try {
-            if (candidatePathIds.isEmpty()) {
-                log.info("신규 경로 배차 실행");
-                return newPathDispatchFlow.execute(newBookDto);
-            } else {
-                log.info("기존 경로 배차 실행");
-                return oldPathDispatchFlow.execute(new ArrayList<>(candidatePathIds), newBookDto);
-            }
+            log.info("Old Path Dispatch Flow 실행");
+            return oldPathDispatchFlow.execute(new ArrayList<>(candidatePathIds), newBookDto);
         } catch (DispatchException e) {
             if (e.getErrorCode() == DispatchErrorCode.CANDIDATE_EMPTY) {
-                log.info("기존 경로 배차 후보 0개 → 신규 경로 배차 실행 (예외 기반)");
+                log.info("Old Path Dispatch Flow 배차 후보 0개 → 신규 경로 배차 실행");
                 return newPathDispatchFlow.execute(newBookDto);
             }
-            throw e; // 다른 코드(8000 등)는 그대로 전파
+            throw e;
         }
     }
 }

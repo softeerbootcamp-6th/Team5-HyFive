@@ -30,6 +30,10 @@ public class OldPathDispatchFlow {
         log.info("========= [OldPathDispatchFlow] 기존 경로 배차 로직 시작 =========");
         log.info("입력된 초기 후보 Path ID 수: {}개, IDs: {}", pathIds.size(), pathIds);
 
+        if (pathIds.isEmpty()) {
+            throw new DispatchException(DispatchErrorCode.CANDIDATE_EMPTY, "배차 가능한 경로가 없습니다.");
+        }
+
         AtomicInteger apiCallCounter = new AtomicInteger(0);
         List<FinalOldPathDto> finalPathCandidates = new ArrayList<>();
 
@@ -44,7 +48,7 @@ public class OldPathDispatchFlow {
         }
 
         if (pathCandidates.isEmpty()) {
-            throw new DispatchException(DispatchErrorCode.CANDIDATE_EMPTY, "배차 가능한 경로가 없습니다.");
+            throw new DispatchException(DispatchErrorCode.CANDIDATE_EMPTY, "유휴 시간을 만족하는 배차 가능한 경로가 없습니다.");
         }
 
         // 2. 각 경로 후보에 대해 신규 예약 노드를 삽입하는 모든 경우의 수 탐색
