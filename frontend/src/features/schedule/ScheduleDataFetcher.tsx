@@ -1,19 +1,27 @@
 import { useGetEntireSchedule } from "@/apis/ScheduleAPI";
 import EmptyUI from "@/components/EmptyUI";
-import type { ScheduleType } from "@/features/schedule/Schedule.types";
+import type {
+  ScheduleData,
+  ScheduleType,
+} from "@/features/schedule/Schedule.types";
 import ScheduleCard from "@/features/schedule/ScheduleCard";
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
 import { CustomError } from "@/utils/CustomError";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import type { Dispatch, SetStateAction } from "react";
 const { color } = theme;
 
 const ScheduleDataFetcher = ({
   activeTab,
   parsedActiveTab,
+  selectedSchedule,
+  setSelectedSchedule,
 }: {
   activeTab: string;
   parsedActiveTab: ScheduleType;
+  selectedSchedule: Partial<ScheduleData | null>;
+  setSelectedSchedule: Dispatch<SetStateAction<Partial<ScheduleData | null>>>;
 }) => {
   const { data, isError, isFetching, error } = useGetEntireSchedule(activeTab);
   if (isError)
@@ -36,8 +44,21 @@ const ScheduleDataFetcher = ({
   return (
     <>
       {data.map((scheduleData, idx) => (
-        <div key={scheduleData.routeId}>
-          <ScheduleCard drivingType={parsedActiveTab} data={scheduleData} />
+        <div
+          key={scheduleData.routeId}
+          onClick={() =>
+            setSelectedSchedule({
+              routeId: scheduleData.routeId,
+              routeStartLocation: scheduleData.routeStartLocation,
+              routeEndLocation: scheduleData.routeStartLocation,
+            })
+          }
+        >
+          <ScheduleCard
+            drivingType={parsedActiveTab}
+            data={scheduleData}
+            isActive={scheduleData.routeId === selectedSchedule?.routeId}
+          />
           {idx !== data.length - 1 && <div css={LineWrapper} />}
         </div>
       ))}

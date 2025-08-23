@@ -22,10 +22,15 @@ const blueColor = color.SemanticScale.blue[400];
 interface DrivingCardProps {
   drivingType: ScheduleType;
   data: DrivingDataType;
+  isActive?: boolean;
 }
-const ScheduleCard = ({ drivingType, data }: DrivingCardProps) => {
+const ScheduleCard = ({
+  drivingType,
+  data,
+  isActive = false,
+}: DrivingCardProps) => {
   return (
-    <div css={ScheduleCardContainer}>
+    <div css={ScheduleCardContainer(isActive)}>
       <div css={HeaderWrapper}>
         <div css={RouteWrapper}>
           <p css={RouteText}>경로 #{data.routeId}</p>

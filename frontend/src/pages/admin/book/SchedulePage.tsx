@@ -1,8 +1,9 @@
+import type { ScheduleData } from "@/features/schedule/Schedule.types";
 import ScheduleDetailSection from "@/features/schedule/ScheduleDetailSection";
 import ScheduleListSection from "@/features/schedule/ScheduleListSection";
 import TabMatcher from "@/utils/TabMatcher";
 import { css } from "@emotion/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const SchedulePage = () => {
   const TAB_LIST = ["운행 중", "운행 대기", "운행 완료"];
@@ -13,6 +14,11 @@ const SchedulePage = () => {
     routeEndLocation: "도착로123",
   };
   const parsedActiveTab = TabMatcher.matchScheduleTypeKRToENG(activeTab);
+  const [selectedSchedule, setSelectedSchedule] =
+    useState<Partial<ScheduleData> | null>(null);
+  useEffect(() => {
+    console.log(selectedSchedule);
+  }, [selectedSchedule]);
   return (
     <div css={BookPageContainer}>
       <ScheduleListSection
@@ -20,6 +26,8 @@ const SchedulePage = () => {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         parsedActiveTab={parsedActiveTab}
+        selectedSchedule={selectedSchedule}
+        setSelectedSchedule={setSelectedSchedule}
       />
       <ScheduleDetailSection scheduleType={parsedActiveTab} data={sampleData} />
     </div>

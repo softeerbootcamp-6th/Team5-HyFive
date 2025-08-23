@@ -2,7 +2,10 @@ import { useGetEntireSchedule } from "@/apis/ScheduleAPI";
 import FallbackUI from "@/components/FallbackUI";
 import RefetchButton from "@/components/RefetchButton";
 import Tabs from "@/components/Tabs";
-import type { ScheduleType } from "@/features/schedule/Schedule.types";
+import type {
+  ScheduleData,
+  ScheduleType,
+} from "@/features/schedule/Schedule.types";
 import ScheduleDataFetcher from "@/features/schedule/ScheduleDataFetcher";
 import { theme } from "@/styles/themes.style";
 import { css } from "@emotion/react";
@@ -15,12 +18,16 @@ interface ScheduleListSectionProps {
   activeTab: string;
   setActiveTab: Dispatch<SetStateAction<string>>;
   parsedActiveTab: ScheduleType;
+  selectedSchedule: Partial<ScheduleData | null>;
+  setSelectedSchedule: Dispatch<SetStateAction<Partial<ScheduleData | null>>>;
 }
 const ScheduleListSection = ({
   TAB_LIST,
   activeTab,
   setActiveTab,
   parsedActiveTab,
+  selectedSchedule,
+  setSelectedSchedule,
 }: ScheduleListSectionProps) => {
   const LOCATION_SECTION = "운정 1구역";
   const { refetch } = useGetEntireSchedule(activeTab);
@@ -51,6 +58,8 @@ const ScheduleListSection = ({
           <ScheduleDataFetcher
             activeTab={activeTab}
             parsedActiveTab={parsedActiveTab}
+            selectedSchedule={selectedSchedule}
+            setSelectedSchedule={setSelectedSchedule}
           />
         </ErrorBoundary>
       </div>
