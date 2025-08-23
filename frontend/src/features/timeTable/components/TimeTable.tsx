@@ -19,12 +19,18 @@ import {
 } from "./index";
 import { TIME_TABLE_CONFIG } from "@/features/timeTable/TimeTable.constants";
 import { useTimeTableDrag } from "@/features/timeTable/hooks/useTimeTableDrag";
-import { useGetTimeSlot } from "@/apis/TimeTableAPI";
+import {
+  timeSlotQueryKey,
+  useGetTimeSlot,
+  usePostTimeSlot,
+  type TimeSlotAPIResponse,
+} from "@/apis/TimeTableAPI";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import ModalContent from "@/components/ModalContent";
 import Modal from "@/components/Modal";
 import { formatDateToYYMMDD } from "@/features/calender/Calender.util";
 import ActionButtonGroup from "@/features/timeTable/components/ActionButtonGroup";
+import { useQueryClient } from "@tanstack/react-query";
 
 const TimeTable = ({
   selectedCarId,
@@ -35,6 +41,8 @@ const TimeTable = ({
   isEditMode = false,
   onEditModeChange = () => {},
 }: TimeTableProps) => {
+  const { createTimeSlot, error } = usePostTimeSlot();
+
   const [displayWeek, setDisplayWeek] = useState(selectedWeek);
   const [showSlots, setShowSlots] = useState(true);
 
@@ -46,11 +54,18 @@ const TimeTable = ({
     return formatDateToYYMMDD(selectedWeek[0]);
   }, [selectedWeek]);
 
-  const { timeSlotData, isFetching, error } = useGetTimeSlot(
-    selectedCarId,
-    nextWeekKey,
-  );
+  const {
+    timeSlotData,
+    isFetching,
+    error: fetchError,
+    refetch,
+  } = useGetTimeSlot(selectedCarId, nextWeekKey);
+  const queryClient = useQueryClient();
 
+  const queryKey = useMemo(
+    () => timeSlotQueryKey(selectedCarId, nextWeekKey),
+    [selectedCarId, nextWeekKey],
+  );
   // draft 상태는 편집 모드에서만 사용 (수정/취소/저장을 위한 상태)
   const [timeSlotsDraft, setTimeSlotsDraft] = useState<AvailableTimeSlotType[]>(
     [],
@@ -85,13 +100,15 @@ const TimeTable = ({
 
   // 에러 발생 시 모달 표시
   useEffect(() => {
-    if (error) {
+    if (error || fetchError) {
       setErrorMessage(
-        error.message || "시간표 데이터를 불러오는데 실패했습니다.",
+        error?.message ||
+          fetchError?.message ||
+          "시간표 데이터를 불러오는데 실패했습니다.",
       );
       setIsErrorModalOpen(true);
     }
-  }, [error]);
+  }, [error, fetchError]);
 
   const handleCloseErrorModal = () => {
     setIsErrorModalOpen(false);
@@ -108,6 +125,28 @@ const TimeTable = ({
     });
 
   const slotsDisabled = Boolean(previewSlot);
+  const handleCancelClick = () => {
+    const cachedSlotData =
+      queryClient.getQueryData<TimeSlotAPIResponse>(queryKey);
+    const originalSlotData = cachedSlotData?.data ?? [];
+
+    setShowSlots(false);
+    setPreviewSlot(null);
+    setTimeSlotsDraft(originalSlotData);
+    requestAnimationFrame(() => setShowSlots(true));
+
+    onEditModeChange(false);
+  };
+
+  const handleSaveClick = () => {
+    createTimeSlot({
+      selectedCarId,
+      weekKey,
+      timeSlots: timeSlotsDraft,
+    });
+    void refetch();
+    onEditModeChange(false);
+  };
 
   return (
     <div css={TimeTableWrapper}>
@@ -116,6 +155,8 @@ const TimeTable = ({
           isEditableWeek={isEditableWeek}
           isEditMode={isEditMode}
           onEditModeChange={onEditModeChange}
+          onCancelClick={handleCancelClick}
+          onSaveClick={handleSaveClick}
         />
       )}
       <div css={TableContainer}>

@@ -6,28 +6,24 @@ interface ActionButtonGroupProps {
   isEditableWeek: boolean;
   isEditMode: boolean;
   onEditModeChange: (isEditMode: boolean) => void;
+  onCancelClick: () => void;
+  onSaveClick: () => void;
 }
 
 const ActionButtonGroup = ({
   isEditableWeek,
   isEditMode,
   onEditModeChange,
+  onCancelClick,
+  onSaveClick,
 }: ActionButtonGroupProps) => {
   if (!isEditableWeek) return null;
   return (
     <div css={TableActionButtonGroupStyle}>
       {isEditMode ? (
         <>
-          <MonoButton
-            mode="white"
-            label="취소"
-            onClick={() => onEditModeChange(false)}
-          />
-          <MonoButton
-            mode="black"
-            label="저장"
-            onClick={() => onEditModeChange(false)}
-          />
+          <MonoButton mode="white" label="취소" onClick={onCancelClick} />
+          <MonoButton mode="black" label="저장" onClick={onSaveClick} />
         </>
       ) : (
         <MonoButton
