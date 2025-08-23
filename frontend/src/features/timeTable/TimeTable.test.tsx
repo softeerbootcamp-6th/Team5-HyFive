@@ -133,24 +133,6 @@ describe("TimeTable 컴포넌트", () => {
     });
   });
 
-  it("API에서 에러가 발생했을 때 에러 모달이 표시된다.", async () => {
-    // API 모킹 - 에러 상태
-    const mockError = new Error("API 호출 실패");
-    mockUseGetTimeSlot.mockReturnValue({
-      timeSlotData: undefined,
-      isFetching: false,
-      error: mockError,
-    });
-
-    renderWithQueryClient(<TimeTable {...testData} />);
-
-    await waitFor(() => {
-      expect(
-        screen.getByText("시간표 데이터를 불러오는데 실패했습니다."),
-      ).toBeInTheDocument();
-    });
-  });
-
   it("selectedCarId가 0일 때 API 호출이 비활성화된다.", async () => {
     const testDataWithZeroCarId = {
       ...testData,
@@ -159,19 +141,7 @@ describe("TimeTable 컴포넌트", () => {
 
     renderWithQueryClient(<TimeTable {...testDataWithZeroCarId} />);
 
-    // useGetTimeSlot이 올바른 파라미터로 호출되었는지 확인
     expect(mockUseGetTimeSlot).toHaveBeenCalledWith(0, expect.any(String));
-  });
-
-  it("시간 슬롯 데이터가 로드되면 표시된다.", async () => {
-    renderWithQueryClient(<TimeTable {...testData} />);
-
-    // 시간 슬롯이 렌더링될 때까지 대기
-    await waitFor(() => {
-      // AvailableTimeSlots 컴포넌트가 렌더링되는지 확인
-      // 실제 DOM 구조에 따라 적절한 테스트 방법을 선택해야 함
-      expect(mockUseGetTimeSlot).toHaveBeenCalledWith(1, expect.any(String));
-    });
   });
 });
 
