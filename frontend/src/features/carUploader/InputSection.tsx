@@ -9,7 +9,7 @@ import useCarForm, {
   type CarFormValues,
 } from "@/features/carUploader/useCarForm";
 import { useMemo, useState } from "react";
-import { usePatchCar, usePostCar } from "@/apis/CarAPI";
+import { useGetCarList, usePatchCar, usePostCar } from "@/apis/CarAPI";
 import { useNavigate } from "react-router";
 import Modal from "@/components/Modal";
 import ModalContent from "@/components/ModalContent";
@@ -55,6 +55,7 @@ const InputSection = ({ type = "register", initValues }: InputSectionProps) => {
   // 서버 통신 관련 로직
   const { mutate: postMutate } = usePostCar();
   const { mutate: patchMutate } = usePatchCar();
+  const { refetch } = useGetCarList();
   const messageType = type === "register" ? "등록" : "수정";
   const navigate = useNavigate();
 
@@ -67,7 +68,7 @@ const InputSection = ({ type = "register", initValues }: InputSectionProps) => {
 
   const handleMutateSuccess = () => {
     handleReset();
-    handleReset();
+    void refetch();
     setModalState({
       isOpen: true,
       isSuccess: true,
@@ -100,6 +101,7 @@ const InputSection = ({ type = "register", initValues }: InputSectionProps) => {
         }
         if (type === "edit") {
           if (!initValues) return;
+
           patchMutate(
             { id: initValues.carId, values: formValues },
             {
