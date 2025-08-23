@@ -102,8 +102,6 @@ export const useDeleteCar = () => {
   });
   return {
     mutate: mutation.mutate,
-    isLoading: mutation.isPending,
-    isError: mutation.isError,
     error: mutation.error,
   };
 };
