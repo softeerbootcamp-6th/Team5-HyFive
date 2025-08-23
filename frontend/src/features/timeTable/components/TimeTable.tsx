@@ -2,6 +2,7 @@ import {
   TableContainer,
   TableBody,
   LoadingContainer,
+  TimeTableWrapper,
 } from "../TimeTable.style";
 import type {
   AvailableTimeSlotType,
@@ -23,8 +24,17 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 import ModalContent from "@/components/ModalContent";
 import Modal from "@/components/Modal";
 import { formatDateToYYMMDD } from "@/features/calender/Calender.util";
+import ActionButtonGroup from "@/features/timeTable/components/ActionButtonGroup";
 
-const TimeTable = ({ selectedCarId, selectedWeek, mode }: TimeTableProps) => {
+const TimeTable = ({
+  selectedCarId,
+  selectedWeek,
+  mode,
+  showActionButtons = false,
+  isEditableWeek = false,
+  isEditMode = false,
+  onEditModeChange = () => {},
+}: TimeTableProps) => {
   const [displayWeek, setDisplayWeek] = useState(selectedWeek);
   const [showSlots, setShowSlots] = useState(true);
 
@@ -100,65 +110,74 @@ const TimeTable = ({ selectedCarId, selectedWeek, mode }: TimeTableProps) => {
   const slotsDisabled = Boolean(previewSlot);
 
   return (
-    <div css={TableContainer}>
-      {/* 헤더 - 최상단 날짜 */}
-      <TimeTableHeader selectedWeek={displayWeek} />
-
-      <div css={TableBody} key={weekKey}>
-        {/* 시간 레이블들 - 좌측 9:00 ~ 19:00 셀 */}
-        <TimeLabels />
-
-        {/* 시간 셀들 - 빈 7 * 11개의 셀 */}
-        <TimeCells
-          mode={mode}
-          totalHours={TIME_TABLE_CONFIG.TOTAL_HOURS}
-          selectedWeek={displayWeek}
-          handleCellMouseDown={
-            mode === "edit" ? handleCellMouseDown : undefined
-          }
-          handleCellMouseEnter={
-            mode === "edit" ? handleCellMouseEnter : undefined
-          }
+    <div css={TimeTableWrapper}>
+      {showActionButtons && (
+        <ActionButtonGroup
+          isEditableWeek={isEditableWeek}
+          isEditMode={isEditMode}
+          onEditModeChange={onEditModeChange}
         />
+      )}
+      <div css={TableContainer}>
+        {/* 헤더 - 최상단 날짜 */}
+        <TimeTableHeader selectedWeek={displayWeek} />
 
-        {/* 유휴시간 블록들 - TimeCell 위 블록*/}
-        {!isFetching && showSlots && (
-          <AvailableTimeSlots
-            key={`slots-${weekKey}`}
-            availableTimeData={timeSlotsDraft}
-            selectedWeek={displayWeek}
+        <div css={TableBody} key={weekKey}>
+          {/* 시간 레이블들 - 좌측 9:00 ~ 19:00 셀 */}
+          <TimeLabels />
+
+          {/* 시간 셀들 - 빈 7 * 11개의 셀 */}
+          <TimeCells
             mode={mode}
-            onDelete={deleteSlot}
-            disabled={slotsDisabled}
-          />
-        )}
-
-        {previewSlot && (
-          <AvailableTimeSlot
-            key={`preview-${previewSlot.rentalDate}-${previewSlot.rentalStartTime}-${previewSlot.rentalEndTime}`}
-            slot={previewSlot}
+            totalHours={TIME_TABLE_CONFIG.TOTAL_HOURS}
             selectedWeek={displayWeek}
-            variant="preview"
-            mode={mode}
-            disabled
+            handleCellMouseDown={
+              mode === "edit" ? handleCellMouseDown : undefined
+            }
+            handleCellMouseEnter={
+              mode === "edit" ? handleCellMouseEnter : undefined
+            }
           />
-        )}
 
-        {isFetching && (
-          <div css={LoadingContainer}>
-            <LoadingSpinner size="large" />
-          </div>
-        )}
-
-        {error && (
-          <Modal isOpen={isErrorModalOpen} onClose={handleCloseErrorModal}>
-            <ModalContent
-              type="alert"
-              content={errorMessage}
-              onClose={handleCloseErrorModal}
+          {/* 유휴시간 블록들 - TimeCell 위 블록*/}
+          {!isFetching && showSlots && (
+            <AvailableTimeSlots
+              key={`slots-${weekKey}`}
+              availableTimeData={timeSlotsDraft}
+              selectedWeek={displayWeek}
+              mode={mode}
+              onDelete={deleteSlot}
+              disabled={slotsDisabled}
             />
-          </Modal>
-        )}
+          )}
+
+          {previewSlot && (
+            <AvailableTimeSlot
+              key={`preview-${previewSlot.rentalDate}-${previewSlot.rentalStartTime}-${previewSlot.rentalEndTime}`}
+              slot={previewSlot}
+              selectedWeek={displayWeek}
+              variant="preview"
+              mode={mode}
+              disabled
+            />
+          )}
+
+          {isFetching && (
+            <div css={LoadingContainer}>
+              <LoadingSpinner size="large" />
+            </div>
+          )}
+
+          {error && (
+            <Modal isOpen={isErrorModalOpen} onClose={handleCloseErrorModal}>
+              <ModalContent
+                type="alert"
+                content={errorMessage}
+                onClose={handleCloseErrorModal}
+              />
+            </Modal>
+          )}
+        </div>
       </div>
     </div>
   );
