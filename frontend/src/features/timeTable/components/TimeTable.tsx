@@ -37,9 +37,10 @@ const TimeTable = ({ selectedCarId, selectedWeek, mode }: TimeTableProps) => {
   const [previewSlot, setPreviewSlot] = useState<AvailableTimeSlotType | null>(
     null,
   );
-
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
 
+  // selectedCarId나 selectedWeek이 변경되면 draft 상태 초기화
   useEffect(() => {
     setTimeSlotsDraft([]);
     setPreviewSlot(null);
@@ -53,15 +54,18 @@ const TimeTable = ({ selectedCarId, selectedWeek, mode }: TimeTableProps) => {
     }
   }, [timeSlotData]);
 
-  // 에러 발생 시 모달 열기
   useEffect(() => {
     if (error) {
+      setErrorMessage(
+        error.message || "시간표 데이터를 불러오는데 실패했습니다.",
+      );
       setIsErrorModalOpen(true);
     }
   }, [error]);
 
   const handleCloseErrorModal = () => {
     setIsErrorModalOpen(false);
+    setErrorMessage("");
   };
 
   const { handleCellMouseDown, handleCellMouseEnter, deleteSlot } =
@@ -127,9 +131,7 @@ const TimeTable = ({ selectedCarId, selectedWeek, mode }: TimeTableProps) => {
           <Modal isOpen={isErrorModalOpen} onClose={handleCloseErrorModal}>
             <ModalContent
               type="alert"
-              content={
-                error.message || "시간표 데이터를 불러오는데 실패했습니다."
-              }
+              content={errorMessage}
               onClose={handleCloseErrorModal}
             />
           </Modal>
