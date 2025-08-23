@@ -1,6 +1,5 @@
 // React & Hooks
 import { useEffect, useMemo, useReducer, useState } from "react";
-
 // 스타일
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
@@ -25,7 +24,7 @@ import { useCarNavigation } from "@/hooks/useCenterNavigation";
 import Modal from "@/components/Modal";
 import { useCenterModal } from "@/hooks/useCenterModal";
 import { useGetCenterInfo } from "@/apis/CenterAPI";
-import { useGetCarList } from "@/apis/CarAPI";
+import { useDeleteCar, useGetCarList } from "@/apis/CarAPI";
 import { mapBackendCenterInfoToCenterOverview } from "@/features/centerOverview/CenterOverview.type";
 import { mapBackendCarListToCarList } from "@/features/car/Car.type";
 import CarList from "@/features/car/CarList";
@@ -46,24 +45,29 @@ const CenterPage = () => {
     carList,
     isFetching: isCarFetching,
     error: carError,
+    refetch: refetchCarList,
   } = useGetCarList();
+  const { mutate: deleteCar, error: carDeleteError } = useDeleteCar();
 
   const mappedCenterData =
     centerInfoData && mapBackendCenterInfoToCenterOverview(centerInfoData);
-  const mappedCarList = carList && mapBackendCarListToCarList(carList);
 
-  // 선택된 차량 초기화를 위함
-  useEffect(() => {
-    if (mappedCarList && mappedCarList.length > 0) {
-      setSelectedCarId(mappedCarList[0].carId);
-    }
-  }, [mappedCarList]);
+  const mappedCarList = useMemo(() => {
+    if (!carList) return [];
+    return mapBackendCarListToCarList(carList);
+  }, [carList]);
 
   // 상태
   const [selectedCarId, setSelectedCarId] = useState<number>(0);
   const [state, dispatch] = useReducer(calenderReducer, initialState);
   const [isEditMode, setIsEditMode] = useState(false);
 
+  // 선택된 차량 초기화를 위함
+  useEffect(() => {
+    if (selectedCarId === 0 && mappedCarList && mappedCarList.length > 0) {
+      setSelectedCarId(mappedCarList[0].carId);
+    }
+  }, [mappedCarList, selectedCarId]);
   const isEditableWeek = useMemo(
     () => isFutureWeek(state.selectedWeek),
     [state.selectedWeek],
@@ -75,7 +79,9 @@ const CenterPage = () => {
     modalState,
     openEditModal,
     openDeleteModal,
+    openLoadingModal,
     openDoneModal,
+    openErrorModal,
     closeModal,
     createModalContent,
   } = useCenterModal();
@@ -111,12 +117,25 @@ const CenterPage = () => {
   };
 
   const handleDeleteConfirm = () => {
-    // TODO 재민 - 삭제 로직 구현
+    if (!selectedCarId || !mappedCarList) {
+      openErrorModal("선택된 차량이 없습니다.");
+      return;
+    }
+
     closeModal();
-    // TODO - 삭제 완료 후 확인 모달 열기
-    setTimeout(() => {
-      openDoneModal();
-    }, 1000);
+    openLoadingModal();
+
+    deleteCar(selectedCarId, {
+      onSuccess: async () => {
+        await refetchCarList();
+        closeModal();
+        openDoneModal();
+      },
+      onError: () => {
+        closeModal();
+        openErrorModal(carDeleteError?.message || "차량 삭제에 실패했습니다.");
+      },
+    });
   };
 
   const handleMonthChange = (direction: "next" | "prev") => {
