@@ -29,16 +29,19 @@ interface CarListAPIResponse {
 const CENTER_ID = 1; // MVP 단계에선 고정
 
 export const useGetCarList = (centerId: number = CENTER_ID) => {
-  const { data, isFetching, error } = useQuery<CarListAPIResponse>({
+  const { data, isFetching, error, refetch } = useQuery<CarListAPIResponse>({
     queryKey: ["carList", centerId],
     queryFn: () => clientInstance.get(`/car/list?center_id=${centerId}`),
     staleTime: 5 * 60 * 1000,
     placeholderData: (prev) => prev,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    refetchOnMount: false,
   });
 
   const carList = data?.data;
 
-  return { carList, isFetching, error };
+  return { carList, isFetching, error, refetch };
 };
 
 export const usePostCar = () => {
@@ -88,5 +91,19 @@ export const usePatchCar = () => {
   });
   return {
     mutate: mutation.mutate,
+  };
+};
+
+export const useDeleteCar = () => {
+  const mutation = useMutation<CarAPIResponse, CustomError, number>({
+    mutationFn: (carId) => {
+      return clientInstance.delete(`/car/${carId}`);
+    },
+  });
+  return {
+    mutate: mutation.mutate,
+    isLoading: mutation.isPending,
+    isError: mutation.isError,
+    error: mutation.error,
   };
 };
