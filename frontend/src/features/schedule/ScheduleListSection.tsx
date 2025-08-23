@@ -1,11 +1,13 @@
+import { useGetEntireSchedule } from "@/apis/ScheduleAPI";
+import FallbackUI from "@/components/FallbackUI";
 import RefetchButton from "@/components/RefetchButton";
 import Tabs from "@/components/Tabs";
 import type { ScheduleType } from "@/features/schedule/Schedule.types";
-import ScheduleCard from "@/features/schedule/ScheduleCard";
-import { drivingDataList } from "@/mocks/drivingMocks";
+import ScheduleDataFetcher from "@/features/schedule/ScheduleDataFetcher";
 import { theme } from "@/styles/themes.style";
 import { css } from "@emotion/react";
 import type { Dispatch, SetStateAction } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 const { color, typography } = theme;
 
 interface ScheduleListSectionProps {
@@ -21,11 +23,12 @@ const ScheduleListSection = ({
   parsedActiveTab,
 }: ScheduleListSectionProps) => {
   const LOCATION_SECTION = "운정 1구역";
+  const { refetch } = useGetEntireSchedule(activeTab);
   return (
     <div css={ScheduleListSectionContainer}>
       <div css={HeaderContainer}>
         <p css={LocationSectionText}>{LOCATION_SECTION}</p>
-        <RefetchButton handleClick={() => {}} />
+        <RefetchButton handleClick={refetch} />
       </div>
       <Tabs
         type="bar_true"
@@ -34,12 +37,22 @@ const ScheduleListSection = ({
         setSelected={setActiveTab}
       />
       <div css={ContentContainer}>
-        {drivingDataList.map((scheduleData, idx) => (
-          <div key={scheduleData.routeId}>
-            <ScheduleCard drivingType={parsedActiveTab} data={scheduleData} />
-            {idx !== drivingDataList.length - 1 && <div css={LineWrapper} />}
-          </div>
-        ))}
+        <ErrorBoundary
+          fallbackRender={({ error, resetErrorBoundary }) => (
+            <FallbackUI
+              error={error}
+              handleRetry={() => {
+                resetErrorBoundary();
+                refetch();
+              }}
+            />
+          )}
+        >
+          <ScheduleDataFetcher
+            activeTab={activeTab}
+            parsedActiveTab={parsedActiveTab}
+          />
+        </ErrorBoundary>
       </div>
     </div>
   );
@@ -48,7 +61,7 @@ const ScheduleListSection = ({
 export default ScheduleListSection;
 
 const ScheduleListSectionContainer = css`
-  width: 485px;
+  min-width: 485px;
   height: calc(100vh - 72px);
   display: flex;
   flex-direction: column;
@@ -68,12 +81,6 @@ const HeaderContainer = css`
 const ContentContainer = css`
   flex: 1;
   overflow-y: scroll;
-`;
-
-const LineWrapper = css`
-  width: 405px;
-  border-bottom: 1px solid ${color.GrayScale.gray3};
-  margin: 20px auto;
 `;
 
 const LocationSectionText = css`
