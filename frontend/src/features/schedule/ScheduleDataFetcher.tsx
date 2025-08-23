@@ -37,7 +37,7 @@ const ScheduleDataFetcher = ({
         routeEndLocation: data[0].routeEndLocation,
       });
     }
-  }, [data, setSelectedSchedule]);
+  }, [data, setSelectedSchedule, selectedSchedule?.routeId]);
 
   if (isFetching) {
     return (

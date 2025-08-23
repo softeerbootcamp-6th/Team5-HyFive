@@ -50,7 +50,7 @@ const ScheduleListSection = ({
               error={error}
               handleRetry={() => {
                 resetErrorBoundary();
-                refetch();
+                void refetch();
               }}
             />
           )}

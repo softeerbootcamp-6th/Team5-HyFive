@@ -56,13 +56,10 @@ const useVisualizeMarker = ({
     ({
       markerType,
       point,
-      bookId,
-      mode = "default",
     }: {
       markerType: MarkerType;
       point: LatLng;
       bookId: number | null;
-      mode?: "default" | "highlight";
     }) => {
       const markerImage = new kakaoMaps.MarkerImage(
         imageSrc[markerType],
@@ -74,11 +71,6 @@ const useVisualizeMarker = ({
         title: "User Marker",
         image: markerImage,
       });
-      if (mode === "default") {
-        kakaoMaps.event.addListener(marker, "click", function () {
-          if (bookId) onClickMarker(bookId);
-        });
-      }
       return marker;
     },
     [kakaoMaps, map, imageSrc],
@@ -119,6 +111,9 @@ const useVisualizeMarker = ({
         point: partMarkerPath.point,
         bookId: partMarkerPath.bookId,
       });
+      kakaoMaps.event.addListener(marker, "click", function () {
+        if (partMarkerPath.bookId) onClickMarker(partMarkerPath.bookId);
+      });
       return marker;
     });
   }, [markerPath, renderMarker]);
@@ -145,13 +140,11 @@ const useVisualizeMarker = ({
       markerType: "enter",
       point: { lat: data.startLoc.lat, lng: data.startLoc.lng },
       bookId: data.bookId,
-      mode: "highlight",
     });
     const endMarker = renderMarker({
       markerType: "out",
       point: { lat: data.endLoc.lat, lng: data.endLoc.lng },
       bookId: data.bookId,
-      mode: "highlight",
     });
     renderInfoWindow({ data });
     markersRef.current.push(startMarker);

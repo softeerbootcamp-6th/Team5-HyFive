@@ -30,7 +30,7 @@ const useInitializeMap = ({
     initializedMap.setMaxLevel(MAX_ZOOM_LEVEL);
 
     setMap(initializedMap);
-  }, [mapRef, centerLat, centerLng]);
+  }, [kakaoMaps, mapRef, centerLat, centerLng]);
 
   const handleInitMidPoint = () => {
     if (!map || !kakaoMaps) return;
