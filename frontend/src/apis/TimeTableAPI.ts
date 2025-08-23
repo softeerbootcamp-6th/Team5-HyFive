@@ -23,6 +23,7 @@ export const useGetTimeSlot = (selectedCarId: number, selectedWeek: Date[]) => {
       clientInstance.get(
         `/rental?car-id=${selectedCarId}&date=${firstDayString}`,
       ),
+    enabled: selectedCarId > 0 && selectedWeek.length > 0,
     staleTime: 5 * 60 * 1000,
     gcTime: 30 * 60 * 1000,
   });

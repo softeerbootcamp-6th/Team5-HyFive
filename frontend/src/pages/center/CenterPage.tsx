@@ -1,5 +1,5 @@
 // React & Hooks
-import { useMemo, useReducer, useState } from "react";
+import { useEffect, useMemo, useReducer, useState } from "react";
 
 // 스타일
 import { css } from "@emotion/react";
@@ -51,6 +51,13 @@ const CenterPage = () => {
   const mappedCenterData =
     centerInfoData && mapBackendCenterInfoToCenterOverview(centerInfoData);
   const mappedCarList = carList && mapBackendCarListToCarList(carList);
+
+  // 선택된 차량 초기화를 위함
+  useEffect(() => {
+    if (mappedCarList && mappedCarList.length > 0) {
+      setSelectedCarId(mappedCarList[0].carId);
+    }
+  }, [mappedCarList]);
 
   // 상태
   const [selectedCarId, setSelectedCarId] = useState<number>(0);

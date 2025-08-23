@@ -4,7 +4,7 @@ import { theme } from "@/styles/themes.style";
 
 const { color, typography } = theme;
 
-import { useReducer, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 
 import Calender from "@/features/calender/Calender";
 import TimeTable from "@/features/timeTable/components/TimeTable";
@@ -34,11 +34,16 @@ const CenterDetailPage = () => {
     centerInfoData && mapBackendCenterInfoToCenterOverview(centerInfoData);
   const mappedCarList = carList && mapBackendCarListToCarList(carList);
 
+  // 선택된 차량 초기화를 위함
+  useEffect(() => {
+    if (mappedCarList && mappedCarList.length > 0) {
+      setSelectedCarId(mappedCarList[0].carId);
+    }
+  }, [mappedCarList]);
+
   const [selectedCarId, setSelectedCarId] = useState<number>(0);
 
   const [state, dispatch] = useReducer(calenderReducer, initialState);
-
-  // TODO 재민 - 차량 리스트까지 가져온 이후 선택된 차량 ID + 선택된 주차 정보 기반으로 유휴시간 요청
 
   // Calender - 헤더용 핸들러
   const handleMonthChange = (direction: "next" | "prev") => {
