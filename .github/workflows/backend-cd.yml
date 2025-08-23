@@ -43,6 +43,7 @@ jobs:
           mkdir -p deploy/scripts
           cp backend/build/libs/*SNAPSHOT.jar deploy/app.jar
           cp backend/src/main/resources/application-init.properties deploy/
+          cp backend/src/main/resources/application-prod.properties deploy/
           cp backend/appspec.yml deploy/
           cp backend/scripts/deploy.sh deploy/scripts/
           chmod +x deploy/scripts/deploy.sh
