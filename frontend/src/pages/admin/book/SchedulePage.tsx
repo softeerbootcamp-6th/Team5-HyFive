@@ -7,13 +7,18 @@ import { useEffect, useState } from "react";
 
 const SchedulePage = () => {
   const TAB_LIST = ["운행 중", "운행 대기", "운행 완료"];
+
+  // 상태값 관리
   const [activeTab, setActiveTab] = useState<string>(TAB_LIST[0]);
   const parsedActiveTab = TabMatcher.matchScheduleTypeKRToENG(activeTab);
   const [selectedSchedule, setSelectedSchedule] =
     useState<Partial<ScheduleData> | null>(null);
+
+  // 탭 변경시 선택된 운행 정보 초기화
   useEffect(() => {
-    console.log(selectedSchedule);
-  }, [selectedSchedule]);
+    setSelectedSchedule(null);
+  }, [activeTab]);
+
   return (
     <div css={BookPageContainer}>
       <ScheduleListSection
