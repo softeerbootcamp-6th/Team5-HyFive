@@ -23,4 +23,19 @@ export const APIMatcher = {
       routeEndLocation: "",
     };
   },
+  matchbookListAPI: (apiItem: BookAPIData & { pathId: number }) => {
+    return {
+      id: apiItem.id,
+      bookTime: apiItem.bookTime,
+      name: apiItem.bookName,
+      phone: apiItem.bookTel,
+      isExistWalkingDevice: apiItem.walker,
+      bookDate: apiItem.bookDate,
+      userStartLocation: apiItem.startAddr,
+      userEndLocation: apiItem.endAddr,
+      hospitalTime: apiItem.hospitalTime,
+      status: apiItem.bookStatus,
+      routeId: apiItem.pathId,
+    };
+  },
 };
