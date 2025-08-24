@@ -1,3 +1,5 @@
+import type { RouteFilterValue } from "@/features/statusFilter/StatusFilter.constants";
+
 export interface RouteType {
   routeId: number;
   centerName: string;
@@ -16,4 +18,16 @@ export interface PassengerRoute {
   id: number;
   name: string;
   status: RouteStatus;
+}
+
+export interface BackendRouteType {
+  pathId: number;
+  carNumber: string;
+  startTime: string;
+  endTime: string;
+  startAddr: string;
+  endAddr: string;
+  centerName: string;
+  driveStatus: RouteFilterValue;
+  userCount: number;
 }
