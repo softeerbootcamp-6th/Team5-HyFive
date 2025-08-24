@@ -42,5 +42,8 @@ public class Rental {
 
     @OneToMany(mappedBy = "rental", fetch = FetchType.LAZY)
     private List<Path> pathList;
+
+    @OneToMany(mappedBy = "rental", cascade=CascadeType.ALL)
+    private List<AvailableRental> availableList;
 }
 
