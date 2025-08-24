@@ -1,7 +1,7 @@
 import type {
   NodeAPIReponse,
   PassengerAPIResponse,
-  ScheduleAPIResposne,
+  ScheduleAPIResponse,
 } from "@/features/schedule/Schedule.types";
 import { APIMatcher } from "@/utils/APIMatcher";
 import { clientInstance } from "@/utils/AxiosInstance";
@@ -21,7 +21,7 @@ export const useGetEntireSchedule = (activeTab: string) => {
   const maxInterval = 2 * 60000; //2분
   const intervalRef = useRef(minInterval);
 
-  const { data, isFetching, refetch } = useSuspenseQuery<ScheduleAPIResposne>({
+  const { data, isFetching, refetch } = useSuspenseQuery<ScheduleAPIResponse>({
     queryKey: ["schedule", scheduleStatus],
     queryFn: () =>
       clientInstance.get(`/path/scroll?status=${scheduleStatus}&size=100`),

@@ -20,7 +20,7 @@ export interface ScheduleData {
   carNumber: string;
 }
 
-export interface ScheduleAPIResposne {
+export interface ScheduleAPIResponse {
   isSuccess: boolean;
   code: number;
   message: string;
