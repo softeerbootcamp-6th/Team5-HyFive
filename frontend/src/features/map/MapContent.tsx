@@ -1,23 +1,25 @@
 import { useGetNode } from "@/apis/ScheduleAPI";
-import LoadingSpinner from "@/components/LoadingSpinner";
 import MapCore from "@/features/map/MapCore";
-import { Suspense } from "react";
+import { CustomError } from "@/utils/CustomError";
 
 const MapContent = ({ id }: { id: number }) => {
-  const { polyline, marker, highlight } = useGetNode(id);
+  const { polyline, marker, highlight, isError } = useGetNode(id);
 
   const safeMarkerPath = marker ?? [];
   const safePolylinePath = polyline ?? [];
   const safeHighlightPath = highlight ?? [];
 
+  if (isError)
+    throw new CustomError({
+      message: "지도 관련 데이터가 존재하지 않습니다",
+    });
+
   return (
-    <Suspense fallback={<LoadingSpinner />}>
-      <MapCore
-        markerPath={safeMarkerPath}
-        polylinePath={safePolylinePath}
-        highlightPath={safeHighlightPath}
-      />
-    </Suspense>
+    <MapCore
+      markerPath={safeMarkerPath}
+      polylinePath={safePolylinePath}
+      highlightPath={safeHighlightPath}
+    />
   );
 };
 

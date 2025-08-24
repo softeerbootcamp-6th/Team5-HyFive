@@ -1,5 +1,6 @@
 import { useGetEntireSchedule } from "@/apis/ScheduleAPI";
 import FallbackUI from "@/components/FallbackUI";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import RefetchButton from "@/components/RefetchButton";
 import Tabs from "@/components/Tabs";
 import type {
@@ -9,7 +10,7 @@ import type {
 import ScheduleDataFetcher from "@/features/schedule/ScheduleDataFetcher";
 import { theme } from "@/styles/themes.style";
 import { css } from "@emotion/react";
-import type { Dispatch, SetStateAction } from "react";
+import { Suspense, type Dispatch, type SetStateAction } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 const { color, typography } = theme;
 
@@ -55,12 +56,14 @@ const ScheduleListSection = ({
             />
           )}
         >
-          <ScheduleDataFetcher
-            activeTab={activeTab}
-            parsedActiveTab={parsedActiveTab}
-            selectedSchedule={selectedSchedule}
-            setSelectedSchedule={setSelectedSchedule}
-          />
+          <Suspense fallback={<LoadingSpinner />}>
+            <ScheduleDataFetcher
+              activeTab={activeTab}
+              parsedActiveTab={parsedActiveTab}
+              selectedSchedule={selectedSchedule}
+              setSelectedSchedule={setSelectedSchedule}
+            />
+          </Suspense>
         </ErrorBoundary>
       </div>
     </div>

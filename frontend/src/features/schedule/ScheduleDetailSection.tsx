@@ -1,5 +1,6 @@
 import EmptyUI from "@/components/EmptyUI";
 import FallbackUI from "@/components/FallbackUI";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import MapContent from "@/features/map/MapContent";
 import MapHeader from "@/features/schedule/MapHeader";
 import type {
@@ -7,6 +8,7 @@ import type {
   ScheduleType,
 } from "@/features/schedule/Schedule.types";
 import { css } from "@emotion/react";
+import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
 interface ScheduleDetailSectionProps {
@@ -27,17 +29,21 @@ const ScheduleDetailSection = ({
           <FallbackUI error={error} handleRetry={resetErrorBoundary} />
         )}
       >
-        <MapHeader
-          scheduleType={scheduleType}
-          selectedSchedule={selectedSchedule}
-        />
+        <Suspense fallback={<LoadingSpinner />}>
+          <MapHeader
+            scheduleType={scheduleType}
+            selectedSchedule={selectedSchedule}
+          />
+        </Suspense>
       </ErrorBoundary>
       <ErrorBoundary
         fallbackRender={({ error, resetErrorBoundary }) => (
           <FallbackUI error={error} handleRetry={resetErrorBoundary} />
         )}
       >
-        <MapContent id={selectedSchedule.routeId} />
+        <Suspense fallback={<LoadingSpinner />}>
+          <MapContent id={selectedSchedule.routeId} />
+        </Suspense>
       </ErrorBoundary>
     </div>
   );

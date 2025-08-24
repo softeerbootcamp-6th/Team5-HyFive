@@ -1,14 +1,21 @@
+import { useGetPassenger } from "@/apis/ScheduleAPI";
 import { ChevronDownIcon } from "@/assets/icons";
 import Table from "@/components/table/Table";
-import type { PassengerData } from "@/features/schedule/Schedule.types";
 import { theme } from "@/styles/themes.style";
+import { CustomError } from "@/utils/CustomError";
 import { css } from "@emotion/react";
 import { useState } from "react";
 import { createPortal } from "react-dom";
 const { color, typography } = theme;
 
-const PassengerDropDown = ({ data }: { data: PassengerData[] }) => {
+const PassengerDropDown = ({ id }: { id: number | undefined }) => {
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
+  const { data, isError } = useGetPassenger(id as number);
+  if (isError)
+    throw new CustomError({
+      message: "탑승자 정보 불러오는 과정에 문제가 존재합니다",
+    });
+
   return (
     <>
       <div
@@ -23,7 +30,7 @@ const PassengerDropDown = ({ data }: { data: PassengerData[] }) => {
       {isDropDownOpen &&
         createPortal(
           <div css={DropDownContent}>
-            <Table rows={data} />
+            <Table rows={data ?? []} />
           </div>,
           document.getElementById("map")!,
         )}
