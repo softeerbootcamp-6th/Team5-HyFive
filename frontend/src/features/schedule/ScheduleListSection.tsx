@@ -62,7 +62,13 @@ const ScheduleListSection = ({
             />
           )}
         >
-          <Suspense fallback={<LoadingSpinner />}>
+          <Suspense
+            fallback={
+              <div css={LoadingSpinnerWrapper}>
+                <LoadingSpinner />
+              </div>
+            }
+          >
             <ScheduleDataFetcher
               activeTab={activeTab}
               parsedActiveTab={parsedActiveTab}
@@ -105,4 +111,12 @@ const ContentContainer = css`
 const LocationSectionText = css`
   color: ${color.GrayScale.black};
   font: ${typography.Label.l1_semi};
+`;
+
+const LoadingSpinnerWrapper = css`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;

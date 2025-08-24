@@ -16,7 +16,7 @@ export const useGetEntireSchedule = (activeTab: string) => {
     useSuspenseQuery<ScheduleAPIResposne>({
       queryKey: ["schedule", scheduleStatus],
       queryFn: () =>
-        clientInstance.get(`/path/sroll?status=${scheduleStatus}&size=100`),
+        clientInstance.get(`/path/scroll?status=${scheduleStatus}&size=100`),
       retry: 1,
     });
   const entireScheduleData = data?.data?.items?.map((partData) =>
@@ -32,12 +32,11 @@ export const useGetEntireSchedule = (activeTab: string) => {
 };
 
 export const useGetPassenger = (activeId: number) => {
-  const { data, isError, error, isFetching, refetch } =
-    useQuery<PassengerAPIResponse>({
-      queryKey: ["passenger", activeId],
-      queryFn: () => clientInstance.get(`/path/${activeId}/passenger`),
-      retry: 1,
-    });
+  const { data, refetch } = useSuspenseQuery<PassengerAPIResponse>({
+    queryKey: ["passenger", activeId],
+    queryFn: () => clientInstance.get(`/path/${activeId}/passenge`),
+    retry: 1,
+  });
 
   const passengerData = data?.data?.map((partData) =>
     APIMatcher.matchPassengerAPI(partData),
@@ -45,9 +44,6 @@ export const useGetPassenger = (activeId: number) => {
 
   return {
     data: passengerData,
-    isError,
-    error,
-    isFetching,
     refetch,
   };
 };
