@@ -73,12 +73,14 @@ public class NewPathDispatchFlow {
         log.info("--- STEP 3: 최적 경로 탐색 ---");
         List<FinalNewPathDto> allPaths = routeInfoProvider.getAll(scheduleListByCenter, newBookDto);
         log.info("Kakao API 호출 시뮬레이션 총 횟수: {} 회", routeInfoProvider.getApiCallCount());
+        log.info("STEP 3 완료: 탐색된 최적 경로 {}개", allPaths.size());
 
         FinalNewPathDto bestPath = allPaths.stream()
                 .filter(finalNewPathChecker::isFirstPathDurationExceed)
                 .filter(finalNewPathChecker::isScheduleWithinRentalWindow)
                 .min(Comparator
-                        .comparingInt(finalNewPathChecker::compareStartTimeDifference)
+                        .comparingInt(finalNewPathChecker::fragmentCount)
+                        .thenComparingInt(finalNewPathChecker::compareStartTimeDifference)
                         .thenComparingInt(FinalNewPathDto::totalDuration)
                         .thenComparingInt(FinalNewPathDto::totalDistance)
                 )
