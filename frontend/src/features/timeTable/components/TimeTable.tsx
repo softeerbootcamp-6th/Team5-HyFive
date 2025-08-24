@@ -37,7 +37,6 @@ import {
   usePostTimeSlot,
 } from "@/apis/TimeTableAPI";
 import { useTimeTableDrag } from "@/features/timeTable/hooks/useTimeTableDrag";
-import { useTimeTableError } from "@/features/timeTable/hooks/useTimeTableError";
 
 // 상수, 유틸
 import { TIME_TABLE_CONFIG } from "@/features/timeTable/TimeTable.constants";
@@ -80,7 +79,7 @@ const TimeTable = ({
   const slotsDisabled = Boolean(previewSlot);
 
   const queryClient = useQueryClient();
-  const { createTimeSlot, error } = usePostTimeSlot();
+  const { createTimeSlot, error: postError } = usePostTimeSlot();
   const {
     timeSlotData,
     isFetching,
@@ -89,8 +88,17 @@ const TimeTable = ({
   } = useGetTimeSlot(selectedCarId, nextWeekKey);
 
   // Error 관련 상태
-  const { errorMessage, isErrorModalOpen, handleCloseErrorModal } =
-    useTimeTableError(error, fetchError);
+  const activeError = postError ?? fetchError;
+  const errorMessage =
+    (activeError instanceof Error
+      ? activeError.message
+      : String(activeError)) || "시간표 데이터를 불러오는데 실패했습니다.";
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (activeError) setIsModalOpen(true);
+  }, [activeError]);
 
   const { handleCellMouseDown, handleCellMouseEnter, deleteSlot } =
     useTimeTableDrag({
@@ -206,12 +214,12 @@ const TimeTable = ({
             </div>
           )}
 
-          {error && (
-            <Modal isOpen={isErrorModalOpen} onClose={handleCloseErrorModal}>
+          {(postError || fetchError) && (
+            <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
               <ModalContent
                 type="alert"
                 content={errorMessage}
-                onClose={handleCloseErrorModal}
+                onClose={() => setIsModalOpen(false)}
               />
             </Modal>
           )}
