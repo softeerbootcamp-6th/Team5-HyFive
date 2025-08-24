@@ -137,13 +137,15 @@ public class CustomPathRepositoryImpl implements CustomPathRepository {
     @Override
     public Page<Path> searchPathPageByCondition(Pair<LocalDate, LocalDate> dateRange,
                                                 DriveStatus status,
+                                                Long pathId,
                                                 Pageable pageable) {
         List<Path> pathList = queryFactory
                 .select(path)
                 .from(path)
                 .where(
                         path.driveDate.between(dateRange.getFirst(), dateRange.getSecond()),
-                        statusEq(path, status)
+                        statusEq(path, status),
+                        pathId != null ? path.id.eq(pathId) : null
                 )
                 .orderBy(
                     path.realStartTime.asc(),
@@ -159,7 +161,8 @@ public class CustomPathRepositoryImpl implements CustomPathRepository {
                 .from(path)
                 .where(
                         path.driveDate.between(dateRange.getFirst(), dateRange.getSecond()),
-                        statusEq(path, status)
+                        statusEq(path, status),
+                        pathId != null ? path.id.eq(pathId) : null
                 )
                 .fetchOne();
 
