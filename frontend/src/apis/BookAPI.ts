@@ -1,18 +1,27 @@
-import type { BookAPIResponse } from "@/features/book/Book.types";
+import type { BookAPIResponse, BookData } from "@/features/book/Book.types";
 import { APIMatcher } from "@/utils/APIMatcher";
 import { clientInstance } from "@/utils/AxiosInstance";
 import TabMatcher from "@/utils/TabMatcher";
 import { useQuery } from "@tanstack/react-query";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export const useGetBook = (activeTab: string) => {
+  // book 상태 관리
+  const [visibleData, setVisibleData] = useState<BookData[]>([]);
+  const [pendingData, setPendingData] = useState<BookData[]>([]);
+  const [isNewDataActive, setIsNewDataActive] = useState(false);
+
+  // 이전 탭 추적
+  const prevTabRef = useRef<string>(activeTab);
+  const isInitializedRef = useRef(false);
+
   // book status 서버용으로 변환
   const engBookStatus = TabMatcher.matchBookTypeKRToENG(activeTab);
   const bookStatus = TabMatcher.matchBookTypeClientToServer(engBookStatus);
 
   // polling 주기 관리
-  const minInterval = 5000;
-  const maxInterval = 60000;
+  const minInterval = 60000;
+  const maxInterval = 80000;
   const intervalRef = useRef(minInterval);
 
   const query = useQuery<BookAPIResponse>({
@@ -45,9 +54,54 @@ export const useGetBook = (activeTab: string) => {
     APIMatcher.matchBookAPI(partData),
   );
 
+  // 탭 변경 감지 및 초기화
+  useEffect(() => {
+    if (prevTabRef.current !== activeTab) {
+      // 탭이 변경되면 상태 초기화
+      setVisibleData([]);
+      setPendingData([]);
+      setIsNewDataActive(false);
+      isInitializedRef.current = false;
+      prevTabRef.current = activeTab;
+    }
+  }, [activeTab]);
+
+  // 새로운 데이터 처리
+  useEffect(() => {
+    if (!bookData || bookData.length === 0) return;
+
+    if (!isInitializedRef.current) {
+      setVisibleData(bookData);
+      isInitializedRef.current = true;
+    } else {
+      const existingIds = new Set([
+        ...visibleData.map((item) => item.id),
+        ...pendingData.map((item) => item.id),
+      ]);
+
+      const newItems = bookData.filter((item) => !existingIds.has(item.id));
+
+      if (newItems.length > 0) {
+        setPendingData((prev) => [...newItems, ...prev]);
+        setIsNewDataActive(true);
+      }
+    }
+  }, [bookData, visibleData, pendingData]);
+
+  const mergePendingToVisible = () => {
+    setVisibleData((prev) => [...pendingData, ...prev]);
+    setPendingData([]);
+    setIsNewDataActive(false);
+  };
+
   return {
     data: bookData,
+    visibleData,
+    pendingData,
+    isNewDataActive,
+    pendingCount: pendingData.length,
     isFetching: query.isFetching,
     refetch: query.refetch,
+    mergePendingToVisible,
   };
 };
