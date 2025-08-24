@@ -9,6 +9,7 @@ import { theme } from "@/styles/themes.style";
 import type { TableObject } from "@/utils/TableMatcher";
 import TableMatcher from "@/utils/TableMatcher";
 import { css } from "@emotion/react";
+import { useNavigate } from "react-router";
 const { color } = theme;
 
 interface TableProps {
@@ -28,7 +29,13 @@ const isRouteFilterValue = (
 };
 
 const TableWithIndex = ({ rows }: TableProps) => {
+  const navigate = useNavigate();
   const { keys, labels } = TableMatcher.matchTableHeader(rows);
+
+  const handleRouteIdClick = (routeId: string | number) => {
+    void navigate(`/admin/book/paths?routeId=${routeId}`);
+  };
+
   const formatElement = ({
     key,
     value,
@@ -40,7 +47,13 @@ const TableWithIndex = ({ rows }: TableProps) => {
       case "isExistWalkingDevice":
         return value === true ? "o" : "-";
       case "routeId":
-        return value ? <p css={RouteIDStyle}>#{value}</p> : "-";
+        return value && typeof value !== "boolean" ? (
+          <p css={RouteIDStyle} onClick={() => handleRouteIdClick(value)}>
+            #{value}
+          </p>
+        ) : (
+          "-"
+        );
       case "totalUserCount":
         return value + "명";
       case "status": {
