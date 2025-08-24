@@ -26,7 +26,7 @@ const RefetchButton = ({ handleClick }: RefetchButtonProps) => {
     <div css={RefetchButtonContainer} onClick={handleRefetch}>
       <p css={DateText}>{refetchTime}</p>
       <RefreashIcon
-        css={isRefetchActive ? rotating : undefined}
+        css={isRefetchActive ? rotating() : undefined}
         fill={color.GrayScale.gray4}
       />
     </div>

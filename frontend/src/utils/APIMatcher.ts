@@ -1,4 +1,8 @@
 import type { BookAPIData, BookData } from "@/features/book/Book.types";
+import type {
+  PassengerAPIData,
+  ScheduleAPIData,
+} from "@/features/schedule/Schedule.types";
 
 export const APIMatcher = {
   matchBookAPI: (apiItem: BookAPIData): BookData => {
@@ -21,6 +25,27 @@ export const APIMatcher = {
       routeEndTime: "",
       routeStartLocation: "",
       routeEndLocation: "",
+    };
+  },
+  matchScheduleAPI: (apiItem: ScheduleAPIData) => {
+    return {
+      routeId: apiItem.pathId,
+      totalUserCount: apiItem.userCount,
+      routeStartTime: apiItem.startTime,
+      routeEndTime: apiItem.endTime,
+      routeStartLocation: apiItem.startAddr,
+      routeEndLocation: apiItem.endAddr,
+      centerName: apiItem.centerName,
+      carNumber: apiItem.carNumber,
+    };
+  },
+  matchPassengerAPI: (apiItem: PassengerAPIData) => {
+    return {
+      name: apiItem.name,
+      phone: apiItem.phoneNumber,
+      isExistWalkingDevice: apiItem.walker,
+      boardingTime: apiItem.onTime,
+      getOffTime: apiItem.offTime,
     };
   },
 };
