@@ -20,8 +20,8 @@ export const useGetBook = (activeTab: string) => {
   const bookStatus = TabMatcher.matchBookTypeClientToServer(engBookStatus);
 
   // polling 주기 관리
-  const minInterval = 60000; //1분
-  const maxInterval = 12000; //2분
+  const minInterval = 30000; //30초
+  const maxInterval = 60000; //1분
   const intervalRef = useRef(minInterval);
 
   const query = useQuery<BookAPIResponse>({

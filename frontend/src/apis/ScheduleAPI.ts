@@ -17,8 +17,8 @@ export const useGetEntireSchedule = (activeTab: string) => {
     TabMatcher.matchScheduleTypeClientToServer(engScheduleStatus);
 
   // polling 주기 관리
-  const minInterval = 6000; //1분
-  const maxInterval = 1200; //2분
+  const minInterval = 60000; //1분
+  const maxInterval = 12000; //2분
   const intervalRef = useRef(minInterval);
 
   const { data, isFetching, refetch } = useSuspenseQuery<ScheduleAPIResposne>({
