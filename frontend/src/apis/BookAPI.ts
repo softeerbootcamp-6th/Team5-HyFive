@@ -1,4 +1,8 @@
-import type { BookAPIData, BookAPIResponse, BookData } from "@/features/book/Book.types";
+import type {
+  BookAPIData,
+  BookAPIResponse,
+  BookData,
+} from "@/features/book/Book.types";
 import type { DateFilterValue } from "@/features/dateFilter/DateFilter.constants";
 import type { UserFilterValue } from "@/features/statusFilter/StatusFilter.constants";
 import { APIMatcher } from "@/utils/APIMatcher";
@@ -34,8 +38,8 @@ export const useGetBook = (activeTab: string) => {
   const bookStatus = TabMatcher.matchBookTypeClientToServer(engBookStatus);
 
   // polling 주기 관리
-  const minInterval = 30000; //30초
-  const maxInterval = 60000; //1분
+  const minInterval = 0.5 * 60000; //30초
+  const maxInterval = 1 * 60000; //1분
   const intervalRef = useRef(minInterval);
 
   const query = useQuery<BookAPIResponse>({
