@@ -21,6 +21,7 @@ import { USER_STATUS_FILTER_OPTIONS } from "@/features/statusFilter/StatusFilter
 import { useGetBookList } from "@/apis/BookAPI";
 import EmptyUI from "@/components/EmptyUI";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import RefetchButton from "@/components/RefetchButton";
 
 const { color, typography } = theme;
 
@@ -46,6 +47,12 @@ const UsersPage = () => {
     ITEMS_PER_PAGE,
   );
 
+  const handleRefetch = () => {
+    setSelectedDateFilter("TODAY");
+    setSelectedStatusFilter("ALL");
+    setSelectedPage(1);
+  };
+
   useEffect(() => {
     setSelectedPage(1);
   }, [selectedDateFilter, selectedStatusFilter]);
@@ -63,13 +70,21 @@ const UsersPage = () => {
 
       <section css={ToolbarStyle}>
         <div css={StatusSectionStyle}>
-          <h3 css={CountStyle}>총 {items.length}명</h3>
-          <StatusFilter
-            value={selectedStatusFilter}
-            options={USER_STATUS_FILTER_OPTIONS}
-            setValue={setSelectedStatusFilter}
-          />
-          <ToolTip label={TOOLTIP_DATA.label} content={TOOLTIP_DATA.content} />
+          <div css={leftSectionStyle}>
+            <h3 css={CountStyle}>총 {items.length}명</h3>
+            <StatusFilter
+              value={selectedStatusFilter}
+              options={USER_STATUS_FILTER_OPTIONS}
+              setValue={setSelectedStatusFilter}
+            />
+            <ToolTip
+              label={TOOLTIP_DATA.label}
+              content={TOOLTIP_DATA.content}
+            />
+          </div>
+          <div css={rightSectionStyle}>
+            <RefetchButton handleClick={handleRefetch} />
+          </div>
         </div>
       </section>
       <div css={TableSectionStyle}>
@@ -78,7 +93,10 @@ const UsersPage = () => {
             <LoadingSpinner size="large" />
           </div>
         ) : items.length > 0 ? (
-          <TableWithIndex rows={items} />
+          <TableWithIndex
+            rows={items}
+            selectedDateFilter={selectedDateFilter}
+          />
         ) : (
           <EmptyUI />
         )}
@@ -134,9 +152,9 @@ const ToolbarStyle = css`
 
 const StatusSectionStyle = css`
   display: flex;
-  gap: 24px;
+  width: 100%;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
 `;
 
 const CountStyle = css`
@@ -153,6 +171,19 @@ const LoadingSpinnerStyle = css`
   display: flex;
   width: 100%;
   height: 100%;
+  align-items: center;
+  justify-content: center;
+`;
+
+const leftSectionStyle = css`
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  justify-content: center;
+`;
+
+const rightSectionStyle = css`
+  display: flex;
   align-items: center;
   justify-content: center;
 `;

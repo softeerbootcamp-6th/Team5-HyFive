@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSearchParams, useNavigate } from "react-router";
 
 // 타입
 import type { DateFilterValue } from "@/features/dateFilter/DateFilter.constants";
@@ -21,6 +22,7 @@ import { ROUTE_STATUS_FILTER_OPTIONS } from "@/features/statusFilter/StatusFilte
 import { useGetRouteList } from "@/apis/RouteListAPI";
 import EmptyUI from "@/components/EmptyUI";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import RefetchButton from "@/components/RefetchButton";
 
 const { color, typography } = theme;
 
@@ -32,19 +34,38 @@ const TOOLTIP_DATA = {
 };
 
 const PathsPage = () => {
-  const [selectedDateFilter, setSelectedDateFilter] =
-    useState<DateFilterValue>("TODAY");
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+
+  // URL에서 파라미터 가져오기
+  const routeId = searchParams.get("routeId");
+  const periodFromUrl = searchParams.get("period") as DateFilterValue;
+
+  const [selectedDateFilter, setSelectedDateFilter] = useState<DateFilterValue>(
+    periodFromUrl || "TODAY",
+  );
   const [selectedStatusFilter, setSelectedStatusFilter] =
     useState<RouteFilterValue>("ALL");
   const [selectedPage, setSelectedPage] = useState(1);
   const ITEMS_PER_PAGE = 12;
+
+  const pathId = routeId ? Number(routeId) : null;
 
   const { items, pageInfo, isFetching } = useGetRouteList(
     selectedDateFilter,
     selectedStatusFilter,
     selectedPage,
     ITEMS_PER_PAGE,
+    pathId,
   );
+
+  const handleRefetch = () => {
+    void navigate("/admin/book/paths", { replace: true });
+
+    setSelectedDateFilter("TODAY");
+    setSelectedStatusFilter("ALL");
+    setSelectedPage(1);
+  };
 
   useEffect(() => {
     setSelectedPage(1);
@@ -63,13 +84,21 @@ const PathsPage = () => {
 
       <section css={ToolbarStyle}>
         <div css={StatusSectionStyle}>
-          <h3 css={CountStyle}>총 {items.length}명</h3>
-          <StatusFilter
-            value={selectedStatusFilter}
-            options={ROUTE_STATUS_FILTER_OPTIONS}
-            setValue={setSelectedStatusFilter}
-          />
-          <ToolTip label={TOOLTIP_DATA.label} content={TOOLTIP_DATA.content} />
+          <div css={leftSectionStyle}>
+            <h3 css={CountStyle}>총 {items.length}명</h3>
+            <StatusFilter
+              value={selectedStatusFilter}
+              options={ROUTE_STATUS_FILTER_OPTIONS}
+              setValue={setSelectedStatusFilter}
+            />
+            <ToolTip
+              label={TOOLTIP_DATA.label}
+              content={TOOLTIP_DATA.content}
+            />
+          </div>
+          <div css={rightSectionStyle}>
+            <RefetchButton handleClick={handleRefetch} />
+          </div>
         </div>
       </section>
 
@@ -134,9 +163,9 @@ const ToolbarStyle = css`
 
 const StatusSectionStyle = css`
   display: flex;
-  gap: 24px;
+  width: 100%;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
 `;
 
 const CountStyle = css`
@@ -153,6 +182,19 @@ const LoadingSpinnerStyle = css`
   display: flex;
   width: 100%;
   height: 100%;
+  align-items: center;
+  justify-content: center;
+`;
+
+const leftSectionStyle = css`
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  justify-content: center;
+`;
+
+const rightSectionStyle = css`
+  display: flex;
   align-items: center;
   justify-content: center;
 `;
