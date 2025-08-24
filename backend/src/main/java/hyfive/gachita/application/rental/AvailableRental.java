@@ -41,4 +41,9 @@ public class AvailableRental {
     public void setRental(Rental rental) {
         this.rental = rental;
     }
+
+    public void updateTime(LocalTime startTime, LocalTime maybeEndTime) {
+        this.startTime = startTime;
+        this.endTime = maybeEndTime;
+    }
 }

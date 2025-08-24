@@ -12,6 +12,9 @@ import hyfive.gachita.application.node.Point;
 import hyfive.gachita.application.node.Segment;
 import hyfive.gachita.application.path.dto.*;
 import hyfive.gachita.application.path.respository.PathRepository;
+import hyfive.gachita.application.rental.AvailableRental;
+import hyfive.gachita.application.rental.AvailableRentalRepository;
+import hyfive.gachita.application.rental.RentalService;
 import hyfive.gachita.client.geocode.dto.LatLng;
 import hyfive.gachita.client.kakao.KakaoNaviService;
 import hyfive.gachita.client.kakao.RouteInfo;
@@ -41,6 +44,8 @@ import java.util.stream.Collectors;
 public class PathService {
     private final PathRepository pathRepository;
     private final KakaoNaviService kakaoNaviService;
+    private final RentalService rentalService;
+    private final AvailableRentalRepository availableRentalRepository;
 
     @Transactional
     public Path createPathWithNodes(FinalNewPathDto finalPathDto, Book book) {
@@ -48,9 +53,17 @@ public class PathService {
         LocalTime endTime = finalPathDto.nodeList().get(2).time();
         LocalTime maybeEndTime = minTime(finalPathDto.rentalEndTime(), startTime.plusHours(2));
 
+        // availableRental : startTime ~ endTime로 업데이트
+        AvailableRental updatedRental = finalPathDto.availableRental();
+        updatedRental.updateTime(startTime, maybeEndTime);
+        availableRentalRepository.save(updatedRental);
+
+        // Fragment가 있으면 해당 시간 정보를 갖는 새로운 availableRental 생성 후, 저장
+        rentalService.createAndSaveFragments(finalPathDto);
+
         Path path = Path.builder()
                 .car(finalPathDto.car())
-                .availableRental(finalPathDto.availableRental())
+                .availableRental(updatedRental)
                 .maybeStartTime(startTime)  // TODO: 고정값, 필요 없다면 제거 고려
                 .maybeEndTime(maybeEndTime)
                 .realStartTime(startTime)

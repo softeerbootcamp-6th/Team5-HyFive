@@ -3,6 +3,8 @@ package hyfive.gachita.application.rental;
 import hyfive.gachita.application.car.Car;
 import hyfive.gachita.application.car.repository.CarRepository;
 import hyfive.gachita.application.common.enums.SearchPeriod;
+import hyfive.gachita.dispatch.FragmentDto;
+import hyfive.gachita.dispatch.dto.FinalNewPathDto;
 import hyfive.gachita.global.BusinessException;
 import hyfive.gachita.global.ErrorCode;
 import hyfive.gachita.application.common.util.DateRangeUtil;
@@ -11,6 +13,7 @@ import hyfive.gachita.application.rental.dto.RentalRes;
 import hyfive.gachita.application.rental.repository.RentalRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
@@ -20,10 +23,12 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class RentalService {
 
     private final RentalRepository rentalRepository;
     private final CarRepository carRepository;
+    private final AvailableRentalRepository availableRentalRepository;
 
     @Transactional
     public List<RentalRes> replaceWeeklyRentals(Long carId, LocalDate targetDate, List<ReplaceRental> rentalList) {
@@ -83,4 +88,29 @@ public class RentalService {
                 .anyMatch(dto -> Duration.between(dto.rentalStartTime(), dto.rentalEndTime()).toHours() < 2);
     }
 
+    @Transactional
+    public void createAndSaveFragments(FinalNewPathDto finalPathDto) {
+        Rental rental = rentalRepository.findById(finalPathDto.availableRental().getRental().getId())
+                .orElseThrow(() -> new IllegalStateException("Rental이 DB에 존재하지 않습니다."));
+
+        FragmentDto.ofFirst(finalPathDto).ifPresent(fragment -> {
+            log.info("Fragment First: {} ~ {}", fragment.startTime(), fragment.endTime());
+            AvailableRental first = AvailableRental.builder()
+                    .rental(rental)
+                    .startTime(fragment.startTime())
+                    .endTime(fragment.endTime())
+                    .build();
+            availableRentalRepository.save(first);
+        });
+
+        FragmentDto.ofSecond(finalPathDto).ifPresent(fragment -> {
+            log.info("Fragment Second: {} ~ {}", fragment.startTime(), fragment.endTime());
+            AvailableRental second = AvailableRental.builder()
+                    .rental(rental)
+                    .startTime(fragment.startTime())
+                    .endTime(fragment.endTime())
+                    .build();
+            availableRentalRepository.save(second);
+        });
+    }
 }

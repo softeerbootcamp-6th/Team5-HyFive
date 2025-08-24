@@ -40,8 +40,8 @@ public class FinalNewPathChecker {
     }
 
     public int compareFragmentCount(FinalNewPathDto path) {
-        Optional<FragmentDto> firstFragment = FragmentDto.of(path.rentalStartTime(), path.nodeList().get(0).time());
-        Optional<FragmentDto> secondFragment = FragmentDto.of(path.nodeList().get(0).time().plusSeconds(2 * HOUR_IN_SECONDS), path.rentalEndTime());
+        Optional<FragmentDto> firstFragment = FragmentDto.ofFirst(path);
+        Optional<FragmentDto> secondFragment = FragmentDto.ofSecond(path);
 
         int totalCount = firstFragment.map(FragmentDto::fragmentCount).orElse(0)
                 + secondFragment.map(FragmentDto::fragmentCount).orElse(0);
