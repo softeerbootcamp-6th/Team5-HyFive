@@ -76,13 +76,13 @@ public class NewPathDispatchFlow {
         FinalNewPathDto bestPath = allPaths.stream()
                 .filter(finalNewPathChecker::isFirstPathDurationExceed)
                 .filter(finalNewPathChecker::isScheduleWithinRentalWindow)
-                .min(Comparator
+                .max(
+                        Comparator
                         .comparingInt(finalNewPathChecker::compareFragmentCount)
-                        .thenComparingInt(finalNewPathChecker::compareStartTimeDifference)
-                        .thenComparingInt(FinalNewPathDto::totalDuration)
-                        .thenComparingInt(FinalNewPathDto::totalDistance)
+                            .thenComparingInt(finalNewPathChecker::compareStartTimeDifference)
+                            .thenComparingInt(FinalNewPathDto::totalDuration)
+                            .thenComparingInt(FinalNewPathDto::totalDistance)
                 )
-                // TODO: 각 필터에 대한 예외 처리 추가 필요
                 .orElseThrow(()
                         -> new DispatchException("운행 시간이 한시간 이상이거나, 예약 시간 내에 운행이 가능한 차량이 없습니다."));
 
