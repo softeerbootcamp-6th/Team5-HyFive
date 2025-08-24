@@ -16,7 +16,7 @@ const useZoomLevel = ({ map }: UseZoomLevelProps) => {
     kakaoMaps.event.addListener(map, "zoom_changed", function () {
       setZoomLevel(map.getLevel());
     });
-  }, [map]);
+  }, [kakaoMaps, map]);
 
   useEffect(() => {
     if (!map) return;

@@ -1,7 +1,7 @@
 import {
   INITIAL_ZOOM_LEVEL,
   MAX_ZOOM_LEVEL,
-} from "@/features/map/useZoomLevel";
+} from "@/features/map/hooks/useZoomLevel";
 import { useEffect, useState, type RefObject } from "react";
 
 interface UseInitializeMapProps {
@@ -30,7 +30,7 @@ const useInitializeMap = ({
     initializedMap.setMaxLevel(MAX_ZOOM_LEVEL);
 
     setMap(initializedMap);
-  }, [mapRef, centerLat, centerLng]);
+  }, [kakaoMaps, mapRef, centerLat, centerLng]);
 
   const handleInitMidPoint = () => {
     if (!map || !kakaoMaps) return;

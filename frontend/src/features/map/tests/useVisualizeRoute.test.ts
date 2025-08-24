@@ -1,7 +1,7 @@
 import { describe, it, beforeEach, beforeAll, expect, vi } from "vitest";
 import { renderHook } from "@testing-library/react";
-import useVisualizeRoute from "@/features/map/useVisualizeRoute";
-import animateRouteSegments from "@/features/map/animateRouteSegments.util";
+import useVisualizeRoute from "@/features/map/hooks/useVisualizeRoute";
+import animateRouteSegments from "@/features/map/utils/animateRouteSegments.util";
 
 //kakaomap api 관련 map, path mock data
 const mapMock = {};
@@ -43,7 +43,7 @@ beforeAll(() => {
 });
 
 //유틸 함수 mocking
-vi.mock("@/features/map/animateRouteSegments.util", () => {
+vi.mock("@/features/map/utils/animateRouteSegments.util", () => {
   return {
     default: vi.fn(({ segments, renderSegment }) => {
       segments.forEach((segment: LatLngInstance[]) => renderSegment(segment));

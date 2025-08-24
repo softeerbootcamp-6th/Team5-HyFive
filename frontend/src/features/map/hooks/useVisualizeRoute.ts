@@ -1,4 +1,4 @@
-import animateRouteSegments from "@/features/map/animateRouteSegments.util";
+import animateRouteSegments from "@/features/map/utils/animateRouteSegments.util";
 import type { LatLng, PolylinePath } from "@/features/map/Map.types";
 import { theme } from "@/styles/themes.style";
 import { useEffect, useRef } from "react";
@@ -14,7 +14,10 @@ const useVisualizeRoute = ({ map, polylinePath }: UseVisualizeRouteProps) => {
   const highlightPolylineRef = useRef<PolylineInstance | null>(null);
 
   useEffect(() => {
-    if (!kakaoMaps || !map || polylinePath.length === 0) return;
+    if (!kakaoMaps || !map || !polylinePath || polylinePath.length === 0)
+      return;
+    if (basePolylineRef.current) basePolylineRef.current = null;
+    if (highlightPolylineRef.current) highlightPolylineRef.current = null;
 
     const basePolyline = new kakaoMaps.Polyline({
       path: [],

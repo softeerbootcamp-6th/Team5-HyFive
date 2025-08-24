@@ -6,7 +6,7 @@ const BookPage = () => {
   return (
     <ErrorBoundary
       fallbackRender={({ error, resetErrorBoundary }) => (
-        <FallbackUI error={error} handleRetry={resetErrorBoundary} />
+        <FallbackUI error={error} resetErrorBoundary={resetErrorBoundary} />
       )}
     >
       <BookSection />
