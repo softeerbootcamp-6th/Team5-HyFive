@@ -9,7 +9,7 @@ import { css } from "@emotion/react";
 const { typography } = theme;
 
 interface BookDetailSectionProps {
-  data: BookData | undefined;
+  data: BookData | null;
   activeTab: string;
 }
 

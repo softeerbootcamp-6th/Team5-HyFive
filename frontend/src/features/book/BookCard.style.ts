@@ -25,9 +25,10 @@ const BookCardContainer = (isActive: boolean) => css`
   flex-direction: column;
   gap: 20px;
   border-radius: 20px;
+  cursor: pointer;
 
   &:hover {
-    background-color: ${color.GrayScale.gray1};
+    background-color: ${color.GrayScale.gray2};
   }
 
   ${isActive &&

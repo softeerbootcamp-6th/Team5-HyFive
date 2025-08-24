@@ -5,35 +5,62 @@ import BookCard from "@/features/book/BookCard";
 import { bookDataList } from "@/mocks/bookMocks";
 import { theme } from "@/styles/themes.style";
 import TabMatcher from "@/utils/TabMatcher";
-import { css } from "@emotion/react";
-import { type Dispatch, type SetStateAction } from "react";
+import { css, keyframes } from "@emotion/react";
+import { useEffect, useRef, type Dispatch, type SetStateAction } from "react";
+import { useGetBook } from "@/apis/BookAPI";
 import type { BookData } from "@/features/book/Book.types";
+import Tag from "@/components/Tag";
 const { color, typography } = theme;
 
 interface BookListSectionProps {
-  data: BookData[] | undefined;
   activeTab: string;
-  activeBookId: number | null;
   setActiveTab: Dispatch<SetStateAction<string>>;
-  setActiveBookId: Dispatch<SetStateAction<number | null>>;
-  refetch: () => void;
+  activeBookData: BookData | null;
+  setActiveBookData: Dispatch<SetStateAction<BookData | null>>;
 }
 const BookListSection = ({
-  data,
   activeTab,
-  activeBookId,
   setActiveTab,
-  setActiveBookId,
-  refetch,
+  activeBookData,
+  setActiveBookData,
 }: BookListSectionProps) => {
   const TAB_LIST = ["신규 예약", "예약 성공", "예약 실패"];
   const LOCATION_SECTION = "운정 1구역";
+  const contentContainerRef = useRef<HTMLDivElement>(null);
+
+  const {
+    visibleData: data,
+    isNewDataActive,
+    pendingCount,
+    mergePendingToVisible,
+    isFetching,
+    refetch,
+  } = useGetBook(activeTab);
+
+  // 첫 번째 인덱스의 값 초기값으로 설정
+  useEffect(() => {
+    setActiveBookData(data[0]);
+  }, [data, setActiveBookData]);
+
+  // polling 성공시 새로운 데이터 발생한 경우 반영하는 로직
+  const handleMergeNewData = () => {
+    mergePendingToVisible();
+    if (contentContainerRef.current) {
+      contentContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
+  const matchTagColor = (activeTab: string) => {
+    if (activeTab === "신규 예약") return "orange";
+    if (activeTab === "예약 성공") return "blue";
+    return "red";
+  };
 
   return (
     <div css={BookListSectionContainer}>
       <div css={HeaderContainer}>
         <p css={LocationSectionText}>{LOCATION_SECTION}</p>
-        <RefetchButton handleClick={refetch} />
+        <RefetchButton isFetching={isFetching} handleClick={refetch} />
       </div>
       <Tabs
         type="bar_true"
@@ -41,17 +68,25 @@ const BookListSection = ({
         selected={activeTab}
         setSelected={setActiveTab}
       />
-      <div css={ContentContainer}>
+      {isNewDataActive && (
+        <div onClick={handleMergeNewData} css={NewDataWrapper}>
+          <Tag
+            type={matchTagColor(activeTab)}
+            label={`새로운 예약: ${pendingCount}건`}
+          />
+        </div>
+      )}
+      <div ref={contentContainerRef} css={ContentContainer}>
         {data && data?.length > 0 ? (
           data.map((bookData, idx) => (
             <div
               key={`${activeTab}-${bookData.id}`}
-              onClick={() => setActiveBookId(bookData.id)}
+              onClick={() => setActiveBookData(bookData)}
             >
               <BookCard
                 bookType={TabMatcher.matchBookTypeKRToENG(activeTab)}
                 data={bookData}
-                isActive={bookData.id === activeBookId}
+                isActive={bookData.id === activeBookData?.id}
               />
               {idx !== bookDataList.length - 1 && <div css={LineWrapper} />}
             </div>
@@ -94,6 +129,29 @@ const LineWrapper = css`
   width: 405px;
   border-bottom: 1px solid ${color.GrayScale.gray3};
   margin: 20px auto;
+`;
+
+const popIn = keyframes`
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+`;
+
+export const NewDataWrapper = css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: ${popIn} 0.5s ease-out;
+  cursor: pointer;
 `;
 
 const LocationSectionText = css`
