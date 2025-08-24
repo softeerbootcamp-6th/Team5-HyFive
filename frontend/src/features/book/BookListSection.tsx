@@ -62,11 +62,11 @@ const BookListSection = ({
         selected={activeTab}
         setSelected={setActiveTab}
       />
-      {
+      {isNewDataActive && (
         <div onClick={handleMergeNewData} css={NewDataWrapper}>
           <Tag type="orange" label={`새로운 예약: ${pendingCount}건`} />
         </div>
-      }
+      )}
       <div ref={contentContainerRef} css={ContentContainer}>
         {data && data?.length > 0 ? (
           data.map((bookData, idx) => (

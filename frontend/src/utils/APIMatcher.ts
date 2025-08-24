@@ -7,24 +7,25 @@ import type {
 export const APIMatcher = {
   matchBookAPI: (apiItem: BookAPIData): BookData => {
     return {
+      //예약자
       id: apiItem.id,
       bookStatus: apiItem.bookStatus,
       name: apiItem.bookName,
       phone: apiItem.bookTel,
       isExistWalkingDevice: apiItem.walker,
+      //예약
       bookTime: apiItem.bookTime,
       bookDate: apiItem.bookDate,
       userStartLocation: apiItem.startAddr,
       userEndLocation: apiItem.endAddr,
       hospitalTime: apiItem.hospitalTime,
-
-      // 아직 API에서 안 오는 값들은 일단 빈값 처리
-      routeId: "",
-      carNumber: "",
-      routeStartTime: "",
-      routeEndTime: "",
-      routeStartLocation: "",
-      routeEndLocation: "",
+      // 경로
+      routeId: apiItem.path?.pathId ?? "",
+      carNumber: apiItem.path?.carNumber ?? "",
+      routeStartTime: apiItem.path?.startTime ?? "",
+      routeEndTime: apiItem.path?.endTime ?? "",
+      routeStartLocation: apiItem.path?.startAddr ?? "",
+      routeEndLocation: apiItem.path?.endAddr ?? "",
     };
   },
   matchScheduleAPI: (apiItem: ScheduleAPIData) => {

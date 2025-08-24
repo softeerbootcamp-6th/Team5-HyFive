@@ -45,7 +45,6 @@ export const useGetBook = (activeTab: string) => {
       } else {
         intervalRef.current = Math.min(intervalRef.current * 2, maxInterval);
       }
-      console.log(intervalRef.current);
       return intervalRef.current;
     },
   });
@@ -57,7 +56,6 @@ export const useGetBook = (activeTab: string) => {
   // 탭 변경 감지 및 초기화
   useEffect(() => {
     if (prevTabRef.current !== activeTab) {
-      // 탭이 변경되면 상태 초기화
       setVisibleData([]);
       setPendingData([]);
       setIsNewDataActive(false);
@@ -80,7 +78,6 @@ export const useGetBook = (activeTab: string) => {
       ]);
 
       const newItems = bookData.filter((item) => !existingIds.has(item.id));
-
       if (newItems.length > 0) {
         setPendingData((prev) => [...newItems, ...prev]);
         setIsNewDataActive(true);
@@ -88,6 +85,7 @@ export const useGetBook = (activeTab: string) => {
     }
   }, [bookData, visibleData, pendingData]);
 
+  // visible Data에 pending Data 수동 병합
   const mergePendingToVisible = () => {
     setVisibleData((prev) => [...pendingData, ...prev]);
     setPendingData([]);

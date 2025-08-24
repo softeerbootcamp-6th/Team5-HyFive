@@ -42,4 +42,12 @@ export interface BookAPIData {
   endAddr: string;
   walker: boolean;
   bookStatus: BookStatus;
+  path: {
+    pathId: string;
+    carNumber: string;
+    startTime: string;
+    endTime: string;
+    startAddr: string;
+    endAddr: string;
+  } | null;
 }
