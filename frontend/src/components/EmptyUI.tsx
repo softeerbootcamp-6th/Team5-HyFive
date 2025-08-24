@@ -25,7 +25,7 @@ const EmptyUI = ({ type = "static", message }: EmptyUIProps) => {
           />
         )}
       </div>
-      <p css={TextWrapper}>{message ?? "요청값이 없습니다 :-("}</p>
+      <p css={TextWrapper}>{message ?? "아직 등록된 정보가 없어요 :-("}</p>
     </div>
   );
 };
