@@ -16,6 +16,7 @@ interface BookListSectionProps {
   activeBookId: number | null;
   setActiveTab: Dispatch<SetStateAction<string>>;
   setActiveBookId: Dispatch<SetStateAction<number | null>>;
+  isFetching: boolean;
   refetch: () => void;
 }
 const BookListSection = ({
@@ -24,6 +25,7 @@ const BookListSection = ({
   activeBookId,
   setActiveTab,
   setActiveBookId,
+  isFetching,
   refetch,
 }: BookListSectionProps) => {
   const TAB_LIST = ["신규 예약", "예약 성공", "예약 실패"];
@@ -33,7 +35,7 @@ const BookListSection = ({
     <div css={BookListSectionContainer}>
       <div css={HeaderContainer}>
         <p css={LocationSectionText}>{LOCATION_SECTION}</p>
-        <RefetchButton handleClick={refetch} />
+        <RefetchButton isFetching={isFetching} handleClick={refetch} />
       </div>
       <Tabs
         type="bar_true"

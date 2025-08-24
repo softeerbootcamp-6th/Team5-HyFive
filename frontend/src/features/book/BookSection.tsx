@@ -8,7 +8,7 @@ const BookSection = () => {
   const [activeTab, setActiveTab] = useState<string>("신규 예약");
   const [activeBookId, setActiveBookId] = useState<number | null>(null);
 
-  const { data, refetch } = useGetBook(activeTab);
+  const { data, isFetching, refetch } = useGetBook(activeTab);
   const activeBookData = data?.find(
     (book) => book.id === (activeBookId ?? data[0].id),
   );
@@ -21,6 +21,7 @@ const BookSection = () => {
         setActiveTab={setActiveTab}
         activeBookId={activeBookId}
         setActiveBookId={setActiveBookId}
+        isFetching={isFetching}
         refetch={refetch}
       />
       <BookDetailSection data={activeBookData} activeTab={activeTab} />
