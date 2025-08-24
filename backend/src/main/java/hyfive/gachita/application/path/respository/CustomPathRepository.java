@@ -20,6 +20,7 @@ public interface CustomPathRepository {
     List<Path> findPathsForScroll(LocalDate date, DriveStatus status, PathCursor cursor, int size);
     Page<Path> searchPathPageByCondition(Pair<LocalDate, LocalDate> dateRange,
                                          DriveStatus status,
+                                         Long PathId,
                                          Pageable pageable);
     Optional<List<Node>> findNodeListWithSegmentInfoByPathId(Long id);
 

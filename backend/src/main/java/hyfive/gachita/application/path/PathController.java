@@ -46,10 +46,11 @@ public class PathController implements PathDocs {
     public BaseResponse<PagedListRes<PathDetailRes>> getPathList(
             @RequestParam(name = "period", required = false, defaultValue = "TODAY") SearchPeriod period,
             @RequestParam(name = "status", required = false) DriveStatus status,
+            @RequestParam(name = "path-id", required = false) Long pathId,
             @RequestParam(name = "page", required = false, defaultValue = "1") int page,
             @RequestParam(name = "limit", required = false, defaultValue = "12") int limit
     ) {
-        return BaseResponse.success(pathService.getPathList(period, status, page, limit));
+        return BaseResponse.success(pathService.getPathList(period, status, pathId, page, limit));
     }
 
     @GetMapping("/{id}/nodes")

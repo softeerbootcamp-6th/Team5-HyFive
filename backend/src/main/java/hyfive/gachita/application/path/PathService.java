@@ -147,14 +147,14 @@ public class PathService {
                 .build();
     }
 
-    public PagedListRes<PathDetailRes> getPathList(SearchPeriod period, DriveStatus status, int page, int limit) {
+    public PagedListRes<PathDetailRes> getPathList(SearchPeriod period, DriveStatus status, Long pathId, int page, int limit) {
         Pageable pageable = PageRequest.of(
                 page - 1,
                 limit
         );
 
         Pair<LocalDate, LocalDate> dateRange = DateRangeUtil.getDateRange(LocalDate.now(), period);
-        Page<Path> pageResult = pathRepository.searchPathPageByCondition(dateRange, status, pageable);
+        Page<Path> pageResult = pathRepository.searchPathPageByCondition(dateRange, status, pathId, pageable);
         List<PathDetailRes> pathResList = pageResult.getContent().stream().map(PathDetailRes::from).toList();
         return PagedListRes.<PathDetailRes>builder()
                 .items(pathResList)
