@@ -8,7 +8,6 @@ import ScheduleCard from "@/features/schedule/ScheduleCard";
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
 import { useEffect, type Dispatch, type SetStateAction } from "react";
-import { CustomError } from "@/utils/CustomError";
 const { color } = theme;
 
 const ScheduleDataFetcher = ({
@@ -22,7 +21,7 @@ const ScheduleDataFetcher = ({
   selectedSchedule: Partial<ScheduleData | null>;
   setSelectedSchedule: Dispatch<SetStateAction<Partial<ScheduleData | null>>>;
 }) => {
-  const { data, isError } = useGetEntireSchedule(activeTab);
+  const { data } = useGetEntireSchedule(activeTab);
 
   useEffect(() => {
     if (data && data.length > 0 && !selectedSchedule?.routeId) {
@@ -33,11 +32,6 @@ const ScheduleDataFetcher = ({
       });
     }
   }, [data, setSelectedSchedule, selectedSchedule?.routeId]);
-
-  if (isError)
-    throw new CustomError({
-      message: "운행 경로 데이터 통신 중 문제가 발생했습니다.",
-    });
 
   if (!data || data.length === 0) {
     return <EmptyUI />;

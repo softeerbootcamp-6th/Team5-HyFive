@@ -1,4 +1,3 @@
-import { useGetEntireSchedule } from "@/apis/ScheduleAPI";
 import FallbackUI from "@/components/FallbackUI";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import RefetchButton from "@/components/RefetchButton";
@@ -10,6 +9,7 @@ import type {
 import ScheduleDataFetcher from "@/features/schedule/ScheduleDataFetcher";
 import { theme } from "@/styles/themes.style";
 import { css } from "@emotion/react";
+import { useQueryClient } from "@tanstack/react-query";
 import { Suspense, type Dispatch, type SetStateAction } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 const { color, typography } = theme;
@@ -31,12 +31,16 @@ const ScheduleListSection = ({
   setSelectedSchedule,
 }: ScheduleListSectionProps) => {
   const LOCATION_SECTION = "운정 1구역";
-  const { refetch } = useGetEntireSchedule(activeTab);
+  const queryClient = useQueryClient();
   return (
     <div css={ScheduleListSectionContainer}>
       <div css={HeaderContainer}>
         <p css={LocationSectionText}>{LOCATION_SECTION}</p>
-        <RefetchButton handleClick={refetch} />
+        <RefetchButton
+          handleClick={() =>
+            queryClient.invalidateQueries({ queryKey: ["schedule", activeTab] })
+          }
+        />
       </div>
       <Tabs
         type="bar_true"
@@ -51,7 +55,9 @@ const ScheduleListSection = ({
               error={error}
               handleRetry={() => {
                 resetErrorBoundary();
-                void refetch();
+                void queryClient.invalidateQueries({
+                  queryKey: ["schedule", activeTab],
+                });
               }}
             />
           )}
