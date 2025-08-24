@@ -3,6 +3,7 @@ package hyfive.gachita.application.path;
 import hyfive.gachita.application.book.Book;
 import hyfive.gachita.application.car.Car;
 import hyfive.gachita.application.node.Node;
+import hyfive.gachita.application.rental.AvailableRental;
 import hyfive.gachita.application.rental.Rental;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -30,10 +31,16 @@ public class Path {
     @JoinColumn(name = "car_id", nullable = false)
     private Car car;
 
+    // TODO : 제거 필요(AvailableRental로 대체)
+//    @NotNull
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "rental_id", nullable = false)
+//    private Rental rental;
+
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "rental_id", nullable = false)
-    private Rental rental;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "available_rental_id", nullable = false)
+    private AvailableRental availableRental;
 
     @NotNull
     @Column(name = "maybe_start_time", nullable = false, columnDefinition = "TIME")
