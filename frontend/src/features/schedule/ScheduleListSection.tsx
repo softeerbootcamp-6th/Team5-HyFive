@@ -10,7 +10,13 @@ import ScheduleDataFetcher from "@/features/schedule/ScheduleDataFetcher";
 import { theme } from "@/styles/themes.style";
 import { css } from "@emotion/react";
 import { QueryErrorResetBoundary } from "@tanstack/react-query";
-import { Suspense, useRef, type Dispatch, type SetStateAction } from "react";
+import {
+  Suspense,
+  useRef,
+  useState,
+  type Dispatch,
+  type SetStateAction,
+} from "react";
 import { ErrorBoundary } from "react-error-boundary";
 const { color, typography } = theme;
 
@@ -32,12 +38,16 @@ const ScheduleListSection = ({
 }: ScheduleListSectionProps) => {
   const LOCATION_SECTION = "운정 1구역";
   const refetchFnRef = useRef<() => void>(() => {});
+  const [isFetching, setIsFetching] = useState(false);
 
   return (
     <div css={ScheduleListSectionContainer}>
       <div css={HeaderContainer}>
         <p css={LocationSectionText}>{LOCATION_SECTION}</p>
-        <RefetchButton handleClick={() => refetchFnRef.current()} />
+        <RefetchButton
+          isFetching={isFetching}
+          handleClick={() => refetchFnRef.current()}
+        />
       </div>
       <Tabs
         type="bar_true"
@@ -62,6 +72,7 @@ const ScheduleListSection = ({
                   selectedSchedule={selectedSchedule}
                   setSelectedSchedule={setSelectedSchedule}
                   setRefetchFn={(refetch) => (refetchFnRef.current = refetch)}
+                  setIsFetching={setIsFetching}
                 />
               </Suspense>
             </ErrorBoundary>

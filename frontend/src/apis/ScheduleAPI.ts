@@ -7,6 +7,7 @@ import { APIMatcher } from "@/utils/APIMatcher";
 import { clientInstance } from "@/utils/AxiosInstance";
 import TabMatcher from "@/utils/TabMatcher";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useRef } from "react";
 
 export const useGetEntireSchedule = (activeTab: string) => {
   // 한글 탭 > 영어 탭으로 변경
@@ -15,21 +16,40 @@ export const useGetEntireSchedule = (activeTab: string) => {
   const scheduleStatus =
     TabMatcher.matchScheduleTypeClientToServer(engScheduleStatus);
 
-  const { data, isError, error, isFetching, refetch } =
-    useSuspenseQuery<ScheduleAPIResposne>({
-      queryKey: ["schedule", scheduleStatus],
-      queryFn: () =>
-        clientInstance.get(`/path/scroll?status=${scheduleStatus}&size=100`),
-      retry: 1,
-    });
+  // polling 주기 관리
+  const minInterval = 6000; //1분
+  const maxInterval = 1200; //2분
+  const intervalRef = useRef(minInterval);
+
+  const { data, isFetching, refetch } = useSuspenseQuery<ScheduleAPIResposne>({
+    queryKey: ["schedule", scheduleStatus],
+    queryFn: () =>
+      clientInstance.get(`/path/scroll?status=${scheduleStatus}&size=100`),
+    retry: 1,
+    refetchInterval: (query) => {
+      /**
+       * polling
+       * - 에러 발생시 interval 2배
+       * - 통신 성공+새 데이터 발생시 interval 최소값으로 설정
+       * - 통신 성공+새 데이터 없을시 interval 2배
+       */
+      if (query.state.error) {
+        intervalRef.current = Math.min(intervalRef.current * 2, maxInterval);
+      } else if (query.state.data && query.state.data?.data.items?.length > 0) {
+        intervalRef.current = minInterval;
+      } else {
+        intervalRef.current = Math.min(intervalRef.current * 2, maxInterval);
+      }
+      return intervalRef.current;
+    },
+  });
 
   const entireScheduleData = data?.data?.items?.map((partData) =>
     APIMatcher.matchScheduleAPI(partData),
   );
+
   return {
     data: entireScheduleData,
-    isError,
-    error,
     isFetching,
     refetch,
   };
