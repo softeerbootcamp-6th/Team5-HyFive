@@ -9,10 +9,6 @@ import CenterOverview from "@/features/centerOverview/CenterOverview";
 import { TimeTable } from "@/features/timeTable/components";
 import Calender from "@/features/calender/Calender";
 import ToolTip from "@/components/ToolTip";
-import MonoButton from "@/components/MonoButton";
-
-// 아이콘
-import { WhiteEditIcon } from "@/assets/icons";
 
 // 데이터 & 유틸
 import {
@@ -28,6 +24,7 @@ import { useDeleteCar, useGetCarList } from "@/apis/CarAPI";
 import { mapBackendCenterInfoToCenterOverview } from "@/features/centerOverview/CenterOverview.type";
 import { mapBackendCarListToCarList } from "@/features/car/Car.type";
 import CarList from "@/features/car/CarList";
+import { CarActionButtonGroupStyle } from "@/features/timeTable/TimeTable.style";
 
 const { color, typography } = theme;
 const TOOLTIP_DATA = {
@@ -164,7 +161,7 @@ const CenterPage = () => {
       <div css={SectionWrapper}>
         <div css={CarSectionHeader}>
           <h4 css={SectionLabel}>등록된 차량</h4>
-          <div css={ActionButtonGroup}>
+          <div css={CarActionButtonGroupStyle}>
             <button
               css={CarEditTextStyle}
               onClick={() => handleClickEdit("edit")}
@@ -196,43 +193,8 @@ const CenterPage = () => {
       {/* 타임 테이블 */}
       <div css={SectionWrapper}>
         <div css={TimeTableSectionHeader}>
-          <div css={HeaderLeftGroup}>
-            <h4 css={SectionLabel}>차량 시간표</h4>
-            <ToolTip
-              label={TOOLTIP_DATA.label}
-              content={TOOLTIP_DATA.content}
-            />
-          </div>
-          <div css={HeaderRightGroup}>
-            {isEditableWeek &&
-              (isEditMode ? (
-                <div css={ActionButtonGroup}>
-                  <MonoButton
-                    mode="white"
-                    label="취소"
-                    onClick={() => {
-                      setIsEditMode(false);
-                    }}
-                  />
-                  <MonoButton
-                    mode="black"
-                    label="저장"
-                    onClick={() => {
-                      setIsEditMode(false);
-                    }}
-                  />
-                </div>
-              ) : (
-                <MonoButton
-                  mode="black"
-                  label="유휴시간 편집"
-                  icon={<WhiteEditIcon />}
-                  onClick={() => {
-                    setIsEditMode(true);
-                  }}
-                />
-              ))}
-          </div>
+          <h4 css={SectionLabel}>차량 시간표</h4>
+          <ToolTip label={TOOLTIP_DATA.label} content={TOOLTIP_DATA.content} />
         </div>
 
         <div css={TableSection}>
@@ -240,6 +202,10 @@ const CenterPage = () => {
             mode={isEditMode ? "edit" : "view"}
             selectedCarId={selectedCarId}
             selectedWeek={state.selectedWeek}
+            showActionButtons={true}
+            isEditMode={isEditMode}
+            isEditableWeek={isEditableWeek}
+            onEditModeChange={setIsEditMode}
           />
           <Calender
             highlightType="week"
@@ -264,7 +230,6 @@ const CenterPage = () => {
 
 export default CenterPage;
 
-// TODO 재민 - 하드코딩 값 제거 + 반응형 고려
 const PageContainer = css`
   width: 100vw;
   display: flex;
@@ -310,13 +275,6 @@ const TableSection = css`
   height: 600px;
 `;
 
-const ActionButtonGroup = css`
-  display: flex;
-  align-items: stretch;
-  justify-content: center;
-  gap: 12px;
-`;
-
 const DividerStyle = css`
   width: 1px;
   align-self: stretch;
@@ -335,19 +293,6 @@ const TimeTableSectionHeader = css`
   width: 100%;
   height: 44px;
   align-items: center;
-  justify-content: center;
-`;
-
-const HeaderLeftGroup = css`
-  display: flex;
-  align-items: center;
   gap: 16px;
-  margin-right: auto;
-`;
-
-const HeaderRightGroup = css`
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-right: 466px;
+  justify-content: flex-start;
 `;

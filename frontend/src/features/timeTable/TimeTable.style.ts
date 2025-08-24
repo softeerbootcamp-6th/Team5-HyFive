@@ -13,6 +13,7 @@ export const TableContainer = css`
   width: 100%;
   height: 100%;
   display: flex;
+  position: relative;
   flex-direction: column;
   border: 1px solid ${color.GrayScale.gray3};
   border-radius: ${borderRadius.Medium};
@@ -147,4 +148,28 @@ export const LoadingContainer = css`
   justify-content: center;
   align-items: center;
   z-index: 10;
+`;
+
+export const CarActionButtonGroupStyle = css`
+  display: flex;
+  align-items: stretch;
+  justify-self: center;
+  gap: 12px;
+`;
+
+export const TableActionButtonGroupStyle = css`
+  display: flex;
+  position: absolute;
+  top: -64px;
+  right: 0;
+  align-items: stretch;
+  justify-content: center;
+  gap: 12px;
+  z-index: 5;
+`;
+
+export const TimeTableWrapper = css`
+  position: relative;
+  width: 100%;
+  height: 100%;
 `;
