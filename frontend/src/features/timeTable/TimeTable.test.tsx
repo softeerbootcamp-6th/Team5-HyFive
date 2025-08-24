@@ -8,15 +8,17 @@ import type { TimeTableProps } from "@/features/timeTable/TimeTable.type";
 import { format } from "date-fns";
 import type { AvailableTimeSlot } from "@/mocks/timeBlockMocks";
 import { isAllSlotsInSelectedWeek } from "@/features/timeTable/utils/TimeTable.util";
+import { useGetTimeSlot, usePostTimeSlot } from "@/apis/TimeTableAPI";
 
 // API 모킹
 vi.mock("@/apis/TimeTableAPI", () => ({
+  timeSlotQueryKey: vi.fn(),
   useGetTimeSlot: vi.fn(),
+  usePostTimeSlot: vi.fn(),
 }));
 
-import { useGetTimeSlot } from "@/apis/TimeTableAPI";
-
 const mockUseGetTimeSlot = vi.mocked(useGetTimeSlot);
+const mockUsePostTimeSlot = vi.mocked(usePostTimeSlot);
 
 const testData: TimeTableProps = {
   selectedCarId: 1,
@@ -72,6 +74,11 @@ describe("TimeTable 컴포넌트", () => {
       isFetching: false,
       error: null,
       refetch: vi.fn(),
+    });
+
+    mockUsePostTimeSlot.mockReturnValue({
+      createTimeSlot: vi.fn(),
+      error: null,
     });
   });
 
