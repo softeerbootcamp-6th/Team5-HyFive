@@ -1,6 +1,5 @@
 package hyfive.gachita.dispatch;
 
-import hyfive.gachita.client.kakao.KakaoNaviService;
 import hyfive.gachita.dispatch.dto.*;
 import hyfive.gachita.dispatch.excepion.DispatchException;
 import hyfive.gachita.dispatch.module.calculator.RadiusExpandCalculator;
@@ -32,6 +31,7 @@ public class NewPathDispatchFlow {
     private final BoundingBoxFilter boundingBoxFilter;
     private final HaversineFilter haversineFilter;
     private final FinalNewPathChecker finalNewPathChecker;
+
     private final RadiusExpandCalculator radiusExpandCalculator;
 
 //    private final static int RADIUS_METERS = 3000;
@@ -88,16 +88,18 @@ public class NewPathDispatchFlow {
         log.info("--- STEP 3: 최적 경로 탐색 ---");
         List<FinalNewPathDto> allPaths = routeInfoProvider.getAll(scheduleListByCenter, newBookDto);
         log.info("Kakao API 호출 시뮬레이션 총 횟수: {} 회", routeInfoProvider.getApiCallCount());
+        log.info("STEP 3 완료: 탐색된 최적 경로 {}개", allPaths.size());
 
         FinalNewPathDto bestPath = allPaths.stream()
                 .filter(finalNewPathChecker::isFirstPathDurationExceed)
                 .filter(finalNewPathChecker::isScheduleWithinRentalWindow)
-                .min(Comparator
-                        .comparingInt(finalNewPathChecker::compareStartTimeDifference)
-                        .thenComparingInt(FinalNewPathDto::totalDuration)
-                        .thenComparingInt(FinalNewPathDto::totalDistance)
+                .max(
+                        Comparator
+                        .comparingInt(finalNewPathChecker::compareFragmentCount)
+                            .thenComparingInt(finalNewPathChecker::compareStartTimeDifference)
+                            .thenComparingInt(FinalNewPathDto::totalDuration)
+                            .thenComparingInt(FinalNewPathDto::totalDistance)
                 )
-                // TODO: 각 필터에 대한 예외 처리 추가 필요
                 .orElseThrow(()
                         -> new DispatchException("운행 시간이 한시간 이상이거나, 예약 시간 내에 운행이 가능한 차량이 없습니다."));
 
