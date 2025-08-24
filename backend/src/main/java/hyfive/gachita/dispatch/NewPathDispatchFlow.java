@@ -3,6 +3,7 @@ package hyfive.gachita.dispatch;
 import hyfive.gachita.client.kakao.KakaoNaviService;
 import hyfive.gachita.dispatch.dto.*;
 import hyfive.gachita.dispatch.excepion.DispatchException;
+import hyfive.gachita.dispatch.module.calculator.RadiusExpandCalculator;
 import hyfive.gachita.dispatch.module.checker.FinalNewPathChecker;
 import hyfive.gachita.dispatch.module.condition.BoundingBoxCondition;
 import hyfive.gachita.dispatch.module.condition.RadiusCondition;
@@ -24,27 +25,47 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class NewPathDispatchFlow {
+
     private final CenterListProvider centerListProvider;
     private final IdleCarListProvider idleCarListProvider;
     private final RouteInfoProvider routeInfoProvider;
     private final BoundingBoxFilter boundingBoxFilter;
     private final HaversineFilter haversineFilter;
     private final FinalNewPathChecker finalNewPathChecker;
-    private final KakaoNaviService kakaoNaviService;
+    private final RadiusExpandCalculator radiusExpandCalculator;
 
-    private final static int RADIUS_METERS = 3000;
+//    private final static int RADIUS_METERS = 3000;
 
     public DispatchResult execute(NewBookDto newBookDto) {
         log.info("========= [NewPathDispatchFlow] 신규 경로 배차 로직 시작 =========");
+//        log.info("--- STEP 1: 반경 내 센터 필터링 (반경: {}m) ---", RADIUS_METERS);
+//        BoundingBoxCondition boundingBoxCondition = BoundingBoxCondition.from(newBookDto.startLat(), newBookDto.startLng(), RADIUS_METERS);
+//        RadiusCondition radiusCondition = RadiusCondition.from(newBookDto.startLat(), newBookDto.startLng(), RADIUS_METERS);
+//
+//        List<FilteredCenterDto> filteredCenterList = centerListProvider.getAll().stream()
+//                .filter(center -> boundingBoxFilter.test(center, boundingBoxCondition))
+//                .filter(center -> haversineFilter.test(center, radiusCondition))
+//                .toList();
 
-        log.info("--- STEP 1: 반경 내 센터 필터링 (반경: {}m) ---", RADIUS_METERS);
-        BoundingBoxCondition boundingBoxCondition = BoundingBoxCondition.from(newBookDto.startLat(), newBookDto.startLng(), RADIUS_METERS);
-        RadiusCondition radiusCondition = RadiusCondition.from(newBookDto.startLat(), newBookDto.startLng(), RADIUS_METERS);
+        final double baseLat = newBookDto.startLat();
+        final double baseLng = newBookDto.startLng();
 
-        List<FilteredCenterDto> filteredCenterList = centerListProvider.getAll().stream()
-                .filter(center -> boundingBoxFilter.test(center, boundingBoxCondition))
-                .filter(center -> haversineFilter.test(center, radiusCondition))
-                .toList();
+        List<FilteredCenterDto> filteredCenterList =
+                radiusExpandCalculator.expandUntilEnough(
+                        baseLat, baseLng,
+                        centerListProvider.getAll(),
+                        (center, rCond) -> {
+                            // RadiusCondition 기반으로 Haversine 적용
+                            // + (가능하면) BoundingBox도 결합
+                            // radius 접근 가능 시:
+                            BoundingBoxCondition bb = BoundingBoxCondition.from(baseLat, baseLng, rCond.radiusMeters());
+                            return boundingBoxFilter.test(center, bb)
+                                    && haversineFilter.test(center, rCond);
+
+                            // radius 접근 불가 시 대안:
+                            // return haversineFilter.test(center, rCond);
+                        }
+                );
 
         log.info("STEP 1 완료: 필터링된 센터 {}개", filteredCenterList.size());
         if (log.isDebugEnabled()) {
