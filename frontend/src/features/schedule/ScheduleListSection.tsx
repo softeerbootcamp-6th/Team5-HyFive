@@ -9,7 +9,7 @@ import type {
 import ScheduleDataFetcher from "@/features/schedule/ScheduleDataFetcher";
 import { theme } from "@/styles/themes.style";
 import { css } from "@emotion/react";
-import { useQueryClient } from "@tanstack/react-query";
+import { QueryErrorResetBoundary, useQueryClient } from "@tanstack/react-query";
 import { Suspense, type Dispatch, type SetStateAction } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 const { color, typography } = theme;
@@ -37,9 +37,14 @@ const ScheduleListSection = ({
       <div css={HeaderContainer}>
         <p css={LocationSectionText}>{LOCATION_SECTION}</p>
         <RefetchButton
-          handleClick={() =>
-            queryClient.invalidateQueries({ queryKey: ["schedule", activeTab] })
-          }
+          handleClick={() => {
+            void queryClient.invalidateQueries({
+              queryKey: ["schedule", activeTab],
+            });
+            void queryClient.refetchQueries({
+              queryKey: ["schedule", activeTab],
+            });
+          }}
         />
       </div>
       <Tabs
@@ -49,34 +54,26 @@ const ScheduleListSection = ({
         setSelected={setActiveTab}
       />
       <div css={ContentContainer}>
-        <ErrorBoundary
-          fallbackRender={({ error, resetErrorBoundary }) => (
-            <FallbackUI
-              error={error}
-              handleRetry={() => {
-                resetErrorBoundary();
-                void queryClient.invalidateQueries({
-                  queryKey: ["schedule", activeTab],
-                });
-              }}
-            />
+        <QueryErrorResetBoundary>
+          {({ reset }) => (
+            <ErrorBoundary onReset={reset} FallbackComponent={FallbackUI}>
+              <Suspense
+                fallback={
+                  <div css={LoadingSpinnerWrapper}>
+                    <LoadingSpinner />
+                  </div>
+                }
+              >
+                <ScheduleDataFetcher
+                  activeTab={activeTab}
+                  parsedActiveTab={parsedActiveTab}
+                  selectedSchedule={selectedSchedule}
+                  setSelectedSchedule={setSelectedSchedule}
+                />
+              </Suspense>
+            </ErrorBoundary>
           )}
-        >
-          <Suspense
-            fallback={
-              <div css={LoadingSpinnerWrapper}>
-                <LoadingSpinner />
-              </div>
-            }
-          >
-            <ScheduleDataFetcher
-              activeTab={activeTab}
-              parsedActiveTab={parsedActiveTab}
-              selectedSchedule={selectedSchedule}
-              setSelectedSchedule={setSelectedSchedule}
-            />
-          </Suspense>
-        </ErrorBoundary>
+        </QueryErrorResetBoundary>
       </div>
     </div>
   );

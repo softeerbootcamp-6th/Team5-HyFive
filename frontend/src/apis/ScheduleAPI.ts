@@ -6,12 +6,15 @@ import type {
 import { APIMatcher } from "@/utils/APIMatcher";
 import { clientInstance } from "@/utils/AxiosInstance";
 import TabMatcher from "@/utils/TabMatcher";
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 export const useGetEntireSchedule = (activeTab: string) => {
+  // 한글 탭 > 영어 탭으로 변경
   const engScheduleStatus = TabMatcher.matchScheduleTypeKRToENG(activeTab);
+  // 영어 클라이언트용 탭 > 영어 서버용 탭으로 변경
   const scheduleStatus =
     TabMatcher.matchScheduleTypeClientToServer(engScheduleStatus);
+
   const { data, isError, error, isFetching, refetch } =
     useSuspenseQuery<ScheduleAPIResposne>({
       queryKey: ["schedule", scheduleStatus],
@@ -19,6 +22,7 @@ export const useGetEntireSchedule = (activeTab: string) => {
         clientInstance.get(`/path/scroll?status=${scheduleStatus}&size=100`),
       retry: 1,
     });
+
   const entireScheduleData = data?.data?.items?.map((partData) =>
     APIMatcher.matchScheduleAPI(partData),
   );
@@ -34,7 +38,7 @@ export const useGetEntireSchedule = (activeTab: string) => {
 export const useGetPassenger = (activeId: number) => {
   const { data, refetch } = useSuspenseQuery<PassengerAPIResponse>({
     queryKey: ["passenger", activeId],
-    queryFn: () => clientInstance.get(`/path/${activeId}/passenge`),
+    queryFn: () => clientInstance.get(`/path/${activeId}/passenger`),
     retry: 1,
   });
 
@@ -49,12 +53,11 @@ export const useGetPassenger = (activeId: number) => {
 };
 
 export const useGetNode = (activeId: number) => {
-  const { data, isError, error, isFetching, refetch } =
-    useQuery<NodeAPIReponse>({
-      queryKey: ["node", activeId],
-      queryFn: () => clientInstance.get(`/path/${activeId}/nodes`),
-      retry: 1,
-    });
+  const { data, refetch } = useSuspenseQuery<NodeAPIReponse>({
+    queryKey: ["node", activeId],
+    queryFn: () => clientInstance.get(`/path/${activeId}/nodes`),
+    retry: 1,
+  });
 
   const { polyline, marker, highlight } = data?.data ?? {};
 
@@ -62,9 +65,6 @@ export const useGetNode = (activeId: number) => {
     polyline,
     marker,
     highlight,
-    isError,
-    error,
-    isFetching,
     refetch,
   };
 };

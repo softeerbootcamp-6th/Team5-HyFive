@@ -6,10 +6,10 @@ const { color, typography } = theme;
 
 const FallbackUI = ({
   error,
-  handleRetry,
+  resetErrorBoundary,
 }: {
   error: Error;
-  handleRetry: () => void;
+  resetErrorBoundary: () => void;
 }) => {
   return (
     <div css={FallbackUIContainer}>
@@ -18,7 +18,7 @@ const FallbackUI = ({
         <p>문제가 발생했습니다. 다시 요청해주세요 :(</p>
         <p>{error.message}</p>
       </div>
-      <div css={ButtonWrapper} onClick={handleRetry}>
+      <div css={ButtonWrapper} onClick={resetErrorBoundary}>
         <Button label="재시도" size="xsmall" />
       </div>
     </div>

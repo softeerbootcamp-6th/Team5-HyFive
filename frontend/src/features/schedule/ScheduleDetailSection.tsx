@@ -8,7 +8,7 @@ import type {
   ScheduleType,
 } from "@/features/schedule/Schedule.types";
 import { css } from "@emotion/react";
-import { useQueryClient } from "@tanstack/react-query";
+import { QueryErrorResetBoundary } from "@tanstack/react-query";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
@@ -20,63 +20,46 @@ const ScheduleDetailSection = ({
   scheduleType,
   selectedSchedule,
 }: ScheduleDetailSectionProps) => {
-  const queryClient = useQueryClient();
-  if (!selectedSchedule || !selectedSchedule.routeId) {
+  const activeId = selectedSchedule?.routeId;
+  if (!selectedSchedule || !activeId) {
     return <EmptyUI type="dynamic" message="지도에 나타낼 정보가 없습니다" />;
   }
-  const activeId = selectedSchedule?.routeId;
 
   return (
     <div css={ScheduleDetailSectionContainer}>
-      <ErrorBoundary
-        fallbackRender={({ error, resetErrorBoundary }) => (
-          <FallbackUI
-            error={error}
-            handleRetry={() => {
-              resetErrorBoundary();
-              void queryClient.refetchQueries({
-                queryKey: ["passenger", selectedSchedule?.routeId],
-              });
-            }}
-          />
+      <QueryErrorResetBoundary>
+        {({ reset }) => (
+          <ErrorBoundary onReset={reset} FallbackComponent={FallbackUI}>
+            <Suspense
+              fallback={
+                <div css={LoadingSpinnerWrapper}>
+                  <LoadingSpinner />
+                </div>
+              }
+            >
+              <MapHeader
+                scheduleType={scheduleType}
+                selectedSchedule={selectedSchedule}
+              />
+            </Suspense>
+          </ErrorBoundary>
         )}
-      >
-        <Suspense
-          fallback={
-            <div css={LoadingSpinnerWrapper}>
-              <LoadingSpinner />
-            </div>
-          }
-        >
-          <MapHeader
-            scheduleType={scheduleType}
-            selectedSchedule={selectedSchedule}
-          />
-        </Suspense>
-      </ErrorBoundary>
-      <ErrorBoundary
-        fallbackRender={({ error, resetErrorBoundary }) => (
-          <FallbackUI
-            error={error}
-            handleRetry={() => {
-              resetErrorBoundary();
-              void queryClient.refetchQueries({
-                queryKey: ["schedule", activeId],
-              });
-            }}
-          />
+      </QueryErrorResetBoundary>
+      <QueryErrorResetBoundary>
+        {({ reset }) => (
+          <ErrorBoundary onReset={reset} FallbackComponent={FallbackUI}>
+            <Suspense
+              fallback={
+                <div css={LoadingSpinnerWrapper}>
+                  <LoadingSpinner />
+                </div>
+              }
+            >
+              <MapContent id={activeId} />
+            </Suspense>
+          </ErrorBoundary>
         )}
-      >
-        <Suspense
-          fallback={
-            <div css={LoadingSpinnerWrapper}>
-              <LoadingSpinner />
-            </div>
-          }
-        >
-          <MapContent id={activeId} />
-        </Suspense>
-      </ErrorBoundary>
+      </QueryErrorResetBoundary>
     </div>
   );
 };
