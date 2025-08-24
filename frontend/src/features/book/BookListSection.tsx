@@ -6,7 +6,7 @@ import { bookDataList } from "@/mocks/bookMocks";
 import { theme } from "@/styles/themes.style";
 import TabMatcher from "@/utils/TabMatcher";
 import { css, keyframes } from "@emotion/react";
-import { useEffect, type Dispatch, type SetStateAction } from "react";
+import { useEffect, useRef, type Dispatch, type SetStateAction } from "react";
 import { useGetBook } from "@/apis/BookAPI";
 import type { BookData } from "@/features/book/Book.types";
 import Tag from "@/components/Tag";
@@ -26,6 +26,7 @@ const BookListSection = ({
 }: BookListSectionProps) => {
   const TAB_LIST = ["신규 예약", "예약 성공", "예약 실패"];
   const LOCATION_SECTION = "운정 1구역";
+  const contentContainerRef = useRef<HTMLDivElement>(null);
 
   const {
     visibleData: data,
@@ -41,6 +42,14 @@ const BookListSection = ({
     setActiveBookData(data[0]);
   }, [data, setActiveBookData]);
 
+  // polling 성공시 새로운 데이터 발생한 경우 반영하는 로직
+  const handleMergeNewData = () => {
+    mergePendingToVisible();
+    if (contentContainerRef.current) {
+      contentContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
   return (
     <div css={BookListSectionContainer}>
       <div css={HeaderContainer}>
@@ -53,12 +62,12 @@ const BookListSection = ({
         selected={activeTab}
         setSelected={setActiveTab}
       />
-      {isNewDataActive && (
-        <div onClick={mergePendingToVisible} css={NewDataWrapper}>
-          <Tag type="blue" label={`새로운 예약: ${pendingCount}건`} />
+      {
+        <div onClick={handleMergeNewData} css={NewDataWrapper}>
+          <Tag type="orange" label={`새로운 예약: ${pendingCount}건`} />
         </div>
-      )}
-      <div css={ContentContainer}>
+      }
+      <div ref={contentContainerRef} css={ContentContainer}>
         {data && data?.length > 0 ? (
           data.map((bookData, idx) => (
             <div
@@ -133,6 +142,7 @@ export const NewDataWrapper = css`
   justify-content: center;
   align-items: center;
   animation: ${popIn} 0.5s ease-out;
+  cursor: pointer;
 `;
 
 const LocationSectionText = css`
