@@ -8,6 +8,7 @@ import type {
   ScheduleType,
 } from "@/features/schedule/Schedule.types";
 import { css } from "@emotion/react";
+import { useQueryClient } from "@tanstack/react-query";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
@@ -19,18 +20,25 @@ const ScheduleDetailSection = ({
   scheduleType,
   selectedSchedule,
 }: ScheduleDetailSectionProps) => {
+  const queryClient = useQueryClient();
   if (!selectedSchedule || !selectedSchedule.routeId) {
     return <EmptyUI type="dynamic" message="지도에 나타낼 정보가 없습니다" />;
   }
+  const activeId = selectedSchedule?.routeId;
+
   return (
     <div css={ScheduleDetailSectionContainer}>
-      <MapHeader
-        scheduleType={scheduleType}
-        selectedSchedule={selectedSchedule}
-      />
       <ErrorBoundary
         fallbackRender={({ error, resetErrorBoundary }) => (
-          <FallbackUI error={error} handleRetry={resetErrorBoundary} />
+          <FallbackUI
+            error={error}
+            handleRetry={() => {
+              resetErrorBoundary();
+              void queryClient.refetchQueries({
+                queryKey: ["passenger", selectedSchedule?.routeId],
+              });
+            }}
+          />
         )}
       >
         <Suspense
@@ -40,7 +48,33 @@ const ScheduleDetailSection = ({
             </div>
           }
         >
-          <MapContent id={selectedSchedule.routeId} />
+          <MapHeader
+            scheduleType={scheduleType}
+            selectedSchedule={selectedSchedule}
+          />
+        </Suspense>
+      </ErrorBoundary>
+      <ErrorBoundary
+        fallbackRender={({ error, resetErrorBoundary }) => (
+          <FallbackUI
+            error={error}
+            handleRetry={() => {
+              resetErrorBoundary();
+              void queryClient.refetchQueries({
+                queryKey: ["schedule", activeId],
+              });
+            }}
+          />
+        )}
+      >
+        <Suspense
+          fallback={
+            <div css={LoadingSpinnerWrapper}>
+              <LoadingSpinner />
+            </div>
+          }
+        >
+          <MapContent id={activeId} />
         </Suspense>
       </ErrorBoundary>
     </div>
