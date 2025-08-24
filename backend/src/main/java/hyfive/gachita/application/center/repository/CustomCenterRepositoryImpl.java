@@ -21,6 +21,7 @@ import java.util.List;
 import static hyfive.gachita.application.car.QCar.car;
 import static hyfive.gachita.application.center.QCenter.center;
 import static hyfive.gachita.application.path.QPath.path;
+import static hyfive.gachita.application.rental.QAvailableRental.availableRental;
 import static hyfive.gachita.application.rental.QRental.rental;
 
 @RequiredArgsConstructor
@@ -67,7 +68,7 @@ public class CustomCenterRepositoryImpl implements CustomCenterRepository{
                                 center.lng
                         ),
                         car,
-                        rental
+                        availableRental
                 ))
                 .where(
                         center.id.in(condition.centerIdList())
@@ -79,18 +80,20 @@ public class CustomCenterRepositoryImpl implements CustomCenterRepository{
                         car.delYn.eq(DelYn.N)
                 )
                 .join(rental)
+                .on(rental.car.eq(car)
+                        .and(rental.rentalDate.eq(condition.hospitalDate()))
+                )
+                .join(rental.availableList, availableRental)
                 .on(
-                        rental.car.id.eq(car.id)
+                        availableRental.startTime.loe(condition.maybeOnTime())
+                                .and(availableRental.endTime.goe(condition.deadline()))
                                 .and(
                                         JPAExpressions
                                                 .selectOne()
                                                 .from(path)
-                                                .where(path.rental.eq(rental))
+                                                .where(path.availableRental.eq(availableRental))
                                                 .notExists()
                                 )
-                                .and(rental.rentalDate.eq(condition.hospitalDate()))
-                                .and(rental.rentalStartTime.loe(condition.maybeOnTime()))
-                                .and(rental.rentalEndTime.goe(condition.deadline()))
                 )
                 .fetch();
     }

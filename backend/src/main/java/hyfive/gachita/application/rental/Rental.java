@@ -41,8 +41,8 @@ public class Rental {
     @Column(name = "rental_end_time", nullable = false, columnDefinition = "TIME")
     private LocalTime rentalEndTime;
 
-    @OneToMany(mappedBy = "rental", fetch = FetchType.LAZY)
-    private List<Path> pathList;
+//    @OneToMany(mappedBy = "rental", fetch = FetchType.LAZY)
+//    private List<Path> pathList;
 
     @OneToMany(mappedBy = "rental", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default

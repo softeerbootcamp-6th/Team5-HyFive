@@ -50,7 +50,7 @@ public class PathService {
 
         Path path = Path.builder()
                 .car(finalPathDto.car())
-                .rental(finalPathDto.rental())
+                .availableRental(finalPathDto.availableRental())
                 .maybeStartTime(startTime)  // TODO: 고정값, 필요 없다면 제거 고려
                 .maybeEndTime(maybeEndTime)
                 .realStartTime(startTime)

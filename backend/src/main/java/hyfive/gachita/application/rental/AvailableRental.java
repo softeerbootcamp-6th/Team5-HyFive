@@ -1,5 +1,6 @@
 package hyfive.gachita.application.rental;
 
+import hyfive.gachita.application.path.Path;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -33,6 +34,9 @@ public class AvailableRental {
     @NotNull
     @Column(name = "end_time", nullable = false)
     private LocalTime endTime;
+
+    @OneToOne(mappedBy = "availableRental")
+    private Path path;
 
     public void setRental(Rental rental) {
         this.rental = rental;

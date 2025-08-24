@@ -4,6 +4,7 @@ import hyfive.gachita.application.book.Book;
 import hyfive.gachita.application.car.Car;
 import hyfive.gachita.application.path.Path;
 import hyfive.gachita.application.path.PathService;
+import hyfive.gachita.application.rental.AvailableRental;
 import hyfive.gachita.application.rental.Rental;
 import lombok.Builder;
 
@@ -14,7 +15,7 @@ import java.util.List;
 public record FinalNewPathDto(
         FilteredCenterDto centerDto,
         Car car,
-        Rental rental,
+        AvailableRental availableRental,
         LocalTime rentalStartTime,
         LocalTime rentalEndTime,
         int totalDuration,
@@ -25,9 +26,9 @@ public record FinalNewPathDto(
         return new FinalNewPathDto(
                 path.centerDto(),
                 path.car(),
-                path.rental(),
-                path.rental().getRentalStartTime(),
-                path.rental().getRentalEndTime(),
+                path.availableRental(),
+                path.availableRental().getStartTime(),
+                path.availableRental().getEndTime(),
                 totalDuration,
                 totalDistance,
                 nodeList
