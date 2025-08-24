@@ -9,8 +9,8 @@ import type {
 import ScheduleDataFetcher from "@/features/schedule/ScheduleDataFetcher";
 import { theme } from "@/styles/themes.style";
 import { css } from "@emotion/react";
-import { QueryErrorResetBoundary, useQueryClient } from "@tanstack/react-query";
-import { Suspense, type Dispatch, type SetStateAction } from "react";
+import { QueryErrorResetBoundary } from "@tanstack/react-query";
+import { Suspense, useRef, type Dispatch, type SetStateAction } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 const { color, typography } = theme;
 
@@ -31,21 +31,13 @@ const ScheduleListSection = ({
   setSelectedSchedule,
 }: ScheduleListSectionProps) => {
   const LOCATION_SECTION = "운정 1구역";
-  const queryClient = useQueryClient();
+  const refetchFnRef = useRef<() => void>(() => {});
+
   return (
     <div css={ScheduleListSectionContainer}>
       <div css={HeaderContainer}>
         <p css={LocationSectionText}>{LOCATION_SECTION}</p>
-        <RefetchButton
-          handleClick={() => {
-            void queryClient.invalidateQueries({
-              queryKey: ["schedule", activeTab],
-            });
-            void queryClient.refetchQueries({
-              queryKey: ["schedule", activeTab],
-            });
-          }}
-        />
+        <RefetchButton handleClick={() => refetchFnRef.current()} />
       </div>
       <Tabs
         type="bar_true"
@@ -69,6 +61,7 @@ const ScheduleListSection = ({
                   parsedActiveTab={parsedActiveTab}
                   selectedSchedule={selectedSchedule}
                   setSelectedSchedule={setSelectedSchedule}
+                  setRefetchFn={(refetch) => (refetchFnRef.current = refetch)}
                 />
               </Suspense>
             </ErrorBoundary>

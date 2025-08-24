@@ -15,13 +15,19 @@ const ScheduleDataFetcher = ({
   parsedActiveTab,
   selectedSchedule,
   setSelectedSchedule,
+  setRefetchFn,
 }: {
   activeTab: string;
   parsedActiveTab: ScheduleType;
   selectedSchedule: Partial<ScheduleData | null>;
   setSelectedSchedule: Dispatch<SetStateAction<Partial<ScheduleData | null>>>;
+  setRefetchFn: (refetch: () => void) => void;
 }) => {
-  const { data } = useGetEntireSchedule(activeTab);
+  const { data, refetch } = useGetEntireSchedule(activeTab);
+
+  useEffect(() => {
+    setRefetchFn(refetch);
+  }, [refetch, setRefetchFn]);
 
   useEffect(() => {
     if (data && data.length > 0 && !selectedSchedule?.routeId) {
