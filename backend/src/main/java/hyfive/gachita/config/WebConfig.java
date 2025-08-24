@@ -24,7 +24,6 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOriginPatterns(
                         "http://localhost:*",
                         "https://localhost:*",
-                        "https://d1llms5eo9o356.cloudfront.net",
                         "http://gachita.site",
                         "https://gachita.site"
                 )

@@ -15,6 +15,9 @@ public record BookRes(
         @Schema(description = "예약 ID", example = "1")
         Long id,
 
+        @Schema(description = "경로 ID", example = "1")
+        Long pathId,
+
         @Schema(description = "예약자 이름", example = "홍길동")
         String bookName,
 
@@ -54,6 +57,7 @@ public record BookRes(
     public static BookRes from(Book book) {
         return new BookRes(
                 book.getId(),
+                book.getPath() == null ? null : book.getPath().getId(),
                 book.getBookName(),
                 book.getBookTel(),
                 book.getCreatedAt().toLocalDate(),

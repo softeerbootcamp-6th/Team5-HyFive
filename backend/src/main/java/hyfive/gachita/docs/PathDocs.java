@@ -116,6 +116,13 @@ public interface PathDocs {
             @RequestParam(name = "status", required = false) DriveStatus status,
 
             @Parameter(
+                    name = "path-id",
+                    description = "경로 ID / null 값으로 요청하면 전체 경로를 조회",
+                    example = "1"
+            )
+            @RequestParam(name = "path-id",  required = false) Long pathId,
+
+            @Parameter(
                     name = "page",
                     description = "페이지 번호 (기본값: 1)",
                     example = "1"
