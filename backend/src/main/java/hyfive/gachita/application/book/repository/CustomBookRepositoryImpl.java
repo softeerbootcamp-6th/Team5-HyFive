@@ -36,6 +36,7 @@ public class CustomBookRepositoryImpl implements CustomBookRepository {
 
         List<Book> books = queryFactory
                 .selectFrom(book)
+                .leftJoin(book.path).fetchJoin()
                 .where(
                         betweenCreatedDate(book, dateRange),
                         statusEq(book, status)

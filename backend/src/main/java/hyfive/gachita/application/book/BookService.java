@@ -14,7 +14,7 @@ import hyfive.gachita.application.common.enums.SearchPeriod;
 import hyfive.gachita.global.BusinessException;
 import hyfive.gachita.global.ErrorCode;
 import hyfive.gachita.application.common.util.DateRangeUtil;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -67,6 +67,7 @@ public class BookService {
         return savedBook;
     }
 
+    @Transactional(readOnly = true)
     public PagedListRes<BookRes> getBookList(SearchPeriod period, BookStatus bookStatus, int page, int limit) {
         Pageable pageable = PageRequest.of(
                 page - 1,
