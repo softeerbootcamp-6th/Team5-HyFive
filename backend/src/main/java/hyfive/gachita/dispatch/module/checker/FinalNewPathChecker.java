@@ -1,10 +1,12 @@
 package hyfive.gachita.dispatch.module.checker;
 
+import hyfive.gachita.dispatch.FragmentDto;
 import hyfive.gachita.dispatch.dto.FinalNewPathDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalTime;
+import java.util.Optional;
 
 @Component
 @Slf4j
@@ -37,32 +39,23 @@ public class FinalNewPathChecker {
         return diff;
     }
 
-    public int fragmentCount(FinalNewPathDto path) {
-        int driveStartTimeSec = path.nodeList().get(0).time().toSecondOfDay();
-        int rentalStartTimeSec = path.rentalStartTime().toSecondOfDay();
-        int rentalEndTimeSec = path.rentalEndTime().toSecondOfDay();
+    public int compareFragmentCount(FinalNewPathDto path) {
+        Optional<FragmentDto> firstFragment = FragmentDto.of(path.rentalStartTime(), path.nodeList().get(0).time());
+        Optional<FragmentDto> secondFragment = FragmentDto.of(path.nodeList().get(0).time().plusSeconds(2 * HOUR_IN_SECONDS), path.rentalEndTime());
 
-        int firstFragmentSize = Math.max(0, driveStartTimeSec - rentalStartTimeSec);
-        int secondFragmentSize = Math.max(0, rentalEndTimeSec - (driveStartTimeSec + 2 * HOUR_IN_SECONDS));
-
-        int count = (firstFragmentSize / (2 * HOUR_IN_SECONDS)) + (secondFragmentSize / (2 * HOUR_IN_SECONDS));
-
-        LocalTime firstFragmentStart = path.rentalStartTime();
-        LocalTime firstFragmentEnd = path.nodeList().get(0).time();
-        LocalTime secondFragmentStart = path.nodeList().get(0).time().plusSeconds(2 * HOUR_IN_SECONDS);
-        LocalTime secondFragmentEnd = path.rentalEndTime();
+        int totalCount = firstFragment.map(FragmentDto::fragmentCount).orElse(0)
+                + secondFragment.map(FragmentDto::fragmentCount).orElse(0);
 
         log.info(
-                "경로 조각 개수: {}, firstFragment: {}~{}, secondFragment: {}~{}, availableRentalId: {}, startTime: {}, endTime: {}",
-                count,
-                firstFragmentStart,
-                firstFragmentEnd,
-                secondFragmentStart,
-                secondFragmentEnd,
+                "경로 조각 총 개수: {}, firstFragment: {}~{}, secondFragment: {}~{}, availableRentalId: {}, startTime: {}, endTime: {}",
+                totalCount,
+                firstFragment.map(f -> f.startTime() + "~" + f.endTime()).orElse("없음"),
+                secondFragment.map(f -> f.startTime() + "~" + f.endTime()).orElse("없음"),
                 path.availableRental().getId(),
                 path.availableRental().getStartTime(),
                 path.availableRental().getEndTime()
         );
-        return count;
+
+        return totalCount;
     }
 }

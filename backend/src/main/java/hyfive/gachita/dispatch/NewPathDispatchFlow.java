@@ -1,6 +1,5 @@
 package hyfive.gachita.dispatch;
 
-import hyfive.gachita.client.kakao.KakaoNaviService;
 import hyfive.gachita.dispatch.dto.*;
 import hyfive.gachita.dispatch.excepion.DispatchException;
 import hyfive.gachita.dispatch.module.checker.FinalNewPathChecker;
@@ -30,7 +29,6 @@ public class NewPathDispatchFlow {
     private final BoundingBoxFilter boundingBoxFilter;
     private final HaversineFilter haversineFilter;
     private final FinalNewPathChecker finalNewPathChecker;
-    private final KakaoNaviService kakaoNaviService;
 
     private final static int RADIUS_METERS = 3000;
 
@@ -79,7 +77,7 @@ public class NewPathDispatchFlow {
                 .filter(finalNewPathChecker::isFirstPathDurationExceed)
                 .filter(finalNewPathChecker::isScheduleWithinRentalWindow)
                 .min(Comparator
-                        .comparingInt(finalNewPathChecker::fragmentCount)
+                        .comparingInt(finalNewPathChecker::compareFragmentCount)
                         .thenComparingInt(finalNewPathChecker::compareStartTimeDifference)
                         .thenComparingInt(FinalNewPathDto::totalDuration)
                         .thenComparingInt(FinalNewPathDto::totalDistance)
