@@ -11,7 +11,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest --ui",
-    "test-cli": "vitest"
+    "test-cli": "vitest",
+    "test-e2e": "cypress open"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
