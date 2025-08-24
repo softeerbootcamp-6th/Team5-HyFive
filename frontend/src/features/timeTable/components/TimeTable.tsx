@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -130,7 +130,7 @@ const TimeTable = ({
     }
   }, [timeSlotData]);
 
-  const handleCancelClick = () => {
+  const handleCancelClick = useCallback(() => {
     const cachedSlotData =
       queryClient.getQueryData<TimeSlotAPIResponse>(queryKey);
     const originalSlotData = cachedSlotData?.data ?? [];
@@ -141,7 +141,12 @@ const TimeTable = ({
     requestAnimationFrame(() => setShowSlots(true));
 
     onEditModeChange(false);
-  };
+  }, [queryClient, queryKey, onEditModeChange]);
+
+  // 날짜, 차량 변경 시 편집 모드 해제
+  useEffect(() => {
+    handleCancelClick();
+  }, [selectedWeek, selectedCarId, handleCancelClick]);
 
   const handleSaveClick = () => {
     createTimeSlot({
