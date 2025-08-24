@@ -29,15 +29,17 @@ const RefetchButton = ({
   }, [isFetching]);
 
   // 수동 업데이트
-  const handleRefetch = () => {
-    setIsRefetchActive(true);
-    handleClick();
-    setRefetchTime(DateFormatter.formatDateToSplitTime(new Date()));
-    setTimeout(() => setIsRefetchActive(false), ROTATING_TIME * 1000);
+  const handleManualRefetch = () => {
+    if (!isFetching) {
+      setIsRefetchActive(true);
+      handleClick();
+      setRefetchTime(DateFormatter.formatDateToSplitTime(new Date()));
+      setTimeout(() => setIsRefetchActive(false), ROTATING_TIME * 1000);
+    }
   };
 
   return (
-    <div css={RefetchButtonContainer} onClick={handleRefetch}>
+    <div css={RefetchButtonContainer} onClick={handleManualRefetch}>
       <p css={DateText}>{refetchTime}</p>
       <RefreashIcon
         css={isRefetchActive ? rotating() : undefined}
