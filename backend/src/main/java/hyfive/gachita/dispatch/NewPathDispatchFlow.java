@@ -47,23 +47,17 @@ public class NewPathDispatchFlow {
 //                .filter(center -> haversineFilter.test(center, radiusCondition))
 //                .toList();
 
-        final double baseLat = newBookDto.startLat();
-        final double baseLng = newBookDto.startLng();
+        final double newBookLat = newBookDto.startLat();
+        final double newBookLng = newBookDto.startLng();
 
         List<FilteredCenterDto> filteredCenterList =
                 radiusExpandCalculator.expandUntilEnough(
-                        baseLat, baseLng,
+                        newBookLat, newBookLng,
                         centerListProvider.getAll(),
                         (center, rCond) -> {
-                            // RadiusCondition 기반으로 Haversine 적용
-                            // + (가능하면) BoundingBox도 결합
-                            // radius 접근 가능 시:
-                            BoundingBoxCondition bb = BoundingBoxCondition.from(baseLat, baseLng, rCond.radiusMeters());
+                            BoundingBoxCondition bb = BoundingBoxCondition.from(newBookLat, newBookLng, rCond.radiusMeters());
                             return boundingBoxFilter.test(center, bb)
                                     && haversineFilter.test(center, rCond);
-
-                            // radius 접근 불가 시 대안:
-                            // return haversineFilter.test(center, rCond);
                         }
                 );
 
