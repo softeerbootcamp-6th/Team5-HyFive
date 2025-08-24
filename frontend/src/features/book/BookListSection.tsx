@@ -50,6 +50,12 @@ const BookListSection = ({
     }
   };
 
+  const matchTagColor = (activeTab: string) => {
+    if (activeTab === "신규 예약") return "orange";
+    if (activeTab === "예약 성공") return "blue";
+    return "red";
+  };
+
   return (
     <div css={BookListSectionContainer}>
       <div css={HeaderContainer}>
@@ -64,7 +70,10 @@ const BookListSection = ({
       />
       {isNewDataActive && (
         <div onClick={handleMergeNewData} css={NewDataWrapper}>
-          <Tag type="orange" label={`새로운 예약: ${pendingCount}건`} />
+          <Tag
+            type={matchTagColor(activeTab)}
+            label={`새로운 예약: ${pendingCount}건`}
+          />
         </div>
       )}
       <div ref={contentContainerRef} css={ContentContainer}>
