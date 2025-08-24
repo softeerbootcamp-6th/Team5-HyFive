@@ -24,8 +24,8 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOriginPatterns(
                         "http://localhost:*",
                         "https://localhost:*",
-                        "http://gachita.site",
-                        "https://gachita.site"
+                        "http://gachita.site:*",
+                        "https://gachita.site:*"
                 )
                 .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE")
                 .allowedHeaders("*")
