@@ -4,6 +4,8 @@ import {
   InProgressIcon,
   WaitingIcon,
 } from "@/assets/icons";
+import FallbackUI from "@/components/FallbackUI";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import PassengerDropDown from "@/features/schedule/PassengerDropDown";
 import type {
   ScheduleData,
@@ -12,6 +14,8 @@ import type {
 import { theme } from "@/styles/themes.style";
 import TabMatcher from "@/utils/TabMatcher";
 import { css } from "@emotion/react";
+import { Suspense } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 const { color, typography } = theme;
 
 interface MapHeaderProps {
@@ -41,7 +45,15 @@ const MapHeader = ({ scheduleType, selectedSchedule }: MapHeaderProps) => {
           </div>
         </div>
         {selectedSchedule && (
-          <PassengerDropDown id={selectedSchedule.routeId} />
+          <ErrorBoundary
+            fallbackRender={({ error, resetErrorBoundary }) => (
+              <FallbackUI error={error} handleRetry={resetErrorBoundary} />
+            )}
+          >
+            <Suspense fallback={<LoadingSpinner />}>
+              <PassengerDropDown id={selectedSchedule.routeId} />
+            </Suspense>
+          </ErrorBoundary>
         )}
       </div>
     </div>

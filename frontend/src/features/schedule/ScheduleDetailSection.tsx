@@ -24,24 +24,22 @@ const ScheduleDetailSection = ({
   }
   return (
     <div css={ScheduleDetailSectionContainer}>
+      <MapHeader
+        scheduleType={scheduleType}
+        selectedSchedule={selectedSchedule}
+      />
       <ErrorBoundary
         fallbackRender={({ error, resetErrorBoundary }) => (
           <FallbackUI error={error} handleRetry={resetErrorBoundary} />
         )}
       >
-        <Suspense fallback={<LoadingSpinner />}>
-          <MapHeader
-            scheduleType={scheduleType}
-            selectedSchedule={selectedSchedule}
-          />
-        </Suspense>
-      </ErrorBoundary>
-      <ErrorBoundary
-        fallbackRender={({ error, resetErrorBoundary }) => (
-          <FallbackUI error={error} handleRetry={resetErrorBoundary} />
-        )}
-      >
-        <Suspense fallback={<LoadingSpinner />}>
+        <Suspense
+          fallback={
+            <div css={LoadingSpinnerWrapper}>
+              <LoadingSpinner />
+            </div>
+          }
+        >
           <MapContent id={selectedSchedule.routeId} />
         </Suspense>
       </ErrorBoundary>
@@ -56,4 +54,12 @@ const ScheduleDetailSectionContainer = css`
   flex-direction: column;
   width: 100%;
   height: 100%;
+`;
+
+const LoadingSpinnerWrapper = css`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
