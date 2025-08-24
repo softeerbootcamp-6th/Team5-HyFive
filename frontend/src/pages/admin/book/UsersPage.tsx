@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // 타입
 import type { DateFilterValue } from "@/features/dateFilter/DateFilter.constants";
@@ -10,7 +10,6 @@ import { theme } from "@/styles/themes.style";
 
 // 컴포넌트
 import DateFilter from "@/features/dateFilter/DateFilter";
-import SearchInput from "@/components/SearchInput";
 import ToolTip from "@/components/ToolTip";
 import TableWithIndex from "@/components/table/TableWithIndex";
 import StatusFilter from "@/features/statusFilter/StatusFilter";
@@ -19,12 +18,13 @@ import Pagination from "@/components/Pagination";
 // 상수
 import { DATE_FILTER_OPTIONS } from "@/features/dateFilter/DateFilter.constants";
 import { USER_STATUS_FILTER_OPTIONS } from "@/features/statusFilter/StatusFilter.constants";
-import { UsersPageRowsMockData } from "@/mocks/tableMocks";
+import { useGetBookList } from "@/apis/BookAPI";
+import EmptyUI from "@/components/EmptyUI";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 const { color, typography } = theme;
 
 const DEFAULT_LOCATION = "운정 1구역";
-const TEMP_COUNT = 12;
 const TOOLTIP_DATA = {
   label: "예약 상태 기준",
   content:
@@ -37,6 +37,18 @@ const UsersPage = () => {
   const [selectedStatusFilter, setSelectedStatusFilter] =
     useState<UserFilterValue>("ALL");
   const [selectedPage, setSelectedPage] = useState(1);
+  const ITEMS_PER_PAGE = 12;
+
+  const { items, pageInfo, isFetching } = useGetBookList(
+    selectedDateFilter,
+    selectedStatusFilter,
+    selectedPage,
+    ITEMS_PER_PAGE,
+  );
+
+  useEffect(() => {
+    setSelectedPage(1);
+  }, [selectedDateFilter, selectedStatusFilter]);
 
   return (
     <div css={PageContainerStyle}>
@@ -51,7 +63,7 @@ const UsersPage = () => {
 
       <section css={ToolbarStyle}>
         <div css={StatusSectionStyle}>
-          <h3 css={CountStyle}>총 {TEMP_COUNT}명</h3>
+          <h3 css={CountStyle}>총 {items.length}명</h3>
           <StatusFilter
             value={selectedStatusFilter}
             options={USER_STATUS_FILTER_OPTIONS}
@@ -59,13 +71,22 @@ const UsersPage = () => {
           />
           <ToolTip label={TOOLTIP_DATA.label} content={TOOLTIP_DATA.content} />
         </div>
-        <SearchInput searchType="user" />
       </section>
+      <div css={TableSectionStyle}>
+        {isFetching ? (
+          <div css={LoadingSpinnerStyle}>
+            <LoadingSpinner size="large" />
+          </div>
+        ) : items.length > 0 ? (
+          <TableWithIndex rows={items} />
+        ) : (
+          <EmptyUI />
+        )}
+      </div>
 
-      <TableWithIndex rows={UsersPageRowsMockData} />
       <Pagination
-        currentPage={selectedPage}
-        totalPages={10}
+        currentPage={pageInfo.current}
+        totalPages={pageInfo.totalPages}
         onPageChange={setSelectedPage}
       />
     </div>
@@ -76,6 +97,7 @@ export default UsersPage;
 
 const PageContainerStyle = css`
   width: 100%;
+  height: 100%;
   padding: 40px;
   display: flex;
   flex-direction: column;
@@ -83,13 +105,13 @@ const PageContainerStyle = css`
     margin-bottom: 20px; /* 기본 간격 */
   }
   > *:nth-child(1) {
-    margin-bottom: 76px; /* 첫 번째 → 두 번째 */
+    margin-bottom: 66px; /* 첫 번째 → 두 번째 */
   }
   > *:nth-child(2) {
     margin-bottom: 20px; /* 두 번째 → 세 번째 */
   }
   > *:nth-child(3) {
-    margin-bottom: 52px; /* 세 번째 → 네 번째 */
+    margin-bottom: 30px; /* 세 번째 → 네 번째 */
   }
 `;
 
@@ -120,4 +142,17 @@ const StatusSectionStyle = css`
 const CountStyle = css`
   font: ${typography.Heading.h4_semi};
   color: ${color.GrayScale.black};
+`;
+
+const TableSectionStyle = css`
+  width: 100%;
+  min-height: 810px;
+`;
+
+const LoadingSpinnerStyle = css`
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
 `;

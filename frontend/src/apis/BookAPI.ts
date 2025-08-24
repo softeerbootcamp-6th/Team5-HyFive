@@ -1,9 +1,23 @@
-import type { BookAPIResponse, BookData } from "@/features/book/Book.types";
+import type { BookAPIData, BookAPIResponse, BookData } from "@/features/book/Book.types";
+import type { DateFilterValue } from "@/features/dateFilter/DateFilter.constants";
+import type { UserFilterValue } from "@/features/statusFilter/StatusFilter.constants";
 import { APIMatcher } from "@/utils/APIMatcher";
 import { clientInstance } from "@/utils/AxiosInstance";
 import TabMatcher from "@/utils/TabMatcher";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
+
+interface BookListAPIResponse {
+  isSuccess: boolean;
+  code: number;
+  message: string;
+  data: {
+    items: (BookAPIData & { pathId: number })[];
+    currentPageNum: number;
+    totalPageNum: number;
+    totalItemNum: number;
+  };
+}
 
 export const useGetBook = (activeTab: string) => {
   // book 상태 관리
@@ -101,5 +115,37 @@ export const useGetBook = (activeTab: string) => {
     isFetching: query.isFetching,
     refetch: query.refetch,
     mergePendingToVisible,
+  };
+};
+
+export const useGetBookList = (
+  period: DateFilterValue,
+  status: UserFilterValue | "",
+  page: number,
+  limit: number,
+) => {
+  if (status === "ALL") status = "";
+  const { data, error, isFetching } = useQuery<BookListAPIResponse>({
+    queryKey: ["bookList", period, status, page, limit],
+    queryFn: () =>
+      clientInstance.get(
+        `/book/list?period=${period}&status=${status}&page=${page}&limit=${limit}`,
+      ),
+    throwOnError: true,
+  });
+
+  const bookList = data?.data.items.map((partData) =>
+    APIMatcher.matchbookListAPI(partData),
+  );
+  return {
+    items: bookList ?? [],
+    pageInfo: {
+      current: data?.data.currentPageNum ?? 1,
+      totalPages: data?.data.totalPageNum ?? 1,
+      totalItems: data?.data.totalItemNum ?? 0,
+    },
+
+    error,
+    isFetching,
   };
 };
