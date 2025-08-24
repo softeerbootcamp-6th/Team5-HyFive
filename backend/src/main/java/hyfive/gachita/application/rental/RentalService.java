@@ -41,13 +41,24 @@ public class RentalService {
         rentalRepository.deleteRentalsBetween(carId, startOfWeek, endOfWeek);
 
         List<Rental> rentalsToSave = rentalList.stream()
-                .map(dto -> Rental.builder()
-                        .car(car)
-                        .rentalDate(dto.rentalDate())
-                        .rentalStartTime(dto.rentalStartTime())
-                        .rentalEndTime(dto.rentalEndTime())
-                        .build()
-                ).toList();
+                .map(dto -> {
+                    // 부모 Rental 생성
+                    Rental rental = Rental.builder()
+                            .car(car)
+                            .rentalDate(dto.rentalDate())
+                            .rentalStartTime(dto.rentalStartTime())
+                            .rentalEndTime(dto.rentalEndTime())
+                            .build();
+
+                    AvailableRental availableRental = AvailableRental.builder()
+                            .startTime(dto.rentalStartTime())
+                            .endTime(dto.rentalEndTime())
+                            .build();
+
+                    rental.setAvailableRental(availableRental);
+
+                    return rental;
+                }).toList();
 
         return rentalRepository.saveAll(rentalsToSave)
                 .stream()

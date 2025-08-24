@@ -9,6 +9,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -43,7 +44,13 @@ public class Rental {
     @OneToMany(mappedBy = "rental", fetch = FetchType.LAZY)
     private List<Path> pathList;
 
-    @OneToMany(mappedBy = "rental", cascade=CascadeType.ALL)
-    private List<AvailableRental> availableList;
+    @OneToMany(mappedBy = "rental", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<AvailableRental> availableList = new ArrayList<>();
+
+    public void setAvailableRental(AvailableRental availableRental) {
+        this.availableList.add(availableRental);
+        availableRental.setRental(this);
+    }
 }
 

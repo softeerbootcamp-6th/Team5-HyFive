@@ -2,11 +2,18 @@ package hyfive.gachita.application.rental;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalTime;
 
 @Entity
-
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
 @Table(name = "available_rental")
 public class AvailableRental {
     @Id
@@ -27,4 +34,7 @@ public class AvailableRental {
     @Column(name = "end_time", nullable = false)
     private LocalTime endTime;
 
+    public void setRental(Rental rental) {
+        this.rental = rental;
+    }
 }
