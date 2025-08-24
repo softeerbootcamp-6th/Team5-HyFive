@@ -36,14 +36,19 @@ const TOOLTIP_DATA = {
 const PathsPage = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const [selectedDateFilter, setSelectedDateFilter] =
-    useState<DateFilterValue>("TODAY");
+
+  // URL에서 파라미터 가져오기
+  const routeId = searchParams.get("routeId");
+  const periodFromUrl = searchParams.get("period") as DateFilterValue;
+
+  const [selectedDateFilter, setSelectedDateFilter] = useState<DateFilterValue>(
+    periodFromUrl || "TODAY",
+  );
   const [selectedStatusFilter, setSelectedStatusFilter] =
     useState<RouteFilterValue>("ALL");
   const [selectedPage, setSelectedPage] = useState(1);
   const ITEMS_PER_PAGE = 12;
 
-  const routeId = searchParams.get("routeId");
   const pathId = routeId ? Number(routeId) : null;
 
   const { items, pageInfo, isFetching } = useGetRouteList(

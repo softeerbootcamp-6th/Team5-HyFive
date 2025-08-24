@@ -93,7 +93,10 @@ const UsersPage = () => {
             <LoadingSpinner size="large" />
           </div>
         ) : items.length > 0 ? (
-          <TableWithIndex rows={items} />
+          <TableWithIndex
+            rows={items}
+            selectedDateFilter={selectedDateFilter}
+          />
         ) : (
           <EmptyUI />
         )}

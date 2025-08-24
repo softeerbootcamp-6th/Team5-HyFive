@@ -5,6 +5,7 @@ import {
   type RouteFilterValue,
   type UserFilterValue,
 } from "@/features/statusFilter/StatusFilter.constants";
+import type { DateFilterValue } from "@/features/dateFilter/DateFilter.constants";
 import { theme } from "@/styles/themes.style";
 import type { TableObject } from "@/utils/TableMatcher";
 import TableMatcher from "@/utils/TableMatcher";
@@ -14,6 +15,7 @@ const { color } = theme;
 
 interface TableProps {
   rows: TableObject[];
+  selectedDateFilter?: DateFilterValue;
 }
 
 const isUserFilterValue = (
@@ -28,12 +30,20 @@ const isRouteFilterValue = (
   return value in ROUTE_STATUS_META;
 };
 
-const TableWithIndex = ({ rows }: TableProps) => {
+const TableWithIndex = ({ rows, selectedDateFilter }: TableProps) => {
   const navigate = useNavigate();
   const { keys, labels } = TableMatcher.matchTableHeader(rows);
 
   const handleRouteIdClick = (routeId: string | number) => {
-    void navigate(`/admin/book/paths?routeId=${routeId}`);
+    const searchParams = new URLSearchParams();
+    searchParams.append("routeId", String(routeId));
+
+    // 선택된 날짜 필터가 있으면 URL 파라미터에 추가
+    if (selectedDateFilter) {
+      searchParams.append("period", selectedDateFilter);
+    }
+
+    void navigate(`/admin/book/paths?${searchParams.toString()}`);
   };
 
   const formatElement = ({
