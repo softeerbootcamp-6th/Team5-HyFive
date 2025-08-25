@@ -57,7 +57,7 @@ const createInfoWindowHTML = ({
       }
     </style>
 
-    <div class="info-window">
+    <div data-testid="map-infowindow" class="info-window">
       <div class="info-header">
         ${statusTag}
         <p class="info-title">${name}</p>
