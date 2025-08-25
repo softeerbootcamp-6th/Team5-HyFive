@@ -15,7 +15,7 @@ interface TimePickerProps {
 const TimePicker = ({ onCancel, onConfirm }: TimePickerProps) => {
   const [selectedMeridiem, setSelectedMeridiem] = useState<Meridiem>("AM");
   const [hour, setHour] = useState<string>("");
-  const [minute, setMinute] = useState<string>("");
+  const [minute, setMinute] = useState<string>("00");
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   // 시간 입력 핸들러
