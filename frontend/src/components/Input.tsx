@@ -114,6 +114,7 @@ const IconWrapper = css`
   display: flex;
   align-items: center;
   justify-content: center;
+  pointer-events: none;
   top: 50%;
   transform: translateY(-50%);
   right: 24px;
