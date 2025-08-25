@@ -29,12 +29,23 @@ export const validateDate = (value: string): string | null => {
   return null;
 };
 
-export const validateTime = (hour: string, minute: string): string | null => {
-  if (!hour || !minute) return "시간을 입력해주세요";
-  const h = parseInt(hour);
+export const validateTime = (value: string): string | null => {
+  if (!value) return "시간을 입력해주세요";
+  const [timePart, meridiem] = value.split(" ");
+  const [hour, minute] = timePart.split(":");
+  let h = parseInt(hour);
   const m = parseInt(minute);
+
+  if (isNaN(h) || isNaN(m)) return "올바른 시간을 입력해주세요";
   if (h < 1 || h > 12) return "시간은 1-12 사이로 입력해주세요";
   if (m < 0 || m > 59) return "분은 0-59 사이로 입력해주세요";
+
+  if (meridiem === "AM") {
+    h = h === 12 ? 0 : h;
+  } else if (meridiem === "PM") {
+    h = h === 12 ? 12 : h + 12;
+  }
+
   if (h < 9 || h > 20) return "예약 가능 시간은 9시부터 20시까지입니다";
   return null;
 };
