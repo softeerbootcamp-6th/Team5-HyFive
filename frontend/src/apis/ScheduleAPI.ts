@@ -62,9 +62,10 @@ export const useGetPassenger = (activeId: number) => {
     retry: 1,
   });
 
-  const passengerData = data?.data?.map((partData) =>
-    APIMatcher.matchPassengerAPI(partData),
-  );
+  const passengerData = data?.data?.map((partData, idx) => ({
+    order: idx + 1,
+    ...APIMatcher.matchPassengerAPI(partData),
+  }));
 
   return {
     data: passengerData,
