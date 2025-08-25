@@ -2,7 +2,7 @@ import EmptyUI from "@/components/EmptyUI";
 import FallbackUI from "@/components/FallbackUI";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import MapContent from "@/features/map/MapContent";
-import MapHeader from "@/features/schedule/MapHeader";
+import MapHeader from "@/features/map/MapHeader";
 import type {
   ScheduleData,
   ScheduleType,
