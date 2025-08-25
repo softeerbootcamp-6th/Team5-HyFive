@@ -76,6 +76,7 @@ public class DemoService {
         }
     }
 
+    @Transactional
     public Map<String, Object> saveTodayPathPolyline() {
         LocalDate today = LocalDate.now();
         List<Path> pathList = pathRepository.findAllByDriveDate(today);
