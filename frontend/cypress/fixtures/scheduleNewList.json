@@ -1,0 +1,136 @@
+{
+  "isSuccess": true,
+  "code": 1000,
+  "message": "요청에 성공했습니다.",
+  "data": {
+    "items": [
+      {
+        "pathId": 22,
+        "carNumber": "12가1009",
+        "startTime": "10:49",
+        "endTime": "12:40",
+        "startAddr": "공릉로 430",
+        "endAddr": "동일로 1643",
+        "centerName": "시립노원노인종합복지관",
+        "driveStatus": "WAITING",
+        "userCount": 5
+      },
+      {
+        "pathId": 15,
+        "carNumber": "11가1001",
+        "startTime": "10:49",
+        "endTime": "12:40",
+        "startAddr": "공릉로 430",
+        "endAddr": "동일로 1643",
+        "centerName": "시립노원노인종합복지관",
+        "driveStatus": "WAITING",
+        "userCount": 1
+      },
+      {
+        "pathId": 4,
+        "carNumber": "11가1001",
+        "startTime": "10:56",
+        "endTime": "12:50",
+        "startAddr": "한글비석로 97",
+        "endAddr": "동일로 1643",
+        "centerName": "시립노원노인종합복지관",
+        "driveStatus": "WAITING",
+        "userCount": 1
+      },
+      {
+        "pathId": 16,
+        "carNumber": "11가1001",
+        "startTime": "11:16",
+        "endTime": "12:30",
+        "startAddr": "노원로 564",
+        "endAddr": "동일로 1678",
+        "centerName": "가온요양원",
+        "driveStatus": "WAITING",
+        "userCount": 1
+      },
+      {
+        "pathId": 14,
+        "carNumber": "11가1001",
+        "startTime": "11:25",
+        "endTime": "12:40",
+        "startAddr": "한글비석로 97",
+        "endAddr": "동일로 1413",
+        "centerName": "시립노원노인종합복지관",
+        "driveStatus": "WAITING",
+        "userCount": 1
+      },
+      {
+        "pathId": 6,
+        "carNumber": "11가1001",
+        "startTime": "11:31",
+        "endTime": "12:20",
+        "startAddr": "노원로 564",
+        "endAddr": "동일로 1342",
+        "centerName": "가온요양원",
+        "driveStatus": "WAITING",
+        "userCount": 1
+      },
+      {
+        "pathId": 3,
+        "carNumber": "11가1001",
+        "startTime": "12:28",
+        "endTime": "13:00",
+        "startAddr": "노원로 564",
+        "endAddr": "노원로 456",
+        "centerName": "가온요양원",
+        "driveStatus": "WAITING",
+        "userCount": 1
+      },
+      {
+        "pathId": 1,
+        "carNumber": "11가1001",
+        "startTime": "12:59",
+        "endTime": "14:20",
+        "startAddr": "섬밭로 52",
+        "endAddr": "한글비석로 68",
+        "centerName": "공릉노인복지관",
+        "driveStatus": "WAITING",
+        "userCount": 1
+      },
+      {
+        "pathId": 17,
+        "carNumber": "11가1001",
+        "startTime": "13:59",
+        "endTime": "15:40",
+        "startAddr": "한글비석로 479",
+        "endAddr": "공릉로 187",
+        "centerName": "가온요양원",
+        "driveStatus": "WAITING",
+        "userCount": 1
+      },
+      {
+        "pathId": 5,
+        "carNumber": "11가1001",
+        "startTime": "14:21",
+        "endTime": "15:00",
+        "startAddr": "한글비석로 479",
+        "endAddr": "동일로 1413",
+        "centerName": "가온요양원",
+        "driveStatus": "WAITING",
+        "userCount": 1
+      },
+      {
+        "pathId": 2,
+        "carNumber": "11가1001",
+        "startTime": "14:36",
+        "endTime": "15:40",
+        "startAddr": "상계로23다길 13-8",
+        "endAddr": "동일로 1678",
+        "centerName": "가온요양원",
+        "driveStatus": "WAITING",
+        "userCount": 1
+      }
+    ],
+    "hasNext": false,
+    "cursor": {
+      "lastId": 2,
+      "lastStartTime": "14:36",
+      "lastEndTime": "15:40"
+    }
+  }
+}
