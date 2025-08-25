@@ -23,9 +23,10 @@ public record FragmentDto(
     }
 
     public static Optional<FragmentDto> ofSecond(FinalNewPathDto path) {
-        LocalTime driveEnd = path.nodeList().get(0).time();
-        LocalTime maxRentalEnd = path.availableRental().getRental().getRentalEndTime();
-        LocalTime startTime = driveEnd.isBefore(maxRentalEnd) ? driveEnd : maxRentalEnd;
+        LocalTime maybeEndTime = path.nodeList().get(0).time().plusHours(2);
+        LocalTime maxRentalEnd = path.availableRental().getEndTime();
+
+        LocalTime startTime = maybeEndTime.isBefore(maxRentalEnd) ? maybeEndTime : maxRentalEnd;
         return of(startTime, path.rentalEndTime());
     }
 
