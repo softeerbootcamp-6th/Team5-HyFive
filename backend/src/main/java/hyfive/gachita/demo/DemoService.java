@@ -14,6 +14,7 @@ import hyfive.gachita.global.BusinessException;
 import hyfive.gachita.global.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -76,6 +77,8 @@ public class DemoService {
         }
     }
 
+    // 매일 오후 8시에 오늘 날짜의 모든 Path에 대해 polyline 저장 작업 수행
+    @Scheduled(cron = "0 0 20 * * *")
     @Transactional
     public Map<String, Object> saveTodayPathPolyline() {
         LocalDate today = LocalDate.now();
