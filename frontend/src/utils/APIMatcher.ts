@@ -39,7 +39,7 @@ export const APIMatcher = {
       name: apiItem.bookName,
       phone: apiItem.bookTel,
       isExistWalkingDevice: apiItem.walker,
-      bookDate: apiItem.bookDate,
+      hospitalDate: apiItem.hospitalDate,
       userStartLocation: apiItem.startAddr,
       userEndLocation: apiItem.endAddr,
       hospitalTime: apiItem.hospitalTime,
