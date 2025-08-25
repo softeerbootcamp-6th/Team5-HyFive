@@ -41,20 +41,6 @@ const ScheduleDetailSection = ({
                 scheduleType={scheduleType}
                 selectedSchedule={selectedSchedule}
               />
-            </Suspense>
-          </ErrorBoundary>
-        )}
-      </QueryErrorResetBoundary>
-      <QueryErrorResetBoundary>
-        {({ reset }) => (
-          <ErrorBoundary onReset={reset} FallbackComponent={FallbackUI}>
-            <Suspense
-              fallback={
-                <div css={LoadingSpinnerWrapper}>
-                  <LoadingSpinner />
-                </div>
-              }
-            >
               <MapContent id={activeId} />
             </Suspense>
           </ErrorBoundary>
