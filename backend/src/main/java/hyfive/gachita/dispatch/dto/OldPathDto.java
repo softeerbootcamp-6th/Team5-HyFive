@@ -15,7 +15,13 @@ public record OldPathDto(
 ) {
     public static OldPathDto from(Long pathId, Long carId, List<NodeWithDeadline> nodeList) {
         List<NodeDto> nodeDtoList = nodeList.stream()
-                .map(nwd -> NodeDto.from(nwd.node(), nwd.deadline()))
+                .map(nwd -> NodeDto.from(
+                        nwd.node(),
+                        nwd.deadline(),
+                        nwd.bookId(),
+                        nwd.availableRentalStartTime(),
+                        nwd.availableRentalEndTime()
+                        ))
                 .toList();
 
         return OldPathDto.builder()

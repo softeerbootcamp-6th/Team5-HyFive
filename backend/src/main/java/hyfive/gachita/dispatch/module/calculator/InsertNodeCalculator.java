@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,26 +56,65 @@ public class InsertNodeCalculator {
      * 모든 노드의 예상 도착 시간을 새로 계산합니다.
      */
     private List<NodeDto> updateNodeTime(List<NodeDto> nodeList, List<Integer> durationList) {
-        LocalTime baseTime = nodeList.get(0).time();
-        log.trace("[updateNodeTime] 노드 시간 업데이트 시작. 기준 시간: {}, 구간별 소요시간 수: {}", baseTime, durationList.size());
+        log.trace("[updateNodeTime] 노드 시간 업데이트 시작. 후보 노드 수: {}", nodeList.size());
 
         List<NodeDto> updatedList = new ArrayList<>();
-        updatedList.add(nodeList.get(0)); // 첫 번째 노드는 기준이므로 그대로 추가
-
-        long cumulativeSeconds = 0;
+        updatedList.add(nodeList.get(0)); // 첫 번째 노드는 그대로
+        LocalTime previousTime = nodeList.get(0).time(); // 초기 기준
 
         for (int i = 1; i < nodeList.size(); i++) {
-            // 이전 노드와의 이동 시간을 누적
-            cumulativeSeconds += durationList.get(i - 1);
-            LocalTime newTime = baseTime.plusSeconds(cumulativeSeconds);
+            NodeDto currentNode = nodeList.get(i);
+            NodeDto previousNode = updatedList.get(i - 1);
 
-            NodeDto updatedNode = NodeDto.updateTime(nodeList.get(i), newTime);
+            // Kakao API duration (i-1) -> (i) 로 이동하는데 걸리는 시간
+            int travelSec = durationList.get(i - 1);
+
+            // 이전 노드 slack 계산 (END 노드만)
+            long slackSec = 0;
+            if (previousNode.type() == NodeType.END) {
+                LocalTime latest = currentNode.deadline().getSecond();
+                slackSec = Math.max(0, Duration.between(previousTime.plusSeconds(travelSec), latest).getSeconds());
+            }
+
+            // earliest/latest 범위 계산
+            LocalTime earliest = (currentNode.deadline() != null) ? currentNode.deadline().getFirst() : null;
+
+            // 예상 도착 시간 = 이전 시간 + duration + slack(범위 내)
+            LocalTime newTime = previousTime.plusSeconds(travelSec + slackSec);
+
+            // deadline 조정
+            if (earliest != null && newTime.isBefore(earliest)) newTime = earliest;
+
+            NodeDto updatedNode = NodeDto.updateTime(currentNode, newTime);
             updatedList.add(updatedNode);
-            log.trace("  -> 노드 {} 시간 업데이트: {}", i, newTime);
+            previousTime = newTime;
+            log.trace(" -> 노드 {} 시간 업데이트: {}", i, newTime);
         }
 
         return updatedList;
     }
+
+//    private List<NodeDto> updateNodeTime(List<NodeDto> nodeList, List<Integer> durationList) {
+//        LocalTime baseTime = nodeList.get(0).time();
+//        log.trace("[updateNodeTime] 노드 시간 업데이트 시작. 기준 시간: {}, 구간별 소요시간 수: {}", baseTime, durationList.size());
+//
+//        List<NodeDto> updatedList = new ArrayList<>();
+//        updatedList.add(nodeList.get(0)); // 첫 번째 노드는 기준이므로 그대로 추가
+//
+//        long cumulativeSeconds = 0;
+//
+//        for (int i = 1; i < nodeList.size(); i++) {
+//            // 이전 노드와의 이동 시간을 누적
+//            cumulativeSeconds += durationList.get(i - 1);
+//            LocalTime newTime = baseTime.plusSeconds(cumulativeSeconds);
+//
+//            NodeDto updatedNode = NodeDto.updateTime(nodeList.get(i), newTime);
+//            updatedList.add(updatedNode);
+//            log.trace("  -> 노드 {} 시간 업데이트: {}", i, newTime);
+//        }
+//
+//        return updatedList;
+//    }
 
     /**
      * 계산된 경로가 비즈니스 규칙에 맞는지 검증합니다.
