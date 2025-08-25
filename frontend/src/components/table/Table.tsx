@@ -10,6 +10,12 @@ interface TableProps {
 
 const Table = ({ rows }: TableProps) => {
   const { keys, labels } = TableMatcher.matchTableHeader(rows);
+  const formatElement = ({ key, row }: { key: string; row: TableObject }) => {
+    const value = row[key as keyof TableObject];
+    if (key === "isExistWalkingDevice") return value ? "o" : "x";
+    if (key === "routeId") return "#" + value;
+    return value;
+  };
   return (
     <table css={TableContainer}>
       <thead css={TableHeader}>
@@ -26,11 +32,7 @@ const Table = ({ rows }: TableProps) => {
           <tr key={idx} css={TableContentRow}>
             {keys.map((key) => (
               <td key={key} css={TableContentElement}>
-                {key === "isExistWalkingDevice"
-                  ? row[key]
-                    ? "o"
-                    : "x"
-                  : row[key]}
+                {formatElement({ key, row })}
               </td>
             ))}
           </tr>

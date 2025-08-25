@@ -81,7 +81,9 @@ export const usePatchCar = () => {
       formData.append("carNumber", carData.carNumber);
       formData.append("capacity", carData.maxPassenger);
       formData.append("lowFloor", String(carData.isLowFloor));
-      formData.append("imageFile", carData.carImage as File);
+      if (carData.carImage instanceof File) {
+        formData.append("imageFile", carData.carImage as File);
+      }
       return clientInstance.patch(`/car/${id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",

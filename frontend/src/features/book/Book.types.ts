@@ -10,9 +10,10 @@ export interface BookData {
   isExistWalkingDevice: boolean;
   bookTime: string;
   bookDate: string;
+  hospitalTime: string;
+  hospitalDate: string;
   userStartLocation: string;
   userEndLocation: string;
-  hospitalTime: string;
   routeId: string;
   carNumber: string;
   routeStartTime: string;

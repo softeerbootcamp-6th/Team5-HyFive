@@ -2,7 +2,7 @@ import EmptyUI from "@/components/EmptyUI";
 import FallbackUI from "@/components/FallbackUI";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import MapContent from "@/features/map/MapContent";
-import MapHeader from "@/features/schedule/MapHeader";
+import MapHeader from "@/features/map/MapHeader";
 import type {
   ScheduleData,
   ScheduleType,
@@ -29,7 +29,11 @@ const ScheduleDetailSection = ({
     <div css={ScheduleDetailSectionContainer}>
       <QueryErrorResetBoundary>
         {({ reset }) => (
-          <ErrorBoundary onReset={reset} FallbackComponent={FallbackUI}>
+          <ErrorBoundary
+            key={selectedSchedule?.routeId}
+            onReset={reset}
+            FallbackComponent={FallbackUI}
+          >
             <Suspense
               fallback={
                 <div css={LoadingSpinnerWrapper}>
@@ -41,20 +45,6 @@ const ScheduleDetailSection = ({
                 scheduleType={scheduleType}
                 selectedSchedule={selectedSchedule}
               />
-            </Suspense>
-          </ErrorBoundary>
-        )}
-      </QueryErrorResetBoundary>
-      <QueryErrorResetBoundary>
-        {({ reset }) => (
-          <ErrorBoundary onReset={reset} FallbackComponent={FallbackUI}>
-            <Suspense
-              fallback={
-                <div css={LoadingSpinnerWrapper}>
-                  <LoadingSpinner />
-                </div>
-              }
-            >
               <MapContent id={activeId} />
             </Suspense>
           </ErrorBoundary>

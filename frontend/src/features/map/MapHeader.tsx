@@ -4,7 +4,7 @@ import {
   InProgressIcon,
   WaitingIcon,
 } from "@/assets/icons";
-import PassengerDropDown from "@/features/schedule/PassengerDropDown";
+import PassengerDropDown from "@/features/map/components/PassengerDropDown";
 import type {
   ScheduleData,
   ScheduleType,
@@ -25,6 +25,10 @@ const MapHeader = ({ scheduleType, selectedSchedule }: MapHeaderProps) => {
     completed: <CompletedIcon />,
   };
   const parsedScheduleType = TabMatcher.matchScheduleTypeENGToKR(scheduleType);
+  const formatScheduleStatus = (status: string) => {
+    if (status === "운행 대기") return "운행 대기 중";
+    return status;
+  };
 
   return (
     <div css={MapHeaderContainer}>
@@ -33,7 +37,9 @@ const MapHeader = ({ scheduleType, selectedSchedule }: MapHeaderProps) => {
         <div css={LeftSectionWrapper}>
           <div>{ICON_MAPPER[scheduleType]}</div>
           <div>
-            <p css={RouteStatusText}>{parsedScheduleType}</p>
+            <p css={RouteStatusText}>
+              {formatScheduleStatus(parsedScheduleType)}
+            </p>
             <div css={RouteLocationWrapper}>
               <p>{selectedSchedule.routeStartLocation}</p>
               <ArrowRightIcon />

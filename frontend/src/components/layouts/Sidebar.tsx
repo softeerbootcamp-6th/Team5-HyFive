@@ -1,7 +1,7 @@
 import { CarIcon, DashboardIcon, PersonIcon, RouteIcon } from "@/assets/icons";
 import { theme } from "@/styles/themes.style";
 import { css } from "@emotion/react";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 
 interface SidebarContent {
   label: string;
@@ -32,18 +32,30 @@ const Sidebar = () => {
       route: "/admin/book/paths",
     },
   ] as const;
+
+  const location = useLocation();
+
   return (
     <div css={SidebarConatiner}>
       <Link css={ContentButton} to="/admin/book/register">
         신규 예약 접수
       </Link>
       <ul>
-        {SIDEBAR_CONTENT.map((content) => (
-          <Link to={content.route} key={content.label} css={ContentLi}>
-            {content.icon}
-            <p>{content.label}</p>
-          </Link>
-        ))}
+        {SIDEBAR_CONTENT.map((content) => {
+          const isActive = location.pathname === content.route;
+          return (
+            <div key={content.label} css={LiWrapper}>
+              <Link
+                to={content.route}
+                key={content.label}
+                css={[ContentLi, isActive && ActiveLi]}
+              >
+                {content.icon}
+                <p>{content.label}</p>
+              </Link>
+            </div>
+          );
+        })}
       </ul>
     </div>
   );
@@ -74,9 +86,28 @@ export const ContentButton = css`
   background-color: ${theme.color.Maincolor.primary};
 `;
 
+export const LiWrapper = css`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 4px 0;
+`;
+
 export const ContentLi = css`
   display: flex;
-  flex-direction: row;
-  gap: 11px;
   padding: 12px 20px;
+  flex-direction: row;
+  align-items: center;
+  gap: 11px;
+  border-radius: 10px;
+  font: ${theme.typography.Label.l4_semi};
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: ${theme.color.GrayScale.gray6};
+  }
+`;
+
+export const ActiveLi = css`
+  background-color: ${theme.color.GrayScale.gray6};
 `;

@@ -58,7 +58,11 @@ const ScheduleListSection = ({
       <div css={ContentContainer}>
         <QueryErrorResetBoundary>
           {({ reset }) => (
-            <ErrorBoundary onReset={reset} FallbackComponent={FallbackUI}>
+            <ErrorBoundary
+              key={activeTab}
+              onReset={reset}
+              FallbackComponent={FallbackUI}
+            >
               <Suspense
                 fallback={
                   <div css={LoadingSpinnerWrapper}>
