@@ -38,6 +38,7 @@ const Tabs = <T extends string>({
       <div css={TabsContainer}>
         {group.map((item, i) => (
           <div
+            data-testid="tab"
             key={item}
             css={StyledTab(type, selected === item)}
             onClick={() => setSelected(item)}

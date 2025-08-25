@@ -82,7 +82,12 @@ const MapCore = ({ markerPath, polylinePath, highlightPath }: MapCoreProps) => {
 
   return (
     <div css={MapContentContainer}>
-      <div id="map" ref={mapRef} css={MapWrapper} />
+      <div
+        data-testid="schedule-detail-map"
+        id="map"
+        ref={mapRef}
+        css={MapWrapper}
+      />
       <MidPointButton onClick={handleInitMidPoint} />
       <ZoomButton zoomLevel={zoomLevel} handleZoomLevel={handleZoomLevel} />
       <RoutePicker
