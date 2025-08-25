@@ -26,7 +26,7 @@ interface ModalState {
   content: string;
 }
 const InputSection = ({ type = "register", initValues }: InputSectionProps) => {
-  const MAX_PASSENGER = 25;
+  const MAX_PASSENGER = 10;
   const dropdownOptions = Array.from({ length: MAX_PASSENGER }, (_, index) =>
     String(index + 1),
   );
