@@ -48,15 +48,15 @@ export const usePopupManager = ({
   const renderPopupPortal = () => {
     if (!activePopup || !portalTarget) return null;
 
-    // 해당 Input의 위치 계산
     const inputRef = activePopup === "calendar" ? dateInputRef : timeInputRef;
     const inputElement = inputRef.current;
 
     if (!inputElement) return null;
 
     const rect = inputElement.getBoundingClientRect();
-    const popupRight = rect.right - rect.width;
-    const popupTop = rect.bottom + rect.height * 0.2;
+
+    const popupLeft = rect.left / 0.8;
+    const popupTop = rect.top / 0.8 + rect.height + 25;
 
     const popupContent =
       activePopup === "calendar" ? (
@@ -83,7 +83,7 @@ export const usePopupManager = ({
           style={{
             position: "absolute",
             top: popupTop,
-            left: popupRight,
+            left: popupLeft,
           }}
         >
           {popupContent}

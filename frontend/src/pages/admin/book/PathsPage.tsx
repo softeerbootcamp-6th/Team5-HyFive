@@ -85,7 +85,7 @@ const PathsPage = () => {
       <section css={ToolbarStyle}>
         <div css={StatusSectionStyle}>
           <div css={leftSectionStyle}>
-            <h3 css={CountStyle}>총 {items.length}명</h3>
+            <h3 css={CountStyle}>총 {pageInfo.totalItems}명</h3>
             <StatusFilter
               value={selectedStatusFilter}
               options={ROUTE_STATUS_FILTER_OPTIONS}

@@ -3,7 +3,14 @@ import { theme } from "@/styles/themes.style";
 
 const { color, typography } = theme;
 
-const TAG_TYPES = ["orange", "red", "blue", "green", "gray"] as const;
+const TAG_TYPES = [
+  "orange",
+  "red",
+  "blue",
+  "green",
+  "gray",
+  "selectedGray",
+] as const;
 
 type TagType = (typeof TAG_TYPES)[number];
 
@@ -44,6 +51,11 @@ const getTagStyle = (type: TagType) => {
       return {
         background: "rgba(97, 97, 97, 0.10)",
         color: color.GrayScale.gray5,
+      };
+    case "selectedGray":
+      return {
+        background: color.GrayScale.gray5,
+        color: color.GrayScale.gray3,
       };
     default: {
       // TagType 확장 시 case 누락 방지 위함

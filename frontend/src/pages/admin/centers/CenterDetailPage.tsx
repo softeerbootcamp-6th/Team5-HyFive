@@ -45,6 +45,11 @@ const CenterDetailPage = () => {
     }
   }, [mappedCarList, selectedCarId]);
 
+  // 차량 선택 시 달력 오늘 날짜로 초기화
+  useEffect(() => {
+    handleDateClick(new Date());
+  }, [selectedCarId]);
+
   // Calender - 헤더용 핸들러
   const handleMonthChange = (direction: "next" | "prev") => {
     dispatch({

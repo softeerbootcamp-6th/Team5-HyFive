@@ -66,6 +66,8 @@ const CarInfoCard = ({
         </div>
         {isDriving ? (
           <Tag type="green" label="운행 중" />
+        ) : isSelected ? (
+          <Tag type="selectedGray" label="미운행" />
         ) : (
           <Tag type="gray" label="미운행" />
         )}

@@ -13,6 +13,7 @@ import {
   validateDate,
   formatTimeDisplay,
   formatPhone,
+  validateTime,
 } from "@/utils/UserValidation";
 import {
   calenderReducer,
@@ -217,7 +218,7 @@ const UserInputSection = () => {
               name="hospitalTime"
               control={control}
               rules={{
-                required: "병원 도착 시간을 선택해주세요",
+                validate: (value) => validateTime(value) || true,
               }}
               render={({ field }) => (
                 <Input

@@ -197,11 +197,37 @@ export const isBeforeToday = (dateString: string): boolean => {
 };
 
 /**
- * 현재 선택된 주가 다음 주거나 이후인지 확인합니다.
+ * 현재 선택된 주가 2주 이후인지 확인합니다. (기획을 위함)
  * @param week 날짜 배열 (주 단위)
- * @returns 현재 선택된 주가 다음 주거나 이후이면 true, 아니면 false
+ * @returns 현재 선택된 주가 2주 이후이면 true, 아니면 false
  */
 export const isFutureWeek = (week: Date[]): boolean => {
-  const lastDayOfThisWeek = endOfWeek(new Date(), { weekStartsOn: 0 });
-  return week.some((date) => isAfter(startOfDay(date), lastDayOfThisWeek));
+  const endOfThisWeek = endOfWeek(new Date(), { weekStartsOn: 0 });
+
+  // 다음 주 마지막 날 (이번 주 마지막 날에서 +7일 후)
+  const endOfNextWeek = addDays(endOfThisWeek, 7);
+
+  return week.some((date) => isAfter(startOfDay(date), endOfNextWeek));
+};
+
+/**
+ * 선택된 날짜가 오늘 기준으로 다음 주 토요일까지 예약 가능한지 확인합니다.(기획)
+ * @param selectedDate 선택된 날짜
+ * @returns 현재 선택된 날짜가 예약 가능한 날짜이면 true, 아니면 false
+ */
+export const isBookingPossible = (selectedDate: Date): boolean => {
+  const day = new Date().getDay();
+  const deltaToThisSaturday = 6 - day;
+  const deltaToNextSaturday = deltaToThisSaturday + 7;
+
+  const nextWeekSaturday = new Date();
+  nextWeekSaturday.setDate(nextWeekSaturday.getDate() + deltaToNextSaturday);
+
+  nextWeekSaturday.setHours(23, 59, 59, 999);
+
+  if (selectedDate.getTime() > nextWeekSaturday.getTime()) {
+    return false;
+  }
+
+  return true;
 };

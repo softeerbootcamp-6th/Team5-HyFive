@@ -55,7 +55,7 @@ const Pagination = ({
           <button
             css={PageButtonStyle}
             onClick={() => handlePageChange(start - 1)}
-            disabled={safeCurrent === 1}
+            disabled={safeCurrent === 1 || safeCurrent - windowSize < 1}
           >
             <ChevronLeftIcon className="chevron-icon" />
           </button>
@@ -72,7 +72,9 @@ const Pagination = ({
           <button
             css={PageButtonStyle}
             onClick={() => handlePageChange(end + 1)}
-            disabled={safeCurrent === safeTotal}
+            disabled={
+              safeCurrent === safeTotal || safeCurrent + windowSize > safeTotal
+            }
           >
             <ChevronRightIcon className="chevron-icon" />
           </button>

@@ -15,7 +15,7 @@ interface CarModalContentProps {
 const MODAL_TYPE_META = {
   edit: {
     title: "수정",
-    content: "차량 등록화면으로 이동합니다.",
+    content: "차량 수정 페이지로 이동합니다.",
   },
   delete: {
     title: "삭제",

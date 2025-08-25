@@ -4,7 +4,7 @@ import { theme } from "@/styles/themes.style";
 const { color, typography, borderRadius } = theme;
 
 interface MonoButtonProps {
-  mode: "black" | "white";
+  mode: "black" | "white" | "gray";
   label: string;
   icon?: React.ReactNode;
   onClick: () => void;
@@ -21,18 +21,26 @@ const MonoButton = ({ mode, label, icon, onClick }: MonoButtonProps) => {
 
 export default MonoButton;
 
-const getButtonColor = (mode: "black" | "white") => {
+const getButtonColor = (mode: "black" | "white" | "gray") => {
   switch (mode) {
     case "black":
       return css`
         background-color: ${color.GrayScale.black};
         color: ${color.GrayScale.white};
+        cursor: pointer;
       `;
     case "white":
       return css`
         background-color: ${color.GrayScale.white};
         color: ${color.GrayScale.black};
         border: 1px solid ${color.GrayScale.gray3};
+        cursor: pointer;
+      `;
+    case "gray":
+      return css`
+        background-color: ${color.GrayScale.gray3};
+        color: ${color.GrayScale.white};
+        cursor: not-allowed;
       `;
   }
 };
@@ -44,5 +52,4 @@ const ButtonContainer = css`
   padding: 12px 20px;
   font: ${typography.Label.l3_semi};
   border-radius: ${borderRadius.Small};
-  cursor: pointer;
 `;

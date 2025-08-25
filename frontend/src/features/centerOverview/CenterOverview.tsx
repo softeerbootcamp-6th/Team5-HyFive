@@ -18,7 +18,6 @@ const CenterOverview = ({
   centerTel = "",
   centerAddr = "",
   registeredCars = 0,
-  estimatedRevenue = 0,
   isLoading = false,
   error = null,
 }: CenterOverviewProps) => {
@@ -41,7 +40,7 @@ const CenterOverview = ({
     {
       icon: <PayIcon fill={color.GrayScale.gray5} />,
       label: "예상 수익",
-      content: `₩ ${estimatedRevenue.toLocaleString()}`,
+      content: `₩ 182,000`,
     },
   ];
 
