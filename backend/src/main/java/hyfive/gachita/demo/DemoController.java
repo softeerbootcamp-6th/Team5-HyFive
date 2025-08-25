@@ -1,7 +1,6 @@
 package hyfive.gachita.demo;
 
 import hyfive.gachita.application.path.DriveStatus;
-import hyfive.gachita.application.path.PathService;
 import hyfive.gachita.global.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +12,7 @@ import java.util.Map;
 @RequestMapping("/demo")
 @RequiredArgsConstructor
 public class DemoController {
-    private final PathService pathService;
+    private final DemoService demoService;
 
     @GetMapping("/path/{pathId}/save-polyline")
     @Operation(
@@ -21,7 +20,7 @@ public class DemoController {
             description = "pathId를 받아 해당 경로의 polyline 정보를 DB에 저장합니다."
     )
     public BaseResponse<String> savePathPolyLine(@PathVariable Long pathId) {
-        pathService.savePolyline(pathId);
+        demoService.savePolyline(pathId);
         return BaseResponse.success("Polyline saved successfully");
     }
 
@@ -31,7 +30,7 @@ public class DemoController {
             description = "운행 날짜가 오늘인 모든 Path의 polyline 정보를 DB에 저장하고 결과를 반환합니다."
     )
     public BaseResponse<Map<String, Object>> savePathPolyLine() {
-        return BaseResponse.success(pathService.saveTodayPathPolyline());
+        return BaseResponse.success(demoService.saveTodayPathPolyline());
     }
 
     @PatchMapping("/path/drive-status")
@@ -40,6 +39,6 @@ public class DemoController {
             description = "경로 ID와 새로운 운행 상태를 받아 해당 경로의 운행 상태를 변경하고 결과를 반환합니다."
     )
     public BaseResponse<Map<String, Object>> changeDriveStatus(Long id, DriveStatus status) {
-        return BaseResponse.success(pathService.changeDriveStatus(id, status));
+        return BaseResponse.success(demoService.changeDriveStatus(id, status));
     }
 }
