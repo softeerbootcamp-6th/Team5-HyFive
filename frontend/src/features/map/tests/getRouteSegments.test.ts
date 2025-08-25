@@ -1,4 +1,4 @@
-import getRouteSegments from "@/features/map/getRouteSegments.util";
+import getRouteSegments from "@/features/map/utils/getRouteSegments.util";
 
 const TEST_PATH = [
   { lat: 37.65350753605161, lng: 127.05272873217041 },

@@ -1,4 +1,4 @@
-import getRouteMidPoint from "@/features/map/getRouteMidPoint.util";
+import getRouteMidPoint from "@/features/map/utils/getRouteMidPoint.util";
 
 const TEST_PATH = [
   { lat: 37.65350753605161, lng: 127.05272873217041 },
@@ -44,11 +44,11 @@ describe("지도의 중점을 올바르게 반환한다.", () => {
     });
   });
 
-  it("전체 경로의 길이가 음수거나 0인 경우 null인 위치를 반환한다.", () => {
+  it("전체 경로의 길이가 음수거나 0인 경우 기본 위치를 반환한다.", () => {
     //when
     const centerLatLng = getRouteMidPoint(TEST_PATH.slice(0, 0));
 
     //then
-    expect(centerLatLng).toEqual({ lat: null, lng: null });
+    expect(centerLatLng).toEqual({ lat: 37.674088, lng: 127.070157 });
   });
 });

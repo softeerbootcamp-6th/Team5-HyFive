@@ -1,11 +1,23 @@
+import FallbackUI from "@/components/FallbackUI";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import RefetchButton from "@/components/RefetchButton";
 import Tabs from "@/components/Tabs";
-import type { ScheduleType } from "@/features/schedule/Schedule.types";
-import ScheduleCard from "@/features/schedule/ScheduleCard";
-import { drivingDataList } from "@/mocks/drivingMocks";
+import type {
+  ScheduleData,
+  ScheduleType,
+} from "@/features/schedule/Schedule.types";
+import ScheduleDataFetcher from "@/features/schedule/ScheduleDataFetcher";
 import { theme } from "@/styles/themes.style";
 import { css } from "@emotion/react";
-import type { Dispatch, SetStateAction } from "react";
+import { QueryErrorResetBoundary } from "@tanstack/react-query";
+import {
+  Suspense,
+  useRef,
+  useState,
+  type Dispatch,
+  type SetStateAction,
+} from "react";
+import { ErrorBoundary } from "react-error-boundary";
 const { color, typography } = theme;
 
 interface ScheduleListSectionProps {
@@ -13,19 +25,29 @@ interface ScheduleListSectionProps {
   activeTab: string;
   setActiveTab: Dispatch<SetStateAction<string>>;
   parsedActiveTab: ScheduleType;
+  selectedSchedule: Partial<ScheduleData | null>;
+  setSelectedSchedule: Dispatch<SetStateAction<Partial<ScheduleData | null>>>;
 }
 const ScheduleListSection = ({
   TAB_LIST,
   activeTab,
   setActiveTab,
   parsedActiveTab,
+  selectedSchedule,
+  setSelectedSchedule,
 }: ScheduleListSectionProps) => {
   const LOCATION_SECTION = "운정 1구역";
+  const refetchFnRef = useRef<() => void>(() => {});
+  const [isFetching, setIsFetching] = useState(false);
+
   return (
     <div css={ScheduleListSectionContainer}>
       <div css={HeaderContainer}>
         <p css={LocationSectionText}>{LOCATION_SECTION}</p>
-        <RefetchButton handleClick={() => {}} />
+        <RefetchButton
+          isFetching={isFetching}
+          handleClick={() => refetchFnRef.current()}
+        />
       </div>
       <Tabs
         type="bar_true"
@@ -34,12 +56,28 @@ const ScheduleListSection = ({
         setSelected={setActiveTab}
       />
       <div css={ContentContainer}>
-        {drivingDataList.map((scheduleData, idx) => (
-          <div key={scheduleData.routeId}>
-            <ScheduleCard drivingType={parsedActiveTab} data={scheduleData} />
-            {idx !== drivingDataList.length - 1 && <div css={LineWrapper} />}
-          </div>
-        ))}
+        <QueryErrorResetBoundary>
+          {({ reset }) => (
+            <ErrorBoundary onReset={reset} FallbackComponent={FallbackUI}>
+              <Suspense
+                fallback={
+                  <div css={LoadingSpinnerWrapper}>
+                    <LoadingSpinner />
+                  </div>
+                }
+              >
+                <ScheduleDataFetcher
+                  activeTab={activeTab}
+                  parsedActiveTab={parsedActiveTab}
+                  selectedSchedule={selectedSchedule}
+                  setSelectedSchedule={setSelectedSchedule}
+                  setRefetchFn={(refetch) => (refetchFnRef.current = refetch)}
+                  setIsFetching={setIsFetching}
+                />
+              </Suspense>
+            </ErrorBoundary>
+          )}
+        </QueryErrorResetBoundary>
       </div>
     </div>
   );
@@ -48,7 +86,8 @@ const ScheduleListSection = ({
 export default ScheduleListSection;
 
 const ScheduleListSectionContainer = css`
-  width: 485px;
+  min-width: 485px;
+  max-width: 485px;
   height: calc(100vh - 72px);
   display: flex;
   flex-direction: column;
@@ -70,13 +109,15 @@ const ContentContainer = css`
   overflow-y: scroll;
 `;
 
-const LineWrapper = css`
-  width: 405px;
-  border-bottom: 1px solid ${color.GrayScale.gray3};
-  margin: 20px auto;
-`;
-
 const LocationSectionText = css`
   color: ${color.GrayScale.black};
   font: ${typography.Label.l1_semi};
+`;
+
+const LoadingSpinnerWrapper = css`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;

@@ -67,6 +67,9 @@ export const useTimeTableSlots = ({
       onSlotsUpdate?.(newSlotData);
       setPreviewSlot(null);
       dragHandlers.resetDrag(setDragState);
+    } else {
+      setPreviewSlot(null);
+      dragHandlers.resetDrag(setDragState);
     }
   }, [
     dragState,

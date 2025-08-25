@@ -5,7 +5,7 @@ const { color, typography } = theme;
 const grayColor = color.GrayScale.gray4;
 const blueColor = color.SemanticScale.blue[400];
 
-const ScheduleCardContainer = css`
+const ScheduleCardContainer = (isActive: boolean) => css`
   width: 100%;
   padding: 20px;
   display: flex;
@@ -14,9 +14,12 @@ const ScheduleCardContainer = css`
   border-radius: 20px;
   color: ${grayColor};
   font: ${typography.Body.b3_medi};
+  background-color: ${isActive ? color.GrayScale.gray1 : "transparent"};
 
   &:hover {
-    background-color: ${color.GrayScale.gray1};
+    cursor: pointer;
+    background-color: ${color.GrayScale.gray2};
+    transition: 0.2s ease-in;
   }
 `;
 

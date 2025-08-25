@@ -1,24 +1,16 @@
 // React & Hooks
-import { useMemo, useReducer, useState } from "react";
-
+import { useEffect, useMemo, useReducer, useState } from "react";
 // 스타일
 import { css } from "@emotion/react";
 import { theme } from "@/styles/themes.style";
 
 // 컴포넌트
 import CenterOverview from "@/features/centerOverview/CenterOverview";
-import CarInfoCard from "@/features/car/CarInfoCard";
-import CarAddCard from "@/features/car/CarAddCard";
 import { TimeTable } from "@/features/timeTable/components";
 import Calender from "@/features/calender/Calender";
 import ToolTip from "@/components/ToolTip";
-import MonoButton from "@/components/MonoButton";
-
-// 아이콘
-import { WhiteEditIcon } from "@/assets/icons";
 
 // 데이터 & 유틸
-import { mockCarData, mockCenterData } from "@/mocks/centerDetailMocks";
 import {
   calenderReducer,
   initialState,
@@ -27,6 +19,12 @@ import { isFutureWeek } from "@/features/calender/Calender.util";
 import { useCarNavigation } from "@/hooks/useCenterNavigation";
 import Modal from "@/components/Modal";
 import { useCenterModal } from "@/hooks/useCenterModal";
+import { useGetCenterInfo } from "@/apis/CenterAPI";
+import { useDeleteCar, useGetCarList } from "@/apis/CarAPI";
+import { mapBackendCenterInfoToCenterOverview } from "@/features/centerOverview/CenterOverview.type";
+import { mapBackendCarListToCarList } from "@/features/car/Car.type";
+import CarList from "@/features/car/CarList";
+import { CarActionButtonGroupStyle } from "@/features/timeTable/TimeTable.style";
 
 const { color, typography } = theme;
 const TOOLTIP_DATA = {
@@ -35,13 +33,38 @@ const TOOLTIP_DATA = {
 };
 
 const CenterPage = () => {
+  const {
+    centerInfoData,
+    isFetching: isCenterFetching,
+    error: CenterError,
+  } = useGetCenterInfo();
+  const {
+    carList,
+    isFetching: isCarFetching,
+    error: carError,
+    refetch: refetchCarList,
+  } = useGetCarList();
+  const { mutate: deleteCar, error: carDeleteError } = useDeleteCar();
+
+  const mappedCenterData =
+    centerInfoData && mapBackendCenterInfoToCenterOverview(centerInfoData);
+
+  const mappedCarList = useMemo(() => {
+    if (!carList) return [];
+    return mapBackendCarListToCarList(carList);
+  }, [carList]);
+
   // 상태
-  const [selectedCarId, setSelectedCarId] = useState<number>(
-    mockCarData[0]?.carId ?? null,
-  );
+  const [selectedCarId, setSelectedCarId] = useState<number>(0);
   const [state, dispatch] = useReducer(calenderReducer, initialState);
   const [isEditMode, setIsEditMode] = useState(false);
 
+  // 선택된 차량 초기화를 위함
+  useEffect(() => {
+    if (selectedCarId === 0 && mappedCarList && mappedCarList.length > 0) {
+      setSelectedCarId(mappedCarList[0].carId);
+    }
+  }, [mappedCarList, selectedCarId]);
   const isEditableWeek = useMemo(
     () => isFutureWeek(state.selectedWeek),
     [state.selectedWeek],
@@ -53,23 +76,63 @@ const CenterPage = () => {
     modalState,
     openEditModal,
     openDeleteModal,
+    openLoadingModal,
     openDoneModal,
+    openErrorModal,
     closeModal,
     createModalContent,
   } = useCenterModal();
 
+  const handleClickEdit = (type: "edit" | "delete") => {
+    if (!selectedCarId || !mappedCarList) {
+      alert("선택된 차량이 없습니다. 차량 선택 후 진행해주세요.");
+      return;
+    }
+
+    const selectedCarInfo = mappedCarList.find(
+      (car) => car.carId === selectedCarId,
+    );
+
+    if (!selectedCarInfo) return;
+
+    if (type === "edit") {
+      openEditModal();
+    } else if (type === "delete") {
+      openDeleteModal();
+    }
+  };
+
   const handleEditConfirm = () => {
-    navigateToEditCar(selectedCarId);
+    const selectedCarInfo = mappedCarList!.find(
+      (car) => car.carId === selectedCarId,
+    );
+
+    if (!selectedCarInfo) return;
+
+    navigateToEditCar(selectedCarInfo);
     closeModal();
   };
 
   const handleDeleteConfirm = () => {
-    // TODO 재민 - 삭제 로직 구현
+    if (!selectedCarId || !mappedCarList) {
+      openErrorModal("선택된 차량이 없습니다.");
+      return;
+    }
+
     closeModal();
-    // TODO - 삭제 완료 후 확인 모달 열기
-    setTimeout(() => {
-      openDoneModal();
-    }, 1000);
+    openLoadingModal();
+
+    deleteCar(selectedCarId, {
+      onSuccess: async () => {
+        await refetchCarList();
+        closeModal();
+        openDoneModal();
+      },
+      onError: () => {
+        closeModal();
+        openErrorModal(carDeleteError?.message || "차량 삭제에 실패했습니다.");
+      },
+    });
   };
 
   const handleMonthChange = (direction: "next" | "prev") => {
@@ -88,77 +151,50 @@ const CenterPage = () => {
   return (
     <div css={PageContainer}>
       {/* 센터 정보 */}
-      <CenterOverview {...mockCenterData} />
+      <CenterOverview
+        {...mappedCenterData}
+        isLoading={isCenterFetching}
+        error={CenterError}
+      />
 
       {/* 등록된 차량 */}
       <div css={SectionWrapper}>
         <div css={CarSectionHeader}>
           <h4 css={SectionLabel}>등록된 차량</h4>
-          <div css={ActionButtonGroup}>
-            <button css={CarEditTextStyle} onClick={openEditModal}>
+          <div css={CarActionButtonGroupStyle}>
+            <button
+              css={CarEditTextStyle}
+              onClick={() => handleClickEdit("edit")}
+            >
               수정하기
             </button>
             <div css={DividerStyle} />
-            <button css={CarEditTextStyle} onClick={openDeleteModal}>
+            <button
+              css={CarEditTextStyle}
+              onClick={() => handleClickEdit("delete")}
+            >
               삭제하기
             </button>
           </div>
         </div>
         <div css={ContentSection}>
-          {mockCarData.map((car) => (
-            <CarInfoCard
-              key={car.carId}
-              carData={car}
-              isSelected={selectedCarId === car.carId}
-              setIsSelected={setSelectedCarId}
-            />
-          ))}
-          {mockCarData.length < 6 && (
-            <CarAddCard onClick={() => navigateToRegisterCar()} />
-          )}
+          <CarList
+            canAddCar={true}
+            onAddCarClick={navigateToRegisterCar}
+            carList={mappedCarList}
+            selectedCarId={selectedCarId}
+            setSelectedCarId={setSelectedCarId}
+            isLoading={isCarFetching}
+            error={carError}
+          />
         </div>
       </div>
 
       {/* 타임 테이블 */}
       <div css={SectionWrapper}>
         <div css={TimeTableSectionHeader}>
-          <div css={HeaderLeftGroup}>
-            <h4 css={SectionLabel}>차량 시간표</h4>
-            <ToolTip
-              label={TOOLTIP_DATA.label}
-              content={TOOLTIP_DATA.content}
-            />
-          </div>
-          <div css={HeaderRightGroup}>
-            {isEditableWeek &&
-              (isEditMode ? (
-                <div css={ActionButtonGroup}>
-                  <MonoButton
-                    mode="white"
-                    label="취소"
-                    onClick={() => {
-                      setIsEditMode(false);
-                    }}
-                  />
-                  <MonoButton
-                    mode="black"
-                    label="저장"
-                    onClick={() => {
-                      setIsEditMode(false);
-                    }}
-                  />
-                </div>
-              ) : (
-                <MonoButton
-                  mode="black"
-                  label="유휴시간 편집"
-                  icon={<WhiteEditIcon />}
-                  onClick={() => {
-                    setIsEditMode(true);
-                  }}
-                />
-              ))}
-          </div>
+          <h4 css={SectionLabel}>차량 시간표</h4>
+          <ToolTip label={TOOLTIP_DATA.label} content={TOOLTIP_DATA.content} />
         </div>
 
         <div css={TableSection}>
@@ -166,6 +202,10 @@ const CenterPage = () => {
             mode={isEditMode ? "edit" : "view"}
             selectedCarId={selectedCarId}
             selectedWeek={state.selectedWeek}
+            showActionButtons={true}
+            isEditMode={isEditMode}
+            isEditableWeek={isEditableWeek}
+            onEditModeChange={setIsEditMode}
           />
           <Calender
             highlightType="week"
@@ -190,7 +230,6 @@ const CenterPage = () => {
 
 export default CenterPage;
 
-// TODO 재민 - 하드코딩 값 제거 + 반응형 고려
 const PageContainer = css`
   width: 100vw;
   display: flex;
@@ -236,13 +275,6 @@ const TableSection = css`
   height: 600px;
 `;
 
-const ActionButtonGroup = css`
-  display: flex;
-  align-items: stretch;
-  justify-content: center;
-  gap: 12px;
-`;
-
 const DividerStyle = css`
   width: 1px;
   align-self: stretch;
@@ -261,19 +293,6 @@ const TimeTableSectionHeader = css`
   width: 100%;
   height: 44px;
   align-items: center;
-  justify-content: center;
-`;
-
-const HeaderLeftGroup = css`
-  display: flex;
-  align-items: center;
   gap: 16px;
-  margin-right: auto;
-`;
-
-const HeaderRightGroup = css`
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-right: 466px;
+  justify-content: flex-start;
 `;

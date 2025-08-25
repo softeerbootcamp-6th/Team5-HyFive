@@ -4,7 +4,11 @@ import { NoRouteIcon } from "@/assets/icons";
 const { color, typography } = theme;
 import MovingCarGif from "@/assets/gif/moving_car.gif";
 
-const EmptyUI = ({ type = "static" }: { type?: "static" | "dynamic" }) => {
+interface EmptyUIProps {
+  type?: "static" | "dynamic";
+  message?: string;
+}
+const EmptyUI = ({ type = "static", message }: EmptyUIProps) => {
   return (
     <div css={EmptyUIContainer}>
       <div css={ImageWrapper}>
@@ -21,7 +25,7 @@ const EmptyUI = ({ type = "static" }: { type?: "static" | "dynamic" }) => {
           />
         )}
       </div>
-      <p css={TextWrapper}>요청값이 없습니다 :-(</p>
+      <p css={TextWrapper}>{message ?? "아직 등록된 정보가 없어요 :-("}</p>
     </div>
   );
 };

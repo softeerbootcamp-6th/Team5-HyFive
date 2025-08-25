@@ -49,32 +49,36 @@ const Pagination = ({
   };
 
   return (
-    <div css={PaginationContainer}>
-      <button
-        css={PageButtonStyle}
-        onClick={() => handlePageChange(start - 1)}
-        disabled={safeCurrent === 1}
-      >
-        <ChevronLeftIcon className="chevron-icon" />
-      </button>
-      {ranges.map((page) => (
-        <button
-          key={page}
-          css={PageNumberStyle(safeCurrent === page)}
-          onClick={() => handlePageChange(page)}
-          disabled={safeCurrent === page}
-        >
-          {page}
-        </button>
-      ))}
-      <button
-        css={PageButtonStyle}
-        onClick={() => handlePageChange(end + 1)}
-        disabled={safeCurrent === safeTotal}
-      >
-        <ChevronRightIcon className="chevron-icon" />
-      </button>
-    </div>
+    <>
+      {safeTotal > 0 && (
+        <div css={PaginationContainer}>
+          <button
+            css={PageButtonStyle}
+            onClick={() => handlePageChange(start - 1)}
+            disabled={safeCurrent === 1}
+          >
+            <ChevronLeftIcon className="chevron-icon" />
+          </button>
+          {ranges.map((page) => (
+            <button
+              key={page}
+              css={PageNumberStyle(safeCurrent === page)}
+              onClick={() => handlePageChange(page)}
+              disabled={safeCurrent === page}
+            >
+              {page}
+            </button>
+          ))}
+          <button
+            css={PageButtonStyle}
+            onClick={() => handlePageChange(end + 1)}
+            disabled={safeCurrent === safeTotal}
+          >
+            <ChevronRightIcon className="chevron-icon" />
+          </button>
+        </div>
+      )}
+    </>
   );
 };
 
