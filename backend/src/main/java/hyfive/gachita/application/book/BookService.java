@@ -1,20 +1,20 @@
 package hyfive.gachita.application.book;
 
+import hyfive.gachita.application.book.dto.BookCursor;
+import hyfive.gachita.application.book.dto.BookRes;
 import hyfive.gachita.application.book.dto.BookWithPathRes;
+import hyfive.gachita.application.book.dto.CreateBookReq;
+import hyfive.gachita.application.book.repository.BookRepository;
+import hyfive.gachita.application.common.dto.PagedListRes;
+import hyfive.gachita.application.common.dto.ScrollRes;
+import hyfive.gachita.application.common.enums.SearchPeriod;
+import hyfive.gachita.application.common.util.AddressParser;
+import hyfive.gachita.application.common.util.DateRangeUtil;
 import hyfive.gachita.application.path.Path;
 import hyfive.gachita.client.geocode.GeoCodeService;
 import hyfive.gachita.client.geocode.dto.LatLng;
-import hyfive.gachita.application.book.dto.BookCursor;
-import hyfive.gachita.application.book.dto.BookRes;
-import hyfive.gachita.application.book.dto.CreateBookReq;
-import hyfive.gachita.application.common.dto.PagedListRes;
-import hyfive.gachita.application.book.repository.BookRepository;
-import hyfive.gachita.application.common.dto.ScrollRes;
-import hyfive.gachita.application.common.enums.SearchPeriod;
 import hyfive.gachita.global.BusinessException;
 import hyfive.gachita.global.ErrorCode;
-import hyfive.gachita.application.common.util.DateRangeUtil;
-import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -23,6 +23,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -40,6 +41,11 @@ public class BookService {
             throw new BusinessException(ErrorCode.DUPLICATE_BOOK_DATE);
         }
 
+        String startAddr = AddressParser.extractRoadAddress(createBookReq.startAddr())
+                .orElseThrow(() -> new BusinessException(ErrorCode.INVALID_INPUT, "주소 형식이 잘못되었습니다."));
+        String endAddr = AddressParser.extractRoadAddress(createBookReq.endAddr())
+                .orElseThrow(() -> new BusinessException(ErrorCode.INVALID_INPUT, "주소 형식이 잘못되었습니다."));
+
         LatLng startLoc = geoCodeService.getPointByAddress(createBookReq.startAddr());
         LatLng endLoc = geoCodeService.getPointByAddress(createBookReq.endAddr());
         log.info("출발지 위도 {} 경도 {}", startLoc.lat(), startLoc.lng());
@@ -50,10 +56,10 @@ public class BookService {
                 .bookTel(createBookReq.bookTel())
                 .hospitalDate(createBookReq.hospitalDate())
                 .hospitalTime(createBookReq.hospitalTime())
-                .startAddr(createBookReq.startAddr())
+                .startAddr(startAddr)
                 .startLat(startLoc.lat())
                 .startLng(startLoc.lng())
-                .endAddr(createBookReq.endAddr())
+                .endAddr(endAddr)
                 .endLat(endLoc.lat())
                 .endLng(endLoc.lng())
                 .walker(createBookReq.walker())
