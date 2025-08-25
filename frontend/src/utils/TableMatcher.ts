@@ -9,12 +9,12 @@ const MAPPING_TABLE = {
   //예약 정보
   hospitalTime: { label: "병원 도착 시간", type: "booking" },
   hospitalDate: { label: "이용 희망 날짜", type: "booking" },
-  userStartLocation: { label: "출발지", type: "booking" },
-  userEndLocation: { label: "목적지", type: "booking" },
+  userStartLocation: { label: "탑승지", type: "booking" },
+  userEndLocation: { label: "하차지", type: "booking" },
 
   //경로 정보
   routeId: { label: "경로ID", type: "route" },
-  carNumber: { label: "차량번호", type: "route" },
+  carNumber: { label: "차량 번호", type: "route" },
   routeStartTime: { label: "운행 시작 시간", type: "route" },
   routeEndTime: { label: "운행 종료 시간", type: "route" },
   routeStartLocation: { label: "시작점", type: "route" },
