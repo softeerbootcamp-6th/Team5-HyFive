@@ -3,7 +3,7 @@ package hyfive.gachita.application.rental;
 import hyfive.gachita.application.car.Car;
 import hyfive.gachita.application.car.repository.CarRepository;
 import hyfive.gachita.application.common.enums.SearchPeriod;
-import hyfive.gachita.dispatch.FragmentDto;
+import hyfive.gachita.dispatch.dto.FragmentDto;
 import hyfive.gachita.dispatch.dto.FinalNewPathDto;
 import hyfive.gachita.global.BusinessException;
 import hyfive.gachita.global.ErrorCode;

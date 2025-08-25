@@ -5,7 +5,6 @@ import hyfive.gachita.dispatch.excepion.DispatchException;
 import hyfive.gachita.dispatch.module.calculator.RadiusExpandCalculator;
 import hyfive.gachita.dispatch.module.checker.FinalNewPathChecker;
 import hyfive.gachita.dispatch.module.condition.BoundingBoxCondition;
-import hyfive.gachita.dispatch.module.condition.RadiusCondition;
 import hyfive.gachita.dispatch.module.filter.BoundingBoxFilter;
 import hyfive.gachita.dispatch.module.filter.HaversineFilter;
 import hyfive.gachita.dispatch.module.provider.CenterListProvider;
@@ -34,18 +33,8 @@ public class NewPathDispatchFlow {
 
     private final RadiusExpandCalculator radiusExpandCalculator;
 
-//    private final static int RADIUS_METERS = 3000;
-
     public DispatchResult execute(NewBookDto newBookDto) {
         log.info("========= [NewPathDispatchFlow] 신규 경로 배차 로직 시작 =========");
-//        log.info("--- STEP 1: 반경 내 센터 필터링 (반경: {}m) ---", RADIUS_METERS);
-//        BoundingBoxCondition boundingBoxCondition = BoundingBoxCondition.from(newBookDto.startLat(), newBookDto.startLng(), RADIUS_METERS);
-//        RadiusCondition radiusCondition = RadiusCondition.from(newBookDto.startLat(), newBookDto.startLng(), RADIUS_METERS);
-//
-//        List<FilteredCenterDto> filteredCenterList = centerListProvider.getAll().stream()
-//                .filter(center -> boundingBoxFilter.test(center, boundingBoxCondition))
-//                .filter(center -> haversineFilter.test(center, radiusCondition))
-//                .toList();
 
         final double newBookLat = newBookDto.startLat();
         final double newBookLng = newBookDto.startLng();

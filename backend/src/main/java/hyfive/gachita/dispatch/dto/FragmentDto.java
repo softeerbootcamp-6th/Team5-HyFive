@@ -1,6 +1,4 @@
-package hyfive.gachita.dispatch;
-
-import hyfive.gachita.dispatch.dto.FinalNewPathDto;
+package hyfive.gachita.dispatch.dto;
 
 import java.time.Duration;
 import java.time.LocalTime;
@@ -25,7 +23,10 @@ public record FragmentDto(
     }
 
     public static Optional<FragmentDto> ofSecond(FinalNewPathDto path) {
-        return of(path.nodeList().get(0).time().plusSeconds(2 * HOUR_IN_SECONDS), path.rentalEndTime());
+        LocalTime driveEnd = path.nodeList().get(0).time();
+        LocalTime maxRentalEnd = path.availableRental().getRental().getRentalEndTime();
+        LocalTime startTime = driveEnd.isBefore(maxRentalEnd) ? driveEnd : maxRentalEnd;
+        return of(startTime, path.rentalEndTime());
     }
 
     public int fragmentCount() {

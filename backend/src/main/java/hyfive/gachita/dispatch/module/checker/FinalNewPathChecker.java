@@ -1,6 +1,6 @@
 package hyfive.gachita.dispatch.module.checker;
 
-import hyfive.gachita.dispatch.FragmentDto;
+import hyfive.gachita.dispatch.dto.FragmentDto;
 import hyfive.gachita.dispatch.dto.FinalNewPathDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

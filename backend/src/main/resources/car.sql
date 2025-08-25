@@ -2,8 +2,8 @@ INSERT INTO car (center_id, model_name, car_number, capacity, low_floor, car_ima
 VALUES
     (1, '현대 스타리아', '11가1001', 11, true, 'https://gachita-bucket.s3.ap-northeast-2.amazonaws.com/images/094176c8-c00a-4ade-9afe-ccead2fca88a.png', NOW(), 'N'),
     (1, '기아 카니발', '22나2001', 9, false, 'https://gachita-bucket.s3.ap-northeast-2.amazonaws.com/images/094176c8-c00a-4ade-9afe-ccead2fca88a.png', NOW(), 'N'),
-    (1, '벤츠 스프린터', '33다3001', 12, true, 'https://gachita-bucket.s3.ap-northeast-2.amazonaws.com/images/094176c8-c00a-4ade-9afe-ccead2fca88a.png', NOW(), 'N'),
-    (1, '토요타 하이엑스', '44라4001', 12, false, 'https://gachita-bucket.s3.ap-northeast-2.amazonaws.com/images/094176c8-c00a-4ade-9afe-ccead2fca88a.png', NOW(), 'N'),
+    (1, '현대 스타렉스', '33다3001', 12, true, 'https://gachita-bucket.s3.ap-northeast-2.amazonaws.com/images/094176c8-c00a-4ade-9afe-ccead2fca88a.png', NOW(), 'N'),
+    (1, '기아 프레지오', '44라4001', 12, false, 'https://gachita-bucket.s3.ap-northeast-2.amazonaws.com/images/094176c8-c00a-4ade-9afe-ccead2fca88a.png', NOW(), 'N'),
     (2, '현대 스타리아', '11가1001', 11, true, 'https://gachita-bucket.s3.ap-northeast-2.amazonaws.com/images/094176c8-c00a-4ade-9afe-ccead2fca88a.png', NOW(), 'N'),
     (2, '기아 카니발', '22나2001', 9, false, 'https://gachita-bucket.s3.ap-northeast-2.amazonaws.com/images/094176c8-c00a-4ade-9afe-ccead2fca88a.png', NOW(), 'N'),
     (2, '벤츠 스프린터', '33다3001', 12, true, 'https://gachita-bucket.s3.ap-northeast-2.amazonaws.com/images/094176c8-c00a-4ade-9afe-ccead2fca88a.png', NOW(), 'N'),
@@ -319,4 +319,8 @@ VALUES
     (80, '현대 스타리아', '11가1001', 11, true, 'https://gachita-bucket.s3.ap-northeast-2.amazonaws.com/images/094176c8-c00a-4ade-9afe-ccead2fca88a.png', NOW(), 'N'),
     (80, '기아 카니발', '22나2001', 9, false, 'https://gachita-bucket.s3.ap-northeast-2.amazonaws.com/images/094176c8-c00a-4ade-9afe-ccead2fca88a.png', NOW(), 'N'),
     (80, '벤츠 스프린터', '33다3001', 12, true, 'https://gachita-bucket.s3.ap-northeast-2.amazonaws.com/images/094176c8-c00a-4ade-9afe-ccead2fca88a.png', NOW(), 'N'),
-    (80, '토요타 하이엑스', '44라4001', 12, false, 'https://gachita-bucket.s3.ap-northeast-2.amazonaws.com/images/094176c8-c00a-4ade-9afe-ccead2fca88a.png', NOW(), 'N');
+    (80, '토요타 하이엑스', '44라4001', 12, false, 'https://gachita-bucket.s3.ap-northeast-2.amazonaws.com/images/094176c8-c00a-4ade-9afe-ccead2fca88a.png', NOW(), 'N'),
+    (81, '현대 스타리아', '11가1001', 11, true, 'https://gachita-bucket.s3.ap-northeast-2.amazonaws.com/images/094176c8-c00a-4ade-9afe-ccead2fca88a.png', NOW(), 'N'),
+    (81, '기아 카니발', '22나2001', 9, false, 'https://gachita-bucket.s3.ap-northeast-2.amazonaws.com/images/094176c8-c00a-4ade-9afe-ccead2fca88a.png', NOW(), 'N'),
+    (81, '벤츠 스프린터', '33다3001', 12, true, 'https://gachita-bucket.s3.ap-northeast-2.amazonaws.com/images/094176c8-c00a-4ade-9afe-ccead2fca88a.png', NOW(), 'N'),
+    (81, '토요타 하이엑스', '44라4001', 12, false, 'https://gachita-bucket.s3.ap-northeast-2.amazonaws.com/images/094176c8-c00a-4ade-9afe-ccead2fca88a.png', NOW(), 'N');
