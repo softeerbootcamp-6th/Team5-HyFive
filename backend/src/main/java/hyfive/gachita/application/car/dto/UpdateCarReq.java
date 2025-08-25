@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.NOT_REQUIRED;
+
 @Schema(description = "차량 수정 요청 DTO")
 public record UpdateCarReq(
         @NotBlank
@@ -24,8 +26,7 @@ public record UpdateCarReq(
         @Schema(description = "저상 차량 여부", example = "false")
         Boolean lowFloor,
 
-        @NotNull
-        @Schema(description = "차량 이미지 파일", example = "이미지는 최대 10MB까지 첨부 가능합니다")
+        @Schema(description = "차량 이미지 파일", example = "이미지는 최대 10MB까지 첨부 가능합니다", requiredMode = NOT_REQUIRED)
         MultipartFile imageFile
 ) {}
 

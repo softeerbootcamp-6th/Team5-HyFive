@@ -8,6 +8,8 @@ import lombok.Builder;
 
 import java.time.LocalTime;
 
+import static hyfive.gachita.application.common.util.CarNumberFormatter.format;
+
 @Builder
 public record PathRes(
         @Schema(description = "경로 ID", example = "1")
@@ -34,7 +36,7 @@ public record PathRes(
         public PathRes(Long pathId, String carNumber, LocalTime startTime,
                        LocalTime endTime, String startAddr, String endAddr) {
                 this.pathId = pathId;
-                this.carNumber = carNumber;
+                this.carNumber = format(carNumber);
                 this.startTime = startTime;
                 this.endTime = endTime;
                 this.startAddr = startAddr;
@@ -44,7 +46,7 @@ public record PathRes(
         public static PathRes from(Path path) {
                 return new PathRes(
                         path.getId(),
-                        path.getCar().getCarNumber(),
+                        format(path.getCar().getCarNumber()),
                         path.getRealStartTime(),
                         path.getRealEndTime(),
                         path.getStartAddr(),
