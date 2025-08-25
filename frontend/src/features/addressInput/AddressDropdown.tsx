@@ -14,6 +14,7 @@ import {
   NoContentText,
   LoadingContent,
 } from "./AddressInput.style";
+import { useEffect, useRef } from "react";
 
 const { color } = theme;
 
@@ -42,8 +43,25 @@ const AddressDropdown = ({
 }: AddressDropdownProps) => {
   const headerText = type === "departure" ? "출발지 검색" : "도착지 검색";
 
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        onClose();
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [onClose]);
+
   return (
-    <div css={DropdownContainer}>
+    <div css={DropdownContainer} ref={dropdownRef}>
       <header css={DropdownHeader}>
         <h3 css={HeaderStyle}>{headerText}</h3>
         <button onClick={onClose} css={CloseButtonStyle}>
