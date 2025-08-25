@@ -26,7 +26,7 @@ const ScheduleDetailSection = ({
   }
 
   return (
-    <div css={ScheduleDetailSectionContainer}>
+    <div data-testid="schedule-detail" css={ScheduleDetailSectionContainer}>
       <QueryErrorResetBoundary>
         {({ reset }) => (
           <ErrorBoundary onReset={reset} FallbackComponent={FallbackUI}>

@@ -68,7 +68,7 @@ const useVisualizeMarker = ({
       const marker = new kakaoMaps.Marker({
         map,
         position: new kakaoMaps.LatLng(point.lat, point.lng),
-        title: "User Marker",
+        title: `marker-${markerType}`,
         image: markerImage,
       });
       return marker;

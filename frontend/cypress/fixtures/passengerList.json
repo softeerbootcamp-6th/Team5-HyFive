@@ -1,0 +1,14 @@
+{
+  "isSuccess": true,
+  "code": 1000,
+  "message": "요청에 성공했습니다.",
+  "data": [
+    {
+      "name": "정미영",
+      "phoneNumber": "010-6080-6534",
+      "walker": true,
+      "onTime": "11:19",
+      "offTime": "12:40"
+    }
+  ]
+}

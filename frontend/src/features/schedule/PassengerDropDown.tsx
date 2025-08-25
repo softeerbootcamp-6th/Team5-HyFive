@@ -13,6 +13,7 @@ const PassengerDropDown = ({ id }: { id: number | undefined }) => {
   return (
     <>
       <div
+        data-testid="passenger-schedule-btn"
         css={DropDownTrigger}
         onClick={() => setIsDropDownOpen((prev) => !prev)}
       >
@@ -23,7 +24,7 @@ const PassengerDropDown = ({ id }: { id: number | undefined }) => {
       </div>
       {isDropDownOpen &&
         createPortal(
-          <div css={DropDownContent}>
+          <div data-testid="passenger-schedule-info" css={DropDownContent}>
             <Table rows={data ?? []} />
           </div>,
           document.getElementById("map")!,

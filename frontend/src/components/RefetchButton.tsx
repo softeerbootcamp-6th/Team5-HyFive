@@ -42,6 +42,7 @@ const RefetchButton = ({
     <div css={RefetchButtonContainer} onClick={handleManualRefetch}>
       <p css={DateText}>{refetchTime}</p>
       <RefreashIcon
+        data-testid="refetch-btn"
         css={isRefetchActive ? rotating() : undefined}
         fill={color.GrayScale.gray4}
       />

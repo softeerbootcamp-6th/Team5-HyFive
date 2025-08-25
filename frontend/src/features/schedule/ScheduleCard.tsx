@@ -36,7 +36,7 @@ const ScheduleCard = ({
   isActive = false,
 }: DrivingCardProps) => {
   return (
-    <div css={ScheduleCardContainer(isActive)}>
+    <div data-testid="schedule-list-item" css={ScheduleCardContainer(isActive)}>
       <div css={HeaderWrapper}>
         <div css={RouteWrapper}>
           <p css={RouteText}>경로 #{data.routeId}</p>
