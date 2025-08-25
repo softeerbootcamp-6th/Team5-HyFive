@@ -21,8 +21,7 @@ public record CarListRes(
         @Schema(description = "저상 차량 여부", example = "false")
         Boolean lowFloor,
 
-        // TODO : carImage example 추가
-        @Schema(description = "차량 이미지 url", example = "(차후 추가 예정)")
+        @Schema(description = "차량 이미지 url")
         String carImage,
 
         @Schema(description = "차량 운행 상태", example = "false")
