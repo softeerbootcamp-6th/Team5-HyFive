@@ -53,7 +53,7 @@ public class GeoCodeApiClient extends ApiClient {
         GeoCodeApiRes.ResponseWrapper<CoordResult> responseWrapper = result.response();
         if ("NOT_FOUND".equalsIgnoreCase(responseWrapper.status())) {
             throw new BusinessException(ErrorCode.INVALID_INPUT,
-                    String.format("좌표를 찾을 수 없는 주소입니다: %s", request.address()));
+                    String.format("해당 지역은 자동차 접근 불가능한 주소입니다. 다시 입력해주세요. %s", request.address()));
         }
         if ("ERROR".equalsIgnoreCase(responseWrapper.status())) {
             throw new BusinessException(ErrorCode.EXTERNAL_API_ERROR);
