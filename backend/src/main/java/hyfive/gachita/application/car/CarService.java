@@ -10,12 +10,14 @@ import hyfive.gachita.global.BusinessException;
 import hyfive.gachita.global.ErrorCode;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 import static hyfive.gachita.application.common.util.CarNumberFormatter.normalize;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CarService {
@@ -62,7 +64,10 @@ public class CarService {
             throw new BusinessException(ErrorCode.DUPLICATE_CAR_NUMBER);
         }
 
-        String imageUrl = s3Service.uploadImage(updateCarReq.imageFile());
+        String imageUrl = car.getCarImage();
+        if (!(updateCarReq.imageFile() == null)) {
+            imageUrl = s3Service.uploadImage(updateCarReq.imageFile());
+        }
 
         car.update(
                 updateCarReq.modelName(),

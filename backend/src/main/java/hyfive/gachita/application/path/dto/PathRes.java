@@ -1,11 +1,14 @@
 package hyfive.gachita.application.path.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.querydsl.core.annotations.QueryProjection;
 import hyfive.gachita.application.path.Path;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
 import java.time.LocalTime;
+
+import static hyfive.gachita.application.common.util.CarNumberFormatter.format;
 
 @Builder
 public record PathRes(
@@ -16,9 +19,11 @@ public record PathRes(
         String carNumber,
 
         @Schema(description = "운행 시작 시간", example = "09:30")
+        @JsonFormat(pattern = "HH:mm")
         LocalTime startTime,
 
         @Schema(description = "운행 종료 시간", example = "10:45")
+        @JsonFormat(pattern = "HH:mm")
         LocalTime endTime,
 
         @Schema(description = "출발지 주소", example = "노원로16길 15")
@@ -31,7 +36,7 @@ public record PathRes(
         public PathRes(Long pathId, String carNumber, LocalTime startTime,
                        LocalTime endTime, String startAddr, String endAddr) {
                 this.pathId = pathId;
-                this.carNumber = carNumber;
+                this.carNumber = format(carNumber);
                 this.startTime = startTime;
                 this.endTime = endTime;
                 this.startAddr = startAddr;
@@ -41,7 +46,7 @@ public record PathRes(
         public static PathRes from(Path path) {
                 return new PathRes(
                         path.getId(),
-                        path.getCar().getCarNumber(),
+                        format(path.getCar().getCarNumber()),
                         path.getRealStartTime(),
                         path.getRealEndTime(),
                         path.getStartAddr(),

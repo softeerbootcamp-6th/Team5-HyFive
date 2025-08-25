@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.Map;
 
 @RestController
@@ -30,7 +31,7 @@ public class DemoController {
             description = "운행 날짜가 오늘인 모든 Path의 polyline 정보를 DB에 저장하고 결과를 반환합니다."
     )
     public BaseResponse<Map<String, Object>> savePathPolyLine() {
-        return BaseResponse.success(demoService.saveTodayPathPolyline());
+        return BaseResponse.success(demoService.savePathPolyline(LocalDate.now()));
     }
 
     @PatchMapping("/path/drive-status")
