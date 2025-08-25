@@ -16,18 +16,25 @@ public record NodeDto(
         LocalTime time,
         NodeType type,
 
-        Pair<LocalTime, LocalTime> deadline
+        Pair<LocalTime, LocalTime> deadline,
+        Long bookId,                        // 추가
+        LocalTime availableRentalStartTime, // 추가
+        LocalTime availableRentalEndTime    // 추가
 ) {
     /**
      * 기존 경로의 node
      */
-    public static NodeDto from(Node node, LocalTime deadline) {
+    public static NodeDto from(Node node, LocalTime deadline, Long bookId,
+                               LocalTime availableStart, LocalTime availableEnd) {
         NodeDto.NodeDtoBuilder builder = NodeDto.builder()
                 .nodeId(node.getId())
                 .lat(node.getLat())
                 .lng(node.getLng())
                 .time(node.getTime())
-                .type(node.getType());
+                .type(node.getType())
+                .bookId(bookId)
+                .availableRentalStartTime(availableStart)
+                .availableRentalEndTime(availableEnd);
 
         if (node.getType() == NodeType.END && deadline != null) {
             LocalTime firstDeadline = deadline.minusMinutes(30);
@@ -53,6 +60,7 @@ public record NodeDto(
                 .time(null)
                 .type(NodeType.START)
                 .deadline(Pair.of(startDeadline, endDeadline))
+                .bookId(newBook.id())
                 .build();
     }
 
@@ -68,6 +76,7 @@ public record NodeDto(
                 .time(null)
                 .type(NodeType.END)
                 .deadline(newBook.deadline())
+                .bookId(newBook.id())
                 .build();
     }
 
@@ -82,6 +91,9 @@ public record NodeDto(
                 .time(newTime)
                 .type(nodeDto.type())
                 .deadline(nodeDto.deadline())
+                .bookId(nodeDto.bookId())
+                .availableRentalEndTime(nodeDto.availableRentalEndTime())
+                .availableRentalStartTime(nodeDto.availableRentalStartTime())
                 .build();
     }
 }

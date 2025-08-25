@@ -47,7 +47,7 @@ public class PathService {
     public Path createPathWithNodes(FinalNewPathDto finalPathDto, Book book) {
         LocalTime startTime = finalPathDto.nodeList().get(0).time();
         LocalTime endTime = finalPathDto.nodeList().get(2).time();
-        LocalTime maybeEndTime = minTime(finalPathDto.rentalEndTime(), startTime.plusHours(2));
+        LocalTime maybeEndTime = minTime(finalPathDto.availableRental().getRental().getRentalEndTime(), startTime.plusHours(2));
 
         // availableRental : startTime ~ endTime로 업데이트
         AvailableRental updatedRental = finalPathDto.availableRental();

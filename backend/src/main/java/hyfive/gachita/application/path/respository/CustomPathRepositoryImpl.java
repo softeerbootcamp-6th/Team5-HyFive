@@ -34,6 +34,7 @@ import static hyfive.gachita.application.center.QCenter.center;
 import static hyfive.gachita.application.node.QNode.node;
 import static hyfive.gachita.application.node.QSegment.segment;
 import static hyfive.gachita.application.path.QPath.path;
+import static hyfive.gachita.application.rental.QAvailableRental.availableRental;
 
 @Repository
 @RequiredArgsConstructor
@@ -47,7 +48,10 @@ public class CustomPathRepositoryImpl implements CustomPathRepository {
                         path.id,
                         car.id,
                         node,
-                        node.book.deadline
+                        book.deadline,
+                        book.id,
+                        availableRental.startTime,
+                        availableRental.endTime
                 )
                 .from(path)
                 .join(path.car, car)
@@ -57,6 +61,8 @@ public class CustomPathRepositoryImpl implements CustomPathRepository {
                         car.delYn.eq(DelYn.N)
                 )
                 .join(path.nodeList, node)
+                .join(node.book, book)
+                .join(path.availableRental, availableRental) // fetch join 역할
                 .where(
                         path.maybeStartTime.loe(condition.maybeOnTime()),
                         path.maybeEndTime.goe(condition.deadline()),
@@ -75,7 +81,10 @@ public class CustomPathRepositoryImpl implements CustomPathRepository {
                     List<NodeWithDeadline> nodes = tuplesForOnePath.stream()
                             .map(tuple -> new NodeWithDeadline(
                                     tuple.get(node),
-                                    tuple.get(node.book.deadline)
+                                    tuple.get(book.deadline),
+                                    tuple.get(book.id),
+                                    tuple.get(availableRental.startTime),
+                                    tuple.get(availableRental.endTime)
                             ))
                             .toList();
 
