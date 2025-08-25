@@ -104,7 +104,7 @@ export default BookListSection;
 const BookListSectionContainer = css`
   min-width: 485px;
   max-width: 485px;
-  height: calc(100vh - 72px);
+  height: calc(125dvh - 72px);
   display: flex;
   flex-direction: column;
   gap: 24px;

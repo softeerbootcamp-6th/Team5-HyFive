@@ -56,13 +56,13 @@ export default CarModalContent;
 const CardContainer = css`
   display: flex;
   background-color: ${color.GrayScale.white};
-  width: 346px;
+  width: 320px;
   align-items: center;
   justify-content: center;
-  padding: 28px;
+  padding: 23px;
   border-radius: ${borderRadius.Medium};
   flex-direction: column;
-  gap: 38px;
+  gap: 28px;
 `;
 
 const TextSection = css`
@@ -74,12 +74,12 @@ const TextSection = css`
 `;
 
 const HeaderText = css`
-  font: ${typography.Heading.h3_semi};
+  font: ${typography.Heading.h4_semi};
   color: ${color.GrayScale.black};
 `;
 
 const HighlightedText = css`
-  font: ${typography.Heading.h3_semi};
+  font: ${typography.Heading.h4_semi};
   color: ${color.Maincolor.primary};
 `;
 const ContentText = css`

@@ -18,3 +18,9 @@ body {
   background-color: #ffffff;
   color: #212121;
 }
+
+#root {
+  zoom: 0.8;
+  height: 100%;
+  width: 100%;
+}

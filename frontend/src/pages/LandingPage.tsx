@@ -35,7 +35,7 @@ export default LandingPage;
 
 const LandingPageContainer = css`
   display: flex;
-  height: 100vh;
+  height: 125vh;
   width: 100%;
   overflow: hidden;
 `;

@@ -112,7 +112,6 @@ const CenterDetailPage = () => {
 export default CenterDetailPage;
 
 const PageContainer = css`
-  width: 100vw;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
