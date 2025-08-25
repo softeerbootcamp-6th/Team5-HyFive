@@ -44,7 +44,7 @@ const Sidebar = () => {
         {SIDEBAR_CONTENT.map((content) => {
           const isActive = location.pathname === content.route;
           return (
-            <div css={LiWrapper}>
+            <div key={content.label} css={LiWrapper}>
               <Link
                 to={content.route}
                 key={content.label}
