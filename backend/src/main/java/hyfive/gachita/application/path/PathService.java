@@ -343,6 +343,20 @@ public class PathService {
                 book.getEndAddr()
         );
     }
+
+    @Transactional
+    public Map<String, Object> changeDriveStatus(Long id, DriveStatus status) {
+        Path path = pathRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NO_EXIST_VALUE, "DB에 경로 데이터가 존재하지 않습니다."));
+        DriveStatus prevStatus = path.getDriveStatus();
+        path.setDriveStatus(status);
+        Map<String, Object> result = new HashMap<>();
+        result.put("pathId", path.getId());
+        result.put("prevStatus", prevStatus);
+        result.put("newStatus", path.getDriveStatus());
+
+        return result;
+    }
 }
 
 

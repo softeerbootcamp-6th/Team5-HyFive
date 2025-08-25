@@ -1,13 +1,11 @@
 package hyfive.gachita.demo;
 
+import hyfive.gachita.application.path.DriveStatus;
 import hyfive.gachita.application.path.PathService;
 import hyfive.gachita.global.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -34,5 +32,14 @@ public class DemoController {
     )
     public BaseResponse<Map<String, Object>> savePathPolyLine() {
         return BaseResponse.success(pathService.saveTodayPathPolyline());
+    }
+
+    @PatchMapping("/path/drive-status")
+    @Operation(
+            summary = "경로 운행 상태 변경",
+            description = "경로 ID와 새로운 운행 상태를 받아 해당 경로의 운행 상태를 변경하고 결과를 반환합니다."
+    )
+    public BaseResponse<Map<String, Object>> changeDriveStatus(Long id, DriveStatus status) {
+        return BaseResponse.success(pathService.changeDriveStatus(id, status));
     }
 }
