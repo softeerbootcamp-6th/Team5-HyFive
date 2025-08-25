@@ -31,12 +31,6 @@ public class Path {
     @JoinColumn(name = "car_id", nullable = false)
     private Car car;
 
-    // TODO : 제거 필요(AvailableRental로 대체)
-//    @NotNull
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "rental_id", nullable = false)
-//    private Rental rental;
-
     @NotNull
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "available_rental_id", nullable = false)
