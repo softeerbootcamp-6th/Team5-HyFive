@@ -20,14 +20,14 @@ const PassengerRouteList = ({
   return (
     <div css={RouteDetailContainer}>
       <ul css={PassengerWrapper}>
-        {passengers.map((passenger) => (
+        {passengers.map((passenger, idx) => (
           <li
             data-testid="passenger-highlight-btn"
             key={passenger.bookId}
             css={PartPassengerWrapper}
             onClick={() => passenger.bookId && onSelect(passenger.bookId)}
           >
-            <PassengerRouteItem passenger={passenger} />
+            <PassengerRouteItem idx={idx + 1} passenger={passenger} />
           </li>
         ))}
       </ul>
