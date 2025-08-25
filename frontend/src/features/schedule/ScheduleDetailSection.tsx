@@ -29,7 +29,11 @@ const ScheduleDetailSection = ({
     <div css={ScheduleDetailSectionContainer}>
       <QueryErrorResetBoundary>
         {({ reset }) => (
-          <ErrorBoundary onReset={reset} FallbackComponent={FallbackUI}>
+          <ErrorBoundary
+            key={selectedSchedule?.routeId}
+            onReset={reset}
+            FallbackComponent={FallbackUI}
+          >
             <Suspense
               fallback={
                 <div css={LoadingSpinnerWrapper}>
