@@ -1,5 +1,6 @@
 package hyfive.gachita.application.path.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.querydsl.core.annotations.QueryProjection;
 import hyfive.gachita.application.path.Path;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -16,9 +17,11 @@ public record PathRes(
         String carNumber,
 
         @Schema(description = "운행 시작 시간", example = "09:30")
+        @JsonFormat(pattern = "HH:mm")
         LocalTime startTime,
 
         @Schema(description = "운행 종료 시간", example = "10:45")
+        @JsonFormat(pattern = "HH:mm")
         LocalTime endTime,
 
         @Schema(description = "출발지 주소", example = "노원로16길 15")

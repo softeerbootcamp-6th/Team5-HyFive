@@ -14,6 +14,7 @@ import hyfive.gachita.global.BusinessException;
 import hyfive.gachita.global.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -76,10 +77,18 @@ public class DemoService {
         }
     }
 
+    // 매일 오후 8시에 내일 날짜의 모든 Path에 대해 polyline 저장 작업 수행
+    @Scheduled(cron = "0 0 20 * * *")
     @Transactional
-    public Map<String, Object> saveTodayPathPolyline() {
-        LocalDate today = LocalDate.now();
-        List<Path> pathList = pathRepository.findAllByDriveDate(today);
+    public void saveTomorrowPathPolyline() {
+        LocalDate tomorrow = LocalDate.now().plusDays(1);
+        Map<String, Object> result = savePathPolyline(tomorrow);
+        log.info("{}건의 Path 중 {}건의 polyline 저장 성공, 실패한 Path ID: {}", result.get("total"), result.get("success"), result.get("failedIds"));
+    }
+
+    @Transactional
+    public Map<String, Object> savePathPolyline(LocalDate date) {
+        List<Path> pathList = pathRepository.findAllByDriveDate(date);
 
         int successCount = 0;
         List<Long> failedIds = new ArrayList<>();
@@ -89,7 +98,7 @@ public class DemoService {
                 savePolyline(path.getId());
                 successCount++;
             } catch (Exception e) {
-                log.error("Failed to save polyline for pathId {}: {}", path.getId(), e.getMessage());
+                log.error("Polyline 저장 실패 pathId {}: {}", path.getId(), e.getMessage());
                 failedIds.add(path.getId());
             }
         }

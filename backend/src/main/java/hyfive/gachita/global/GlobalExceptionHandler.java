@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
         log.info("MethodArgumentNotValidException : {}", errorMessages);
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(BaseResponse.fail(ErrorCode.INVALID_INPUT, errorMessages));
+                .body(BaseResponse.fail(ErrorCode.INVALID_INPUT));
     }
 
     @ExceptionHandler(Exception.class)
