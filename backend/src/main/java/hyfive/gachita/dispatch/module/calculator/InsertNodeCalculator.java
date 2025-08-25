@@ -91,8 +91,6 @@ public class InsertNodeCalculator {
             log.trace(" -> 노드 {} 시간 업데이트: {}", i, newTime);
         }
 
-        // TODO : 가용 시간을 넘어가는가?
-
         return updatedList;
     }
 
@@ -107,6 +105,22 @@ public class InsertNodeCalculator {
         if (routeInfo.totalDuration() > MAX_TOTAL_DURATION) {
             log.debug("  -> 유효성 검증 실패: 총 소요시간 초과 (결과: {}초 > 최대: {}초)", routeInfo.totalDuration(), MAX_TOTAL_DURATION);
             return false;
+        }
+
+        // 2. available time 범위에 속하는지 확인
+        LocalTime startTime = nodeList.get(0).time();
+        LocalTime endTime   = nodeList.get(nodeList.size() - 1).time();
+        LocalTime availableStartTime = nodeList.get(0).availableRentalStartTime();
+        LocalTime availableEndTime   = nodeList.get(0).availableRentalEndTime();
+
+        boolean withinAvailableTime =
+                (startTime.equals(availableStartTime) || startTime.isAfter(availableStartTime)) &&
+                        (endTime.equals(availableEndTime) || endTime.isBefore(availableEndTime));
+
+        if (!withinAvailableTime) {
+            log.debug("  -> 유효성 검증 실패: 차량 대여 가능 시간 위반 (운행 시간: {} ~ {}, 허용 범위: {} ~ {})",
+                    startTime, endTime, availableStartTime, availableEndTime);
+            return false; // 또는 예외 throw
         }
 
         // 2. 각 노드별 마감 시간 검증
