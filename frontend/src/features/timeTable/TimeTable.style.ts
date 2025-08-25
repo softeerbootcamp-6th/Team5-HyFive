@@ -166,10 +166,40 @@ export const TableActionButtonGroupStyle = css`
   justify-content: center;
   gap: 12px;
   z-index: 5;
+  &:hover div {
+    opacity: 1;
+    pointer-events: auto;
+  }
 `;
 
 export const TimeTableWrapper = css`
   position: relative;
   width: 100%;
   height: 100%;
+`;
+
+export const ToolTipBoxStyle = css`
+  display: flex;
+  width: max-content;
+  position: absolute;
+  padding: 12px 14px;
+  bottom: 140%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+  white-space: pre-line;
+  background-color: ${color.GrayScale.gray6};
+  border-radius: ${borderRadius.Large};
+  font: ${typography.Caption.c1_medi};
+  line-height: 1.5;
+  color: ${color.GrayScale.gray2};
+`;
+
+export const ArrowStyle = css`
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
 `;
