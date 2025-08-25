@@ -1,4 +1,7 @@
-import { formatTimeToHHMM } from "@/features/calender/Calender.util";
+import {
+  formatTimeToHHMM,
+  isBookingPossible,
+} from "@/features/calender/Calender.util";
 
 export const validateName = (value: string): string | null => {
   if (!value) return "이름을 입력해주세요";
@@ -21,6 +24,8 @@ export const validateDate = (value: string): string | null => {
   today.setHours(0, 0, 0, 0);
   const selectedDate = new Date(value);
   if (selectedDate < today) return "오늘 이후 날짜를 선택해주세요";
+  if (!isBookingPossible(selectedDate))
+    return "오늘 날짜 기준 다음 주 토요일까지 예약이 가능합니다.";
   return null;
 };
 
@@ -30,6 +35,7 @@ export const validateTime = (hour: string, minute: string): string | null => {
   const m = parseInt(minute);
   if (h < 1 || h > 12) return "시간은 1-12 사이로 입력해주세요";
   if (m < 0 || m > 59) return "분은 0-59 사이로 입력해주세요";
+  if (h < 9 || h > 20) return "예약 가능 시간은 9시부터 20시까지입니다";
   return null;
 };
 

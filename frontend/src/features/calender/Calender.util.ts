@@ -209,3 +209,25 @@ export const isFutureWeek = (week: Date[]): boolean => {
 
   return week.some((date) => isAfter(startOfDay(date), endOfNextWeek));
 };
+
+/**
+ * 선택된 날짜가 오늘 기준으로 다음 주 토요일까지 예약 가능한지 확인합니다.(기획)
+ * @param selectedDate 선택된 날짜
+ * @returns 현재 선택된 날짜가 예약 가능한 날짜이면 true, 아니면 false
+ */
+export const isBookingPossible = (selectedDate: Date): boolean => {
+  const day = new Date().getDay();
+  const deltaToThisSaturday = 6 - day;
+  const deltaToNextSaturday = deltaToThisSaturday + 7;
+
+  const nextWeekSaturday = new Date();
+  nextWeekSaturday.setDate(nextWeekSaturday.getDate() + deltaToNextSaturday);
+
+  nextWeekSaturday.setHours(23, 59, 59, 999);
+
+  if (selectedDate.getTime() > nextWeekSaturday.getTime()) {
+    return false;
+  }
+
+  return true;
+};
