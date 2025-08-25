@@ -14,12 +14,15 @@ export const APIMatcher = {
       name: apiItem.bookName,
       phone: apiItem.bookTel,
       isExistWalkingDevice: apiItem.walker,
-      //예약
-      bookTime: apiItem.bookTime,
       bookDate: apiItem.bookDate,
+      bookTime: apiItem.bookTime,
+
+      //예약
+      hospitalDate: apiItem.hospitalDate,
       userStartLocation: apiItem.startAddr,
       userEndLocation: apiItem.endAddr,
       hospitalTime: apiItem.hospitalTime,
+
       // 경로
       routeId: apiItem.path?.pathId ?? "",
       carNumber: apiItem.path?.carNumber ?? "",
