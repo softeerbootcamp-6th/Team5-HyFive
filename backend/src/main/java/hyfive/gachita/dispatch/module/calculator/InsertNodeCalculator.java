@@ -55,6 +55,7 @@ public class InsertNodeCalculator {
      * 첫 번째 노드의 시간을 기준으로, 각 구간별 소요시간(durationList)을 누적하여
      * 모든 노드의 예상 도착 시간을 새로 계산합니다.
      */
+    // TODO : 2차 로직
     private List<NodeDto> updateNodeTime(List<NodeDto> nodeList, List<Integer> durationList) {
         log.trace("[updateNodeTime] 노드 시간 업데이트 시작. 후보 노드 수: {}", nodeList.size());
 
@@ -72,17 +73,17 @@ public class InsertNodeCalculator {
             // 이전 노드 slack 계산 (END 노드만)
             long slackSec = 0;
             if (previousNode.type() == NodeType.END) {
-                LocalTime latest = currentNode.deadline().getSecond();
+                LocalTime latest = previousNode.deadline().getSecond();
                 slackSec = Math.max(0, Duration.between(previousTime.plusSeconds(travelSec), latest).getSeconds());
             }
 
-            // earliest/latest 범위 계산
+            // 다음 노드가 END 노드라면 earliest/latest 범위 계산
             LocalTime earliest = (currentNode.deadline() != null) ? currentNode.deadline().getFirst() : null;
 
             // 예상 도착 시간 = 이전 시간 + duration + slack(범위 내)
             LocalTime newTime = previousTime.plusSeconds(travelSec + slackSec);
 
-            // deadline 조정
+            // 다음 노드가 END 노드라면 deadline 조정
             if (earliest != null && newTime.isBefore(earliest)) newTime = earliest;
 
             NodeDto updatedNode = NodeDto.updateTime(currentNode, newTime);
@@ -91,9 +92,12 @@ public class InsertNodeCalculator {
             log.trace(" -> 노드 {} 시간 업데이트: {}", i, newTime);
         }
 
+        // TODO : 가용 시간을 넘어가는가?
+
         return updatedList;
     }
 
+    // TODO : 1차 삽입 로직
 //    private List<NodeDto> updateNodeTime(List<NodeDto> nodeList, List<Integer> durationList) {
 //        LocalTime baseTime = nodeList.get(0).time();
 //        log.trace("[updateNodeTime] 노드 시간 업데이트 시작. 기준 시간: {}, 구간별 소요시간 수: {}", baseTime, durationList.size());
