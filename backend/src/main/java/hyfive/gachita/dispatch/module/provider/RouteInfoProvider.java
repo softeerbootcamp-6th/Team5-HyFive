@@ -29,8 +29,8 @@ public class RouteInfoProvider {
                     List<CarScheduleDto> schedules = entry.getValue();
 
                     List<LatLng> nodeList = List.of(
-                            new LatLng(newBookDto.startLat(), newBookDto.startLng()),
                             new LatLng(center.lat(), center.lng()),
+                            new LatLng(newBookDto.startLat(), newBookDto.startLng()),
                             new LatLng(newBookDto.endLat(), newBookDto.endLng())
                     );
 
