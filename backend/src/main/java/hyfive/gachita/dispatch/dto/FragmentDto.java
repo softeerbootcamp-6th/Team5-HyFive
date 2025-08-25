@@ -1,6 +1,4 @@
-package hyfive.gachita.dispatch;
-
-import hyfive.gachita.dispatch.dto.FinalNewPathDto;
+package hyfive.gachita.dispatch.dto;
 
 import java.time.Duration;
 import java.time.LocalTime;
