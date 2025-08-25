@@ -16,8 +16,16 @@ const useVisualizeRoute = ({ map, polylinePath }: UseVisualizeRouteProps) => {
   useEffect(() => {
     if (!kakaoMaps || !map || !polylinePath || polylinePath.length === 0)
       return;
-    if (basePolylineRef.current) basePolylineRef.current = null;
-    if (highlightPolylineRef.current) highlightPolylineRef.current = null;
+
+    // 기존 polyline 해제
+    if (basePolylineRef.current) {
+      basePolylineRef.current.setMap(null);
+      basePolylineRef.current = null;
+    }
+    if (highlightPolylineRef.current) {
+      highlightPolylineRef.current.setMap(null);
+      highlightPolylineRef.current = null;
+    }
 
     const basePolyline = new kakaoMaps.Polyline({
       path: [],
@@ -52,6 +60,11 @@ const useVisualizeRoute = ({ map, polylinePath }: UseVisualizeRouteProps) => {
         basePolyline.setPath(accumulatedPath);
       },
     });
+
+    return () => {
+      basePolyline.setMap(null);
+      highlightPolyline.setMap(null);
+    };
   }, [map, kakaoMaps, polylinePath]);
 
   const highlightRoute = (highlightPath: LatLng[]) => {
