@@ -1,5 +1,6 @@
 package hyfive.gachita.application.path.dto;
 
+import hyfive.gachita.client.kakao.dto.response.KakaoNaviRes;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
@@ -15,6 +16,9 @@ public record MapDrawRes(
         List<MarkerRes> marker,
 
         @Schema(description = "강조할 구간 정보", implementation = HighlightRes.class)
-        List<HighlightRes> highlight
+        List<HighlightRes> highlight,
+
+        @Schema(description = "지도 경계 정보", implementation = KakaoNaviRes.Bound.class)
+        KakaoNaviRes.Bound bound
 ) {
 }

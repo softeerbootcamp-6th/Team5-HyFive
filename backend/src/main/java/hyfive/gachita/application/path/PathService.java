@@ -182,6 +182,10 @@ public class PathService {
         List<Node> orderedNodeList = pathRepository.findNodeListWithSegmentInfoByPathId(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NO_EXIST_VALUE, "DB에 경로 데이터가 존재하지 않습니다."));
 
+        List<LatLng> latLngList = orderedNodeList.stream()
+                .map(node -> new LatLng(node.getLat(), node.getLng()))
+                .collect(Collectors.toList());
+
         // 응답 형식으로 변환
         List<SegmentRes> segmentResList = getSegmentResList(orderedNodeList);
         List<MarkerRes> markerResList = getMarkerResList(orderedNodeList);
@@ -191,6 +195,7 @@ public class PathService {
                 .polyline(segmentResList)
                 .marker(markerResList)
                 .highlight(highlightResList)
+                .bound(kakaoNaviService.getRouteBound(latLngList))
                 .build();
     }
 

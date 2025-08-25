@@ -52,7 +52,10 @@ public record KakaoNaviRes(
 
             @Schema(description = "전체 경로 거리(m)", example = "19032")
             @JsonProperty("distance")
-            int distance
+            int distance,
+
+            @Schema(description = "지도상의 사각 영역 정보")
+            Bound bound
     ) {}
 
     @Schema(description = "경로를 구성하는 한 개의 구간(Section)")
@@ -83,5 +86,24 @@ public record KakaoNaviRes(
             @Schema(description = "도로를 구성하는 좌표열 (경도, 위도 순)")
             @JsonProperty("vertexes")
             List<Double> vertexes
+    ) {}
+
+    @Schema(description = "지도상의 사각 영역 정보")
+    public record Bound(
+            @Schema(description = "최소 경도", example = "127.10699672876241")
+            @JsonProperty("min_x")
+            double minX,
+
+            @Schema(description = "최소 위도", example = "37.35782058991495")
+            @JsonProperty("min_y")
+            double minY,
+
+            @Schema(description = "최대 경도", example = "127.17437025337696")
+            @JsonProperty("max_x")
+            double maxX,
+
+            @Schema(description = "최대 위도", example = "37.40371556711698")
+            @JsonProperty("max_y")
+            double maxY
     ) {}
 }

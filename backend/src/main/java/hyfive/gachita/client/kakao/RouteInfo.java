@@ -1,6 +1,7 @@
 package hyfive.gachita.client.kakao;
 
 import hyfive.gachita.client.geocode.dto.LatLng;
+import hyfive.gachita.client.kakao.dto.response.KakaoNaviRes;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
@@ -22,5 +23,8 @@ public record RouteInfo(
         List<Integer> distanceList,
 
         @Schema(description = "구간별 소요 시간 리스트 (s)")
-        List<Integer> durationList
+        List<Integer> durationList,
+
+        @Schema(description = "경로의 시작/끝 좌표 및 영역 정보")
+        KakaoNaviRes.Bound bound
 ) {}

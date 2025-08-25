@@ -40,7 +40,14 @@ public class KakaoNaviService {
                 .polylineList(polylineList)
                 .distanceList(durationList)
                 .durationList(distanceList)
+                .bound(route.summary().bound())
                 .build();
+    }
+
+    public KakaoNaviRes.Bound getRouteBound(List<LatLng> nodeList) {
+        DirectionsReq request = createDirectionsReq(nodeList);
+        KakaoNaviRes.Route result = kakaoNaviApiClient.getWaypointsDirections(request);
+        return result.summary().bound();
     }
 
     // 경로를 구성하는 좌표를 하나의 리스트로 통합
