@@ -17,6 +17,6 @@ export default AdminLayout;
 
 const ContentContainer = css`
   position: relative;
-  height: calc(100dvh - 72px);
   top: 72px;
+  width: 125vw;
 `;

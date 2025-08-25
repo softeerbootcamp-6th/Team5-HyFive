@@ -231,7 +231,6 @@ const CenterPage = () => {
 export default CenterPage;
 
 const PageContainer = css`
-  width: 100vw;
   display: flex;
   flex-direction: column;
   align-items: flex-start;

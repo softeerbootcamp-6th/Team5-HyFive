@@ -22,13 +22,13 @@ const SidebarContainer = css`
   top: 72px;
   left: 0;
   width: 330px;
-  height: calc(100dvh - 72px);
+  height: calc(125dvh - 72px);
 `;
 
 const ContentContainer = css`
   position: relative;
-  width: calc(100dvw - 330px);
-  height: calc(100dvh - 72px);
+  width: calc(125dvw - 330px);
+  height: calc(125dvh - 72px);
   left: 330px;
   top: 0;
 `;

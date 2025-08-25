@@ -19,6 +19,6 @@ export default CenterLayout;
 
 const ContentContainer = css`
   position: relative;
-  height: 100%;
+  height: calc(125dvh - 72px);
   top: 72px;
 `;
