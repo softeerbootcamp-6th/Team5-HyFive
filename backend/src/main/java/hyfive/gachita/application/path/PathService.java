@@ -190,12 +190,12 @@ public class PathService {
         List<SegmentRes> segmentResList = getSegmentResList(orderedNodeList);
         List<MarkerRes> markerResList = getMarkerResList(orderedNodeList);
         List<HighlightRes> highlightResList = getHighlightResList(orderedNodeList, segmentResList);
-
+        BoundRes boundRes = BoundRes.from(kakaoNaviService.getRouteBound(latLngList));
         return MapDrawRes.builder()
                 .polyline(segmentResList)
                 .marker(markerResList)
                 .highlight(highlightResList)
-                .bound(kakaoNaviService.getRouteBound(latLngList))
+                .bound(boundRes)
                 .build();
     }
 

@@ -18,7 +18,7 @@ public record MapDrawRes(
         @Schema(description = "강조할 구간 정보", implementation = HighlightRes.class)
         List<HighlightRes> highlight,
 
-        @Schema(description = "지도 경계 정보", implementation = KakaoNaviRes.Bound.class)
-        KakaoNaviRes.Bound bound
+        @Schema(description = "지도 경계 정보", implementation = BoundRes.class)
+        BoundRes bound
 ) {
 }
