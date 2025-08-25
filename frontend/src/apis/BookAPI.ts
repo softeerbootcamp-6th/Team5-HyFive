@@ -8,7 +8,7 @@ import type { UserFilterValue } from "@/features/statusFilter/StatusFilter.const
 import { APIMatcher } from "@/utils/APIMatcher";
 import { clientInstance } from "@/utils/AxiosInstance";
 import TabMatcher from "@/utils/TabMatcher";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 
 interface BookListAPIResponse {
@@ -136,6 +136,9 @@ export const useGetBookList = (
         `/book/list?period=${period}&status=${status}&page=${page}&limit=${limit}`,
       ),
     throwOnError: true,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+    placeholderData: keepPreviousData,
   });
 
   const bookList = data?.data.items.map((partData) =>
@@ -148,7 +151,6 @@ export const useGetBookList = (
       totalPages: data?.data.totalPageNum ?? 1,
       totalItems: data?.data.totalItemNum ?? 0,
     },
-
     error,
     isFetching,
   };

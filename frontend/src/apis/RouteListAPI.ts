@@ -3,7 +3,7 @@ import type { RouteFilterValue } from "@/features/statusFilter/StatusFilter.cons
 import type { BackendRouteType } from "@/types/routeType.types";
 import { APIMatcher } from "@/utils/APIMatcher";
 import { clientInstance } from "@/utils/AxiosInstance";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
 interface RouteListAPIResponse {
   isSuccess: boolean;
@@ -39,6 +39,9 @@ export const useGetRouteList = (
       return clientInstance.get(`/path/list?${params.toString()}`);
     },
     throwOnError: true,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+    placeholderData: keepPreviousData,
   });
   const routeList = data?.data.items.map((partData) =>
     APIMatcher.matchRouteListAPI(partData),
