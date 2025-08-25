@@ -38,13 +38,13 @@ const CardContainer = css`
 `;
 
 const TextStyle = css`
-  font: ${typography.Heading.h3_semi};
+  font: ${typography.Heading.h5_semi};
   color: ${color.GrayScale.black};
 `;
 
 const AlertTextStyle = css`
   text-align: center;
-  font: ${typography.Heading.h4_semi};
+  font: ${typography.Label.l3_semi};
   color: ${color.GrayScale.black};
   overflow: hidden;
   display: -webkit-box;
