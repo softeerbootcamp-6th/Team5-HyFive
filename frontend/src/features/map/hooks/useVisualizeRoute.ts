@@ -29,7 +29,7 @@ const useVisualizeRoute = ({ map, polylinePath }: UseVisualizeRouteProps) => {
 
     const basePolyline = new kakaoMaps.Polyline({
       path: [],
-      strokeWeight: 16,
+      strokeWeight: 13,
       strokeColor: "#F70",
       strokeOpacity: 1,
       strokeStyle: "solid",
