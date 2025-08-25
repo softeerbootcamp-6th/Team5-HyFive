@@ -197,11 +197,15 @@ export const isBeforeToday = (dateString: string): boolean => {
 };
 
 /**
- * 현재 선택된 주가 다음 주거나 이후인지 확인합니다.
+ * 현재 선택된 주가 2주 이후인지 확인합니다. (기획을 위함)
  * @param week 날짜 배열 (주 단위)
- * @returns 현재 선택된 주가 다음 주거나 이후이면 true, 아니면 false
+ * @returns 현재 선택된 주가 2주 이후이면 true, 아니면 false
  */
 export const isFutureWeek = (week: Date[]): boolean => {
-  const lastDayOfThisWeek = endOfWeek(new Date(), { weekStartsOn: 0 });
-  return week.some((date) => isAfter(startOfDay(date), lastDayOfThisWeek));
+  const endOfThisWeek = endOfWeek(new Date(), { weekStartsOn: 0 });
+
+  // 다음 주 마지막 날 (이번 주 마지막 날에서 +7일 후)
+  const endOfNextWeek = addDays(endOfThisWeek, 7);
+
+  return week.some((date) => isAfter(startOfDay(date), endOfNextWeek));
 };
