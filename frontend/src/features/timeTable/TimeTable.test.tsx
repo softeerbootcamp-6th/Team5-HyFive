@@ -8,7 +8,11 @@ import type { TimeTableProps } from "@/features/timeTable/TimeTable.type";
 import { format } from "date-fns";
 import type { AvailableTimeSlot } from "@/mocks/timeBlockMocks";
 import { isAllSlotsInSelectedWeek } from "@/features/timeTable/utils/TimeTable.util";
-import { useGetTimeSlot, usePostTimeSlot } from "@/apis/TimeTableAPI";
+import {
+  useGetTimeSlot,
+  usePostTimeSlot,
+  timeSlotQueryKey,
+} from "@/apis/TimeTableAPI";
 
 // API 모킹
 vi.mock("@/apis/TimeTableAPI", () => ({
@@ -17,6 +21,7 @@ vi.mock("@/apis/TimeTableAPI", () => ({
   usePostTimeSlot: vi.fn(),
 }));
 
+const mockTimeSlotQueryKey = vi.mocked(timeSlotQueryKey);
 const mockUseGetTimeSlot = vi.mocked(useGetTimeSlot);
 const mockUsePostTimeSlot = vi.mocked(usePostTimeSlot);
 
@@ -69,6 +74,8 @@ const renderWithQueryClient = (component: React.ReactElement) => {
 describe("TimeTable 컴포넌트", () => {
   beforeEach(() => {
     // API 모킹 - 성공 케이스
+    mockTimeSlotQueryKey.mockReturnValue(["timeSlot", 1, "2025-08-13"]);
+
     mockUseGetTimeSlot.mockReturnValue({
       timeSlotData: mockTimeSlotAPIData,
       isFetching: false,

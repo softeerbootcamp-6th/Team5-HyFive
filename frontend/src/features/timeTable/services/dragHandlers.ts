@@ -74,15 +74,17 @@ export const dragHandlers = {
     if (mode !== "edit") return;
     if (!dragState.isDragging) return;
     if (dragState.startPosition?.dayIndex !== dayIndex) return; // 가로 드래그 무시
-    if (dragState.startPosition?.hourIndex > hourIndex) return; // 윗쪽 드래그 무시
 
     const startHourIndex = dragState.startPosition!.hourIndex;
     const endHourIndex = hourIndex;
 
+    const minHour = Math.min(startHourIndex, endHourIndex);
+    const maxHour = Math.max(startHourIndex, endHourIndex);
+
     const previewSlot = changeSlotFormatForServer(
       dayIndex,
-      startHourIndex,
-      endHourIndex,
+      minHour,
+      maxHour,
       selectedWeek,
     );
     setPreviewSlot(previewSlot);
@@ -115,11 +117,10 @@ export const dragHandlers = {
     if (!isDragging || !startPosition || !currentPosition) return false;
 
     const isSameDay = startPosition.dayIndex === currentPosition.dayIndex;
-    const isDownward = startPosition.hourIndex < currentPosition.hourIndex;
     const hasMinLength =
-      currentPosition.hourIndex - startPosition.hourIndex >= 1;
+      Math.abs(currentPosition.hourIndex - startPosition.hourIndex) >= 1;
 
-    return isSameDay && isDownward && hasMinLength;
+    return isSameDay && hasMinLength;
   },
 
   /**
@@ -134,11 +135,9 @@ export const dragHandlers = {
     const startHour = startPosition.hourIndex;
     const endHour = currentPosition.hourIndex;
 
-    return changeSlotFormatForServer(
-      dayIndex,
-      startHour,
-      endHour,
-      selectedWeek,
-    );
+    const minHour = Math.min(startHour, endHour);
+    const maxHour = Math.max(startHour, endHour);
+
+    return changeSlotFormatForServer(dayIndex, minHour, maxHour, selectedWeek);
   },
 };

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -49,7 +49,7 @@ const TimeTable = ({
   showActionButtons = false,
   isEditableWeek = false,
   isEditMode = false,
-  onEditModeChange = () => {},
+  onEditModeChange,
 }: TimeTableProps) => {
   // Display 관련 상태
   const [displayWeek, setDisplayWeek] = useState(selectedWeek);
@@ -123,14 +123,13 @@ const TimeTable = ({
 
   // 새로운 데이터가 로드되면 draft 상태 초기화
   useEffect(() => {
-    if (timeSlotData) {
-      setTimeSlotsDraft(timeSlotData);
-      setPreviewSlot(null);
-      setShowSlots(true);
-    }
-  }, [timeSlotData]);
+    if (isFetching || !timeSlotData) return;
+    setTimeSlotsDraft(timeSlotData);
+    setPreviewSlot(null);
+    setShowSlots(true);
+  }, [isFetching, timeSlotData]);
 
-  const handleCancelClick = () => {
+  const handleCancelClick = useCallback(() => {
     const cachedSlotData =
       queryClient.getQueryData<TimeSlotAPIResponse>(queryKey);
     const originalSlotData = cachedSlotData?.data ?? [];
@@ -140,8 +139,12 @@ const TimeTable = ({
     setTimeSlotsDraft(originalSlotData);
     requestAnimationFrame(() => setShowSlots(true));
 
-    onEditModeChange(false);
-  };
+    onEditModeChange?.(false);
+  }, [queryClient, queryKey, onEditModeChange]);
+
+  useEffect(() => {
+    handleCancelClick();
+  }, [selectedWeek, selectedCarId, handleCancelClick]);
 
   const handleSaveClick = () => {
     createTimeSlot({
@@ -150,12 +153,12 @@ const TimeTable = ({
       timeSlots: timeSlotsDraft,
     });
     void refetch();
-    onEditModeChange(false);
+    onEditModeChange?.(false);
   };
 
   return (
     <div css={TimeTableWrapper}>
-      {showActionButtons && (
+      {showActionButtons && onEditModeChange && (
         <ActionButtonGroup
           isEditableWeek={isEditableWeek}
           isEditMode={isEditMode}

@@ -7,7 +7,7 @@ import type {
   TimeTableMode,
 } from "@/features/timeTable/TimeTable.type";
 import { getTimeSlotGridStyle } from "@/features/timeTable/TimeTable.style";
-import { RemoveIcon } from "@/assets/icons";
+import { CloseIcon } from "@/assets/icons";
 import { useState } from "react";
 import { isBeforeToday } from "@/features/calender/Calender.util";
 
@@ -61,7 +61,7 @@ const AvailableTimeSlot = ({
               onClick={handleDeleteClick}
               css={DeleteButtonStyle(hovered)}
             >
-              <RemoveIcon fill={color.Maincolor.primary} />
+              <CloseIcon fill={color.Maincolor.primary} />
             </button>
           )}
           <time dateTime={`${slot.rentalStartTime}/${slot.rentalEndTime}`}>
