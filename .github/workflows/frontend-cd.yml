@@ -3,9 +3,6 @@ name: Frontend CD
 on:
   push:
     branches: [main, dev]
-  pull_request:
-    branches: [dev-fe]
-  workflow_dispatch:
 
 permissions:
   id-token: write
