@@ -7,10 +7,16 @@ public class AddressParser {
         if (address == null || address.isBlank()) {
             return Optional.empty();
         }
-        String[] parts = address.trim().split("\\s+");
-        if (parts.length < 3) {
-            return Optional.empty();
+
+        String trimmed = address.trim();
+
+        if (trimmed.matches(".*[시].*[구].*")) {
+            String[] parts = trimmed.split("\\s+", 3);
+            if (parts.length == 3) {
+                return Optional.of(parts[2]);
+            }
         }
-        return Optional.of(parts[parts.length - 2] + " " + parts[parts.length - 1]);
+
+        return Optional.of(trimmed);
     }
 }
