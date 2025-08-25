@@ -6,5 +6,8 @@ import java.time.LocalTime;
 
 public record NodeWithDeadline(
         Node node,
-        LocalTime deadline
+        LocalTime deadline,
+        Long bookId,
+        LocalTime availableRentalStartTime,
+        LocalTime availableRentalEndTime
 ) {}
