@@ -55,7 +55,6 @@ public class InsertNodeCalculator {
      * 첫 번째 노드의 시간을 기준으로, 각 구간별 소요시간(durationList)을 누적하여
      * 모든 노드의 예상 도착 시간을 새로 계산합니다.
      */
-    // TODO : 2차 로직
     private List<NodeDto> updateNodeTime(List<NodeDto> nodeList, List<Integer> durationList) {
         log.trace("[updateNodeTime] 노드 시간 업데이트 시작. 후보 노드 수: {}", nodeList.size());
 
@@ -96,29 +95,6 @@ public class InsertNodeCalculator {
 
         return updatedList;
     }
-
-    // TODO : 1차 삽입 로직
-//    private List<NodeDto> updateNodeTime(List<NodeDto> nodeList, List<Integer> durationList) {
-//        LocalTime baseTime = nodeList.get(0).time();
-//        log.trace("[updateNodeTime] 노드 시간 업데이트 시작. 기준 시간: {}, 구간별 소요시간 수: {}", baseTime, durationList.size());
-//
-//        List<NodeDto> updatedList = new ArrayList<>();
-//        updatedList.add(nodeList.get(0)); // 첫 번째 노드는 기준이므로 그대로 추가
-//
-//        long cumulativeSeconds = 0;
-//
-//        for (int i = 1; i < nodeList.size(); i++) {
-//            // 이전 노드와의 이동 시간을 누적
-//            cumulativeSeconds += durationList.get(i - 1);
-//            LocalTime newTime = baseTime.plusSeconds(cumulativeSeconds);
-//
-//            NodeDto updatedNode = NodeDto.updateTime(nodeList.get(i), newTime);
-//            updatedList.add(updatedNode);
-//            log.trace("  -> 노드 {} 시간 업데이트: {}", i, newTime);
-//        }
-//
-//        return updatedList;
-//    }
 
     /**
      * 계산된 경로가 비즈니스 규칙에 맞는지 검증합니다.
